@@ -1,0 +1,6 @@
+@Macreel_Software.Server_HostAddress = http://localhost:5120
+
+GET {{Macreel_Software.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,10 @@
+<Solution>
+  <Project Path="macreel_software.client/macreel_software.client.esproj">
+    <Build />
+    <Deploy />
+  </Project>
+  <Project Path="Macreel_Software.DAL/Macreel_Software.DAL.csproj" />
+  <Project Path="Macreel_Software.Models/Macreel_Software.Models.csproj" />
+  <Project Path="Macreel_Software.Server/Macreel_Software.Server.csproj" />
+  <Project Path="Macreel_Software.Services/Macreel_Software.Services.csproj" />
+</Solution>

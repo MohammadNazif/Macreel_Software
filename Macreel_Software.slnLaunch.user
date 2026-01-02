@@ -1,0 +1,11 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "Macreel_Software.Server\\Macreel_Software.Server.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]
