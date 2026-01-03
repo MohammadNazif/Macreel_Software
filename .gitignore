@@ -118,3 +118,4 @@ Desktop.ini
 # If Angular build is copied to server manually
 # Macreel_Software.Server/wwwroot/
 
+/Macreel_Software.DAL/obj/Debug/net8.0/Macreel_Software.DAL.GeneratedMSBuildEditorConfig.editorconfig
