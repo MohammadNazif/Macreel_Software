@@ -1,22 +1,42 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\Himansu_Projects\\Macreel\\Macreel_Software\\",
+  "WorkspaceRootPath": "D:\\Manisha\\Macreel_Software\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{F4302B2B-877E-EBB6-A173-C32263D0A774}|Macreel_Software.Server\\Macreel_Software.Server.csproj|d:\\himansu_projects\\macreel\\macreel_software\\macreel_software.server\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{B78FAED6-E976-9AF0-7920-39D2F8AD71F4}|Macreel_Software.Services\\Macreel_Software.Services.csproj|d:\\manisha\\macreel_software\\macreel_software.services\\attendanceupload\\uploadattendance.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B78FAED6-E976-9AF0-7920-39D2F8AD71F4}|Macreel_Software.Services\\Macreel_Software.Services.csproj|solutionrelative:macreel_software.services\\attendanceupload\\uploadattendance.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{65F04315-8379-0D0C-6131-78AC87D537EC}|Macreel_Software.Models\\Macreel_Software.Models.csproj|d:\\manisha\\macreel_software\\macreel_software.models\\commondata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{65F04315-8379-0D0C-6131-78AC87D537EC}|Macreel_Software.Models\\Macreel_Software.Models.csproj|solutionrelative:macreel_software.models\\commondata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B78FAED6-E976-9AF0-7920-39D2F8AD71F4}|Macreel_Software.Services\\Macreel_Software.Services.csproj|d:\\manisha\\macreel_software\\macreel_software.services\\fileupload\\fileupload.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B78FAED6-E976-9AF0-7920-39D2F8AD71F4}|Macreel_Software.Services\\Macreel_Software.Services.csproj|solutionrelative:macreel_software.services\\fileupload\\fileupload.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F4302B2B-877E-EBB6-A173-C32263D0A774}|Macreel_Software.Server\\Macreel_Software.Server.csproj|d:\\manisha\\macreel_software\\macreel_software.server\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F4302B2B-877E-EBB6-A173-C32263D0A774}|Macreel_Software.Server\\Macreel_Software.Server.csproj|solutionrelative:macreel_software.server\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E9736C7C-8EBE-60D3-92AA-C82284442EE0}|Macreel_Software.DAL\\Macreel_Software.DAL.csproj|d:\\manisha\\macreel_software\\macreel_software.dal\\auth\\iauthservices.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E9736C7C-8EBE-60D3-92AA-C82284442EE0}|Macreel_Software.DAL\\Macreel_Software.DAL.csproj|solutionrelative:macreel_software.dal\\auth\\iauthservices.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E9736C7C-8EBE-60D3-92AA-C82284442EE0}|Macreel_Software.DAL\\Macreel_Software.DAL.csproj|d:\\manisha\\macreel_software\\macreel_software.dal\\auth\\authservices.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E9736C7C-8EBE-60D3-92AA-C82284442EE0}|Macreel_Software.DAL\\Macreel_Software.DAL.csproj|solutionrelative:macreel_software.dal\\auth\\authservices.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F4302B2B-877E-EBB6-A173-C32263D0A774}|Macreel_Software.Server\\Macreel_Software.Server.csproj|d:\\manisha\\macreel_software\\macreel_software.server\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F4302B2B-877E-EBB6-A173-C32263D0A774}|Macreel_Software.Server\\Macreel_Software.Server.csproj|solutionrelative:macreel_software.server\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F4302B2B-877E-EBB6-A173-C32263D0A774}|Macreel_Software.Server\\Macreel_Software.Server.csproj|d:\\himansu_projects\\macreel\\macreel_software\\macreel_software.server\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{F4302B2B-877E-EBB6-A173-C32263D0A774}|Macreel_Software.Server\\Macreel_Software.Server.csproj|solutionrelative:macreel_software.server\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{B78FAED6-E976-9AF0-7920-39D2F8AD71F4}|Macreel_Software.Services\\Macreel_Software.Services.csproj|d:\\manisha\\macreel_software\\macreel_software.services\\mailsender\\mailsender.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B78FAED6-E976-9AF0-7920-39D2F8AD71F4}|Macreel_Software.Services\\Macreel_Software.Services.csproj|solutionrelative:macreel_software.services\\mailsender\\mailsender.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E9736C7C-8EBE-60D3-92AA-C82284442EE0}|Macreel_Software.DAL\\Macreel_Software.DAL.csproj|d:\\himansu_projects\\macreel\\macreel_software\\macreel_software.dal\\jwttokenprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E9736C7C-8EBE-60D3-92AA-C82284442EE0}|Macreel_Software.DAL\\Macreel_Software.DAL.csproj|solutionrelative:macreel_software.dal\\jwttokenprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F4302B2B-877E-EBB6-A173-C32263D0A774}|Macreel_Software.Server\\Macreel_Software.Server.csproj|d:\\himansu_projects\\macreel\\macreel_software\\macreel_software.server\\controllers\\weatherforecastcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F4302B2B-877E-EBB6-A173-C32263D0A774}|Macreel_Software.Server\\Macreel_Software.Server.csproj|solutionrelative:macreel_software.server\\controllers\\weatherforecastcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{E9736C7C-8EBE-60D3-92AA-C82284442EE0}|Macreel_Software.DAL\\Macreel_Software.DAL.csproj|d:\\manisha\\macreel_software\\macreel_software.dal\\common\\icommonservices.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E9736C7C-8EBE-60D3-92AA-C82284442EE0}|Macreel_Software.DAL\\Macreel_Software.DAL.csproj|solutionrelative:macreel_software.dal\\common\\icommonservices.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,7 +46,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 8,
+          "SelectedChildIndex": 9,
           "Children": [
             {
               "$type": "Bookmark",
@@ -57,55 +77,118 @@
               "Name": "ST:2:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "JwtTokenProvider.cs",
-              "DocumentMoniker": "D:\\Himansu_Projects\\Macreel\\Macreel_Software\\Macreel_Software.DAL\\JwtTokenProvider.cs",
-              "RelativeDocumentMoniker": "Macreel_Software.DAL\\JwtTokenProvider.cs",
-              "ToolTip": "D:\\Himansu_Projects\\Macreel\\Macreel_Software\\Macreel_Software.DAL\\JwtTokenProvider.cs",
-              "RelativeToolTip": "Macreel_Software.DAL\\JwtTokenProvider.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "CommonData.cs",
+              "DocumentMoniker": "D:\\Manisha\\Macreel_Software\\Macreel_Software.Models\\CommonData.cs",
+              "RelativeDocumentMoniker": "Macreel_Software.Models\\CommonData.cs",
+              "ToolTip": "D:\\Manisha\\Macreel_Software\\Macreel_Software.Models\\CommonData.cs",
+              "RelativeToolTip": "Macreel_Software.Models\\CommonData.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-02T06:57:12.308Z",
+              "WhenOpened": "2026-01-03T12:11:11.977Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Program.cs",
-              "DocumentMoniker": "D:\\Himansu_Projects\\Macreel\\Macreel_Software\\Macreel_Software.Server\\Program.cs",
-              "RelativeDocumentMoniker": "Macreel_Software.Server\\Program.cs",
-              "ToolTip": "D:\\Himansu_Projects\\Macreel\\Macreel_Software\\Macreel_Software.Server\\Program.cs",
-              "RelativeToolTip": "Macreel_Software.Server\\Program.cs",
-              "ViewState": "AgIAADYAAAAAAAAAAAAAAE0AAAAXAAAAAAAAAA==",
+              "Title": "UploadAttendance.cs",
+              "DocumentMoniker": "D:\\Manisha\\Macreel_Software\\Macreel_Software.Services\\AttendanceUpload\\UploadAttendance.cs",
+              "RelativeDocumentMoniker": "Macreel_Software.Services\\AttendanceUpload\\UploadAttendance.cs",
+              "ToolTip": "D:\\Manisha\\Macreel_Software\\Macreel_Software.Services\\AttendanceUpload\\UploadAttendance.cs",
+              "RelativeToolTip": "Macreel_Software.Services\\AttendanceUpload\\UploadAttendance.cs",
+              "ViewState": "AgIAADoAAAAAAAAAAAAgwE4AAAA0AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-02T06:51:54.616Z",
+              "WhenOpened": "2026-01-03T11:53:20.548Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "AuthServices.cs",
+              "DocumentMoniker": "D:\\Manisha\\Macreel_Software\\Macreel_Software.DAL\\Auth\\AuthServices.cs",
+              "RelativeDocumentMoniker": "Macreel_Software.DAL\\Auth\\AuthServices.cs",
+              "ToolTip": "D:\\Manisha\\Macreel_Software\\Macreel_Software.DAL\\Auth\\AuthServices.cs",
+              "RelativeToolTip": "Macreel_Software.DAL\\Auth\\AuthServices.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAGMAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-03T11:29:24.554Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "IAuthServices.cs",
+              "DocumentMoniker": "D:\\Manisha\\Macreel_Software\\Macreel_Software.DAL\\Auth\\IAuthServices.cs",
+              "RelativeDocumentMoniker": "Macreel_Software.DAL\\Auth\\IAuthServices.cs",
+              "ToolTip": "D:\\Manisha\\Macreel_Software\\Macreel_Software.DAL\\Auth\\IAuthServices.cs",
+              "RelativeToolTip": "Macreel_Software.DAL\\Auth\\IAuthServices.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAqwAoAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-03T11:25:15.221Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "WeatherForecastController.cs",
-              "DocumentMoniker": "D:\\Himansu_Projects\\Macreel\\Macreel_Software\\Macreel_Software.Server\\Controllers\\WeatherForecastController.cs",
-              "RelativeDocumentMoniker": "Macreel_Software.Server\\Controllers\\WeatherForecastController.cs",
-              "ToolTip": "D:\\Himansu_Projects\\Macreel\\Macreel_Software\\Macreel_Software.Server\\Controllers\\WeatherForecastController.cs",
-              "RelativeToolTip": "Macreel_Software.Server\\Controllers\\WeatherForecastController.cs",
-              "ViewState": "AgIAAA4AAAAAAAAAAAAiwBkAAAAiAAAAAAAAAA==",
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "D:\\Manisha\\Macreel_Software\\Macreel_Software.Server\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "Macreel_Software.Server\\Controllers\\AuthController.cs",
+              "ToolTip": "D:\\Manisha\\Macreel_Software\\Macreel_Software.Server\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "Macreel_Software.Server\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAewA4AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-02T06:49:54.164Z"
+              "WhenOpened": "2026-01-03T10:53:30.834Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "D:\\Himansu_Projects\\Macreel\\Macreel_Software\\Macreel_Software.Server\\appsettings.json",
-              "RelativeDocumentMoniker": "Macreel_Software.Server\\appsettings.json",
-              "ToolTip": "D:\\Himansu_Projects\\Macreel\\Macreel_Software\\Macreel_Software.Server\\appsettings.json",
-              "RelativeToolTip": "Macreel_Software.Server\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-01-02T06:47:30.605Z",
-              "EditorCaption": ""
+              "DocumentIndex": 6,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\Manisha\\Macreel_Software\\Macreel_Software.Server\\Program.cs",
+              "RelativeDocumentMoniker": "Macreel_Software.Server\\Program.cs",
+              "ToolTip": "D:\\Manisha\\Macreel_Software\\Macreel_Software.Server\\Program.cs",
+              "RelativeToolTip": "Macreel_Software.Server\\Program.cs",
+              "ViewState": "AgIAADgAAAAAAAAAAAAtwEUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-03T10:34:39.912Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "FileUpload.cs",
+              "DocumentMoniker": "D:\\Manisha\\Macreel_Software\\Macreel_Software.Services\\FileUpload\\FileUpload.cs",
+              "RelativeDocumentMoniker": "Macreel_Software.Services\\FileUpload\\FileUpload.cs",
+              "ToolTip": "D:\\Manisha\\Macreel_Software\\Macreel_Software.Services\\FileUpload\\FileUpload.cs",
+              "RelativeToolTip": "Macreel_Software.Services\\FileUpload\\FileUpload.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-03T10:05:15.585Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ICommonServices.cs",
+              "DocumentMoniker": "D:\\Manisha\\Macreel_Software\\Macreel_Software.DAL\\Common\\ICommonServices.cs",
+              "RelativeDocumentMoniker": "Macreel_Software.DAL\\Common\\ICommonServices.cs",
+              "ToolTip": "D:\\Manisha\\Macreel_Software\\Macreel_Software.DAL\\Common\\ICommonServices.cs",
+              "RelativeToolTip": "Macreel_Software.DAL\\Common\\ICommonServices.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-03T10:03:36.772Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "MailSender.cs",
+              "DocumentMoniker": "D:\\Manisha\\Macreel_Software\\Macreel_Software.Services\\MailSender\\MailSender.cs",
+              "RelativeDocumentMoniker": "Macreel_Software.Services\\MailSender\\MailSender.cs",
+              "ToolTip": "D:\\Manisha\\Macreel_Software\\Macreel_Software.Services\\MailSender\\MailSender.cs",
+              "RelativeToolTip": "Macreel_Software.Services\\MailSender\\MailSender.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-03T08:00:23.451Z"
             }
           ]
         }
