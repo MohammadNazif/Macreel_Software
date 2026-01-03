@@ -15,3 +15,21 @@ D:\Himansu_Projects\Macreel\Macreel_Software\Macreel_Software.DAL\obj\Debug\net8
 D:\Himansu_Projects\Macreel\Macreel_Software\Macreel_Software.DAL\obj\Debug\net8.0\refint\Macreel_Software.DAL.dll
 D:\Himansu_Projects\Macreel\Macreel_Software\Macreel_Software.DAL\obj\Debug\net8.0\Macreel_Software.DAL.pdb
 D:\Himansu_Projects\Macreel\Macreel_Software\Macreel_Software.DAL\obj\Debug\net8.0\ref\Macreel_Software.DAL.dll
+Z:\Ankit Projects\Macreel_Software\Macreel_Software.DAL\bin\Debug\net8.0\Macreel_Software.DAL.deps.json
+Z:\Ankit Projects\Macreel_Software\Macreel_Software.DAL\bin\Debug\net8.0\Macreel_Software.DAL.dll
+Z:\Ankit Projects\Macreel_Software\Macreel_Software.DAL\bin\Debug\net8.0\Macreel_Software.DAL.pdb
+Z:\Ankit Projects\Macreel_Software\Macreel_Software.DAL\bin\Debug\net8.0\Macreel_Software.Models.dll
+Z:\Ankit Projects\Macreel_Software\Macreel_Software.DAL\bin\Debug\net8.0\Macreel_Software.Services.dll
+Z:\Ankit Projects\Macreel_Software\Macreel_Software.DAL\bin\Debug\net8.0\Macreel_Software.Models.pdb
+Z:\Ankit Projects\Macreel_Software\Macreel_Software.DAL\bin\Debug\net8.0\Macreel_Software.Services.pdb
+Z:\Ankit Projects\Macreel_Software\Macreel_Software.DAL\obj\Debug\net8.0\Macreel_Software.DAL.csproj.AssemblyReference.cache
+Z:\Ankit Projects\Macreel_Software\Macreel_Software.DAL\obj\Debug\net8.0\Macreel_Software.DAL.GeneratedMSBuildEditorConfig.editorconfig
+Z:\Ankit Projects\Macreel_Software\Macreel_Software.DAL\obj\Debug\net8.0\Macreel_Software.DAL.AssemblyInfoInputs.cache
+Z:\Ankit Projects\Macreel_Software\Macreel_Software.DAL\obj\Debug\net8.0\Macreel_Software.DAL.AssemblyInfo.cs
+Z:\Ankit Projects\Macreel_Software\Macreel_Software.DAL\obj\Debug\net8.0\Macreel_Software.DAL.csproj.CoreCompileInputs.cache
+Z:\Ankit Projects\Macreel_Software\Macreel_Software.DAL\obj\Debug\net8.0\Macreel_Software.DAL.sourcelink.json
+Z:\Ankit Projects\Macreel_Software\Macreel_Software.DAL\obj\Debug\net8.0\Macreel_.F7CCE093.Up2Date
+Z:\Ankit Projects\Macreel_Software\Macreel_Software.DAL\obj\Debug\net8.0\Macreel_Software.DAL.dll
+Z:\Ankit Projects\Macreel_Software\Macreel_Software.DAL\obj\Debug\net8.0\refint\Macreel_Software.DAL.dll
+Z:\Ankit Projects\Macreel_Software\Macreel_Software.DAL\obj\Debug\net8.0\Macreel_Software.DAL.pdb
+Z:\Ankit Projects\Macreel_Software\Macreel_Software.DAL\obj\Debug\net8.0\ref\Macreel_Software.DAL.dll

@@ -9,3 +9,15 @@ D:\Himansu_Projects\Macreel\Macreel_Software\Macreel_Software.Services\obj\Debug
 D:\Himansu_Projects\Macreel\Macreel_Software\Macreel_Software.Services\obj\Debug\net8.0\refint\Macreel_Software.Services.dll
 D:\Himansu_Projects\Macreel\Macreel_Software\Macreel_Software.Services\obj\Debug\net8.0\Macreel_Software.Services.pdb
 D:\Himansu_Projects\Macreel\Macreel_Software\Macreel_Software.Services\obj\Debug\net8.0\ref\Macreel_Software.Services.dll
+Z:\Ankit Projects\Macreel_Software\Macreel_Software.Services\bin\Debug\net8.0\Macreel_Software.Services.deps.json
+Z:\Ankit Projects\Macreel_Software\Macreel_Software.Services\bin\Debug\net8.0\Macreel_Software.Services.dll
+Z:\Ankit Projects\Macreel_Software\Macreel_Software.Services\bin\Debug\net8.0\Macreel_Software.Services.pdb
+Z:\Ankit Projects\Macreel_Software\Macreel_Software.Services\obj\Debug\net8.0\Macreel_Software.Services.GeneratedMSBuildEditorConfig.editorconfig
+Z:\Ankit Projects\Macreel_Software\Macreel_Software.Services\obj\Debug\net8.0\Macreel_Software.Services.AssemblyInfoInputs.cache
+Z:\Ankit Projects\Macreel_Software\Macreel_Software.Services\obj\Debug\net8.0\Macreel_Software.Services.AssemblyInfo.cs
+Z:\Ankit Projects\Macreel_Software\Macreel_Software.Services\obj\Debug\net8.0\Macreel_Software.Services.csproj.CoreCompileInputs.cache
+Z:\Ankit Projects\Macreel_Software\Macreel_Software.Services\obj\Debug\net8.0\Macreel_Software.Services.sourcelink.json
+Z:\Ankit Projects\Macreel_Software\Macreel_Software.Services\obj\Debug\net8.0\Macreel_Software.Services.dll
+Z:\Ankit Projects\Macreel_Software\Macreel_Software.Services\obj\Debug\net8.0\refint\Macreel_Software.Services.dll
+Z:\Ankit Projects\Macreel_Software\Macreel_Software.Services\obj\Debug\net8.0\Macreel_Software.Services.pdb
+Z:\Ankit Projects\Macreel_Software\Macreel_Software.Services\obj\Debug\net8.0\ref\Macreel_Software.Services.dll

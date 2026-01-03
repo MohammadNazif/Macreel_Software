@@ -1,28 +1,7 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\Himansu_Projects\\Macreel\\Macreel_Software\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{F4302B2B-877E-EBB6-A173-C32263D0A774}|Macreel_Software.Server\\Macreel_Software.Server.csproj|d:\\himansu_projects\\macreel\\macreel_software\\macreel_software.server\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F4302B2B-877E-EBB6-A173-C32263D0A774}|Macreel_Software.Server\\Macreel_Software.Server.csproj|solutionrelative:macreel_software.server\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E9736C7C-8EBE-60D3-92AA-C82284442EE0}|Macreel_Software.DAL\\Macreel_Software.DAL.csproj|d:\\himansu_projects\\macreel\\macreel_software\\macreel_software.dal\\jwttokenprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E9736C7C-8EBE-60D3-92AA-C82284442EE0}|Macreel_Software.DAL\\Macreel_Software.DAL.csproj|solutionrelative:macreel_software.dal\\jwttokenprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F4302B2B-877E-EBB6-A173-C32263D0A774}|Macreel_Software.Server\\Macreel_Software.Server.csproj|d:\\himansu_projects\\macreel\\macreel_software\\macreel_software.server\\controllers\\weatherforecastcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F4302B2B-877E-EBB6-A173-C32263D0A774}|Macreel_Software.Server\\Macreel_Software.Server.csproj|solutionrelative:macreel_software.server\\controllers\\weatherforecastcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E9736C7C-8EBE-60D3-92AA-C82284442EE0}|Macreel_Software.DAL\\Macreel_Software.DAL.csproj|d:\\himansu_projects\\macreel\\macreel_software\\macreel_software.dal\\testing.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E9736C7C-8EBE-60D3-92AA-C82284442EE0}|Macreel_Software.DAL\\Macreel_Software.DAL.csproj|solutionrelative:macreel_software.dal\\testing.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F4302B2B-877E-EBB6-A173-C32263D0A774}|Macreel_Software.Server\\Macreel_Software.Server.csproj|d:\\himansu_projects\\macreel\\macreel_software\\macreel_software.server\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{F4302B2B-877E-EBB6-A173-C32263D0A774}|Macreel_Software.Server\\Macreel_Software.Server.csproj|solutionrelative:macreel_software.server\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    }
-  ],
+  "WorkspaceRootPath": "Z:\\Ankit Projects\\Macreel_Software\\",
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -30,11 +9,15 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 8,
+          "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
             },
             {
               "$type": "Bookmark",
@@ -50,77 +33,11 @@
             },
             {
               "$type": "Bookmark",
-              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
-            },
-            {
-              "$type": "Bookmark",
               "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
             },
             {
               "$type": "Bookmark",
               "Name": "ST:2:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "JwtTokenProvider.cs",
-              "DocumentMoniker": "D:\\Himansu_Projects\\Macreel\\Macreel_Software\\Macreel_Software.DAL\\JwtTokenProvider.cs",
-              "RelativeDocumentMoniker": "Macreel_Software.DAL\\JwtTokenProvider.cs",
-              "ToolTip": "D:\\Himansu_Projects\\Macreel\\Macreel_Software\\Macreel_Software.DAL\\JwtTokenProvider.cs",
-              "RelativeToolTip": "Macreel_Software.DAL\\JwtTokenProvider.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-02T06:57:12.308Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Program.cs",
-              "DocumentMoniker": "D:\\Himansu_Projects\\Macreel\\Macreel_Software\\Macreel_Software.Server\\Program.cs",
-              "RelativeDocumentMoniker": "Macreel_Software.Server\\Program.cs",
-              "ToolTip": "D:\\Himansu_Projects\\Macreel\\Macreel_Software\\Macreel_Software.Server\\Program.cs",
-              "RelativeToolTip": "Macreel_Software.Server\\Program.cs",
-              "ViewState": "AgIAAA8AAAAAAAAAAADwvxoAAAAiAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-02T06:51:54.616Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "WeatherForecastController.cs",
-              "DocumentMoniker": "D:\\Himansu_Projects\\Macreel\\Macreel_Software\\Macreel_Software.Server\\Controllers\\WeatherForecastController.cs",
-              "RelativeDocumentMoniker": "Macreel_Software.Server\\Controllers\\WeatherForecastController.cs",
-              "ToolTip": "D:\\Himansu_Projects\\Macreel\\Macreel_Software\\Macreel_Software.Server\\Controllers\\WeatherForecastController.cs",
-              "RelativeToolTip": "Macreel_Software.Server\\Controllers\\WeatherForecastController.cs",
-              "ViewState": "AgIAAA4AAAAAAAAAAAAiwBkAAAAiAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-02T06:49:54.164Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Testing.cs",
-              "DocumentMoniker": "D:\\Himansu_Projects\\Macreel\\Macreel_Software\\Macreel_Software.DAL\\Testing.cs",
-              "RelativeDocumentMoniker": "Macreel_Software.DAL\\Testing.cs",
-              "ToolTip": "D:\\Himansu_Projects\\Macreel\\Macreel_Software\\Macreel_Software.DAL\\Testing.cs",
-              "RelativeToolTip": "Macreel_Software.DAL\\Testing.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-02T06:49:27.601Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "D:\\Himansu_Projects\\Macreel\\Macreel_Software\\Macreel_Software.Server\\appsettings.json",
-              "RelativeDocumentMoniker": "Macreel_Software.Server\\appsettings.json",
-              "ToolTip": "D:\\Himansu_Projects\\Macreel\\Macreel_Software\\Macreel_Software.Server\\appsettings.json",
-              "RelativeToolTip": "Macreel_Software.Server\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAQAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-01-02T06:47:30.605Z"
             }
           ]
         }
