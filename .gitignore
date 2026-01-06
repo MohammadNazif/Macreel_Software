@@ -101,3 +101,14 @@ $RECYCLE.BIN/
 ##################################################
 
 .github/workflows/*.local.yml
+
+
+
+################
+#Firebase
+################
+# Firebase / Google secrets
+firebase-service-account.json
+Macreel_Software.Server/Firebase/firebase-service-account.json
+
+

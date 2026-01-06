@@ -1,13 +1,31 @@
 ﻿using System.Text;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
 using Macreel_Software.DAL;
 using Macreel_Software.DAL.Auth;
+using Macreel_Software.Server;
+using Macreel_Software.Services;
+using Macreel_Software.Services.FirebaseNotification;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Macreel_Software.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+
+FirebaseApp.Create(new AppOptions
+{
+    Credential = GoogleCredential.FromFile(
+        Path.Combine(
+            builder.Environment.ContentRootPath,
+            "Firebase",
+            "firebase-service-account.json"))
+});
+
+
+builder.Services.AddSingleton<FirebaseNotificationService>();
+
+
+
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<JwtTokenProvider>();
@@ -26,7 +44,6 @@ builder.Services.AddCors(options =>
 
 var key = Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"]);
 
-//Jwt Authentication Configuration
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -65,7 +82,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IAuthServices, AuthServices>();
 builder.Services.AddScoped<JwtTokenProvider>();
 
-
+builder.Services.AddHttpContextAccessor();
 var app = builder.Build();
 
 app.UseDefaultFiles();

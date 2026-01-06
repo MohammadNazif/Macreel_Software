@@ -21,4 +21,28 @@ namespace Macreel_Software.Models
         public string FormattedOutTime { get; set; }
         public string FormattedTotalHours { get; set; }
     }
+    public enum MailBodyType
+    {
+        RegistrationLink,
+        UserCredential,
+        ForgotPassword,
+        QuatationManagement,
+        PerformaInvoice,
+        TaxInvoice
+    }
+    public class MailRequest
+    {
+        public string ToEmail { get; set; }
+        public string Subject { get; set; }
+        public MailBodyType BodyType { get; set; }
+
+        // Optional data
+        public string Value { get; set; }
+        public string UserName { get; set; }
+        public string Password { get; set; }
+        public string otp { get; set; }
+        public string clientName { get; set; }
+        public string AttachmentPath { get; set; }
+    }
+
 }
