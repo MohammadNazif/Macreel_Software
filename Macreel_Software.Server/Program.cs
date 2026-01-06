@@ -3,6 +3,8 @@ using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using Macreel_Software.DAL;
 using Macreel_Software.DAL.Auth;
+using Macreel_Software.DAL.Common;
+using Macreel_Software.DAL.Master;
 using Macreel_Software.Server;
 using Macreel_Software.Services;
 using Macreel_Software.Services.FirebaseNotification;
@@ -29,6 +31,8 @@ builder.Services.AddSingleton<FirebaseNotificationService>();
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<JwtTokenProvider>();
+builder.Services.AddScoped<ICommonServices, CommonService>();
+builder.Services.AddScoped<IMasterService, MasterService>();
 
 builder.Services.AddCors(options =>
 {

@@ -1,6 +1,4 @@
-﻿
-
-namespace Macreel_Software.Models
+﻿namespace Macreel_Software.Models.Common
 {
     public class CommonData
 
@@ -45,4 +43,18 @@ namespace Macreel_Software.Models
         public string AttachmentPath { get; set; }
     }
 
+    public class state
+    {
+        public int stateId { get; set; }
+
+        public string stateName { get; set; }
+    }
+
+    public class city
+    {
+        public int cityId { get; set; }
+        public int stateId { get; set; }
+        public string stateName { get; set; }
+        public string cityName { get; set; }
+    }
 }

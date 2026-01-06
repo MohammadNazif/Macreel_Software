@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Mail;
 using Macreel_Software.Models;
+using Macreel_Software.Models.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 

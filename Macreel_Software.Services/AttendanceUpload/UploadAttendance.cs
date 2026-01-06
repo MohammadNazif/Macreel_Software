@@ -1,4 +1,4 @@
-﻿using Macreel_Software.Models; 
+﻿using Macreel_Software.Models.Common;
 using Microsoft.AspNetCore.Http;
 using OfficeOpenXml;
 
