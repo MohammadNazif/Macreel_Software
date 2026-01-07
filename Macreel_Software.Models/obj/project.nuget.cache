@@ -1,8 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "gHQA46GGSa0=",
+  "dgSpecHash": "VLXtsGG5WSo=",
   "success": true,
   "projectFilePath": "D:\\deep work\\.netProject\\Macreel_Software\\Macreel_Software.Models\\Macreel_Software.Models.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\macre\\.nuget\\packages\\microsoft.aspnetcore.http.abstractions\\2.3.0\\microsoft.aspnetcore.http.abstractions.2.3.0.nupkg.sha512",
+    "C:\\Users\\macre\\.nuget\\packages\\microsoft.aspnetcore.http.features\\2.3.0\\microsoft.aspnetcore.http.features.2.3.0.nupkg.sha512",
+    "C:\\Users\\macre\\.nuget\\packages\\microsoft.extensions.primitives\\8.0.0\\microsoft.extensions.primitives.8.0.0.nupkg.sha512",
+    "C:\\Users\\macre\\.nuget\\packages\\system.text.encodings.web\\8.0.0\\system.text.encodings.web.8.0.0.nupkg.sha512"
+  ],
   "logs": []
 }
