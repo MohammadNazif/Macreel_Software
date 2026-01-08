@@ -2,9 +2,11 @@
 using Macreel_Software.DAL.Admin;
 using Macreel_Software.DAL.Common;
 using Macreel_Software.Models;
+using Macreel_Software.Models.Common;
 using Macreel_Software.Models.Master;
 using Macreel_Software.Server;
 using Macreel_Software.Services.FileUpload.Services;
+using Macreel_Software.Services.MailSender;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,71 +19,115 @@ namespace Macreel_Software.Server.Controllers
         private readonly IAdminServices _services;
         private readonly FileUploadService _fileUploadService;
         private readonly IWebHostEnvironment _env;
-        public AdminController(IAdminServices  service, FileUploadService fileUploadService, IWebHostEnvironment env)
+        private readonly MailSender _mailservice;
+        private readonly PasswordEncrypt _pass;
+
+        public AdminController(
+            IAdminServices service,
+            FileUploadService fileUploadService,
+            IWebHostEnvironment env,
+            MailSender mailservice,
+            PasswordEncrypt pass)
         {
             _services = service;
             _fileUploadService = fileUploadService;
             _env = env;
+            _mailservice = mailservice;
+            _pass = pass;
         }
+
+
+
 
         [HttpPost("insertEmployeeRegistration")]
         public async Task<IActionResult> InsertEmployee([FromForm] employeeRegistration model)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             try
             {
                 string uploadRoot = Path.Combine(_env.WebRootPath, "uploads");
-
                 if (!Directory.Exists(uploadRoot))
                     Directory.CreateDirectory(uploadRoot);
-
-        
 
                 string[] imgExt = { ".jpg", ".jpeg", ".png" };
                 string[] docExt = { ".pdf", ".jpg", ".jpeg", ".png" };
 
-                model.ProfilePicPath = model.ProfilePic != null
-                    ? "/uploads/" + await _fileUploadService.UploadFileAsync(model.ProfilePic, uploadRoot, imgExt)
-                    : "";
+                async Task<string> UploadFile(IFormFile file, string[] allowedExt)
+                {
+                    if (file == null) return "";
+                    return "/uploads/" + await _fileUploadService.UploadFileAsync(file, uploadRoot, allowedExt);
+                }
 
-                model.AadharImgPath = model.AadharImg != null
-                    ? "/uploads/" + await _fileUploadService.UploadFileAsync(model.AadharImg, uploadRoot, imgExt)
-                    : "";
+                model.ProfilePicPath = await UploadFile(model.ProfilePic, imgExt);
+                model.AadharImgPath = await UploadFile(model.AadharImg, imgExt);
+                model.PanImgPath = await UploadFile(model.PanImg, imgExt);
+                model.ExperienceCertificatePath = await UploadFile(model.ExperienceCertificate, docExt);
+                model.TenthCertificatePath = await UploadFile(model.TenthCertificate, docExt);
+                model.TwelthCertificatePath = await UploadFile(model.TwelthCertificate, docExt);
+                model.GraduationCertificatePath = await UploadFile(model.GraduationCertificate, docExt);
+                model.MastersCertificatePath = await UploadFile(model.MastersCertificate, docExt);
 
-                model.PanImgPath = model.PanImg != null
-                    ? "/uploads/" + await _fileUploadService.UploadFileAsync(model.PanImg, uploadRoot, imgExt)
-                    : "";
+                string plainPassword = model.Password;
+                model.Password = _pass.EncryptPassword(model.Password);
 
-                model.ExperienceCertificatePath = model.ExperienceCertificate != null
-                    ? "/uploads/" + await _fileUploadService.UploadFileAsync(model.ExperienceCertificate, uploadRoot, docExt)
-                    : "";
+                string dbMessage = await _services.InsertEmployeeRegistrationData(model);
 
-                model.TenthCertificatePath = model.TenthCertificate != null
-                    ? "/uploads/" + await _fileUploadService.UploadFileAsync(model.TenthCertificate, uploadRoot, docExt)
-                    : "";
+                if (dbMessage.Contains("Email already exists"))
+                {
+                    return BadRequest(new
+                    {
+                        status = false,
+                        statusCode = 409,
+                        message = dbMessage, 
+                        emailStatus = false,
+                        emailMessage = "Email not sent"
+                    });
+                }
 
-                model.TwelfthCertificatePath = model.TwelthCertificate != null
-                    ? "/uploads/" + await _fileUploadService.UploadFileAsync(model.TwelthCertificate, uploadRoot, docExt)
-                    : "";
+                if (!dbMessage.Contains("success"))
+                {
+                    return BadRequest(new
+                    {
+                        status = false,
+                        statusCode = 400,
+                        message = dbMessage,
+                        emailStatus = false,
+                        emailMessage = "Email not sent"
+                    });
+                }
 
-                model.GraduationCertificatePath = model.GraduationCertificate != null
-                    ? "/uploads/" + await _fileUploadService.UploadFileAsync(model.GraduationCertificate, uploadRoot, docExt)
-                    : "";
+                bool emailStatus = false;
+                string emailMessage = "Email not sent";
 
-                model.MastersCertificatePath = model.MastersCertificate != null
-                    ? "/uploads/" + await _fileUploadService.UploadFileAsync(model.MastersCertificate, uploadRoot, docExt)
-                    : "";
+                try
+                {
+                    var mailRequest = new MailRequest
+                    {
+                        ToEmail = model.EmailId,
+                        Subject = "Your Account Credentials - Macreel Infosoft Pvt. Ltd.",
+                        BodyType = MailBodyType.UserCredential,
+                        UserName = model.EmailId,
+                        Password = plainPassword
+                    };
 
-                bool result = await _services.InsertEmployeeRegistrationData(model);
+                    var mailResponse = await _mailservice.SendMailAsync(mailRequest);
+                    emailStatus = mailResponse.Status;
+                    emailMessage = mailResponse.Message;
+                }
+                catch (Exception mailEx)
+                {
+                    emailMessage = "Email sending failed: " + mailEx.Message;
+                }
+
+                string combinedMessage = dbMessage + (emailStatus ? " | Credentials sent to email successfully."
+                                                                   : " | " + emailMessage);
 
                 return Ok(new
                 {
-                    status = result,
-                    message = result ? "Employee registered successfully" : "Employee registration failed"
+                    status = true,
+                    statusCode = 201,
+                    message = combinedMessage,
+                    emailStatus,
+                    emailMessage
                 });
             }
             catch (Exception ex)
@@ -89,10 +135,116 @@ namespace Macreel_Software.Server.Controllers
                 return BadRequest(new
                 {
                     status = false,
-                    message = ex.Message
+                    statusCode = 500,
+                    message = "Registration failed: " + ex.Message,
+                    emailStatus = false,
+                    emailMessage = "Email not sent"
                 });
             }
         }
+
+
+
+        [HttpGet("getReportingManager")]
+        public async Task<IActionResult> GetReportingManager()
+        {
+            try
+            {
+                var result = await _services.GetAllReportingManager();
+
+                if (result != null && result.Any())
+                {
+                    return Ok(ApiResponse<List<ReportingManger>>.SuccessResponse(
+                        result,
+                        "Reporting manager fetched successfully"
+                    ));
+                }
+
+                return Ok(ApiResponse<List<ReportingManger>>.FailureResponse(
+                    "No data found",
+                    404
+                ));
+            }
+            catch (Exception)
+            {
+                return StatusCode(500,
+                    ApiResponse<List<ReportingManger>>.FailureResponse(
+                        "An error occurred while fetching reporting managers",
+                        500,
+                        "SERVER_ERROR"
+                    ));
+            }
+        }
+
+        [HttpGet("GetAllEmployees")]
+        public async Task<IActionResult> GetAllEmployees(
+       string? searchTerm,
+       int? pageNumber,
+       int? pageSize)
+        {
+            try
+            {
+                ApiResponse<List<employeeRegistration>> result =
+                    await _services.GetAllEmpData(searchTerm, pageNumber, pageSize);
+
+                return StatusCode(result.StatusCode, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500,
+                    ApiResponse<List<employeeRegistration>>.FailureResponse(
+                        "An error occurred while fetching employee data",
+                        500,
+                        "SERVER_ERROR"));
+            }
+        }
+
+
+
+        [HttpDelete("deleteEmployeeById")]
+        public async Task<IActionResult> deleteEmployeeById(int id)
+        {
+            var res = await _services.deleteEmployeeById(id);
+
+            if (res)
+            {
+                return Ok(new
+                {
+                    status = true,
+                    StatusCode = 200,
+                    message = "Employee deleted successfully!!!"
+                });
+            }
+
+            return NotFound(new
+            {
+                status = false,
+                StatusCode = 404,
+                message = "Employee not found or already deleted!"
+            });
+        }
+
+        [HttpGet("getEmployeeById")]
+        public async Task<IActionResult> getemployeeById(int id)
+        {
+            try
+            {
+
+                var result = await _services.GetAllEmpDataById(id);
+
+
+                return StatusCode(result.StatusCode, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<role>.FailureResponse(
+                    "An error occurred while fetching employee.",
+                    500,
+                    "SERVER_ERROR"
+                ));
+            }
+        }
+
 
 
     }

@@ -10,6 +10,7 @@ using Macreel_Software.Server;
 using Macreel_Software.Services;
 using Macreel_Software.Services.FileUpload.Services;
 using Macreel_Software.Services.FirebaseNotification;
+using Macreel_Software.Services.MailSender;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -37,7 +38,8 @@ builder.Services.AddScoped<ICommonServices, CommonService>();
 builder.Services.AddScoped<IMasterService, MasterService>();
 builder.Services.AddScoped<IAdminServices, AdminServices>();
 builder.Services.AddScoped<FileUploadService>();
-
+builder.Services.AddScoped<MailSender>();
+builder.Services.AddScoped<PasswordEncrypt>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngular",

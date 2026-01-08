@@ -15,6 +15,7 @@ namespace Macreel_Software.Models.Master
     {
         public int id { get; set; }
         public string rolename { get; set; }
+     
     }
     public class department
     {
@@ -28,9 +29,5 @@ namespace Macreel_Software.Models.Master
         public string designationName { get; set; }
     }
 
-    public class ReportingManger
-    {
-        public int id { get; set; }
-        public string ReportingManagerName { get; set; }
-    }
+   
 }

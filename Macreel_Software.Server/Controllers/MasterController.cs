@@ -67,87 +67,47 @@ namespace Macreel_Software.Server.Controllers
 
 
         [HttpGet("getAllRole")]
-        public async Task<IActionResult> getAllRole(string? searchTerm = null, int? pageNumber = null,int? pageSize = null)
+        public async Task<IActionResult> getAllRole(string? searchTerm = null,int? pageNumber = null, int?pageSize = null)
         {
             try
             {
-                var result = await _service.getAllRole(searchTerm, pageNumber, pageSize);
+                ApiResponse<List<role>> result =
+                    await _service.getAllRole(searchTerm, pageNumber, pageSize);
 
-                if (result.Data != null && result.Data.Any())
-                {
-                 
-                    if (pageNumber.HasValue && pageSize.HasValue)
-                    {
-                        return Ok(ApiResponse<List<role>>.PagedResponse(
-                            result.Data,
-                            pageNumber.Value,
-                            pageSize.Value,
-                            result.TotalRecords,
-                            "Role data fetched successfully"
-                        ));
-                    }
-
-                   
-                    return Ok(ApiResponse<List<role>>.SuccessResponse(
-                        result.Data,
-                        "Role data fetched successfully"
-                    ));
-                }
-
-                return Ok(ApiResponse<List<role>>.FailureResponse(
-                    "No data found",
-                    404
-                ));
+      
+                return StatusCode(result.StatusCode, result);
             }
             catch (Exception ex)
             {
                 return StatusCode(500, ApiResponse<List<role>>.FailureResponse(
                     "An error occurred while fetching role",
                     500,
-                    errorCode: "SERVER_ERROR"
+                    "SERVER_ERROR"
                 ));
             }
         }
-
 
         [HttpGet("getRoleById")]
         public async Task<IActionResult> getRoleById(int roleId)
         {
             try
             {
-                var data = await _service.getAllRoleById(roleId);
-                if (data != null && data.Any())
-                {
-                    return Ok(new
-                    {
-                        status = true,
-                        StatusCode = 200,
-                        message = "Role data get by id successfully!!!",
-                        RoleListbyid = data
-                    });
-                }
-                else
-                {
-                    return Ok(new
-                    {
-                        status = false,
-                        StatusCode = 404,
-                        message = "No data found!!"
-                    });
-                }
+          
+                var result = await _service.getAllRoleById(roleId);
+
+           
+                return StatusCode(result.StatusCode, result);
             }
             catch (Exception ex)
             {
-
-                return StatusCode(500, new
-                {
-                    status = false,
-                    StatusCode = 500,
-                    message = "An error occurred while fetching role.",
-                    error = ex.Message
-                });
+                return StatusCode(500, ApiResponse<role>.FailureResponse(
+                    "An error occurred while fetching role.",
+                    500,
+                    "SERVER_ERROR"
+                ));
             }
         }
+
 
         [HttpGet("deleteRoleById")]
         public async Task<IActionResult> deleteRoleById(int roleId)
@@ -239,47 +199,25 @@ namespace Macreel_Software.Server.Controllers
 
 
         [HttpGet("getAllDepartment")]
-        public async Task<IActionResult> getAllDepartment(string? searchTerm = null,int? pageNumber = null, int? pageSize = null)
+        public async Task<IActionResult> getAllDepartment( string? searchTerm = null,int? pageNumber = null,
+     int? pageSize = null)
         {
             try
             {
-                var result = await _service.getAllDepartment(searchTerm, pageNumber, pageSize);
+                var response = await _service.getAllDepartment(searchTerm, pageNumber, pageSize);
 
-                if (result.Data != null && result.Data.Any())
-                {
-                  
-                    if (pageNumber.HasValue && pageSize.HasValue)
-                    {
-                        return Ok(ApiResponse<List<department>>.PagedResponse(
-                            result.Data,
-                            pageNumber.Value,
-                            pageSize.Value,
-                            result.TotalRecords,
-                            "Department data fetched successfully"
-                        ));
-                    }
-
-                 
-                    return Ok(ApiResponse<List<department>>.SuccessResponse(
-                        result.Data,
-                        "Department data fetched successfully"
-                    ));
-                }
-
-                return Ok(ApiResponse<List<department>>.FailureResponse(
-                    "No data found",
-                    404
-                ));
+                return StatusCode(response.StatusCode, response);
             }
             catch (Exception ex)
             {
                 return StatusCode(500, ApiResponse<List<department>>.FailureResponse(
-                    "An error occurred while fetching department",
+                    "An unexpected error occurred",
                     500,
-                    errorCode: "SERVER_ERROR"
+                    "SERVER_ERROR"
                 ));
             }
         }
+
 
 
         [HttpGet("getDepartmentById")]
@@ -287,37 +225,24 @@ namespace Macreel_Software.Server.Controllers
         {
             try
             {
-                var data = await _service.getAllDepartmentById(depId);
-                if (data != null && data.Any())
+                var response = await _service.getAllDepartmentById(depId);
+
+                if (response.Success)
                 {
-                    return Ok(new
-                    {
-                        status = true,
-                        StatusCode = 200,
-                        message = "Department data get by id successfully!!!",
-                        DepartmentListbyid = data
-                    });
+                    return Ok(response);
                 }
                 else
                 {
-                    return Ok(new
-                    {
-                        status = false,
-                        StatusCode = 404,
-                        message = "No data found!!"
-                    });
+                    return StatusCode(response.StatusCode, response);
                 }
             }
             catch (Exception ex)
             {
-
-                return StatusCode(500, new
-                {
-                    status = false,
-                    StatusCode = 500,
-                    message = "An error occurred while fetching Department.",
-                    error = ex.Message
-                });
+                return StatusCode(500, ApiResponse<List<department>>.FailureResponse(
+                    "An unexpected error occurred while fetching Department.",
+                    500,
+                    errorCode: "EXCEPTION"
+                ));
             }
         }
 
@@ -411,38 +336,14 @@ namespace Macreel_Software.Server.Controllers
 
 
         [HttpGet("getAllDesignation")]
-        public async Task<IActionResult> getAllDesignation(string? searchTerm = null,int? pageNumber = null,
-       int? pageSize = null)
+        public async Task<IActionResult> getAllDesignation( string? searchTerm = null,int? pageNumber = null,
+        int? pageSize = null)
         {
             try
             {
-                var result = await _service.getAllDesignation(searchTerm, pageNumber, pageSize);
+                var response = await _service.getAllDesignation(searchTerm, pageNumber, pageSize);
 
-                if (result.Data != null && result.Data.Any())
-                {
-                  
-                    if (pageNumber.HasValue && pageSize.HasValue)
-                    {
-                        return Ok(ApiResponse<List<designation>>.PagedResponse(
-                            result.Data,
-                            pageNumber.Value,
-                            pageSize.Value,
-                            result.TotalRecords,
-                            "Designation data fetched successfully"
-                        ));
-                    }
-
-                 
-                    return Ok(ApiResponse<List<designation>>.SuccessResponse(
-                        result.Data,
-                        "Designation data fetched successfully"
-                    ));
-                }
-
-                return Ok(ApiResponse<List<designation>>.FailureResponse(
-                    "No data found",
-                    404
-                ));
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -460,39 +361,19 @@ namespace Macreel_Software.Server.Controllers
         {
             try
             {
-                var data = await _service.getAllDesignationById(desId);
-                if (data != null && data.Any())
-                {
-                    return Ok(new
-                    {
-                        status = true,
-                        StatusCode = 200,
-                        message = "Designation data get by id successfully!!!",
-                        DesignationListbyid = data
-                    });
-                }
-                else
-                {
-                    return Ok(new
-                    {
-                        status = false,
-                        StatusCode = 404,
-                        message = "No data found!!"
-                    });
-                }
+                var response = await _service.getAllDesignationById(desId);
+                return Ok(response);
             }
             catch (Exception ex)
             {
-
-                return StatusCode(500, new
-                {
-                    status = false,
-                    StatusCode = 500,
-                    message = "An error occurred while fetching Designation.",
-                    error = ex.Message
-                });
+                return StatusCode(500, ApiResponse<List<designation>>.FailureResponse(
+                    "An error occurred while fetching designation.",
+                    500,
+                    "SERVER_ERROR"
+                ));
             }
         }
+
 
 
         [HttpGet("deleteDesignationById")]

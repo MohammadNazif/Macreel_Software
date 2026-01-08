@@ -24,8 +24,7 @@ public class MailSender
         _enableSsl = Convert.ToBoolean(configuration["MailSettings:EnableSsl"]);
         _httpContextAccessor = httpContextAccessor;
     }
-
-    public CommonMessage SendMail(MailRequest request)
+    public async Task<CommonMessage> SendMailAsync(MailRequest request)
     {
         CommonMessage response = new CommonMessage();
 
@@ -52,7 +51,7 @@ public class MailSender
                 {
                     smtp.EnableSsl = _enableSsl;
                     smtp.Credentials = new NetworkCredential(_senderId, _password);
-                    smtp.Send(mail);
+                    await smtp.SendMailAsync(mail); 
                 }
             }
 
@@ -72,8 +71,8 @@ public class MailSender
     {
         return type switch
         {
-            MailBodyType.RegistrationLink => RegistrationLink(value),
             MailBodyType.UserCredential => UserCredential(username, password),
+            MailBodyType.RegistrationLink => RegistrationLink(value),
             MailBodyType.ForgotPassword => ForgotPasswordBody(otp),
             MailBodyType.QuatationManagement => QuatationManagement(clientName),
             MailBodyType.TaxInvoice => TaxInvoice(clientName),
@@ -174,72 +173,31 @@ public class MailSender
         return $@"
 <html>
 <head>
-    <style>
-        body {{
-            font-family: Arial, sans-serif;
-            background-color: #f4f6f8;
-            padding: 20px;
-        }}
-        .container {{
-            max-width: 600px;
-            background: #ffffff;
-            margin: auto;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }}
-        h3 {{
-            color: #c62828;
-            text-align: center;
-        }}
-        table {{
-            border-collapse: collapse;
-            width: 100%;
-            margin-top: 20px;
-        }}
-        th, td {{
-            border: 1px solid #ddd;
-            padding: 10px;
-        }}
-        th {{
-            background-color: #f0f0f0;
-            text-align: left;
-        }}
-        .footer {{
-            margin-top: 25px;
-            font-size: 13px;
-            text-align: center;
-            color: #777;
-        }}
-    </style>
+<style>
+body {{ font-family: Arial, sans-serif; background-color: #f4f6f8; padding: 20px; }}
+.container {{ max-width: 600px; background: #ffffff; margin: auto; padding: 25px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }}
+h3 {{ color: #c62828; text-align: center; }}
+table {{ border-collapse: collapse; width: 100%; margin-top: 20px; }}
+th, td {{ border: 1px solid #ddd; padding: 10px; }}
+th {{ background-color: #f0f0f0; text-align: left; }}
+.footer {{ margin-top: 25px; font-size: 13px; text-align: center; color: #777; }}
+</style>
 </head>
 <body>
-    <div class='container'>
-        <p>Welcome to,</p>
-        <h3>Macreel Infosoft Pvt. Ltd.</h3>
-
-        <table>
-            <tr>
-                <th colspan='2'>Your registration has been completed successfully</th>
-            </tr>
-            <tr>
-                <td><strong>User Name</strong></td>
-                <td>{username}</td>
-            </tr>
-            <tr>
-                <td><strong>Password</strong></td>
-                <td>{password}</td>
-            </tr>
-        </table>
-
-        <div class='footer'>
-            <p>From Macreel Infosoft Pvt. Ltd.</p>
-            <p>
-                <a href='https://vakiluncle.co.in' target='_blank'>https://vakiluncle.co.in</a>
-            </p>
-            <img src='https://vakiluncle.co.in/assets/img/logo.png' alt='Macreel Logo' width='120'/>
-        </div>
-    </div>
+<div class='container'>
+<p>Welcome to,</p>
+<h3>Macreel Infosoft Pvt. Ltd.</h3>
+<table>
+<tr><th colspan='2'>Your registration has been completed successfully</th></tr>
+<tr><td><strong>User Name</strong></td><td>{username}</td></tr>
+<tr><td><strong>Password</strong></td><td>{password}</td></tr>
+</table>
+<div class='footer'>
+<p>From Macreel Infosoft Pvt. Ltd.</p>
+<p>For Login : <a href='https://vakiluncle.co.in' target='_blank'>https://vakiluncle.co.in</a></p>
+<img src='https://vakiluncle.co.in/assets/img/logo.png' alt='Macreel Logo' width='120'/>
+</div>
+</div>
 </body>
 </html>";
     }
