@@ -74,8 +74,7 @@
               "RelativeToolTip": "Macreel_Software.Models\\Master\\AdminData.cs",
               "ViewState": "AgIAAEAAAAAAAAAAAAAmwEMAAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-12T05:03:23.384Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-12T05:03:23.384Z"
             },
             {
               "$type": "Document",
@@ -87,8 +86,7 @@
               "RelativeToolTip": "Macreel_Software.DAL\\Admin\\IAdminServices.cs",
               "ViewState": "AgIAAAoAAAAAAAAAAAAWwBMAAAATAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-08T13:08:16.772Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-08T13:08:16.772Z"
             },
             {
               "$type": "Document",
@@ -100,8 +98,7 @@
               "RelativeToolTip": "Macreel_Software.Server\\Controllers\\MasterController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAFgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-08T12:46:37.455Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-08T12:46:37.455Z"
             },
             {
               "$type": "Document",
@@ -111,7 +108,7 @@
               "RelativeDocumentMoniker": "Macreel_Software.Server\\Controllers\\AdminController.cs",
               "ToolTip": "D:\\Macreel-Software\\Macreel_Software\\Macreel_Software.Server\\Controllers\\AdminController.cs",
               "RelativeToolTip": "Macreel_Software.Server\\Controllers\\AdminController.cs",
-              "ViewState": "AgIAABgBAAAAAAAAAAAgwC8BAAAjAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-01-07T10:00:55.012Z",
               "EditorCaption": ""
@@ -126,8 +123,7 @@
               "RelativeToolTip": "Macreel_Software.DAL\\Admin\\AdminServices.cs",
               "ViewState": "AgIAAMYBAAAAAAAAAIAwwNgBAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-07T05:41:01.556Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-07T05:41:01.556Z"
             }
           ]
         }
