@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using Macreel_Software.Models;
+using Macreel_Software.Services.MailSender;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
@@ -9,27 +10,27 @@ namespace Macreel_Software.DAL.Auth
     public class AuthServices : IAuthServices
     {
         private readonly IConfiguration _config;
-         
-        public AuthServices(IConfiguration config)
+        private readonly PasswordEncrypt _pass;
+
+        public AuthServices(IConfiguration config, PasswordEncrypt pass)
         {
             _config = config;
+            _pass = pass;
         }
 
-        public async Task<UserData?> ValidateUserAsync(string userName, string password)
+        public async Task<UserData?> ValidateUserAsync(string userName, string enteredPassword)
         {
-           string message = string.Empty;
             UserData? user = null;
 
             try
             {
-                using SqlConnection con = new SqlConnection(
-                    _config.GetConnectionString("DefaultConnection"));
+                using SqlConnection con =
+                    new SqlConnection(_config.GetConnectionString("DefaultConnection"));
 
                 using SqlCommand cmd = new SqlCommand("sp_Login", con);
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 cmd.Parameters.AddWithValue("@UserName", userName);
-                cmd.Parameters.AddWithValue("@Password", password);
                 cmd.Parameters.AddWithValue("@Action", "LOGIN");
 
                 await con.OpenAsync();
@@ -38,7 +39,12 @@ namespace Macreel_Software.DAL.Auth
 
                 if (await dr.ReadAsync())
                 {
-                    if (dr["Password"].ToString() == password)
+                    string encryptedDbPassword = dr["Password"].ToString()!;
+                    //string enteredPass = _pass.EncryptPassword(enteredPassword);
+                    string decryptedDbPassword = _pass.DecryptPassword(encryptedDbPassword);
+
+                 
+                    if (decryptedDbPassword == enteredPassword)
                     {
                         user = new UserData
                         {
@@ -47,21 +53,11 @@ namespace Macreel_Software.DAL.Auth
                             Role = dr["Role"].ToString()
                         };
                     }
-                    else
-                    {
-                        message = "Password does not match";
-                    }
-                }
-                else
-                {
-                    message = "Invalid credentials";
                 }
             }
-        
-            catch (Exception ex)
+            catch
             {
-                message = "Something went wrong";
-             
+                return null;
             }
 
             return user;
@@ -94,9 +90,6 @@ namespace Macreel_Software.DAL.Auth
             }
         }
 
-        public Task<string> UploadFileAsync(IFormFile file, string folderPath, string[] allowedExtensions = null, long maxFileSize = 10485760)
-        {
-            throw new NotImplementedException();
-        }
+      
     }
 }

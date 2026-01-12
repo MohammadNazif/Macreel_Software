@@ -11,9 +11,13 @@ namespace Macreel_Software.DAL.Auth
     public interface IAuthServices
     {
 
-        public Task<UserData?> ValidateUserAsync(string userName, string password);
-        public Task<bool> SaveRefreshTokenAsync(int userId, string refreshToken, DateTime expiry);
-        Task<string> UploadFileAsync(IFormFile file, string folderPath, string[] allowedExtensions = null, long maxFileSize = 10485760);
+         Task<UserData?> ValidateUserAsync(string userName, string password);
+         Task<bool> SaveRefreshTokenAsync(int userId, string refreshToken, DateTime expiry);
+
+
+
+      
+
     }
     
 }
