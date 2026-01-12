@@ -38,7 +38,7 @@ namespace Macreel_Software.Server.Controllers
 
 
 
-
+        #region employee api
         [HttpPost("insertEmployeeRegistration")]
         public async Task<IActionResult> InsertEmployee([FromForm] employeeRegistration model)
         {
@@ -308,6 +308,215 @@ namespace Macreel_Software.Server.Controllers
             }
         }
 
+        #endregion
+
+
+        #region leave api
+
+        [HttpPost("insertLeave")]
+        public async Task<IActionResult> insertLeave([FromBody] Leave data)
+        {
+            try
+            {
+                int result = await _services.InsertRole(data);
+
+                if (result == 1)
+                {
+                    return Ok(new
+                    {
+                        status=true,
+                        statusCode=200,
+                        message="Leave Inserted Successfully!!"
+                    });
+                }
+
+                if (result == 2)
+                {
+                    return Ok(new
+                    {
+                        status = true,
+                        statusCode = 200,
+                        message = "Leave Updated Successfully!!"
+                    });
+                }
+
+                if (result == -1)
+                {
+                    return Ok(new
+                    {
+                        status = false,
+                        statusCode = 400,
+                        message = "Leave already exists!!"
+                    });
+                }
+
+                return Ok(new
+                {
+                    status = false,
+                    statusCode = 400,
+                    message = "Some error occured during leave insertion!!"
+                });
+            }
+            catch (Exception)
+            {
+                return Ok(new
+                {
+                    status = false,
+                    statusCode = 500,
+                    message = "Internal Server error!!"
+                });
+            }
+        }
+
+
+
+        [HttpGet("getAllRole")]
+        public async Task<IActionResult> getAllLeave(string? searchTerm = null, int? pageNumber = null, int? pageSize = null)
+        {
+            try
+            {
+                ApiResponse<List<Leave>> result =
+                    await _services.getAllLeave(searchTerm, pageNumber, pageSize);
+
+
+                return StatusCode(result.StatusCode, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<List<role>>.FailureResponse(
+                    "An error occurred while fetching leave",
+                    500,
+                    "SERVER_ERROR"
+                ));
+            }
+        }
+
+        [HttpGet("getLeaveById")]
+        public async Task<IActionResult> getLeaveById(int id)
+        {
+            try
+            {
+
+                var result = await _services.getAllLeaveById(id);
+
+
+                return StatusCode(result.StatusCode, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<Leave>.FailureResponse(
+                    "An error occurred while fetching role.",
+                    500,
+                    "SERVER_ERROR"
+                ));
+            }
+        }
+
+
+        [HttpDelete("DeleteLeaveById")]
+        public async Task<IActionResult> deleteLeaveById(int id)
+        {
+            try
+            {
+                bool res = await _services.deleteLeaveById(id);
+                if(res)
+                {
+                    return Ok(new
+                    {
+                        status=true,
+                        StatusCode=200,
+                        message="Leave deleted successfully!!"
+                    });
+                }
+                else
+                {
+                    return Ok(new
+                    {
+                        status=false,
+                        StatusCode=400,
+                        messsag="Leave not deleted!!"
+                    });
+                }
+            }
+            catch
+            {
+
+                return Ok(new
+                {
+                    StatusCode=500,
+                    status=false,
+                    message="Interval server error!!"
+                });
+            }
+        }
+
+        [HttpPost("AssignLeave")]
+        public async Task<IActionResult> AssignLeave([FromBody] assignLeave obj)
+        {
+            int row = 0;
+
+            try
+            {
+                obj.NoOfLeave = obj.leaveNo.Split(',');
+                obj.LeaveType = obj.Leave.Split(',');
+
+                for (int i = 0; i < obj.LeaveType.Length; i++)
+                {
+
+                    row = await _services.InsertAssignLeaveAsync(obj.EmployeeId,obj.NoOfLeave[i], obj.LeaveType[i] );
+                }
+
+                if (row > 0)
+                {
+                    return Ok(new
+                    {
+                        status = true,
+                        StatusCode = 200,
+                        message = "Leave assigned successfully!!"
+                    });
+                }
+
+                return Ok(new
+                {
+                    status = false,
+                    StatusCode = 400,
+                    message = "Leave not assigned!!"
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    status = false,
+                    message = "Internal server error",
+                    error = ex.Message
+                });
+            }
+        }
+
+        [HttpGet("getAssignedLeaveById")]
+        public async Task<IActionResult> getAssignedLeaveById(int empId)
+        {
+            try
+            {
+
+                var result = await _services.getAllAssignedLeaveById(empId);
+
+
+                return StatusCode(result.StatusCode, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<showLeave>.FailureResponse(
+                    "An error occurred while fetching assigned leave.",
+                    500,
+                    "SERVER_ERROR"
+                ));
+            }
+        }
+
+
+        #endregion
 
     }
 }
