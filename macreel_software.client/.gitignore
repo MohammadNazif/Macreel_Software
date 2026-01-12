@@ -1,17 +1,28 @@
-# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+# ======================================================
+# Angular / Frontend Build Output
+# ======================================================
+/dist/
+/tmp/
+/out-tsc/
+/bazel-out/
 
-# Compiled output
-/dist
-/tmp
-/out-tsc
-/bazel-out
+# ======================================================
+# Node / Package Managers
+# ======================================================
+/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
-# Node
-/node_modules
-npm-debug.log
-yarn-error.log
+# ======================================================
+# Angular Cache
+# ======================================================
+/.angular/cache/
 
-# IDEs and editors
+# ======================================================
+# IDEs & Editors
+# ======================================================
 .idea/
 .project
 .classpath
@@ -20,23 +31,48 @@ yarn-error.log
 .settings/
 *.sublime-workspace
 
+# ======================================================
 # Visual Studio Code
+# (Keep shared workspace configs)
+# ======================================================
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-.history/*
+.history/
 
-# Miscellaneous
-/.angular/cache
-.sass-cache/
-/connect.lock
-/coverage
-/libpeerconnection.log
+# ======================================================
+# Testing & Coverage
+# ======================================================
+/coverage/
 testem.log
-/typings
+/libpeerconnection.log
 
-# System files
+# ======================================================
+# Environment & Secrets
+# ======================================================
+.env
+.env.*
+!.env.example
+
+# ======================================================
+# Logs & Misc
+# ======================================================
+*.log
+/connect.lock
+/typings/
+
+# ======================================================
+# OS / System Files
+# ======================================================
 .DS_Store
 Thumbs.db
+desktop.ini
+
+# ======================================================
+# Temporary / Backup Files
+# ======================================================
+*.tmp
+*.bak
+*.swp
