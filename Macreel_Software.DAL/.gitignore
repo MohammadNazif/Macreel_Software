@@ -1,0 +1,18 @@
+# Build output
+bin/
+obj/
+
+# Rider / VS local files
+.vs/
+.idea/
+
+# Logs
+logs/
+*.log
+
+# User-specific
+*.user
+*.suo
+
+# EF Core
+Migrations/*.Designer.cs
