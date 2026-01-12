@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using OfficeOpenXml;
 
-
 namespace Macreel_Software.Services.AttendanceUpload
 {
     public class UploadAttendance
@@ -16,9 +15,7 @@ namespace Macreel_Software.Services.AttendanceUpload
 
             if (!Path.GetExtension(file.FileName)
                 .Equals(".xlsx", StringComparison.OrdinalIgnoreCase))
-            {
-                return attendances; 
-            }
+                return attendances;
 
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
@@ -26,12 +23,13 @@ namespace Macreel_Software.Services.AttendanceUpload
             using (var package = new ExcelPackage(stream))
             {
                 var worksheet = package.Workbook.Worksheets[0];
-                if (worksheet == null) return attendances;
+                if (worksheet == null || worksheet.Dimension == null)
+                    return attendances;
 
                 int rowCount = worksheet.Dimension.End.Row;
                 int maxDays = DateTime.DaysInMonth(currentYear, selectedMonth);
-                int day = 0;
 
+                // Employees start from row 11, every employee block = 6 rows
                 for (int row = 11; row <= rowCount; row += 6)
                 {
                     string employeeCode = worksheet.Cells[row, 4].Text?.Trim();
@@ -41,33 +39,31 @@ namespace Macreel_Software.Services.AttendanceUpload
                         employeeCode.Equals("E. Code", StringComparison.OrdinalIgnoreCase))
                         continue;
 
-                    day = 0;
-
-                    for (int col = 3; col <= worksheet.Dimension.End.Column && col <= maxDays; col++)
+                    // Days start from column 3 (day 1)
+                    for (int day = 1; day <= maxDays; day++)
                     {
-                        string status = worksheet.Cells[row + 1, col].Text?.Trim();
-                        string intm = worksheet.Cells[row + 2, col].Text?.Trim();
-                        string outtm = worksheet.Cells[row + 3, col].Text?.Trim();
-                        string ttlhrs = worksheet.Cells[row + 4, col].Text?.Trim();
+                        int col = day + 2;
 
-                        if (string.IsNullOrWhiteSpace(status))
+                        string status = worksheet.Cells[row + 1, col].Text?.Trim();
+                        string inTimeText = worksheet.Cells[row + 2, col].Text?.Trim();
+                        string outTimeText = worksheet.Cells[row + 3, col].Text?.Trim();
+                        string totalHoursText = worksheet.Cells[row + 4, col].Text?.Trim();
+
+                        // If everything is blank → skip (completely empty cell)
+                        if (string.IsNullOrWhiteSpace(status) &&
+                            string.IsNullOrWhiteSpace(inTimeText) &&
+                            string.IsNullOrWhiteSpace(outTimeText))
                             continue;
 
-                        day++;
+                        // Default status handling
+                        if (string.IsNullOrWhiteSpace(status))
+                            status = "A"; // Absent / Holiday / WO fallback
 
-                        TimeSpan inTime = ParseTime(intm);
-                        TimeSpan outTime = ParseTime(outtm);
-                        TimeSpan totalHours = ParseTime(ttlhrs);
+                        TimeSpan inTime = ParseTime(inTimeText);
+                        TimeSpan outTime = ParseTime(outTimeText);
+                        TimeSpan totalHours = ParseTime(totalHoursText);
 
-                        DateTime date;
-                        try
-                        {
-                            date = new DateTime(currentYear, selectedMonth, day);
-                        }
-                        catch
-                        {
-                            date = DateTime.MinValue;
-                        }
+                        DateTime date = new DateTime(currentYear, selectedMonth, day);
 
                         attendances.Add(new CommonData
                         {
@@ -91,7 +87,8 @@ namespace Macreel_Software.Services.AttendanceUpload
 
         private TimeSpan ParseTime(string text)
         {
-            if (string.IsNullOrWhiteSpace(text)) return TimeSpan.Zero;
+            if (string.IsNullOrWhiteSpace(text))
+                return TimeSpan.Zero;
 
             text = text.Replace(".", ":").Replace(" ", "").Trim();
 
