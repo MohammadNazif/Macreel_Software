@@ -23,6 +23,7 @@ namespace Macreel_Software.DAL.Admin
                 config.GetConnectionString("DefaultConnection"));
         }
 
+
         public async Task<string> InsertEmployeeRegistrationData(employeeRegistration data)
         {
             try
@@ -107,6 +108,7 @@ namespace Macreel_Software.DAL.Admin
                     _conn.Close();
             }
         }
+
 
         public async Task<List<ReportingManger>> GetAllReportingManager()
         {
