@@ -96,6 +96,33 @@ namespace Macreel_Software.Models.Master
         public int? EmpId { get; set; }
     }
 
+    public class Leave
+    {
+        public int Id { get; set; }
+        public string leaveName { get; set; }
+        public string description { get; set; }
+    }
+
+    public class assignLeave
+    {
+        public int EmployeeId { get; set; }
+
+        public string Leave { get; set; }   
+        public string leaveNo { get; set; } 
+
+        public string[] NoOfLeave { get; set; }
+        public string[] LeaveType { get; set; }
+    }
+
+    public class showLeave
+    {
+        public int id { get; set; }
+
+        public string leaveType { get; set; }
+        public int? noOfLeave { get; set; }
+    }
+
+
 
 
 
