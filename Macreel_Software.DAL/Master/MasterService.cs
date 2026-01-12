@@ -33,8 +33,8 @@ namespace Macreel_Software.DAL.Master
 
                   
                     cmd.Parameters.AddWithValue("@rolename", data.rolename);
-                    cmd.Parameters.AddWithValue("@action", "insert");
-                  
+                    cmd.Parameters.AddWithValue("@id",data.id);
+                    cmd.Parameters.AddWithValue("@action",data.id>0? "updateRole" : "insert");
 
               
                     SqlParameter resultParam = new SqlParameter("@result", SqlDbType.Int)
