@@ -142,14 +142,23 @@ export class AddDepartmentComponent implements OnInit {
   }
 
   // ================= EDIT =================
- editDepartment(row: DepartmentRow) {
+editDepartment(row: DepartmentRow) {
   this.master.getDepartmentById(row.id).subscribe({
     next: (res) => {
-      if (res.status && res.departmentListbyid?.length) {
-        const dept = res.departmentListbyid[0];
 
+      // ✅ API response ke hisaab se
+      if (res.success && res.data?.length) {
+
+        const dept = res.data[0];
+
+        // ✅ FORM BIND
         this.departmentName = dept.departmentName;
+
+        // ✅ ID SET (VERY IMPORTANT)
         this.editingDepartmentId = dept.id;
+
+      } else {
+        Swal.fire('Error', 'Department not found', 'error');
       }
     },
     error: () => {
@@ -157,6 +166,7 @@ export class AddDepartmentComponent implements OnInit {
     }
   });
 }
+
 
 
   // ================= DELETE =================
