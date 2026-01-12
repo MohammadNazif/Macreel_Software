@@ -111,6 +111,7 @@ namespace Macreel_Software.DAL.Admin
             }
         }
 
+
         public async Task<List<ReportingManger>> GetAllReportingManager()
         {
             List<ReportingManger> list = new();
