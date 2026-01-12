@@ -247,5 +247,67 @@ namespace Macreel_Software.Server.Controllers
 
 
 
+        [HttpPost("updateEmployeeRegistration")]
+        public async Task<IActionResult> UpdateEmployee([FromForm] employeeRegistration model)
+        {
+            try
+            {
+                string uploadRoot = Path.Combine(_env.WebRootPath, "uploads");
+                if (!Directory.Exists(uploadRoot))
+                    Directory.CreateDirectory(uploadRoot);
+
+                string[] imgExt = { ".jpg", ".jpeg", ".png" };
+                string[] docExt = { ".pdf", ".jpg", ".jpeg", ".png" };
+
+                async Task<string?> UploadFile(IFormFile file, string[] allowedExt)
+                {
+                    if (file == null || file.Length == 0)
+                        return null;
+
+                    return "/uploads/" + await _fileUploadService
+                        .UploadFileAsync(file, uploadRoot, allowedExt);
+                }
+
+                model.ProfilePicPath = await UploadFile(model.ProfilePic, imgExt);
+                model.AadharImgPath = await UploadFile(model.AadharImg, imgExt);
+                model.PanImgPath = await UploadFile(model.PanImg, imgExt);
+
+                model.ExperienceCertificatePath = await UploadFile(model.ExperienceCertificate, docExt);
+                model.TenthCertificatePath = await UploadFile(model.TenthCertificate, docExt);
+                model.TwelthCertificatePath = await UploadFile(model.TwelthCertificate, docExt);
+                model.GraduationCertificatePath = await UploadFile(model.GraduationCertificate, docExt);
+                model.MastersCertificatePath = await UploadFile(model.MastersCertificate, docExt);
+
+                bool isUpdated = await _services.UpdateEmployeeRegistrationData(model);
+
+                if (!isUpdated)
+                {
+                    return BadRequest(new
+                    {
+                        status = false,
+                        statusCode = 400,
+                        message = "Employee update failed"
+                    });
+                }
+
+                return Ok(new
+                {
+                    status = true,
+                    statusCode = 200,
+                    message = "Employee updated successfully"
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    status = false,
+                    statusCode = 500,
+                    message = "Update failed: " + ex.Message
+                });
+            }
+        }
+
+
     }
 }

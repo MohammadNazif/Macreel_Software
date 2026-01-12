@@ -81,7 +81,7 @@ namespace Macreel_Software.DAL.Admin
                     cmd.Parameters.AddWithValue("@reportingManager",
                         (object?)data.ReportingManagerId ?? DBNull.Value);
 
-                    cmd.Parameters.AddWithValue("@status", 1);
+                    //cmd.Parameters.AddWithValue("@status", 1);
 
                     if (_conn.State == ConnectionState.Closed)
                         await _conn.OpenAsync();
@@ -225,6 +225,8 @@ namespace Macreel_Software.DAL.Admin
 
                                 MastersCertificatePath = sdr["mastersCertificate"] != DBNull.Value ? sdr["mastersCertificate"]?.ToString():null,
                                 YearOfExperience= sdr["yearOfExperience"] != DBNull.Value ? Convert.ToInt32(sdr["yearOfExperience"]) : (int?)null,
+                                stateName = sdr["stateName"] != DBNull.Value ? sdr["stateName"].ToString():null,
+                                cityName = sdr["cityName"] != DBNull.Value ? sdr["cityName"].ToString():null
                             });
                         }
                     }
@@ -358,6 +360,8 @@ namespace Macreel_Software.DAL.Admin
 
                                 MastersCertificatePath = sdr["mastersCertificate"] != DBNull.Value ? sdr["mastersCertificate"]?.ToString() : null,
                                 YearOfExperience = sdr["yearOfExperience"] != DBNull.Value ? Convert.ToInt32(sdr["yearOfExperience"]) : (int?)null,
+                                stateName = sdr["stateName"] != DBNull.Value ? sdr["stateName"].ToString() : null,
+                                cityName = sdr["cityName"] != DBNull.Value ? sdr["cityName"].ToString() : null
                             });
                         }
                     }
@@ -390,6 +394,81 @@ namespace Macreel_Software.DAL.Admin
             {
                 if (_conn.State == ConnectionState.Open)
                     await _conn.CloseAsync();
+            }
+        }
+
+
+        public async Task<bool> UpdateEmployeeRegistrationData(employeeRegistration data)
+        {
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("sp_Employee", _conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@action", "updateEmployee");
+
+                    cmd.Parameters.AddWithValue("@id", data.Id);
+                    cmd.Parameters.AddWithValue("@empRole", data.EmpRoleId);
+                    cmd.Parameters.AddWithValue("@empCode", data.EmpCode);
+                    cmd.Parameters.AddWithValue("@empName", data.EmpName);
+                    cmd.Parameters.AddWithValue("@mobile", data.Mobile);
+                    cmd.Parameters.AddWithValue("@department", data.DepartmentId);
+                    cmd.Parameters.AddWithValue("@designation", data.DesignationId);
+                    cmd.Parameters.AddWithValue("@reportingManager",
+                        (object?)data.ReportingManagerId ?? DBNull.Value);
+
+                    cmd.Parameters.AddWithValue("@profilePic", (object?)data.ProfilePicPath ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@aadharImg", (object?)data.AadharImgPath ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@panImg", (object?)data.PanImgPath ?? DBNull.Value);
+
+                    cmd.Parameters.AddWithValue("@dateOfJoining", data.DateOfJoining);
+                    cmd.Parameters.AddWithValue("@salary", data.Salary);
+
+                    cmd.Parameters.AddWithValue("@bankName", data.BankName);
+                    cmd.Parameters.AddWithValue("@accountNo", data.AccountNo);
+                    cmd.Parameters.AddWithValue("@ifscCode", data.IfscCode);
+                    cmd.Parameters.AddWithValue("@bankBranch", data.BankBranch);
+
+                    cmd.Parameters.AddWithValue("@dob", data.Dob);
+                    cmd.Parameters.AddWithValue("@gender", data.Gender);
+                    cmd.Parameters.AddWithValue("@nationality", data.Nationality);
+                    cmd.Parameters.AddWithValue("@maritalStatus", data.MaritalStatus);
+
+                    cmd.Parameters.AddWithValue("@presentAddress", data.PresentAddress);
+                    cmd.Parameters.AddWithValue("@state", data.StateId);
+                    cmd.Parameters.AddWithValue("@city", data.CityId);
+                    cmd.Parameters.AddWithValue("@pincode", data.Pincode);
+
+                    cmd.Parameters.AddWithValue("@emergencyContactPersonName", data.EmergencyContactPersonName);
+                    cmd.Parameters.AddWithValue("@emergenctContactNum", data.EmergencyContactNum);
+
+                    cmd.Parameters.AddWithValue("@companyName", data.CompanyName);
+                    cmd.Parameters.AddWithValue("@yearOfExperience", data.YearOfExperience);
+                    cmd.Parameters.AddWithValue("@technology", data.Technology);
+                    cmd.Parameters.AddWithValue("@companyContactno", data.CompanyContactNo);
+
+                    cmd.Parameters.AddWithValue("@experienceCertificate",
+                        (object?)data.ExperienceCertificatePath ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@tenthCertificate",
+                        (object?)data.TenthCertificatePath ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@twelthCertificate",
+                        (object?)data.TwelthCertificatePath ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@graduationCertificate",
+                        (object?)data.GraduationCertificatePath ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@mastersCertificate",
+                        (object?)data.MastersCertificatePath ?? DBNull.Value);
+
+                    if (_conn.State == ConnectionState.Closed)
+                        await _conn.OpenAsync();
+
+                    object result = await cmd.ExecuteScalarAsync();
+                    return Convert.ToBoolean(result);
+                }
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    _conn.Close();
             }
         }
 

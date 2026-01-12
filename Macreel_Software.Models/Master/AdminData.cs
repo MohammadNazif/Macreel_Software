@@ -46,7 +46,9 @@ namespace Macreel_Software.Models.Master
 
         public string? PresentAddress { get; set; }
         public int? StateId { get; set; }
+        public string? stateName { get; set; }
         public int? CityId { get; set; }
+        public string? cityName { get; set; }
         public string? Pincode { get; set; }
 
         public string? EmergencyContactPersonName { get; set; }

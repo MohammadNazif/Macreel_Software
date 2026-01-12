@@ -17,5 +17,6 @@ namespace Macreel_Software.DAL.Admin
           int? pageSize);
         Task<bool> deleteEmployeeById(int id);
         Task<ApiResponse<List<employeeRegistration>>> GetAllEmpDataById(int id);
+        Task<bool> UpdateEmployeeRegistrationData(employeeRegistration data);
     }
 }
