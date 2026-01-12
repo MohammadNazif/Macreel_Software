@@ -89,24 +89,29 @@ export class AddDesignationComponent implements OnInit {
 
   // ================= EDIT =================
   editDesignation(row: DesignationElement) {
-    this.master.getDesignationById(row.id).subscribe({
-      next: (res) => {
-        if (res.status && res.designationListbyid?.length) {
+  this.master.getDesignationById(row.id).subscribe({
+    next: (res) => {
 
-          const data = res.designationListbyid[0];
+      // ✅ API response ke according
+      if (res.success && res.data?.length) {
 
-          // ✅ FORM BIND
-          this.designationName = data.designationName;
+        const data = res.data[0];
 
-          // ✅ CORRECT ID (IMPORTANT)
-          this.editingDesignationId = data.id;   // 🔥 FIX HERE
-        }
-      },
-      error: () => {
-        Swal.fire('Error', 'Failed to fetch designation', 'error');
+        // ✅ FORM BIND
+        this.designationName = data.designationName;
+
+        // ✅ ID SET (MOST IMPORTANT)
+        this.editingDesignationId = data.id;
+
+      } else {
+        Swal.fire('Error', 'Designation not found', 'error');
       }
-    });
-  }
+    },
+    error: () => {
+      Swal.fire('Error', 'Failed to fetch designation', 'error');
+    }
+  });
+}
 
 
 

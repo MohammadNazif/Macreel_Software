@@ -111,20 +111,36 @@ export class AddRoleComponent implements OnInit {
     });
   }
 
-  editRole(role: PeriodicElement) {
-    this.master.getRoleById(role.id).subscribe({
-      next: (res) => {
-        if (res.status && res.roleListbyid.length) {
-          const roleData = res.roleListbyid[0];
-          this.roleName = roleData.rolename;
-          this.editingRoleId = roleData.id;
-        } else {
-          Swal.fire({ icon: 'error', title: 'Error!', text: 'Failed to load role data' });
-        }
-      },
-      error: () => Swal.fire({ icon: 'error', title: 'Error!', text: 'Failed to fetch role data' })
-    });
-  }
+ editRole(role: PeriodicElement) {
+  this.master.getRoleById(role.id).subscribe({
+    next: (res) => {
+
+      // API ke hisaab se
+      if (res.success && res.data && res.data.length > 0) {
+
+        const roleData = res.data[0];
+
+        this.roleName = roleData.rolename;   // 👈 bind yahin ho raha
+        this.editingRoleId = roleData.id;
+
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error!',
+          text: 'Role data not found'
+        });
+      }
+    },
+    error: () => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'Failed to fetch role data'
+      });
+    }
+  });
+}
+
 
   deleteRole(role: PeriodicElement) {
     Swal.fire({
