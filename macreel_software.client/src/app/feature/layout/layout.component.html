@@ -86,6 +86,14 @@
         <span *ngIf="sidebarOpen">Employee Task Sheet</span>
       </div>
 
+        <!--add EMPLOYEE -->
+       <div
+        routerLink="/home/add-employee"
+        (click)="closeSidebarOnMobile()"
+        class="flex items-center p-2 gap-3 rounded-lg cursor-pointer hover:bg-[#FDECEA]">
+        <i class="fa-solid fa-building-user"></i>
+        <span *ngIf="sidebarOpen">Add Employee</span>
+      </div>
     </nav>
   </aside>
 
