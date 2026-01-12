@@ -5,6 +5,8 @@ import { AddDepartmentComponent } from './add-department/add-department.componen
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AddRoleComponent } from './add-role/add-role.component';
 import { AddDesignationComponent } from './add-designation/add-designation.component';
+import { AddEmployeeComponent } from './add-employee/add-employee.component';
+
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -12,7 +14,10 @@ const routes: Routes = [
   { path: 'add-role', component: AddRoleComponent },
   {path:'add-designation',component:AddDesignationComponent},
   { path: 'add-department', component: AddDepartmentComponent },
-  { path: 'dashboard', component: DashboardComponent }
+  { path: 'dashboard', component: DashboardComponent },
+    { path: 'add-employee', component: AddEmployeeComponent },
+ 
+
 ];
 
 @NgModule({

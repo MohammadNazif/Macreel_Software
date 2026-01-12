@@ -1,0 +1,687 @@
+<div class="max-w-7xl mx-auto  bg-gray-100">
+
+    <!-- ================= STEP 1 ================= -->
+    <div *ngIf="step === 1" class="bg-white p-6 rounded-lg shadow">
+
+        <div class="bg-[#C5192F] px-6 py-2 text-white text-lg font-semibold
+     shadow-md shadow-black/30 rounded-t-md">
+            Employee Register
+        </div>
+
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-5">
+
+            <!-- Employee Role -->
+            <div class="relative">
+                <select class="peer w-full appearance-none rounded-md border border-gray-300
+           px-4 py-2 text-sm text-gray-700
+           focus:border-[#C5192F]
+           focus:ring-2 focus:ring-[#C5192F]/30
+           outline-none">
+                    <option value="" disabled selected hidden></option>
+                    <option>Admin</option>
+                    <option>HR</option>
+                </select>
+
+                <label class="absolute left-3 top-3 text-sm text-gray-500
+           bg-white px-1 transition-all
+           peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#C5192F]
+           peer-valid:-top-2 peer-valid:text-xs">
+                    Employee Role
+                </label>
+
+                <span class="absolute right-3 top-3 text-gray-400">▼</span>
+            </div>
+
+
+            <!-- Employee Code -->
+            <div class="relative">
+                <input type="text" placeholder=" " class="peer w-full rounded-md border border-gray-300
+     px-3 py-2 text-sm text-gray-700
+     focus:border-[#C5192F]
+     focus:ring-2 focus:ring-[#C5192F]/30
+     outline-none" />
+
+                <label class="absolute left-3 top-2 text-sm text-gray-500
+     bg-white px-1 transition-all
+     peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#C5192F]">
+                    Employee Code
+                </label>
+            </div>
+
+
+            <!-- Employee Name -->
+            <div class="relative">
+                <input type="text" placeholder=" " class="peer w-full rounded-md border border-gray-300
+       px-4 py-2 text-sm text-gray-700
+       focus:border-[#C5192F]
+       focus:ring-2 focus:ring-[#C5192F]/30
+       outline-none" />
+
+                <label class="absolute left-3 top-2 text-sm text-gray-500
+       bg-white px-1 transition-all
+       peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#C5192F]">
+                    Employee Name
+                </label>
+            </div>
+
+
+            <!-- Mobile Number -->
+            <div class="relative">
+                <input type="text" inputmode="numeric" maxlength="10" placeholder=" " class="peer w-full rounded-md border border-gray-300
+       px-4 py-2 text-sm text-gray-700
+       focus:border-[#C5192F]
+       focus:ring-2 focus:ring-[#C5192F]/30
+       outline-none" />
+
+                <label class="absolute left-3 top-2 text-sm text-gray-500
+       bg-white px-1 transition-all
+       peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#C5192F]">
+                    Mobile Number
+                </label>
+            </div>
+
+
+
+            <!-- Department -->
+            <!-- Department -->
+            <div class="relative">
+                <select class="peer w-full appearance-none rounded-md border border-gray-300
+       px-3 py-2 text-sm text-gray-700 bg-white
+       focus:border-[#C5192F]
+       focus:ring-2 focus:ring-[#C5192F]/30
+       outline-none" required>
+                    <option value="" disabled selected hidden></option>
+                    <option>HR</option>
+                    <option>IT</option>
+                    <option>Accounts</option>
+                </select>
+
+                <label class="absolute left-3 top-2 text-sm text-gray-500
+       bg-white px-1 transition-all
+       peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#C5192F]">
+                    Department
+                </label>
+
+                <span class="absolute right-3 top-2 text-gray-400 pointer-events-none">
+                    ▼
+                </span>
+            </div>
+
+
+
+            <!-- Designation -->
+            <div class="relative">
+                <select class="peer w-full appearance-none rounded-md border border-gray-300
+       px-3 py-2 text-sm text-gray-700 bg-white
+       focus:border-[#C5192F]
+       focus:ring-2 focus:ring-[#C5192F]/30
+       outline-none" required>
+                    <option value="" disabled selected hidden></option>
+                    <option>Manager</option>
+                    <option>Team Lead</option>
+                    <option>Developer</option>
+                </select>
+
+                <label class="absolute left-3 top-2 text-sm text-gray-500
+       bg-white px-1 transition-all
+       peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#C5192F]">
+                    Designation
+                </label>
+
+                <span class="absolute right-3 top-2 text-gray-400 pointer-events-none">
+                    ▼
+                </span>
+            </div>
+
+
+            <!-- Reporting Manager -->
+            <div class="relative">
+                <input type="text" placeholder=" " class="peer w-full rounded-md border border-gray-300
+       px-4 py-2 text-sm text-gray-700
+       focus:border-[#C5192F]
+       focus:ring-2 focus:ring-[#C5192F]/30
+       outline-none transition" />
+
+                <label class="absolute left-3 top-2 text-sm text-gray-500
+       bg-white px-1 transition-all
+       peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#C5192F]">
+                    Reporting Manager
+                </label>
+            </div>
+
+            <!-- Email ID -->
+            <div class="relative">
+                <input type="email" placeholder=" " class="peer w-full rounded-md border border-gray-300
+       px-4 py-2 text-sm text-gray-700
+       focus:border-[#C5192F]
+       focus:ring-2 focus:ring-[#C5192F]/30
+       outline-none transition" />
+
+                <label class="absolute left-3 top-2 text-sm text-gray-500
+       bg-white px-1 transition-all
+       peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#C5192F]">
+                    Email ID
+                </label>
+            </div>
+
+
+            <!-- Salary -->
+            <div class="relative">
+                <input type="number" placeholder=" " min="0" class="peer w-full rounded-md border border-gray-300
+       px-4 py-2 text-sm text-gray-700
+       focus:border-[#C5192F]
+       focus:ring-2 focus:ring-[#C5192F]/30
+       outline-none transition" />
+
+                <label class="absolute left-3 top-2 text-sm text-gray-500
+       bg-white px-1 transition-all
+       peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#C5192F]">
+                    Salary
+                </label>
+            </div>
+
+            <!-- Date of Joining -->
+            <div class="relative">
+                <input type="date" placeholder=" " class="peer w-full rounded-md border border-gray-300
+       px-4 py-2 text-sm text-gray-700
+       focus:border-[#C5192F]
+       focus:ring-2 focus:ring-[#C5192F]/30
+       outline-none transition" />
+
+                <label class="absolute left-3 top-2 text-sm text-gray-500
+       bg-white px-1 transition-all
+       peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#C5192F]">
+                    Date of Joining
+                </label>
+            </div>
+
+            <!-- DOB-->
+            <div class="relative">
+                <input type="date" placeholder=" " class="peer w-full rounded-md border border-gray-300
+       px-4 py-2 text-sm text-gray-700
+       focus:border-[#C5192F]
+       focus:ring-2 focus:ring-[#C5192F]/30
+       outline-none transition" />
+
+                <label class="absolute left-3 top-2 text-sm text-gray-500
+       bg-white px-1 transition-all
+       peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#C5192F]">
+                    DOB
+                </label>
+            </div>
+
+
+            <!-- Password -->
+            <div class="relative">
+                <input type="password" placeholder=" " class="peer w-full rounded-md border border-gray-300
+       px-4 py-2 text-sm text-gray-700
+       focus:border-[#C5192F]
+       focus:ring-2 focus:ring-[#C5192F]/30
+       outline-none transition" />
+
+                <label class="absolute left-3 top-2 text-sm text-gray-500
+       bg-white px-1 transition-all
+       peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#C5192F]">
+                    Password
+                </label>
+            </div>
+            <!-- Gender -->
+            <div class="relative">
+                <select class="peer w-full appearance-none rounded-md border border-gray-300
+       px-3 py-2 text-sm text-gray-700 bg-white
+       focus:border-[#C5192F]
+       focus:ring-2 focus:ring-[#C5192F]/30
+       outline-none" required>
+                    <option value="" disabled selected hidden></option>
+                    <option>Male</option>
+                    <option>Female</option>
+                    <option>Other</option>
+                </select>
+
+                <label class="absolute left-3 top-2 text-sm text-gray-500
+       bg-white px-1 transition-all
+       peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#C5192F]">
+                    Gender
+                </label>
+
+                <span class="absolute right-3 top-2 text-gray-400 pointer-events-none">
+                    ▼
+                </span>
+            </div>
+
+            <!-- Nationality -->
+            <div class="relative">
+                <input type="text" placeholder=" " class="peer w-full rounded-md border border-gray-300
+       px-4 py-2 text-sm text-gray-700
+       focus:border-[#C5192F]
+       focus:ring-2 focus:ring-[#C5192F]/30
+       outline-none transition" />
+
+                <label class="absolute left-3 top-2 text-sm text-gray-500
+       bg-white px-1 transition-all
+       peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#C5192F]">
+                    Nationality
+                </label>
+            </div>
+
+
+            <!-- Nationality -->
+            <div class="relative">
+                <input type="text" placeholder=" " class="peer w-full rounded-md border border-gray-300
+       px-4 py-2 text-sm text-gray-700
+       focus:border-[#C5192F]
+       focus:ring-2 focus:ring-[#C5192F]/30
+       outline-none transition" />
+
+                <label class="absolute left-3 top-2 text-sm text-gray-500
+       bg-white px-1 transition-all
+       peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#C5192F]">
+                    Marital Status
+                </label>
+            </div>
+
+            <!-- Present Address -->
+            <div class="relative">
+                <textarea rows="1" placeholder=" " class="peer w-full rounded-md border border-gray-300
+       px-4 py-2 text-sm text-gray-700
+       focus:border-[#C5192F]
+       focus:ring-2 focus:ring-[#C5192F]/30
+       outline-none transition"></textarea>
+
+                <label class="absolute left-3 top-2 text-sm text-gray-500
+       bg-white px-1 transition-all
+       peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#C5192F]">
+                    Present Address
+                </label>
+            </div>
+
+            <!-- State -->
+            <div class="relative">
+                <select class="peer w-full appearance-none rounded-md border border-gray-300
+       px-3 py-2 text-sm text-gray-700 bg-white
+       focus:border-[#C5192F]
+       focus:ring-2 focus:ring-[#C5192F]/30
+       outline-none" required>
+                    <option value="" disabled selected hidden></option>
+                    <option>Maharashtra</option>
+                    <option>Gujarat</option>
+                    <option>Delhi</option>
+                </select>
+
+                <label class="absolute left-3 top-2 text-sm text-gray-500
+       bg-white px-1 transition-all
+       peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#C5192F]">
+                    State
+                </label>
+
+                <span class="absolute right-3 top-2 text-gray-400 pointer-events-none">
+                    ▼
+                </span>
+            </div>
+
+            <!-- City -->
+            <div class="relative">
+                <select class="peer w-full appearance-none rounded-md border border-gray-300
+       px-3 py-2 text-sm text-gray-700 bg-white
+       focus:border-[#C5192F]
+       focus:ring-2 focus:ring-[#C5192F]/30
+       outline-none" required>
+                    <option value="" disabled selected hidden></option>
+                    <option>Mumbai</option>
+                    <option>Ahmedabad</option>
+                    <option>Delhi</option>
+                </select>
+
+                <label class="absolute left-3 top-2 text-sm text-gray-500
+       bg-white px-1 transition-all
+       peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#C5192F]">
+                    City
+                </label>
+
+                <span class="absolute right-3 top-2 text-gray-400 pointer-events-none">
+                    ▼
+                </span>
+            </div>
+
+            <!-- Pin code -->
+            <div class="relative">
+                <input type="number" placeholder=" " min="0" class="peer w-full rounded-md border border-gray-300
+       px-4 py-2 text-sm text-gray-700
+       focus:border-[#C5192F]
+       focus:ring-2 focus:ring-[#C5192F]/30
+       outline-none transition" />
+
+                <label class="absolute left-3 top-2 text-sm text-gray-500
+       bg-white px-1 transition-all
+       peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#C5192F]">
+                    Pin code
+                </label>
+            </div>
+
+            <!-- Bank Name -->
+            <div class="relative">
+                <input type="text" placeholder=" " class="peer w-full rounded-md border border-gray-300
+       px-4 py-2 text-sm text-gray-700
+       focus:border-[#C5192F]
+       focus:ring-2 focus:ring-[#C5192F]/30
+       outline-none transition" />
+
+                <label class="absolute left-3 top-2 text-sm text-gray-500
+       bg-white px-1 transition-all
+       peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#C5192F]">
+                    Bank Name
+                </label>
+            </div>
+
+            <!-- Account Number -->
+            <div class="relative">
+                <input type="text" placeholder=" " class="peer w-full rounded-md border border-gray-300
+       px-4 py-2 text-sm text-gray-700
+       focus:border-[#C5192F]
+       focus:ring-2 focus:ring-[#C5192F]/30
+       outline-none transition" />
+
+                <label class="absolute left-3 top-2 text-sm text-gray-500
+       bg-white px-1 transition-all
+       peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#C5192F]">
+                    Account Number
+                </label>
+            </div>
+
+            <!-- IFSC Code -->
+            <div class="relative">
+                <input type="text" placeholder=" " class="peer w-full rounded-md border border-gray-300
+       px-4 py-2 text-sm text-gray-700
+       focus:border-[#C5192F]
+       focus:ring-2 focus:ring-[#C5192F]/30
+       outline-none transition" />
+
+                <label class="absolute left-3 top-2 text-sm text-gray-500
+       bg-white px-1 transition-all
+       peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#C5192F]">
+                    IFSC Code
+                </label>
+            </div>
+
+            <!-- Bank Branch -->
+            <div class="relative">
+                <input type="text" placeholder=" " class="peer w-full rounded-md border border-gray-300
+       px-4 py-2 text-sm text-gray-700
+       focus:border-[#C5192F]
+       focus:ring-2 focus:ring-[#C5192F]/30
+       outline-none transition" />
+
+                <label class="absolute left-3 top-2 text-sm text-gray-500
+       bg-white px-1 transition-all
+       peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#C5192F]">
+                    Bank Branch
+                </label>
+            </div>
+
+            <!-- Emergency Contact Name -->
+            <div class="relative">
+                <input type="text" placeholder=" " class="peer w-full rounded-md border border-gray-300
+       px-4 py-2 text-sm text-gray-700
+       focus:border-[#C5192F]
+       focus:ring-2 focus:ring-[#C5192F]/30
+       outline-none transition" />
+
+                <label class="absolute left-3 top-2 text-sm text-gray-500
+       bg-white px-1 transition-all
+       peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#C5192F]">
+                    Emergency Contact Name
+                </label>
+            </div>
+
+            <!-- Emergency Contact Number -->
+            <div class="relative">
+                <input type="text" placeholder=" " maxlength="10" inputmode="numeric" class="peer w-full rounded-md border border-gray-300
+       px-4 py-2 text-sm text-gray-700
+       focus:border-[#C5192F]
+       focus:ring-2 focus:ring-[#C5192F]/30
+       outline-none transition" />
+
+                <label class="absolute left-3 top-2 text-sm text-gray-500
+       bg-white px-1 transition-all
+       peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#C5192F]">
+                    Emergency Contact Number
+                </label>
+            </div>
+
+
+
+
+            <!-- Aadhar Image -->
+            <div class="relative">
+                <label class="block text-sm font-medium text-gray-500 mb-1">
+                    Aadhar Image
+                </label>
+
+                <input type="file" class="w-full text-sm text-gray-700
+       file:mr-4 file:py-2 file:px-3
+       file:border-0
+       file:text-sm file:font-semibold
+       file:bg-[#C5192F] file:text-white
+       hover:file:bg-[#a41526]
+       cursor-pointer
+       border border-gray-300 rounded-md
+       focus:outline-none focus:ring-2 focus:ring-[#C5192F]/30" />
+            </div>
+
+
+            <!-- PAN Image -->
+            <div class="relative">
+                <label class="block text-sm font-medium text-gray-500 mb-1">
+                    PAN Image
+                </label>
+
+                <input type="file" class="w-full text-sm text-gray-700
+       file:mr-4 file:py-2 file:px-3
+       file:border-0
+       file:text-sm file:font-semibold
+       file:bg-[#C5192F] file:text-white
+       hover:file:bg-[#a41526]
+       cursor-pointer
+       border border-gray-300 rounded-md
+       focus:outline-none focus:ring-2 focus:ring-[#C5192F]/30" />
+            </div>
+
+            <!-- PAN Image -->
+            <div class="relative">
+                <label class="block text-sm font-medium text-gray-500 mb-1">
+                    Profile Image
+                </label>
+
+                <input type="file" class="w-full text-sm text-gray-700
+       file:mr-4 file:py-2 file:px-3
+       file:border-0
+       file:text-sm file:font-semibold
+       file:bg-[#C5192F] file:text-white
+       hover:file:bg-[#a41526]
+       cursor-pointer
+       border border-gray-300 rounded-md
+       focus:outline-none focus:ring-2 focus:ring-[#C5192F]/30" />
+            </div>
+
+
+
+        </div>
+
+        <div class="flex justify-end mt-6">
+            <button (click)="nextStep()" class="bg-[#C5192F] text-white font-semibold px-6 py-2.5
+           rounded-md shadow-md hover:bg-[#a41526] transition
+           focus:outline-none focus:ring-2 focus:ring-[#C5192F]/50">
+                Next
+            </button>
+        </div>
+
+    </div>
+
+    <!-- ================= STEP 2 ================= -->
+    <div *ngIf="step === 2" class="bg-white p-6 rounded-lg shadow">
+
+        <!-- ================= PREVIOUS TRAINING ================= -->
+        <h3 class="text-lg font-semibold border-b pb-2 mb-4">
+            Previous Training
+        </h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+            <!-- Company Name -->
+            <div class="relative">
+                <input type="text" placeholder=" " class="peer w-full rounded-md border border-gray-300
+       px-4 py-2 text-sm text-gray-700
+       focus:border-[#C5192F]
+       focus:ring-2 focus:ring-[#C5192F]/30
+       outline-none" />
+                <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
+       peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#C5192F]">
+                    Company Name
+                </label>
+            </div>
+
+            <!-- Year of Experience -->
+            <div class="relative">
+                <input type="number" placeholder=" " min="0" class="peer w-full rounded-md border border-gray-300
+       px-4 py-2 text-sm text-gray-700
+       focus:border-[#C5192F]
+       focus:ring-2 focus:ring-[#C5192F]/30
+       outline-none" />
+                <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
+       peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#C5192F]">
+                    Year of Experience
+                </label>
+            </div>
+
+            <!-- Technology -->
+            <div class="relative">
+                <textarea rows="1" placeholder=" " class="peer w-full rounded-md border border-gray-300
+   px-4 py-2 text-sm text-gray-700
+   focus:border-[#C5192F]
+   focus:ring-2 focus:ring-[#C5192F]/30
+   outline-none"></textarea>
+                <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
+       peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#C5192F]">
+                    Technology
+                </label>
+            </div>
+
+            <!-- Manager Name -->
+            <div class="relative">
+                <input type="number" placeholder=" " class="peer w-full rounded-md border border-gray-300
+       px-4 py-2 text-sm text-gray-700
+       focus:border-[#C5192F]
+       focus:ring-2 focus:ring-[#C5192F]/30
+       outline-none" />
+                <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
+       peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#C5192F]">
+                    Manager Contact
+                </label>
+            </div>
+
+            <!-- Certification Attach -->
+            <div class="relative w-full">
+                <!-- Hidden actual file input -->
+                <input id="certFile" type="file" class="hidden peer" />
+
+                <!-- Styled div to look like input -->
+                <label for="certFile" class="peer-focus:ring-2 peer-focus:ring-[#C5192F]/30 
+                peer-focus:border-[#C5192F]
+                flex items-center justify-between w-full px-4 py-2 text-gray-700 border border-gray-300 rounded-md cursor-pointer
+                bg-white hover:border-[#C5192F] transition">
+                    <span class="text-gray-500">Certification Attach</span>
+                    <span class="text-gray-400"></span>
+                </label>
+            </div>
+
+
+        </div>
+
+        <!-- ================= EDUCATION DETAILS ================= -->
+        <h3 class="text-lg font-semibold border-b pb-2 mt-6 mb-4">
+            Education Details
+        </h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+            <!-- 10th Marks -->
+            <!-- 10th Marksheet -->
+            <div class="relative">
+                <label class="block text-sm font-medium text-gray-500 mb-1">
+                    10th Marksheet
+                </label>
+                <input type="file" class="w-full text-sm text-gray-700
+      file:mr-4 file:py-2 file:px-3
+      file:border-0
+      file:text-sm file:font-semibold
+      file:bg-[#C5192F] file:text-white
+      hover:file:bg-[#a41526]
+      cursor-pointer
+      border border-gray-300 rounded-md
+      focus:outline-none focus:ring-2 focus:ring-[#C5192F]/30" />
+            </div>
+
+            <!-- 12th Marksheet -->
+            <div class="relative">
+                <label class="block text-sm font-medium text-gray-500 mb-1">
+                    12th Marksheet
+                </label>
+                <input type="file" class="w-full text-sm text-gray-700
+      file:mr-4 file:py-2 file:px-3
+      file:border-0
+      file:text-sm file:font-semibold
+      file:bg-[#C5192F] file:text-white
+      hover:file:bg-[#a41526]
+      cursor-pointer
+      border border-gray-300 rounded-md
+      focus:outline-none focus:ring-2 focus:ring-[#C5192F]/30" />
+            </div>
+
+            <div class="relative">
+                <label class="block text-sm font-medium text-gray-500 mb-1">
+                    Graduation Document
+                </label>
+                <input type="file" class="w-full text-sm text-gray-700
+      file:mr-4 file:py-2 file:px-3
+      file:border-0
+      file:text-sm file:font-semibold
+      file:bg-[#C5192F] file:text-white
+      hover:file:bg-[#a41526]
+      cursor-pointer
+      border border-gray-300 rounded-md
+      focus:outline-none focus:ring-2 focus:ring-[#C5192F]/30" />
+            </div>
+
+            <div class="relative">
+                <label class="block text-sm font-medium text-gray-500 mb-1">
+                    Master Document
+                </label>
+                <input type="file" class="w-full text-sm text-gray-700
+      file:mr-4 file:py-2 file:px-3
+      file:border-0
+      file:text-sm file:font-semibold
+      file:bg-[#C5192F] file:text-white
+      hover:file:bg-[#a41526]
+      cursor-pointer
+      border border-gray-300 rounded-md
+      focus:outline-none focus:ring-2 focus:ring-[#C5192F]/30" />
+            </div>
+
+
+
+            <!-- ================= STEP 2 NAVIGATION ================= -->
+            <div class="flex justify-between mt-6">
+                <button (click)="prevStep()"
+                    class="bg-gray-400 text-white px-4 py-2 rounded-md hover:bg-gray-500 transition">
+                    Back
+                </button>
+                <button (click)="onSubmit()"
+                    class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition">
+                    Save
+                </button>
+            </div>
+
+        </div>
+
+    </div>

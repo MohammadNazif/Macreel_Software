@@ -15,6 +15,7 @@ import { AddDepartmentComponent } from './add-department/add-department.componen
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AddRoleComponent } from './add-role/add-role.component';
 import { AddDesignationComponent } from './add-designation/add-designation.component';
+import { AddEmployeeComponent } from './add-employee/add-employee.component';
 
 
 @NgModule({
@@ -23,7 +24,10 @@ import { AddDesignationComponent } from './add-designation/add-designation.compo
     AddDepartmentComponent,
     DashboardComponent,
     AddRoleComponent,
-    AddDesignationComponent
+    AddDesignationComponent,
+    AddEmployeeComponent,
+    
+
   ],
   imports: [
     CommonModule,
