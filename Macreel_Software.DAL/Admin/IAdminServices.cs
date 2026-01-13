@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Macreel_Software.Models;
 using Macreel_Software.Models.Master;
+using Microsoft.AspNetCore.Http;
 
 namespace Macreel_Software.DAL.Admin
 {
@@ -25,6 +26,10 @@ namespace Macreel_Software.DAL.Admin
         Task<bool> deleteLeaveById(int id);
         public  Task<int> InsertAssignLeaveAsync(int empId,string noOfLeave,string leaveType);
         Task<ApiResponse<List<showLeave>>> getAllAssignedLeaveById(int empId);
+        Task<int> UploadAttendance(IFormFile file, int selectedMonth, int currentYear);
+        Task<ApiResponse<List<Attendance>>> EmpAttendanceDataByEmpCode(string empCode, int month, int year);
+
+        Task<ApiResponse<List<EmpWorkingDetails>>> EmpWorkingDetailsByempCode(int empCode, int month, int year);
 
 
     }
