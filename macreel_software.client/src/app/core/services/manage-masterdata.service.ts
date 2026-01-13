@@ -52,9 +52,6 @@ export class ManageMasterdataService {
   }
 
   addOrUpdateDesignation(role: any) {
-    // const headers = new HttpHeaders({
-    //   'Authorization' : `Bearer ${this.token}`
-    // })
     return this.http.post(`${this.baseUrl}Master/insertDesignation`, role, {})
   }
 

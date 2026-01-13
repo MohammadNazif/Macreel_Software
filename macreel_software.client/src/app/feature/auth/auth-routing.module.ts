@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { LayoutComponent } from '../layout/layout.component';
+import { AddEmployeeComponent } from '../common-pages/add-employee/add-employee.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -9,7 +10,8 @@ const routes: Routes = [
   {
     path: 'home', component: LayoutComponent,
     children: [
-      { path: '', loadChildren: () => import('../pages/pages.module').then(m => m.PagesModule) }
+      { path: '', loadChildren: () => import('../pages/pages.module').then(m => m.PagesModule) },
+      { path: 'add-employee', component: AddEmployeeComponent }
     ]
   }
 ];

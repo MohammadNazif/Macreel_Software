@@ -1,0 +1,122 @@
+<div class="content px-3 py-2">
+
+  <!-- ================= TABLE ================= -->
+  <div class="bg-white shadow rounded-lg p-1">
+
+    <!-- HEADER -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-1 mb-1">
+
+      <!-- TITLE -->
+      <h1 class="ml-2 text-lg md:text-xl text-center md:text-left">
+        Employee List
+      </h1>
+
+      <!-- SEARCH -->
+      <div class="relative w-full md:w-64">
+        <input type="text" placeholder="Search Employee" (keyup)="applyFilter($event)"
+               class="w-full pl-10 pr-3 py-1.5 rounded-lg bg-[#F6F7FB] border border-gray-300
+               focus:outline-none focus:ring-2 focus:ring-[#C5192F]" />
+        <i class="fa-solid fa-magnifying-glass
+               absolute left-3 top-1/2 -translate-y-1/2
+               text-gray-400 text-sm"></i>
+      </div>
+
+      <!-- PAGINATOR -->
+      <mat-paginator 
+        [pageSizeOptions]="[5, 10, 20, 30]" 
+        [pageSize]="pageSize"
+        [length]="totalRecords"
+        showFirstLastButtons
+        (page)="onPageChange($event)">
+      </mat-paginator>
+
+    </div>
+
+    <!-- ================= TABLE WRAPPER ================= -->
+    <div class="relative overflow-x-auto w-full">
+
+      <table mat-table [dataSource]="dataSource" class="min-w-[900px] w-full border border-gray-300 divide-y divide-gray-300 table-fixed text-sm md:text-base">
+
+        <!-- SR NO -->
+        <ng-container matColumnDef="srNo">
+          <th mat-header-cell *matHeaderCellDef class="w-[70px] px-1 py-1 text-center !bg-[#C5192F] text-white border-r whitespace-nowrap">
+            Sr No.
+          </th>
+          <td mat-cell *matCellDef="let element; let i = index" class="px-1 py-1 text-center border-r">
+            {{ i + 1 + pageIndex * pageSize }}
+          </td>
+        </ng-container>
+
+          <!-- EMPLOYEE code -->
+        <ng-container matColumnDef="empCode">
+          <th mat-header-cell *matHeaderCellDef class="min-w-[100px] px-1 py-1 !bg-[#C5192F] text-white border-r ">
+           Emp Code
+          </th>
+          <td mat-cell *matCellDef="let element" class="px-1 py-1 border-r">
+            {{ element.empCode }}
+          </td>
+        </ng-container>
+
+        <!-- EMPLOYEE NAME -->
+        <ng-container matColumnDef="empName">
+          <th mat-header-cell *matHeaderCellDef class="min-w-[180px] px-1 py-1 !bg-[#C5192F] text-white border-r">
+            Name
+          </th>
+          <td mat-cell *matCellDef="let element" class="px-1 py-1 border-r">
+            {{ element.empName }}
+          </td>
+        </ng-container>
+
+           <ng-container matColumnDef="designationName">
+          <th mat-header-cell *matHeaderCellDef class="min-w-[150px] px-1 py-1 !bg-[#C5192F] text-white border-r">
+            Designation
+          </th>
+          <td mat-cell *matCellDef="let element" class="px-1 py-1 border-r">
+            {{ element.designationName }}
+          </td>
+        </ng-container>
+
+        <!-- ROLE -->
+        <ng-container matColumnDef="empEmail">
+          <th mat-header-cell *matHeaderCellDef class="min-w-[150px] px-1 py-1 !bg-[#C5192F] text-white border-r">
+            Email
+          </th>
+          <td mat-cell *matCellDef="let element" class="px-1 py-1 border-r">
+            {{ element.emailId }}
+          </td>
+        </ng-container>
+
+        <!-- DEPARTMENT -->
+        <ng-container matColumnDef="Contact">
+          <th mat-header-cell *matHeaderCellDef class="min-w-[150px] px-1 py-1 !bg-[#C5192F] text-white border-r">
+            Contact
+          </th>
+          <td mat-cell *matCellDef="let element" class="px-1 py-1 border-r">
+            {{ element.mobile }}
+          </td>
+        </ng-container>
+
+        <!-- ACTION -->
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef class="w-[120px] px-1 py-1 text-center !bg-[#C5192F] text-white">
+            Action
+          </th>
+          <td mat-cell *matCellDef="let element" class="px-1 py-1 text-center">
+            <button class="text-green-700 p-2 rounded-full hover:bg-green-100 mr-1" (click)="editEmployee(element)">
+              <i class="fa fa-pencil"></i>
+            </button>
+            <button class="text-red-500 p-2 rounded-full hover:bg-red-100" (click)="deleteEmployee(element)">
+              <i class="fa fa-trash"></i>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- ROWS -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns" class="!h-9"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns" class="hover:bg-gray-100 !h-9"></tr>
+
+      </table>
+
+    </div>
+  </div>
+</div>

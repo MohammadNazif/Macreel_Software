@@ -87,13 +87,54 @@
       </div>
 
         <!--add EMPLOYEE -->
-       <div
+       <!-- <div
         routerLink="/home/add-employee"
         (click)="closeSidebarOnMobile()"
         class="flex items-center p-2 gap-3 rounded-lg cursor-pointer hover:bg-[#FDECEA]">
         <i class="fa-solid fa-building-user"></i>
         <span *ngIf="sidebarOpen">Add Employee</span>
-      </div>
+      </div> -->
+      <div>
+  <!-- ================= EMPLOYEE MANAGEMENT ================= -->
+  <div
+    (click)="toggleMenu('employee')"
+    class="flex items-center p-2 justify-between rounded-lg cursor-pointer hover:bg-[#FDECEA]">
+
+    <div class="flex items-center gap-3">
+      <i class="fa-solid fa-users"></i>
+      <span *ngIf="sidebarOpen">Employee Management</span>
+    </div>
+
+    <span
+      *ngIf="sidebarOpen"
+      class="transition-transform"
+      [ngClass]="openMenu === 'employee' ? 'rotate-90' : ''">
+      >
+    </span>
+  </div>
+
+  <!-- ================= SUB MENU ================= -->
+  <div
+    *ngIf="openMenu === 'employee' && sidebarOpen"
+    class="ml-10 space-y-1 text-sm">
+
+    <a
+      routerLink="/home/add-employee"
+      (click)="closeSidebarOnMobile()"
+      class="block p-2 hover:text-[#E6354B]">
+      Add Employee
+    </a>
+
+    <a
+      routerLink="/home/employee-list"
+      (click)="closeSidebarOnMobile()"
+      class="block p-2 hover:text-[#E6354B]">
+      Employee List
+    </a>
+
+  </div>
+</div>
+
     </nav>
   </aside>
 

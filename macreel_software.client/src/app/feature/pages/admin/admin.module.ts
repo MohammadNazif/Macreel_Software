@@ -15,7 +15,7 @@ import { AddDepartmentComponent } from './add-department/add-department.componen
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AddRoleComponent } from './add-role/add-role.component';
 import { AddDesignationComponent } from './add-designation/add-designation.component';
-import { AddEmployeeComponent } from './add-employee/add-employee.component';
+import { EmployeeListComponent } from './employee-list/employee-list.component';
 
 
 @NgModule({
@@ -25,7 +25,7 @@ import { AddEmployeeComponent } from './add-employee/add-employee.component';
     DashboardComponent,
     AddRoleComponent,
     AddDesignationComponent,
-    AddEmployeeComponent,
+    EmployeeListComponent,
     
 
   ],
@@ -33,9 +33,6 @@ import { AddEmployeeComponent } from './add-employee/add-employee.component';
     CommonModule,
     FormsModule, 
     AdminRoutingModule,
-
-      /* Material Modules */
-   
     MatTableModule,
     MatIconModule,
     MatButtonModule,
