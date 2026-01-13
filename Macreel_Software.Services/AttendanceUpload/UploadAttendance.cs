@@ -1,4 +1,5 @@
 ﻿using Macreel_Software.Models.Common;
+using Macreel_Software.Models.Master;
 using Microsoft.AspNetCore.Http;
 using OfficeOpenXml;
 
@@ -6,9 +7,9 @@ namespace Macreel_Software.Services.AttendanceUpload
 {
     public class UploadAttendance
     {
-        public List<CommonData> ReadExcelFile(IFormFile file, int selectedMonth, int currentYear)
+        public List<Attendance> ReadExcelFile(IFormFile file, int selectedMonth, int currentYear)
         {
-            var attendances = new List<CommonData>();
+            var attendances = new List<Attendance>();
 
             if (file == null || file.Length == 0)
                 throw new ArgumentException("No file uploaded.");
@@ -17,7 +18,7 @@ namespace Macreel_Software.Services.AttendanceUpload
                 .Equals(".xlsx", StringComparison.OrdinalIgnoreCase))
                 return attendances;
 
-            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            //ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
             using (var stream = file.OpenReadStream())
             using (var package = new ExcelPackage(stream))
@@ -29,7 +30,6 @@ namespace Macreel_Software.Services.AttendanceUpload
                 int rowCount = worksheet.Dimension.End.Row;
                 int maxDays = DateTime.DaysInMonth(currentYear, selectedMonth);
 
-                // Employees start from row 11, every employee block = 6 rows
                 for (int row = 11; row <= rowCount; row += 6)
                 {
                     string employeeCode = worksheet.Cells[row, 4].Text?.Trim();
@@ -65,19 +65,22 @@ namespace Macreel_Software.Services.AttendanceUpload
 
                         DateTime date = new DateTime(currentYear, selectedMonth, day);
 
-                        attendances.Add(new CommonData
+                        attendances.Add(new Attendance
                         {
-                            EmployeeCode = employeeCode,
-                            EmployeeName = employeeName,
+                            EmpCode = employeeCode,
+                            EmpName = employeeName,
                             Status = status,
                             InTime = inTime,
                             OutTime = outTime,
-                            TotalHours = totalHours,
-                            Date = date,
-                            day = day,
+                            TotalHours = totalHours == TimeSpan.Zero
+          ? null
+          : (decimal)totalHours.TotalHours,
+                            AttendanceDate = date,
+                            Day = day,
                             Month = selectedMonth,
                             Year = currentYear
                         });
+
                     }
                 }
             }

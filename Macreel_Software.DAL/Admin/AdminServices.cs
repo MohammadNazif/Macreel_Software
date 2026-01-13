@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Security.Cryptography.Pkcs;
@@ -7,7 +8,10 @@ using System.Text;
 using System.Threading.Tasks;
 using FirebaseAdmin.Messaging;
 using Macreel_Software.Models;
+using Macreel_Software.Models.Common;
 using Macreel_Software.Models.Master;
+using Macreel_Software.Services.AttendanceUpload;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using static System.Collections.Specialized.BitVector32;
@@ -18,11 +22,13 @@ namespace Macreel_Software.DAL.Admin
     {
 
         private readonly SqlConnection _conn;
+        private readonly UploadAttendance _upload;
 
-        public AdminServices(IConfiguration config)
+        public AdminServices(IConfiguration config, UploadAttendance load)
         {
             _conn = new SqlConnection(
                 config.GetConnectionString("DefaultConnection"));
+            _upload=load;
         }
 
         #region employee registration
@@ -782,7 +788,206 @@ namespace Macreel_Software.DAL.Admin
         }
 
 
-        #endregion 
+        #endregion
+
+
+        #region attendance
+
+        public async Task<int> UploadAttendance(IFormFile file,int selectedMonth, int currentYear)
+        {
+            int count = 0;
+            var attendanceList = _upload.ReadExcelFile(file, selectedMonth, currentYear);
+
+            foreach (var item in attendanceList)
+            {
+                await SaveAttendance(item);
+                count++;
+            }
+
+            return count;
+        }
+
+        private async Task SaveAttendance(Attendance data)
+        {
+            using (SqlCommand cmd = new SqlCommand("sp_attendance", _conn))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@empCode", data.EmpCode);
+                cmd.Parameters.AddWithValue("@empName", data.EmpName);
+                cmd.Parameters.AddWithValue("@attendanceDate", data.AttendanceDate);
+                cmd.Parameters.AddWithValue("@status", data.Status);
+
+                cmd.Parameters.AddWithValue("@inTime",
+                    data.InTime == TimeSpan.Zero ? DBNull.Value : data.InTime);
+
+                cmd.Parameters.AddWithValue("@outTime",
+                    data.OutTime == TimeSpan.Zero ? DBNull.Value : data.OutTime);
+
+                cmd.Parameters.AddWithValue("@totalHours",
+                    data.TotalHours == null ? DBNull.Value : data.TotalHours);
+
+                cmd.Parameters.AddWithValue("@day", data.Day);
+                cmd.Parameters.AddWithValue("@month", data.Month);
+                cmd.Parameters.AddWithValue("@year", data.Year);
+
+                cmd.Parameters.AddWithValue("@action", "uploadAttendance");
+
+                if (_conn.State != ConnectionState.Open)
+                    await _conn.OpenAsync();
+
+                await cmd.ExecuteNonQueryAsync();
+            }
+        }
+
+        public async Task<ApiResponse<List<Attendance>>> EmpAttendanceDataByEmpCode(string empCode, int month, int year)
+        {
+            List<Attendance> list = new List<Attendance>();
+            int totalRecords = 0;
+            try
+            {
+                using SqlCommand cmd = new SqlCommand("sp_attendance", _conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@action", "getEmpAttendanceByEmpCode");
+                cmd.Parameters.AddWithValue("@empCode", empCode);
+                cmd.Parameters.AddWithValue("@month", month);
+                cmd.Parameters.AddWithValue("@year", year);
+
+                if (_conn.State != ConnectionState.Open)
+                    await _conn.OpenAsync();
+
+                using SqlDataReader sdr = await cmd.ExecuteReaderAsync();
+
+                if (sdr.HasRows)
+                {
+                    while (await sdr.ReadAsync())
+                    {
+                        if (sdr["TotalRecords"] != DBNull.Value)
+                            totalRecords = Convert.ToInt32(sdr["TotalRecords"]);
+
+                        list.Add(new Attendance
+                        {
+                            EmpCode = sdr["empCode"] != DBNull.Value ? sdr["empCode"].ToString() : null,
+                            EmpName = sdr["empName"] != DBNull.Value ? sdr["empName"].ToString() : null,
+                            AttendanceDate = sdr["attendanceDate"] != DBNull.Value ? (DateTime?)sdr["attendanceDate"] : null,
+                            Status = sdr["status"] != DBNull.Value ? sdr["status"].ToString() : null,
+                            InTime = ParseTimeSpan(sdr["inTime"]),
+                            OutTime = ParseTimeSpan(sdr["outTime"]),
+                            TotalHours = sdr["totalHours"] != DBNull.Value ? Convert.ToDecimal(sdr["totalHours"]) : (decimal?)null,
+                            Day = sdr["day"] != DBNull.Value ? Convert.ToInt32(sdr["day"]) : (int?)null,
+                            Month = sdr["month"] != DBNull.Value ? Convert.ToInt32(sdr["month"]) : (int?)null,
+                            Year = sdr["year"] != DBNull.Value ? Convert.ToInt32(sdr["year"]) : (int?)null
+                        });
+                    }
+                }
+
+                var response = ApiResponse<List<Attendance>>.SuccessResponse(list, "Employee attendance fetched successfully");
+                response.TotalRecords = totalRecords;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<List<Attendance>>.FailureResponse(
+                    "Failed to fetch employee attendance",
+                    500,
+                    errorCode: "EMP_ATTENDANCE_ERROR",
+                    validationErrors: null
+                );
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    await _conn.CloseAsync();
+            }
+        }
+
+
+        private TimeSpan? ParseTimeSpan(object dbValue)
+        {
+            if (dbValue == null || dbValue == DBNull.Value)
+                return null;
+
+            string text = dbValue.ToString().Replace(".", ":").Trim();
+
+            if (TimeSpan.TryParse(text, out var ts))
+                return ts;
+
+            if (int.TryParse(text, out int hhmm))
+            {
+                int hours = hhmm / 100;
+                int minutes = hhmm % 100;
+                if (hours >= 0 && hours < 24 && minutes >= 0 && minutes < 60)
+                    return new TimeSpan(hours, minutes, 0);
+            }
+
+            return null;
+        }
+
+
+        public async Task<ApiResponse<List<EmpWorkingDetails>>> EmpWorkingDetailsByempCode(int empCode, int month, int year)
+        {
+            List<EmpWorkingDetails> list = new List<EmpWorkingDetails>();
+            int totalRecords = 0;
+            try
+            {
+                using SqlCommand cmd = new SqlCommand("sp_attendance", _conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@action", "getEmpWorkDetailAttendanceListByEmpid");
+                cmd.Parameters.AddWithValue("@empCode", empCode);
+                cmd.Parameters.AddWithValue("@month", month);
+                cmd.Parameters.AddWithValue("@year", year);
+
+                if (_conn.State != ConnectionState.Open)
+                    await _conn.OpenAsync();
+
+                using SqlDataReader sdr = await cmd.ExecuteReaderAsync();
+                if (sdr.HasRows)
+                {
+
+                    while (await sdr.ReadAsync())
+                    {
+                        list.Add(new EmpWorkingDetails
+                        {
+                            empId = sdr["empId"] != DBNull.Value ? Convert.ToInt32(sdr["empId"]) : 0,
+                            empCode = sdr["empCode"]?.ToString(),
+                            empName = sdr["empName"]?.ToString(),
+
+                            totalWorkingDays = sdr["totalWorkingDays"] != DBNull.Value ? Convert.ToInt32(sdr["totalWorkingDays"]) : 0,
+                            presentDays = sdr["presentDays"] != DBNull.Value ? Convert.ToInt32(sdr["presentDays"]) : 0,
+                            absentDays = sdr["absentDays"] != DBNull.Value ? Convert.ToInt32(sdr["absentDays"]) : 0,
+                            lateEntries = sdr["lateEntries"] != DBNull.Value ? Convert.ToInt32(sdr["lateEntries"]) : 0,
+                            halfDays = sdr["halfDays"] != DBNull.Value ? Convert.ToInt32(sdr["halfDays"]) : 0,
+                            totalWorkingHours = sdr["totalWorkingHours"] != DBNull.Value
+                         ? Convert.ToDecimal(sdr["totalWorkingHours"])
+                         : 0
+                        });
+
+                    }
+                }
+                
+
+                var response = ApiResponse<List<EmpWorkingDetails>>.SuccessResponse(list, "Employee working details fetched successfully");
+            
+                return response;
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<List<EmpWorkingDetails>>.FailureResponse(
+                    "Failed to fetch employee working details",
+                    500,
+                    errorCode: "employee working details",
+                    validationErrors: null
+                );
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    await _conn.CloseAsync();
+            }
+        }
+
+
+        #endregion
 
     }
 }

@@ -516,6 +516,67 @@ namespace Macreel_Software.Server.Controllers
         }
 
 
+
+
+        #endregion
+
+        #region attendance 
+
+        [HttpPost("uploadAttendance")]
+        public async Task<IActionResult> UploadAttendance([FromForm] AttendanceUploadRequest request)
+        {
+            if (request.File == null)
+                return BadRequest("Excel file required");
+
+            int inserted = await _services.UploadAttendance(request.File, request.Month, request.Year);
+
+            if (inserted > 0)
+            {
+                return Ok(new
+                {
+                    status = true,
+                    statusCode = 200,
+                    message = "Attendance uploaded successfully",
+                    insertedRecords = inserted
+                });
+            }
+            else
+            {
+                return Ok(new
+                {
+                    status = false,
+                    statusCode = 400,
+                    message = "Some error occured!!"
+                   
+                });
+            }
+        }
+
+        [HttpGet("EmpAttendancebyEmpCode")]
+        public async Task<IActionResult> GetAttendanceByEmpCode([FromQuery] string empCode, [FromQuery] int month, [FromQuery] int year)
+        {
+            if (string.IsNullOrWhiteSpace(empCode))
+                return BadRequest(ApiResponse<List<Attendance>>.FailureResponse(
+                    "Employee code is required",
+                    400,
+                    errorCode: "EMP_CODE_REQUIRED"
+                ));
+
+            var result = await _services.EmpAttendanceDataByEmpCode(empCode, month, year);
+
+            return StatusCode(result.StatusCode, result);
+        }
+
+
+        [HttpGet("EmpMonthlyWorkingDetailByEmpCode")]
+        public async Task<IActionResult> EmpMonthlyWorkingDetailByEmpCode( int empCode,  int month, int year)
+        {
+         
+
+            var result = await _services.EmpWorkingDetailsByempCode(empCode, month, year);
+
+            return StatusCode(result.StatusCode, result);
+        }
         #endregion
 
     }
