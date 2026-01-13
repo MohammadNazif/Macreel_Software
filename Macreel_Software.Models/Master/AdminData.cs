@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 namespace Macreel_Software.Models.Master
 {
     public class AdminData
@@ -122,6 +123,43 @@ namespace Macreel_Software.Models.Master
         public int? noOfLeave { get; set; }
     }
 
+    public class Attendance
+    {
+
+        public string EmpCode { get; set; }
+        public string EmpName { get; set; }
+        public DateTime? AttendanceDate { get; set; }
+        public string Status { get; set; }
+        public TimeSpan? InTime { get; set; }
+        public TimeSpan? OutTime { get; set; }
+        public decimal? TotalHours { get; set; }
+        public int? Day { get; set; }
+        public int? Month { get; set; }
+        public int? Year { get; set; }
+    }
+    public class AttendanceUploadRequest
+    {
+        [Required]
+        public IFormFile File { get; set; }
+
+        [Required]
+        public int Month { get; set; }
+
+        [Required]
+        public int Year { get; set; }
+    }
+    public class EmpWorkingDetails
+    {
+        public int empId { get; set; }
+        public string empCode { get; set; }
+        public string empName { get; set; }
+        public int totalWorkingDays { get; set; }
+        public int presentDays { get; set; }
+        public int absentDays { get; set; }
+        public int lateEntries { get; set; }
+        public int halfDays { get; set; }
+        public decimal totalWorkingHours { get; set; }
+    }
 
 
 

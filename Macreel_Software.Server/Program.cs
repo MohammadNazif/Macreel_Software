@@ -8,14 +8,17 @@ using Macreel_Software.DAL.Common;
 using Macreel_Software.DAL.Master;
 using Macreel_Software.Server;
 using Macreel_Software.Services;
+using Macreel_Software.Services.AttendanceUpload;
 using Macreel_Software.Services.FileUpload.Services;
 using Macreel_Software.Services.FirebaseNotification;
 using Macreel_Software.Services.MailSender;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using OfficeOpenXml;
 
 var builder = WebApplication.CreateBuilder(args);
 
+ExcelPackage.License.SetNonCommercialPersonal("Macreel_Infosoft");
 
 FirebaseApp.Create(new AppOptions
 {
@@ -91,6 +94,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IAuthServices, AuthServices>();
 builder.Services.AddScoped<JwtTokenProvider>();
+builder.Services.AddScoped<UploadAttendance>();
 
 builder.Services.AddHttpContextAccessor();
 var app = builder.Build();
