@@ -1,0 +1,6 @@
+/* Custom class for floating label when input has value */
+.has-value:valid ~ label {
+  top: -0.5rem; /* move label up */
+  font-size: 0.75rem; /* small text */
+  color: #C5192F; /* match focus color */
+}

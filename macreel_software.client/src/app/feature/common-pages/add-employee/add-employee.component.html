@@ -1,0 +1,530 @@
+<div class="max-w-7xl mx-auto bg-gray-100 p-4">
+
+  <form [formGroup]="employeeForm">
+    <!-- STEP 1 -->
+    <div *ngIf="step === 1" class="bg-white p-6 rounded-lg shadow">
+      <div class="bg-[#C5192F] px-6 py-2 text-white text-lg font-semibold shadow-md rounded-t-md">
+        Employee Register
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-5">
+        <!-- Employee Role -->
+        <div class="relative">
+          <select formControlName="empRoleId" name="empRoleId"
+            class="peer w-full appearance-none rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700 focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
+            <option disabled hidden>Select Role</option>
+
+            <option *ngFor="let role of roles" [value]="role.id">{{ role.rolename }}</option>
+          </select>
+          <label
+            class="absolute left-3 top-3 text-sm text-gray-500 bg-white px-1 transition-all peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#C5192F] peer-valid:-top-2 peer-valid:text-xs">
+            Employee Role
+          </label>
+          <span class="absolute right-3 top-3 text-gray-400">▼</span>
+        </div>
+
+        <!-- Employee Code -->
+        <div class="relative">
+          <input type="text" formControlName="empCode" name="empCode" placeholder=" " class="peer w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700
+           focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none" />
+          <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
+           peer-focus:-top-2 peer-focus:text-xs
+           peer-valid:-top-2 peer-valid:text-xs ">
+            Employee Code
+          </label>
+        </div>
+
+        <!-- Employee Name -->
+        <div class="relative">
+          <input type="text" formControlName="empName" name="empName" placeholder=" " class="peer w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700
+           focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none" />
+
+          <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
+           peer-focus:-top-2 peer-focus:text-xs
+           peer-valid:-top-2 peer-valid:text-xs">
+            Employee Name
+          </label>
+        </div>
+
+        <!-- Mobile Number -->
+        <div class="relative">
+          <input type="tel" formControlName="mobile" name="mobile" placeholder=" " maxlength="10" class="peer w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700
+           focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none" />
+
+          <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
+           peer-focus:-top-2 peer-focus:text-xs
+           peer-valid:-top-2 peer-valid:text-xs">
+            Mobile Number
+          </label>
+        </div>
+
+        <!-- Department -->
+        <div class="relative">
+          <select formControlName="departmentId" name="departmentId" class="peer w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700
+           focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
+
+            <!-- placeholder -->
+            <option value="" disabled selected hidden></option>
+
+            <option *ngFor="let dept of departments" [value]="dept.id">
+              {{ dept.departmentName }}
+            </option>
+          </select>
+
+          <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
+           peer-focus:-top-2 peer-focus:text-xs
+           peer-valid:-top-2 peer-valid:text-xs">
+            Department
+          </label>
+
+          <span class="absolute right-3 top-2 text-gray-400 pointer-events-none"></span>
+        </div>
+
+
+
+        <!-- Designation -->
+        <div class="relative">
+          <select formControlName="designationId" name="designationId" class="peer w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700 bg-white
+           focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
+
+            <!-- placeholder -->
+            <option value="" disabled selected hidden></option>
+
+            <option *ngFor="let d of designations" [value]="d.id">
+              {{ d.designationName }}
+            </option>
+          </select>
+
+          <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
+           peer-focus:-top-2 peer-focus:text-xs
+           peer-valid:-top-2 peer-valid:text-xs">
+            Designation
+          </label>
+
+          <span class="absolute right-3 top-2 text-gray-400 pointer-events-none">▼</span>
+        </div>
+
+
+        <!-- Reporting Manager -->
+    <div class="relative">
+  <select formControlName="reportingManagerId" name="reportingManagerId"
+    class="peer w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700 bg-white
+    focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
+    <option value="" disabled selected hidden></option>
+    <option *ngFor="let manager of reportingManagers" [value]="manager.id">
+      {{ manager.reportingManagerName }}
+    </option>
+  </select>
+  <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
+       peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
+    Reporting Manager
+  </label>
+</div>
+
+        <!-- Email ID -->
+        <div class="relative">
+          <input type="email" formControlName="emailId" name="emailId" placeholder=" " class="peer w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
+           focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none" />
+
+          <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
+           peer-focus:-top-2 peer-focus:text-xs
+           peer-valid:-top-2 peer-valid:text-xs">
+            Email ID
+          </label>
+        </div>
+
+
+        <!-- Salary -->
+        <div class="relative">
+          <input type="number" formControlName="salary" name="salary" placeholder=" " min="0" class="peer w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
+           focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none" />
+
+          <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
+           peer-focus:-top-2 peer-focus:text-xs
+           peer-valid:-top-2 peer-valid:text-xs">
+            Salary
+          </label>
+        </div>
+
+        <!-- Date of Joining -->
+        <div class="relative">
+          <input type="date" formControlName="dateOfJoining" name="dateOfJoining" placeholder=" " class="peer w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
+           focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none" />
+
+          <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
+           peer-focus:-top-2 peer-focus:text-xs
+           peer-valid:-top-2 peer-valid:text-xs">
+            Date of Joining
+          </label>
+        </div>
+
+
+        <!-- DOB -->
+        <div class="relative">
+          <input type="date" formControlName="dob" name="dob" placeholder=" " class="peer w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
+           focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none" />
+
+          <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
+           peer-focus:-top-2 peer-focus:text-xs
+           peer-valid:-top-2 peer-valid:text-xs">
+            DOB
+          </label>
+        </div>
+
+        <!-- Password -->
+        <div class="relative">
+          <input type="password" formControlName="password" name="password" placeholder=" " class="peer w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
+           focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none" />
+
+          <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
+           peer-focus:-top-2 peer-focus:text-xs
+           peer-valid:-top-2 peer-valid:text-xs">
+            Password
+          </label>
+        </div>
+
+
+        <!-- Gender -->
+        <div class="relative">
+          <select formControlName="gender" name="gender" class="peer w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700 bg-white
+           focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
+
+            <!-- placeholder -->
+            <option value="" disabled selected hidden></option>
+
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+
+          <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
+           peer-focus:-top-2 peer-focus:text-xs
+           peer-valid:-top-2 peer-valid:text-xs">
+            Gender
+          </label>
+
+          <span class="absolute right-3 top-2 text-gray-400 pointer-events-none">▼</span>
+        </div>
+
+
+        <!-- Nationality -->
+        <div class="relative">
+          <input type="text" formControlName="nationality" name="nationality" placeholder=" " class="peer w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
+           focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none" />
+
+          <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
+           peer-focus:-top-2 peer-focus:text-xs
+           peer-valid:-top-2 peer-valid:text-xs">
+            Nationality
+          </label>
+        </div>
+
+
+        <!-- Marital Status -->
+        <div class="relative">
+          <select formControlName="maritalStatus" name="maritalStatus" class="peer w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700 bg-white
+           focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
+
+            <!-- placeholder -->
+            <option value="" disabled selected hidden></option>
+
+            <option value="Single">Single</option>
+            <option value="Married">Married</option>
+            <option value="Divorced">Divorced</option>
+            <option value="Widowed">Widowed</option>
+          </select>
+
+          <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
+           peer-focus:-top-2 peer-focus:text-xs
+           peer-valid:-top-2 peer-valid:text-xs">
+            Marital Status
+          </label>
+
+          <span class="absolute right-3 top-2 text-gray-400 pointer-events-none">▼</span>
+        </div>
+
+
+        <!-- Present Address -->
+      <div class="relative col-span-1">
+  <textarea rows="1" formControlName="presentAddress" name="presentAddress" placeholder=" "
+    class="peer w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
+           focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none resize-none">
+  </textarea>
+
+  <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
+         peer-focus:-top-2 peer-focus:text-xs
+         peer-valid:-top-2 peer-valid:text-xs">
+    Present Address
+  </label>
+</div>
+
+
+
+        <!-- STATE -->
+       <div class="relative">
+  <select formControlName="stateId" (change)="onStateChange($event)" name="stateId"
+    class="peer w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700 bg-white
+    focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
+    <option value="" disabled selected hidden></option>
+    <option *ngFor="let state of states" [value]="state.stateId">{{ state.stateName }}</option>
+  </select>
+  <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
+       peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
+    State
+  </label>
+</div>
+
+       <!-- CITY -->
+<div class="relative">
+  <select formControlName="cityId" name="cityId"
+    class="peer w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700 bg-white
+    focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
+    <option value="" disabled selected hidden></option>
+    <option *ngFor="let city of cities" [value]="city.cityId">{{ city.cityName }}</option>
+  </select>
+  <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
+       peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
+    City
+  </label>
+</div>
+
+        <!-- Pin code -->
+        <div class="relative">
+          <input type="text" formControlName="pincode" name="pincode" placeholder=" " maxlength="6" class="peer w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
+           focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none" />
+
+          <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
+           peer-focus:-top-2 peer-focus:text-xs
+           peer-valid:-top-2 peer-valid:text-xs">
+            Pin code
+          </label>
+        </div>
+
+        <!-- Bank Name -->
+        <div class="relative">
+          <input type="text" formControlName="bankName" name="bankName" placeholder=" " class="peer w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
+           focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none" />
+
+          <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
+           peer-focus:-top-2 peer-focus:text-xs
+           peer-valid:-top-2 peer-valid:text-xs">
+            Bank Name
+          </label>
+        </div>
+
+        <!-- Account Number -->
+        <div class="relative">
+          <input type="text" formControlName="accountNo" name="accountNo" placeholder=" " class="peer w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
+           focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none" />
+
+          <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
+           peer-focus:-top-2 peer-focus:text-xs
+           peer-valid:-top-2 peer-valid:text-xs">
+            Account Number
+          </label>
+        </div>
+
+
+        <!-- IFSC Code -->
+        <div class="relative">
+          <input type="text" formControlName="ifscCode" name="ifscCode" placeholder=" " class="peer w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
+           focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none" />
+
+          <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
+           peer-focus:-top-2 peer-focus:text-xs
+           peer-valid:-top-2 peer-valid:text-xs">
+            IFSC Code
+          </label>
+        </div>
+
+
+        <!-- Bank Branch -->
+        <div class="relative">
+          <input type="text" formControlName="bankBranch" name="bankBranch" placeholder=" " class="peer w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
+           focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none" />
+
+          <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
+           peer-focus:-top-2 peer-focus:text-xs
+           peer-valid:-top-2 peer-valid:text-xs">
+            Bank Branch
+          </label>
+        </div>
+
+
+        <!-- Emergency Contact Name -->
+        <!-- Emergency Contact Name -->
+        <div class="relative">
+          <input type="text" formControlName="emergencyContactPersonName" name="emergencyContactPersonName"
+            placeholder=" " class="peer w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
+           focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none" />
+
+          <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
+           peer-focus:-top-2 peer-focus:text-xs
+           peer-valid:-top-2 peer-valid:text-xs">
+            Emergency Contact Name
+          </label>
+        </div>
+
+
+        <!-- Emergency Contact Number -->
+        <!-- Emergency Contact Number -->
+        <div class="relative">
+          <input type="tel" formControlName="emergencyContactNum" name="emergencyContactNum" placeholder=" "
+            maxlength="10" class="peer w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
+           focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none" />
+
+          <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
+           peer-focus:-top-2 peer-focus:text-xs
+           peer-valid:-top-2 peer-valid:text-xs">
+            Emergency Contact Number
+          </label>
+        </div>
+
+
+        <!-- Aadhar Image -->
+        <div class="relative">
+          <label class="block text-sm font-medium text-gray-500 mb-1">Aadhar Image</label>
+          <input type="file" (change)="onFileSelected($event, 'aadhar')" accept=".jpg,.jpeg,.png"
+            class="w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-3 file:border-0 file:text-sm file:font-semibold file:bg-[#C5192F] file:text-white hover:file:bg-[#a41526] cursor-pointer border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#C5192F]/30" />
+        </div>
+
+        <!-- PAN Image -->
+        <div class="relative">
+          <label class="block text-sm font-medium text-gray-500 mb-1">PAN Image</label>
+          <input type="file" (change)="onFileSelected($event, 'pan')" accept=".jpg,.jpeg,.png"
+            class="w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-3 file:border-0 file:text-sm file:font-semibold file:bg-[#C5192F] file:text-white hover:file:bg-[#a41526] cursor-pointer border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#C5192F]/30" />
+        </div>
+
+        <!-- Profile Image -->
+        <div class="relative">
+          <label class="block text-sm font-medium text-gray-500 mb-1">Profile Image</label>
+          <input type="file" (change)="onFileSelected($event, 'profile')" accept=".jpg,.jpeg,.png"
+            class="w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-3 file:border-0 file:text-sm file:font-semibold file:bg-[#C5192F] file:text-white hover:file:bg-[#a41526] cursor-pointer border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#C5192F]/30" />
+        </div>
+      </div>
+
+      <div class="flex justify-end mt-6">
+        <button type="button" (click)="nextStep()"
+          class="bg-[#C5192F] text-white font-semibold px-6 py-2.5 rounded-md shadow-md hover:bg-[#a41526] transition focus:outline-none focus:ring-2 focus:ring-[#C5192F]/50">
+          Next
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div *ngIf="step === 2" class="bg-white p-6 rounded-lg shadow">
+      <!-- PREVIOUS TRAINING -->
+      <h3 class="text-lg font-semibold border-b pb-2 mb-4">Previous Training</h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Company Name -->
+        <!-- Company Name -->
+        <div class="relative">
+          <input type="text" formControlName="companyName" name="companyName" placeholder=" " class="peer w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
+           focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none" />
+
+          <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
+           peer-focus:-top-2 peer-focus:text-xs
+           peer-valid:-top-2 peer-valid:text-xs">
+            Company Name
+          </label>
+        </div>
+
+        <!-- Year of Experience -->
+        <div class="relative">
+          <input type="number" formControlName="yearOfExperience" name="yearOfExperience" placeholder=" " min="0" class="peer w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
+           focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none" />
+
+          <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
+           peer-focus:-top-2 peer-focus:text-xs
+           peer-valid:-top-2 peer-valid:text-xs">
+            Year of Experience
+          </label>
+        </div>
+
+
+        <!-- Technology -->
+        <!-- Technology -->
+        <div class="relative">
+          <textarea rows="1" formControlName="technology" name="technology" placeholder=" " class="peer w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
+           focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none"></textarea>
+
+          <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
+           peer-focus:-top-2 peer-focus:text-xs
+           peer-valid:-top-2 peer-valid:text-xs">
+            Technology
+          </label>
+        </div>
+
+
+        <!-- Company Contact -->
+        <!-- Company Contact -->
+        <div class="relative">
+          <input type="tel" formControlName="companyContactNo" name="companyContactNo" placeholder=" " maxlength="10"
+            class="peer w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
+           focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none" />
+
+          <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
+           peer-focus:-top-2 peer-focus:text-xs
+           peer-valid:-top-2 peer-valid:text-xs">
+            Company Contact
+          </label>
+        </div>
+
+
+        <!-- Experience Certificate -->
+        <div class="relative">
+          <label class="block text-sm font-medium text-gray-500 mb-1">Experience Certificate</label>
+          <input type="file" (change)="onFileSelected($event, 'experience')" accept=".pdf,.jpg,.jpeg,.png"
+            class="w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-3 file:border-0 file:text-sm file:font-semibold file:bg-[#C5192F] file:text-white hover:file:bg-[#a41526] cursor-pointer border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#C5192F]/30" />
+        </div>
+      </div>
+
+      <!-- EDUCATION DETAILS -->
+      <h3 class="text-lg font-semibold border-b pb-2 mt-6 mb-4">Education Details</h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- 10th Marksheet -->
+        <div class="relative">
+          <label class="block text-sm font-medium text-gray-500 mb-1">10th Marksheet</label>
+          <input type="file" (change)="onFileSelected($event, 'tenth')" accept=".pdf,.jpg,.jpeg,.png"
+            class="w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-3 file:border-0 file:text-sm file:font-semibold file:bg-[#C5192F] file:text-white hover:file:bg-[#a41526] cursor-pointer border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#C5192F]/30" />
+        </div>
+
+        <!-- 12th Marksheet -->
+        <div class="relative">
+          <label class="block text-sm font-medium text-gray-500 mb-1">12th Marksheet</label>
+          <input type="file" (change)="onFileSelected($event, 'twelth')" accept=".pdf,.jpg,.jpeg,.png"
+            class="w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-3 file:border-0 file:text-sm file:font-semibold file:bg-[#C5192F] file:text-white hover:file:bg-[#a41526] cursor-pointer border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#C5192F]/30" />
+        </div>
+
+        <!-- Graduation Document -->
+        <div class="relative">
+          <label class="block text-sm font-medium text-gray-500 mb-1">Graduation Document</label>
+          <input type="file" (change)="onFileSelected($event, 'graduation')" accept=".pdf,.jpg,.jpeg,.png"
+            class="w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-3 file:border-0 file:text-sm file:font-semibold file:bg-[#C5192F] file:text-white hover:file:bg-[#a41526] cursor-pointer border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#C5192F]/30" />
+        </div>
+
+        <!-- Master Document -->
+        <div class="relative">
+          <label class="block text-sm font-medium text-gray-500 mb-1">Master Document</label>
+          <input type="file" (change)="onFileSelected($event, 'masters')" accept=".pdf,.jpg,.jpeg,.png"
+            class="w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-3 file:border-0 file:text-sm file:font-semibold file:bg-[#C5192F] file:text-white hover:file:bg-[#a41526] cursor-pointer border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#C5192F]/30" />
+        </div>
+      </div>
+
+      <!-- STEP 2 NAVIGATION -->
+      <div class="flex justify-between mt-6">
+        <button type="button" (click)="prevStep()"
+          class="bg-gray-400 text-white px-4 py-2 rounded-md hover:bg-gray-500 transition">
+          Previous
+        </button>
+        <button type="button" (click)="onSubmit()" [disabled]="isLoading"
+          class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition disabled:opacity-50">
+          {{ isLoading ? 'Submitting...' : 'Submit' }}
+        </button>
+      </div>
+    </div>
+
+  </form>
+</div>

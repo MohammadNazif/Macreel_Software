@@ -5,6 +5,7 @@ import { LayoutComponent } from './layout/layout.component';
 const routes: Routes = [
   { path: '', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule) },
   { path: 'auth', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule) },
+  {path:'commmon',loadChildren:()=>import('../feature/common-pages/common-pages.module').then(n=>n.CommonPagesModule)}
 
   // {
   //   path: '', component: LayoutComponent,
