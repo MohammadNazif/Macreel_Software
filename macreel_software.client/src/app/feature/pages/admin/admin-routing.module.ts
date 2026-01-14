@@ -8,6 +8,7 @@ import { AddDesignationComponent } from './add-designation/add-designation.compo
 import { EmployeeListComponent } from './employee-list/employee-list.component';
 import { AddEmployeeComponent } from '../../common-pages/add-employee/add-employee.component';
 import { AddLeaveTypeComponent } from './add-leave-type/add-leave-type.component';
+import { AddTechnologyComponent } from './add-technology/add-technology.component';
 
 
 const routes: Routes = [
@@ -19,7 +20,8 @@ const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent },
   { path:'employee-list',component:EmployeeListComponent} ,
   { path: 'edit-employee/:id',component: AddEmployeeComponent},
-  {path:'add-leave',component:AddLeaveTypeComponent}
+  { path:'add-leave',component:AddLeaveTypeComponent},
+  { path:'add-technology',component:AddTechnologyComponent}
 ];
 
 @NgModule({

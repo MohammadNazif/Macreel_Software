@@ -35,34 +35,39 @@ export class AddDesignationComponent implements OnInit {
 
   dataSource: DesignationElement[] = [];
   // ================= LOAD =================
- loadDesignations() {
-  this.master
-    .getDesignation(this.pageNumber, this.pageSize, this.searchText)
-    .subscribe({
-      next: (res) => {
-        const data = res.data ?? [];
+  loadDesignations() {
+    this.master
+      .getDesignation(this.pageNumber, this.pageSize, this.searchText)
+      .subscribe({
+        next: (res) => {
+          const data = res.data ?? [];
 
-        this.totalRecords = res.totalRecords ?? 0;
+          this.totalRecords = res.totalRecords ?? 0;
 
-        this.dataSource = data.map((item: any, index: number) => ({
-          srNo: (this.pageNumber - 1) * this.pageSize + index + 1,
-          id: item.id,
-          name: item.designationName
-        }));
-      },
-      error: () => {
-        Swal.fire('Error', 'Failed to load designations', 'error');
-      }
-    });
-}
+          this.dataSource = data.map((item: any, index: number) => ({
+            srNo: (this.pageNumber - 1) * this.pageSize + index + 1,
+            id: item.id,
+            name: item.designationName
+          }));
+        },
+        error: () => {
+          Swal.fire('Error', 'Failed to load designations', 'error');
+        }
+      });
+  }
 
 
   // ================= ADD / UPDATE =================
   onSubmit() {
     if (!this.designationName.trim()) return;
 
+    // const payload = {
+    //   desId: this.editingDesignationId ?? 0,
+    //   designationName: this.designationName
+    // };
+
     const payload = {
-      desId: this.editingDesignationId ?? 0,
+      id: this.editingDesignationId, // use the correct field your API expects
       designationName: this.designationName
     };
 
@@ -89,33 +94,29 @@ export class AddDesignationComponent implements OnInit {
 
   // ================= EDIT =================
   editDesignation(row: DesignationElement) {
-  this.master.getDesignationById(row.id).subscribe({
-    next: (res) => {
+    this.master.getDesignationById(row.id).subscribe({
+      next: (res) => {
 
-      // ✅ API response ke according
-      if (res.success && res.data?.length) {
+        // ✅ API response ke according
+        if (res.success && res.data?.length) {
 
-        const data = res.data[0];
+          const data = res.data[0];
 
-        // ✅ FORM BIND
-        this.designationName = data.designationName;
+          // ✅ FORM BIND
+          this.designationName = data.designationName;
 
-        // ✅ ID SET (MOST IMPORTANT)
-        this.editingDesignationId = data.id;
+          // ✅ ID SET (MOST IMPORTANT)
+          this.editingDesignationId = data.id;
 
-      } else {
-        Swal.fire('Error', 'Designation not found', 'error');
+        } else {
+          Swal.fire('Error', 'Designation not found', 'error');
+        }
+      },
+      error: () => {
+        Swal.fire('Error', 'Failed to fetch designation', 'error');
       }
-    },
-    error: () => {
-      Swal.fire('Error', 'Failed to fetch designation', 'error');
-    }
-  });
-}
-
-
-
-
+    });
+  }
 
   cancelEdit() {
     this.designationName = '';

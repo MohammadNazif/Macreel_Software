@@ -17,6 +17,7 @@ import { AddRoleComponent } from './add-role/add-role.component';
 import { AddDesignationComponent } from './add-designation/add-designation.component';
 import { EmployeeListComponent } from './employee-list/employee-list.component';
 import { AddLeaveTypeComponent } from './add-leave-type/add-leave-type.component';
+import { AddTechnologyComponent } from './add-technology/add-technology.component';
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import { AddLeaveTypeComponent } from './add-leave-type/add-leave-type.component
     AddDesignationComponent,
     EmployeeListComponent,
     AddLeaveTypeComponent,
+    AddTechnologyComponent,
     
 
   ],
