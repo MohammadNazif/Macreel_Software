@@ -57,6 +57,7 @@ namespace Macreel_Software.Server.Controllers
                     return "/uploads/" + await _fileUploadService.UploadFileAsync(file, uploadRoot, allowedExt);
                 }
 
+                // ✅ Upload files
                 model.ProfilePicPath = await UploadFile(model.ProfilePic, imgExt);
                 model.AadharImgPath = await UploadFile(model.AadharImg, imgExt);
                 model.PanImgPath = await UploadFile(model.PanImg, imgExt);
@@ -69,32 +70,16 @@ namespace Macreel_Software.Server.Controllers
                 string plainPassword = model.Password;
                 model.Password = _pass.EncryptPassword(model.Password);
 
+                // ✅ Call Service
                 string dbMessage = await _services.InsertEmployeeRegistrationData(model);
 
                 if (dbMessage.Contains("Email already exists"))
-                {
-                    return BadRequest(new
-                    {
-                        status = false,
-                        statusCode = 409,
-                        message = dbMessage, 
-                        emailStatus = false,
-                        emailMessage = "Email not sent"
-                    });
-                }
+                    return Conflict(new { status = false, statusCode = 409, message = dbMessage });
 
-                if (!dbMessage.Contains("success"))
-                {
-                    return BadRequest(new
-                    {
-                        status = false,
-                        statusCode = 400,
-                        message = dbMessage,
-                        emailStatus = false,
-                        emailMessage = "Email not sent"
-                    });
-                }
+                if (!dbMessage.ToLower().Contains("success"))
+                    return BadRequest(new { status = false, statusCode = 400, message = dbMessage });
 
+                // ✅ Send email
                 bool emailStatus = false;
                 string emailMessage = "Email not sent";
 
@@ -142,7 +127,6 @@ namespace Macreel_Software.Server.Controllers
                 });
             }
         }
-
 
 
         [HttpGet("getReportingManager")]
@@ -318,7 +302,7 @@ namespace Macreel_Software.Server.Controllers
         {
             try
             {
-                int result = await _services.InsertRole(data);
+                int result = await _services.InsertLeave(data);
 
                 if (result == 1)
                 {

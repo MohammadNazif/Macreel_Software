@@ -18,6 +18,7 @@ namespace Macreel_Software.Models.Master
         public string? EmpName { get; set; }
         public string? Mobile { get; set; }
 
+    
         public int? DepartmentId { get; set; }
         public string? departmentName { get; set; }
         public int? DesignationId { get; set; }
@@ -45,6 +46,7 @@ namespace Macreel_Software.Models.Master
         public string? Nationality { get; set; }
         public string? MaritalStatus { get; set; }
 
+        
         public string? PresentAddress { get; set; }
         public int? StateId { get; set; }
         public string? stateName { get; set; }
@@ -80,9 +82,19 @@ namespace Macreel_Software.Models.Master
         public string? TwelthCertificatePath { get; set; }
         public string? GraduationCertificatePath { get; set; }
         public string? MastersCertificatePath { get; set; }
-    
+
 
      
+        public string? SkillIds { get; set; }
+
+        public List<Skill> skill { get; set; } = new List<Skill>();
+        //public List<int>? SkillIds { get; set; }
+
+    }
+    public class Skill
+    {
+        public int id { get; set; }
+        public string skillName { get; set; }
     }
     public class ReportingManger
     {
