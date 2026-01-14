@@ -5,17 +5,58 @@ import { environment } from '../../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
+// export class ManageLeaveService {
+
+//   private baseUrl: string = environment.apiUrl;
+
+//   constructor(private http: HttpClient) {}
+
+// insertLeave(data: any) {
+//   return this.http.post<any>(
+//     `${this.baseUrl}Admin/insertLeave`,
+//     data
+//   );
+// }
+
+// }
+
+
+@Injectable({
+  providedIn: 'root'
+})
 export class ManageLeaveService {
 
-  private baseUrl: string = environment.apiUrl;
+  private baseUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
-insertLeave(data: any) {
+  // GET ALL (pagination + search)
+  getAllLeave(searchTerm = '', pageNumber = 1, pageSize = 10) {
+    return this.http.get<any>(
+      `${this.baseUrl}Admin/getAllLeave?searchTerm=${searchTerm}&pageNumber=${pageNumber}&pageSize=${pageSize}`
+    );
+  }
+
+  // GET BY ID
+  getLeaveById(id: number) {
+    return this.http.get<any>(
+      `${this.baseUrl}Admin/getLeaveById?id=${id}`
+    );
+  }
+
+  // INSERT / UPDATE
+ insertLeave(data: any) {
   return this.http.post<any>(
     `${this.baseUrl}Admin/insertLeave`,
     data
   );
 }
 
+
+  // DELETE
+  deleteLeaveById(id: number) {
+    return this.http.delete<any>(
+      `${this.baseUrl}Admin/DeleteLeaveById?id=${id}`
+    );
+  }
 }

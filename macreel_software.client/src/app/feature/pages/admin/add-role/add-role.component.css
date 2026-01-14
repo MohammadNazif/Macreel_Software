@@ -1,27 +1,29 @@
-/* Hide "Items per page" label */
+/* Hide "Items per page" label if needed
 ::ng-deep .mat-mdc-paginator-page-size-label {
   display: none !important;
 }
 
-/* Hide "x – y of z" range text */
+/* Hide "x – y of z" range text if needed */
 ::ng-deep .mat-mdc-paginator-range-label {
   display: none !important;
 }
 
-/* Reduce dropdown (5,10,20) size */
+/* Reduce dropdown (5, 10, 20, 30) width */
 ::ng-deep .mat-mdc-paginator-page-size-select {
-  width: 50px !important;
-  min-width: 55px !important;
+  width: 60px !important;  /* optional: adjust width */
+  min-width: 45px !important;
 }
 
-/* Reduce dropdown height */
+/* Reduce dropdown height & font */
 ::ng-deep .mat-mdc-select-trigger {
-  height: 22px !important;
-  font-size: 13px !important;
+  height: 8px !important;  /* reduced height */
+  font-size: 8px !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
 }
 
-/* Reduce paginator height */
+/* Reduce paginator overall height */
 ::ng-deep .mat-mdc-paginator-container {
-  min-height: 40px !important;
-  padding: 0 8px !important;
+  min-height: 30px !important;  /* reduce container height */
+  padding: 0 4px !important;
 }
