@@ -20,7 +20,7 @@ namespace Macreel_Software.DAL.Admin
         Task<ApiResponse<List<employeeRegistration>>> GetAllEmpDataById(int id);
         Task<bool> UpdateEmployeeRegistrationData(employeeRegistration data);
 
-        Task<int> InsertRole(Leave data);
+        Task<int> InsertLeave(Leave data);
         Task<ApiResponse<List<Leave>>> getAllLeave(string? searchTerm, int? pageNumber, int? pageSize);
         Task<ApiResponse<List<Leave>>> getAllLeaveById(int id);
         Task<bool> deleteLeaveById(int id);
