@@ -370,7 +370,7 @@ namespace Macreel_Software.Server.Controllers
 
 
 
-        [HttpGet("getAllRole")]
+        [HttpGet("getAllLeave")]
         public async Task<IActionResult> getAllLeave(string? searchTerm = null, int? pageNumber = null, int? pageSize = null)
         {
             try
@@ -571,11 +571,20 @@ namespace Macreel_Software.Server.Controllers
         [HttpGet("EmpMonthlyWorkingDetailByEmpCode")]
         public async Task<IActionResult> EmpMonthlyWorkingDetailByEmpCode( int empCode,  int month, int year)
         {
-         
+            try
+            {
+                var result = await _services.EmpWorkingDetailsByempCode(empCode, month, year);
 
-            var result = await _services.EmpWorkingDetailsByempCode(empCode, month, year);
-
-            return StatusCode(result.StatusCode, result);
+                return StatusCode(result.StatusCode, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<EmpWorkingDetails>.FailureResponse(
+                    "An error occurred while fetching employee work details.",
+                    500,
+                    "SERVER_ERROR"
+                ));
+            }
         }
         #endregion
 

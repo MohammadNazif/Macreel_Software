@@ -924,60 +924,48 @@ namespace Macreel_Software.DAL.Admin
         }
 
 
-        public async Task<ApiResponse<List<EmpWorkingDetails>>> EmpWorkingDetailsByempCode(int empCode, int month, int year)
+        public async Task<ApiResponse<List<EmpWorkingDetails>>> EmpWorkingDetailsByempCode(
+        int empCode, int month, int year)
         {
-            List<EmpWorkingDetails> list = new List<EmpWorkingDetails>();
-            int totalRecords = 0;
+            List<EmpWorkingDetails> list = new();
+
             try
             {
                 using SqlCommand cmd = new SqlCommand("sp_attendance", _conn);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@action", "getEmpWorkDetailAttendanceListByEmpid");
-                cmd.Parameters.AddWithValue("@empCode", empCode);
-                cmd.Parameters.AddWithValue("@month", month);
-                cmd.Parameters.AddWithValue("@year", year);
+
+                cmd.Parameters.Add("@empCode", SqlDbType.Int).Value = empCode;
+                cmd.Parameters.Add("@month", SqlDbType.Int).Value = month;
+                cmd.Parameters.Add("@year", SqlDbType.Int).Value = year;
+                cmd.Parameters.AddWithValue("@action", "EmpWorkDetailAttendanceList");
 
                 if (_conn.State != ConnectionState.Open)
                     await _conn.OpenAsync();
 
-                using SqlDataReader sdr = await cmd.ExecuteReaderAsync();
-                if (sdr.HasRows)
+                 using SqlDataReader sdr = await cmd.ExecuteReaderAsync();
+
+                while (await sdr.ReadAsync())
                 {
-
-                    while (await sdr.ReadAsync())
+                    list.Add(new EmpWorkingDetails
                     {
-                        list.Add(new EmpWorkingDetails
-                        {
-                            empId = sdr["empId"] != DBNull.Value ? Convert.ToInt32(sdr["empId"]) : 0,
-                            empCode = sdr["empCode"]?.ToString(),
-                            empName = sdr["empName"]?.ToString(),
-
-                            totalWorkingDays = sdr["totalWorkingDays"] != DBNull.Value ? Convert.ToInt32(sdr["totalWorkingDays"]) : 0,
-                            presentDays = sdr["presentDays"] != DBNull.Value ? Convert.ToInt32(sdr["presentDays"]) : 0,
-                            absentDays = sdr["absentDays"] != DBNull.Value ? Convert.ToInt32(sdr["absentDays"]) : 0,
-                            lateEntries = sdr["lateEntries"] != DBNull.Value ? Convert.ToInt32(sdr["lateEntries"]) : 0,
-                            halfDays = sdr["halfDays"] != DBNull.Value ? Convert.ToInt32(sdr["halfDays"]) : 0,
-                            totalWorkingHours = sdr["totalWorkingHours"] != DBNull.Value
-                         ? Convert.ToDecimal(sdr["totalWorkingHours"])
-                         : 0
-                        });
-
-                    }
+                        empCode = sdr["empCode"].ToString(),
+                        empName = sdr["empName"].ToString(),
+                        totalWorkingDays = Convert.ToInt32(sdr["totalWorkingDays"]),
+                        presentDays = Convert.ToInt32(sdr["presentDays"]),
+                        absentDays = Convert.ToInt32(sdr["absentDays"]),
+                        lateEntries = Convert.ToInt32(sdr["lateEntries"]),
+                        halfDays = Convert.ToInt32(sdr["halfDays"]),
+                        totalWorkingHours = Convert.ToDecimal(sdr["totalWorkingHours"])
+                    });
                 }
-                
 
-                var response = ApiResponse<List<EmpWorkingDetails>>.SuccessResponse(list, "Employee working details fetched successfully");
-            
-                return response;
+                return ApiResponse<List<EmpWorkingDetails>>
+                    .SuccessResponse(list, "Employee working details fetched successfully");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return ApiResponse<List<EmpWorkingDetails>>.FailureResponse(
-                    "Failed to fetch employee working details",
-                    500,
-                    errorCode: "employee working details",
-                    validationErrors: null
-                );
+                return ApiResponse<List<EmpWorkingDetails>>
+                    .FailureResponse("Failed to fetch employee working details", 500);
             }
             finally
             {

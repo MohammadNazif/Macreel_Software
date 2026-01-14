@@ -648,5 +648,190 @@ namespace Macreel_Software.DAL.Master
             }
         }
         #endregion
+
+        #region technology
+
+        public async Task<int> insertTechnology(technology data)
+        {
+            try
+            {
+                SqlCommand cmd = new SqlCommand("sp_technology", _conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@id",data.id);
+                cmd.Parameters.AddWithValue("@SoftwareType", data.SoftwareType);
+                cmd.Parameters.AddWithValue("@technology", data.technologyName);
+                cmd.Parameters.AddWithValue("@action",data.id>0? "update" : "insert");
+
+                SqlParameter sqlParameter = new SqlParameter("@result", SqlDbType.Int)
+                {
+                    Direction = ParameterDirection.Output
+                };
+                cmd.Parameters.Add(sqlParameter);
+                if (_conn.State != ConnectionState.Open)
+                    await _conn.OpenAsync();
+
+                await cmd.ExecuteNonQueryAsync();
+                return sqlParameter.Value != DBNull.Value
+                   ? Convert.ToInt32(sqlParameter.Value)
+                   : 0;
+
+
+            }
+            catch(Exception ex)
+            {
+                throw;
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    await _conn.CloseAsync();
+            }
+        }
+
+        public async Task<ApiResponse<List<technology>>> getAllTechnology()
+        {
+            List<technology> list = new();
+
+            try
+            {
+                using SqlCommand cmd = new SqlCommand("sp_technology", _conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@action", "selectAllTechnology");
+
+                if (_conn.State == ConnectionState.Closed)
+                    await _conn.OpenAsync();
+
+                using SqlDataReader sdr = await cmd.ExecuteReaderAsync();
+                while (await sdr.ReadAsync())
+                {
+                    list.Add(new technology
+                    {
+                        id = Convert.ToInt32(sdr["id"]),
+                        SoftwareType = sdr["SoftwareType"]?.ToString(),
+                        technologyName = sdr["technology"]?.ToString()
+                    });
+                }
+
+                return ApiResponse<List<technology>>.SuccessResponse(
+                    list,
+                    "Technology list fetched successfully"
+                );
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<List<technology>>.FailureResponse(
+                    ex.Message,
+                    500,
+                    "TECH_FETCH_ERROR"
+                );
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    await _conn.CloseAsync();
+            }
+        }
+
+
+        public async Task<ApiResponse<List<technology>>> getAllTechnologyById(int id)
+        {
+            List<technology> list = new List<technology>();
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("sp_technology", _conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@action", "selectAllById");
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    if (_conn.State != ConnectionState.Open)
+                        await _conn.OpenAsync();
+
+                    using (SqlDataReader sdr = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await sdr.ReadAsync())
+                        {
+                            list.Add(new technology
+                            {
+                                id = Convert.ToInt32(sdr["id"]),
+                                SoftwareType = sdr["SoftwareType"] != DBNull.Value
+                                                    ? sdr["SoftwareType"].ToString()
+                                                    : "",
+                                technologyName = sdr["technology"] != DBNull.Value
+                                                    ? sdr["technology"].ToString()
+                                                    : "",
+                                
+                            });
+                        }
+                    }
+                }
+
+                if (list.Any())
+                {
+                    return ApiResponse<List<technology>>.SuccessResponse(
+                        list,
+                        "technology data fetched successfully."
+                    );
+                }
+                else
+                {
+                    return ApiResponse<List<technology>>.FailureResponse(
+                        "No technology data found.",
+                        404
+                    );
+                }
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<List<technology>>.FailureResponse(
+                    "An error occurred while fetching technology.",
+                    500,
+                    errorCode: "EXCEPTION",
+                    validationErrors: null
+                );
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    await _conn.CloseAsync();
+            }
+        }
+
+        public async Task<bool> deleteTechnologyById(int id)
+        {
+            try
+            {
+                using SqlCommand cmd = new SqlCommand("sp_technology", _conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@action", "deleteById");
+                cmd.Parameters.AddWithValue("@id", id);
+
+                SqlParameter resultParam = new SqlParameter("@result", SqlDbType.Int)
+                {
+                    Direction = ParameterDirection.Output
+                };
+                cmd.Parameters.Add(resultParam);
+
+                if (_conn.State == ConnectionState.Closed)
+                    await _conn.OpenAsync();
+
+                await cmd.ExecuteNonQueryAsync();
+
+                return Convert.ToInt32(resultParam.Value) == 3;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error deleting technology", ex);
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    await _conn.CloseAsync();
+            }
+        }
+
+
+        #endregion
     }
 }
