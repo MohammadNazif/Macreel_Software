@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Security.Cryptography.Pkcs;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using FirebaseAdmin.Messaging;
 using Macreel_Software.Models;
@@ -39,14 +40,18 @@ namespace Macreel_Software.DAL.Admin
                 using (SqlCommand cmd = new SqlCommand("sp_Employee", _conn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
+
                     cmd.Parameters.AddWithValue("@action", "insert");
 
+                    // --- Employee Details ---
                     cmd.Parameters.AddWithValue("@empRole", data.EmpRoleId);
                     cmd.Parameters.AddWithValue("@empCode", data.EmpCode);
                     cmd.Parameters.AddWithValue("@empName", data.EmpName);
                     cmd.Parameters.AddWithValue("@mobile", data.Mobile);
                     cmd.Parameters.AddWithValue("@department", data.DepartmentId);
                     cmd.Parameters.AddWithValue("@designation", data.DesignationId);
+                    cmd.Parameters.AddWithValue("@reportingManager",
+                        (object?)data.ReportingManagerId ?? DBNull.Value);
 
                     cmd.Parameters.AddWithValue("@profilePic", data.ProfilePicPath ?? "");
                     cmd.Parameters.AddWithValue("@aadharImg", data.AadharImgPath ?? "");
@@ -75,22 +80,37 @@ namespace Macreel_Software.DAL.Admin
                     cmd.Parameters.AddWithValue("@emergencyContactPersonName", data.EmergencyContactPersonName);
                     cmd.Parameters.AddWithValue("@emergenctContactNum", data.EmergencyContactNum);
 
+                    // --- Previous Experience ---
                     cmd.Parameters.AddWithValue("@companyName", data.CompanyName ?? "");
                     cmd.Parameters.AddWithValue("@yearOfExperience", data.YearOfExperience);
                     cmd.Parameters.AddWithValue("@technology", data.Technology ?? "");
                     cmd.Parameters.AddWithValue("@companyContactno", data.CompanyContactNo ?? "");
-
                     cmd.Parameters.AddWithValue("@experienceCertificate", data.ExperienceCertificatePath ?? "");
+
+                    // --- Certificates ---
                     cmd.Parameters.AddWithValue("@tenthCertificate", data.TenthCertificatePath ?? "");
                     cmd.Parameters.AddWithValue("@twelthCertificate", data.TwelthCertificatePath ?? "");
                     cmd.Parameters.AddWithValue("@graduationCertificate", data.GraduationCertificatePath ?? "");
                     cmd.Parameters.AddWithValue("@mastersCertificate", data.MastersCertificatePath ?? "");
 
                     cmd.Parameters.AddWithValue("@addedBy", data.addedBy);
-                    cmd.Parameters.AddWithValue("@reportingManager",
-                        (object?)data.ReportingManagerId ?? DBNull.Value);
 
-                    //cmd.Parameters.AddWithValue("@status", 1);
+                    // ✅ Convert comma-separated SkillIdsCsv to DataTable for TVP
+                    DataTable dtSkills = new DataTable();
+                    dtSkills.Columns.Add("technolgyId", typeof(int));
+
+                    if (!string.IsNullOrEmpty(data.SkillIds))
+                    {
+                        var ids = data.SkillIds.Split(',')
+                                                  .Select(s => int.Parse(s.Trim()));
+
+                        foreach (var id in ids)
+                            dtSkills.Rows.Add(id);
+                    }
+
+                    var param = cmd.Parameters.AddWithValue("@TechnologyIds", dtSkills);
+                    param.SqlDbType = SqlDbType.Structured;
+                    param.TypeName = "dbo.TechnologyTableType";
 
                     if (_conn.State == ConnectionState.Closed)
                         await _conn.OpenAsync();
@@ -98,9 +118,7 @@ namespace Macreel_Software.DAL.Admin
                     using (SqlDataReader dr = await cmd.ExecuteReaderAsync())
                     {
                         if (await dr.ReadAsync())
-                        {
-                            return dr["message"].ToString(); 
-                        }
+                            return dr["message"].ToString();
                     }
                 }
 
@@ -236,7 +254,11 @@ namespace Macreel_Software.DAL.Admin
                                 MastersCertificatePath = sdr["mastersCertificate"] != DBNull.Value ? sdr["mastersCertificate"]?.ToString():null,
                                 YearOfExperience= sdr["yearOfExperience"] != DBNull.Value ? Convert.ToInt32(sdr["yearOfExperience"]) : (int?)null,
                                 stateName = sdr["stateName"] != DBNull.Value ? sdr["stateName"].ToString():null,
-                                cityName = sdr["cityName"] != DBNull.Value ? sdr["cityName"].ToString():null
+                                cityName = sdr["cityName"] != DBNull.Value ? sdr["cityName"].ToString():null,
+                                skill = sdr["skillsJson"] != DBNull.Value
+                ? JsonSerializer.Deserialize<List<Skill>>(sdr["skillsJson"].ToString())
+                : new List<Skill>()
+
                             });
                         }
                     }
@@ -371,7 +393,10 @@ namespace Macreel_Software.DAL.Admin
                                 MastersCertificatePath = sdr["mastersCertificate"] != DBNull.Value ? sdr["mastersCertificate"]?.ToString() : null,
                                 YearOfExperience = sdr["yearOfExperience"] != DBNull.Value ? Convert.ToInt32(sdr["yearOfExperience"]) : (int?)null,
                                 stateName = sdr["stateName"] != DBNull.Value ? sdr["stateName"].ToString() : null,
-                                cityName = sdr["cityName"] != DBNull.Value ? sdr["cityName"].ToString() : null
+                                cityName = sdr["cityName"] != DBNull.Value ? sdr["cityName"].ToString() : null,
+                                skill = sdr["skillsJson"] != DBNull.Value
+                ? JsonSerializer.Deserialize<List<Skill>>(sdr["skillsJson"].ToString())
+                : new List<Skill>()
                             });
                         }
                     }
@@ -468,6 +493,22 @@ namespace Macreel_Software.DAL.Admin
                     cmd.Parameters.AddWithValue("@mastersCertificate",
                         (object?)data.MastersCertificatePath ?? DBNull.Value);
 
+                    // ✅ Convert comma-separated SkillIdsCsv to DataTable for TVP
+                    DataTable dtSkills = new DataTable();
+                    dtSkills.Columns.Add("technolgyId", typeof(int));
+
+                    if (!string.IsNullOrEmpty(data.SkillIds))
+                    {
+                        var ids = data.SkillIds.Split(',')
+                                                  .Select(s => int.Parse(s.Trim()));
+
+                        foreach (var id in ids)
+                            dtSkills.Rows.Add(id);
+                    }
+
+                    var param = cmd.Parameters.AddWithValue("@TechnologyIds", dtSkills);
+                    param.SqlDbType = SqlDbType.Structured;
+                    param.TypeName = "dbo.TechnologyTableType";
                     if (_conn.State == ConnectionState.Closed)
                         await _conn.OpenAsync();
 
@@ -487,7 +528,7 @@ namespace Macreel_Software.DAL.Admin
 
         #region leave api
 
-        public async Task<int> InsertRole(Leave data)
+        public async Task<int> InsertLeave(Leave data)
         {
             try
             {

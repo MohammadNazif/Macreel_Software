@@ -505,9 +505,9 @@ namespace Macreel_Software.Server.Controllers
         {
             try
             {
-                bool result = await _service.deleteTechnologyById(id);
+                bool isDeleted = await _service.deleteTechnologyById(id);
 
-                if (result)
+                if (isDeleted)
                 {
                     return Ok(new
                     {
@@ -516,13 +516,15 @@ namespace Macreel_Software.Server.Controllers
                         message = "Technology deleted successfully."
                     });
                 }
-
-                return NotFound(new
+                else
                 {
-                    status = false,
-                    statusCode = 404,
-                    message = "Technology not found or already deleted."
-                });
+                    return Ok(new
+                    {
+                        status = false,
+                        statusCode = 404,
+                        message = "Technology not found or already deleted."
+                    });
+                }
             }
             catch (Exception ex)
             {
