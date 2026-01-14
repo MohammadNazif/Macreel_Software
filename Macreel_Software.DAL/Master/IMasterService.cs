@@ -29,6 +29,12 @@ namespace Macreel_Software.DAL.Master
         Task<ApiResponse<List<designation>>> getAllDesignationById(int id);
 
         Task<bool> deleteDesignationById(int id);
+        Task<int> insertTechnology(technology data);
+        Task<ApiResponse<List<technology>>> getAllTechnology();
+
+        Task<ApiResponse<List<technology>>> getAllTechnologyById(int id);
+
+        Task<bool> deleteTechnologyById(int id);
 
 
     }

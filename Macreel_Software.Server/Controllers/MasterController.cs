@@ -413,5 +413,130 @@ namespace Macreel_Software.Server.Controllers
         }
         #endregion
 
+
+        #region technology api
+
+        [HttpPost("insertTechnology")]
+        public async Task<IActionResult> insertTechnology([FromBody]technology data)
+        {
+            try
+            {
+                int result = await _service.insertTechnology(data);
+
+                if (result == 1)
+                {
+                    return Ok(ApiResponse<object>.SuccessResponse(
+                        null,
+                        "Technology inserted successfully"
+                    ));
+                }
+
+                if (result == 2)
+                {
+                    return Ok(ApiResponse<object>.SuccessResponse(
+                        null,
+                        "Technology updated successfully"
+                    ));
+                }
+
+                if (result == -1)
+                {
+                    return StatusCode(409, ApiResponse<object>.FailureResponse(
+                        "Technology already exists",
+                        409
+                    ));
+                }
+
+                return BadRequest(ApiResponse<object>.FailureResponse(
+                    "Some error occurred while saving Technology",
+                    400
+                ));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<object>.FailureResponse(
+                    "Internal server error",
+                    500
+                ));
+            }
+        }
+
+
+        [HttpGet("GetAllTechnology")]
+        public async Task<IActionResult> getAllTechnology()
+        {
+            try
+            {
+                var result = await _service.getAllTechnology();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<List<technology>>.FailureResponse(
+                    "An error occurred while fetching technology",
+                    500,
+                    errorCode: "SERVER_ERROR"
+                ));
+            }
+        }
+
+
+
+        [HttpGet("GetAllTechnologyById")]
+        public async Task<IActionResult> getAllTechnologybyId(int id)
+        {
+            try
+            {
+                var result = await _service.getAllTechnologyById(id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<List<technology>>.FailureResponse(
+                    "An error occurred while fetching technology",
+                    500,
+                    errorCode: "SERVER_ERROR"
+                ));
+            }
+        }
+
+        [HttpDelete("deleteTechnologyById")]
+        public async Task<IActionResult> DeleteTechnologyById(int id)
+        {
+            try
+            {
+                bool result = await _service.deleteTechnologyById(id);
+
+                if (result)
+                {
+                    return Ok(new
+                    {
+                        status = true,
+                        statusCode = 200,
+                        message = "Technology deleted successfully."
+                    });
+                }
+
+                return NotFound(new
+                {
+                    status = false,
+                    statusCode = 404,
+                    message = "Technology not found or already deleted."
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    status = false,
+                    statusCode = 500,
+                    message = "An error occurred while deleting technology.",
+                    error = ex.Message
+                });
+            }
+        }
+
+        #endregion
+
     }
 }
