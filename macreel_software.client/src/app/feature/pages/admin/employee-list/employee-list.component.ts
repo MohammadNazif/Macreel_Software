@@ -13,6 +13,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { ManageEmployeeService } from '../../../../core/services/manage-employee.service';
+import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -24,7 +26,7 @@ import { ManageEmployeeService } from '../../../../core/services/manage-employee
 
 export class EmployeeListComponent implements OnInit {
 
-  displayedColumns: string[] = ['srNo','empCode', 'empName','designationName', 'empEmail', 'Contact', 'action'];
+  displayedColumns: string[] = ['srNo', 'empCode', 'empName', 'designationName', 'empEmail', 'Contact', 'action'];
   dataSource = new MatTableDataSource<any>([]);
 
   totalRecords = 0;
@@ -34,7 +36,11 @@ export class EmployeeListComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private employeeService: ManageEmployeeService) {}
+  constructor(private employeeService: ManageEmployeeService, private router: Router) { }
+
+  editEmployee(emp: any) {
+  this.router.navigate(['/home/edit-employee', emp.id]);
+}
 
   ngOnInit(): void {
     this.getEmployees();
@@ -42,13 +48,13 @@ export class EmployeeListComponent implements OnInit {
 
   // Fetch employees from API via service
   getEmployees(pageNumber: number = 1, pageSize: number = this.pageSize, searchText: string = this.searchText) {
-    this.employeeService.getAllEmployees(pageNumber, pageSize, searchText).subscribe((res:any) => {
+    this.employeeService.getAllEmployees(pageNumber, pageSize, searchText).subscribe((res: any) => {
       if (res.success) {
-        this.dataSource.data = res.data; 
+        this.dataSource.data = res.data;
         this.totalRecords = res.totalRecords || res.data.length; // API should return totalRecords for pagination
         this.dataSource.paginator = this.paginator;
       }
-    }, (err:any) => {
+    }, (err: any) => {
       console.error('Error fetching employees', err);
     });
   }
@@ -67,13 +73,56 @@ export class EmployeeListComponent implements OnInit {
     this.getEmployees(this.pageIndex + 1, this.pageSize, this.searchText);
   }
 
-  editEmployee(emp: any) {
-    console.log('Edit', emp);
-    // Open edit modal or navigate to edit page
-  }
+  // editEmployee(emp: any) {
+  //   console.log('Edit', emp);
+  //   // Open edit modal or navigate to edit page
+  // }
 
-  deleteEmployee(emp: any) {
-    console.log('Delete', emp);
-    // Call delete API
-  }
+
+deleteEmployee(id: number) {
+  Swal.fire({
+    title: 'Are you sure?',
+    text: 'This employee will be permanently deleted!',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#C5192F',
+    cancelButtonColor: '#6c757d',
+    confirmButtonText: 'Yes, delete it!',
+    cancelButtonText: 'Cancel'
+  }).then((result) => {
+
+    if (result.isConfirmed) {
+
+      this.employeeService.deleteDepartmentById(id).subscribe({
+        next: (res: any) => {
+
+          if (res.status === true) {
+
+            Swal.fire({
+              title: 'Deleted!',
+              text: res.message || 'Employee deleted successfully.',
+              icon: 'success',
+              confirmButtonText: 'OK'
+            }).then(() => {
+              // 🔄 FULL PAGE REFRESH
+              window.location.reload();
+            });
+
+          } else {
+            Swal.fire('Error', res.message || 'Delete failed', 'error');
+          }
+
+        },
+        error: () => {
+          Swal.fire('Error', 'Something went wrong!', 'error');
+        }
+      });
+
+    }
+
+  });
+}
+
+
+
 }
