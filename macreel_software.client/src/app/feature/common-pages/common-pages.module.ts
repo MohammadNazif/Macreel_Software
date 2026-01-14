@@ -4,11 +4,13 @@ import { CommonModule } from '@angular/common';
 import { CommonPagesRoutingModule } from './common-pages-routing.module';
 import { AddEmployeeComponent } from './add-employee/add-employee.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { EmployeeProfileComponent } from './employee-profile/employee-profile.component';
 
 
 @NgModule({
   declarations: [
-    AddEmployeeComponent
+    AddEmployeeComponent,
+    EmployeeProfileComponent
   ],
   imports: [
     CommonModule,
