@@ -1,17 +1,13 @@
 <div class="flex h-screen bg-[#f6f7fb] overflow-hidden">
 
   <!-- MOBILE OVERLAY -->
-  <div
-    *ngIf="sidebarOpen && isMobile"
-    (click)="closeSidebarOnMobile()"
+  <div *ngIf="sidebarOpen && isMobile" (click)="closeSidebarOnMobile()"
     class="fixed inset-0 bg-black/40 z-30 md:hidden">
   </div>
 
   <!-- SIDEBAR -->
-  <aside
-    class="bg-white shadow-lg z-40 h-full transition-all duration-300
-           fixed md:relative"
-    [ngClass]="{
+  <aside class="bg-white shadow-lg z-40 h-full transition-all duration-300
+           fixed md:relative" [ngClass]="{
       'w-[265px] translate-x-0': sidebarOpen,
       'w-[72px] -translate-x-full md:translate-x-0 md:w-[72px]': !sidebarOpen
     }">
@@ -28,9 +24,7 @@
     <nav class="mt-4 px-3 text-[13px] font-medium text-[#7E7E7E] space-y-1">
 
       <!-- DASHBOARD -->
-      <div
-        routerLink="/home/dashboard"
-        (click)="closeSidebarOnMobile()"
+      <div routerLink="/home/dashboard" (click)="closeSidebarOnMobile()"
         class="flex items-center gap-3 p-2 rounded-lg cursor-pointer hover:bg-[#FDECEA]">
         <span>🏠</span>
         <span *ngIf="sidebarOpen">Dashboard</span>
@@ -38,8 +32,7 @@
 
       <!-- MASTER -->
       <div>
-        <div
-          (click)="toggleMenu('master')"
+        <div (click)="toggleMenu('master')"
           class="flex items-center p-2 justify-between rounded-lg cursor-pointer hover:bg-[#FDECEA]">
 
           <div class="flex items-center gap-3">
@@ -47,47 +40,36 @@
             <span *ngIf="sidebarOpen">Master</span>
           </div>
 
-          <span *ngIf="sidebarOpen"
-            class="transition-transform"
-            [ngClass]="openMenu === 'master' ? 'rotate-90' : ''">
+          <span *ngIf="sidebarOpen" class="transition-transform" [ngClass]="openMenu === 'master' ? 'rotate-90' : ''">
             >
           </span>
         </div>
 
-        <div *ngIf="openMenu === 'master' && sidebarOpen"
-          class="ml-10 space-y-1 text-sm">
+        <div *ngIf="openMenu === 'master' && sidebarOpen" class="ml-10 space-y-1 text-sm">
 
-          <a routerLink="/home/add-role"
-             (click)="closeSidebarOnMobile()"
-             class="block p-2 hover:text-[#E6354B]">
+          <a routerLink="/home/add-role" (click)="closeSidebarOnMobile()" class="block p-2 hover:text-[#E6354B]">
             Add Role
           </a>
 
-          <a routerLink="/home/add-designation"
-             (click)="closeSidebarOnMobile()"
-             class="block p-2 hover:text-[#E6354B]">
+          <a routerLink="/home/add-designation" (click)="closeSidebarOnMobile()" class="block p-2 hover:text-[#E6354B]">
             Add Designation
           </a>
 
-          <a routerLink="/home/add-department"
-             (click)="closeSidebarOnMobile()"
-             class="block p-2 hover:text-[#E6354B]">
+          <a routerLink="/home/add-department" (click)="closeSidebarOnMobile()" class="block p-2 hover:text-[#E6354B]">
             Add Department
           </a>
         </div>
       </div>
 
       <!-- EMPLOYEE -->
-      <div
-        routerLink="/home/employee-task-sheet"
-        (click)="closeSidebarOnMobile()"
+      <div routerLink="/home/employee-task-sheet" (click)="closeSidebarOnMobile()"
         class="flex items-center p-2 gap-3 rounded-lg cursor-pointer hover:bg-[#FDECEA]">
         <i class="fa-solid fa-building-user"></i>
         <span *ngIf="sidebarOpen">Employee Task Sheet</span>
       </div>
 
-        <!--add EMPLOYEE -->
-       <!-- <div
+      <!--add EMPLOYEE -->
+      <!-- <div
         routerLink="/home/add-employee"
         (click)="closeSidebarOnMobile()"
         class="flex items-center p-2 gap-3 rounded-lg cursor-pointer hover:bg-[#FDECEA]">
@@ -95,45 +77,76 @@
         <span *ngIf="sidebarOpen">Add Employee</span>
       </div> -->
       <div>
-  <!-- ================= EMPLOYEE MANAGEMENT ================= -->
-  <div
-    (click)="toggleMenu('employee')"
-    class="flex items-center p-2 justify-between rounded-lg cursor-pointer hover:bg-[#FDECEA]">
 
-    <div class="flex items-center gap-3">
-      <i class="fa-solid fa-users"></i>
-      <span *ngIf="sidebarOpen">Employee Management</span>
-    </div>
+        <div (click)="toggleMenu('employee')"
+          class="flex items-center p-2 justify-between rounded-lg cursor-pointer hover:bg-[#FDECEA]">
 
-    <span
-      *ngIf="sidebarOpen"
-      class="transition-transform"
-      [ngClass]="openMenu === 'employee' ? 'rotate-90' : ''">
-      >
-    </span>
-  </div>
+          <div class="flex items-center gap-3">
+            <i class="fa-solid fa-users"></i>
+            <span *ngIf="sidebarOpen">Employee Management</span>
+          </div>
 
-  <!-- ================= SUB MENU ================= -->
-  <div
-    *ngIf="openMenu === 'employee' && sidebarOpen"
-    class="ml-10 space-y-1 text-sm">
+          <span *ngIf="sidebarOpen" class="transition-transform" [ngClass]="openMenu === 'employee' ? 'rotate-90' : ''">
+            >
+          </span>
+        </div>
 
-    <a
-      routerLink="/home/add-employee"
-      (click)="closeSidebarOnMobile()"
-      class="block p-2 hover:text-[#E6354B]">
-      Add Employee
-    </a>
 
-    <a
-      routerLink="/home/employee-list"
-      (click)="closeSidebarOnMobile()"
-      class="block p-2 hover:text-[#E6354B]">
-      Employee List
-    </a>
+        <div *ngIf="openMenu === 'employee' && sidebarOpen" class="ml-10 space-y-1 text-sm">
 
-  </div>
-</div>
+          <a routerLink="/home/add-employee" (click)="closeSidebarOnMobile()" class="block p-2 hover:text-[#E6354B]">
+            Add Employee
+          </a>
+
+          <a routerLink="/home/employee-list" (click)="closeSidebarOnMobile()" class="block p-2 hover:text-[#E6354B]">
+            Employee List
+          </a>
+
+        </div>
+      </div>
+
+      <div>
+
+        <!-- LEAVE MANAGEMENT -->
+        <div>
+          <div (click)="toggleMenu('leave')"
+            class="flex items-center p-2 justify-between rounded-lg cursor-pointer hover:bg-[#FDECEA]">
+
+            <div class="flex items-center gap-3">
+              <i class="fas fa-id-card"></i>
+              <span *ngIf="sidebarOpen">Leave Management</span>
+            </div>
+
+            <span *ngIf="sidebarOpen" class="transition-transform" [ngClass]="openMenu === 'leave' ? 'rotate-90' : ''">
+              >
+            </span>
+          </div>
+
+          <div *ngIf="openMenu === 'leave' && sidebarOpen" class="ml-10 space-y-1 text-sm">
+
+            <a routerLink="/home/add-leave" (click)="closeSidebarOnMobile()" class="block p-2 hover:text-[#E6354B]">
+              Add Leave
+            </a>
+
+            <a routerLink="/home/assign-leave" (click)="closeSidebarOnMobile()" class="block p-2 hover:text-[#E6354B]">
+              Assign Leave
+            </a>
+
+          </div>
+        </div>
+
+
+        <div *ngIf="openMenu === 'master' && sidebarOpen" class="ml-10 space-y-1 text-sm">
+
+          <a routerLink="/home/" (click)="closeSidebarOnMobile()" class="block p-2 hover:text-[#E6354B]">
+            Add Leave
+          </a>
+
+          <a routerLink="/home/" (click)="closeSidebarOnMobile()" class="block p-2 hover:text-[#E6354B]">
+            Assign Leave
+          </a>
+        </div>
+      </div>
 
     </nav>
   </aside>
@@ -146,9 +159,7 @@
 
       <div class="flex items-center gap-3">
         <!-- TOGGLE BUTTON (ALL SCREENS) -->
-        <button
-          (click)="toggleSidebar()"
-          class="text-2xl text-[#E6354B] p-2 rounded-lg">
+        <button (click)="toggleSidebar()" class="text-2xl text-[#E6354B] p-2 rounded-lg">
           ☰
         </button>
 
@@ -167,8 +178,7 @@
         </div>
 
         <!-- PROFILE -->
-        <img src="https://i.pravatar.cc/40"
-             class="w-9 h-9 rounded-full cursor-pointer" />
+        <img src="https://i.pravatar.cc/40" class="w-9 h-9 rounded-full cursor-pointer" />
       </div>
     </header>
 

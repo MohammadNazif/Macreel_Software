@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
@@ -16,6 +16,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { AddRoleComponent } from './add-role/add-role.component';
 import { AddDesignationComponent } from './add-designation/add-designation.component';
 import { EmployeeListComponent } from './employee-list/employee-list.component';
+import { AddLeaveTypeComponent } from './add-leave-type/add-leave-type.component';
 
 
 @NgModule({
@@ -26,6 +27,7 @@ import { EmployeeListComponent } from './employee-list/employee-list.component';
     AddRoleComponent,
     AddDesignationComponent,
     EmployeeListComponent,
+    AddLeaveTypeComponent,
     
 
   ],
@@ -38,7 +40,8 @@ import { EmployeeListComponent } from './employee-list/employee-list.component';
     MatButtonModule,
     MatPaginatorModule,
     MatSortModule,
-    MatInputModule
+    MatInputModule,
+    ReactiveFormsModule
   ]
 })
 export class AdminModule { }

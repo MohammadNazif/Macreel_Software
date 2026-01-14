@@ -64,7 +64,7 @@
            focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
 
             <!-- placeholder -->
-            <option value="" disabled selected hidden></option>
+            <option value="" disabled hidden></option>
 
             <option *ngFor="let dept of departments" [value]="dept.id">
               {{ dept.departmentName }}
@@ -88,7 +88,7 @@
            focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
 
             <!-- placeholder -->
-            <option value="" disabled selected hidden></option>
+            <option value="" disabled hidden></option>
 
             <option *ngFor="let d of designations" [value]="d.id">
               {{ d.designationName }}
@@ -106,11 +106,33 @@
 
 
         <!-- Reporting Manager -->
-    <div class="relative">
+
+        <!-- Reporting Manager (OPTIONAL) -->
+        <div class="relative">
+          <select formControlName="reportingManagerId" name="reportingManagerId" class="peer w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700 bg-white
+           focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
+
+            <!-- 👇 Optional / NULL option -->
+            <option value="">-- No Reporting Manager --</option>
+
+            <option *ngFor="let manager of reportingManagers" [value]="manager.id">
+              {{ manager.reportingManagerName }}
+            </option>
+          </select>
+
+          <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
+           peer-focus:-top-2 peer-focus:text-xs
+           peer-valid:-top-2 peer-valid:text-xs">
+            Reporting Manager
+          </label>
+        </div>
+
+
+        <!-- <div class="relative">
   <select formControlName="reportingManagerId" name="reportingManagerId"
     class="peer w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700 bg-white
     focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
-    <option value="" disabled selected hidden></option>
+    <option value="" disabled hidden></option>
     <option *ngFor="let manager of reportingManagers" [value]="manager.id">
       {{ manager.reportingManagerName }}
     </option>
@@ -119,7 +141,7 @@
        peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
     Reporting Manager
   </label>
-</div>
+</div> -->
 
         <!-- Email ID -->
         <div class="relative">
@@ -190,7 +212,7 @@
            focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
 
             <!-- placeholder -->
-            <option value="" disabled selected hidden></option>
+            <option value="" disabled hidden></option>
 
             <option value="Male">Male</option>
             <option value="Female">Female</option>
@@ -226,7 +248,7 @@
            focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
 
             <!-- placeholder -->
-            <option value="" disabled selected hidden></option>
+            <option value="" disabled hidden></option>
 
             <option value="Single">Single</option>
             <option value="Married">Married</option>
@@ -245,48 +267,45 @@
 
 
         <!-- Present Address -->
-      <div class="relative col-span-1">
-  <textarea rows="1" formControlName="presentAddress" name="presentAddress" placeholder=" "
-    class="peer w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
+        <div class="relative col-span-1">
+          <textarea rows="1" formControlName="presentAddress" name="presentAddress" placeholder=" " class="peer w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
            focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none resize-none">
   </textarea>
 
-  <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
+          <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
          peer-focus:-top-2 peer-focus:text-xs
          peer-valid:-top-2 peer-valid:text-xs">
-    Present Address
-  </label>
-</div>
+            Present Address
+          </label>
+        </div>
 
 
 
         <!-- STATE -->
-       <div class="relative">
-  <select formControlName="stateId" (change)="onStateChange($event)" name="stateId"
-    class="peer w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700 bg-white
+        <div class="relative">
+          <select formControlName="stateId" (change)="onStateChange($event)" name="stateId" class="peer w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700 bg-white
     focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
-    <option value="" disabled selected hidden></option>
-    <option *ngFor="let state of states" [value]="state.stateId">{{ state.stateName }}</option>
-  </select>
-  <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
+            <option value="" disabled hidden></option>
+            <option *ngFor="let state of states" [value]="state.stateId">{{ state.stateName }}</option>
+          </select>
+          <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
        peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
-    State
-  </label>
-</div>
+            State
+          </label>
+        </div>
 
-       <!-- CITY -->
-<div class="relative">
-  <select formControlName="cityId" name="cityId"
-    class="peer w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700 bg-white
+        <!-- CITY -->
+        <div class="relative">
+          <select formControlName="cityId" name="cityId" class="peer w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700 bg-white
     focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
-    <option value="" disabled selected hidden></option>
-    <option *ngFor="let city of cities" [value]="city.cityId">{{ city.cityName }}</option>
-  </select>
-  <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
+            <option value="" disabled hidden></option>
+            <option *ngFor="let city of cities" [value]="city.cityId">{{ city.cityName }}</option>
+          </select>
+          <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
        peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
-    City
-  </label>
-</div>
+            City
+          </label>
+        </div>
 
         <!-- Pin code -->
         <div class="relative">
@@ -521,7 +540,8 @@
         </button>
         <button type="button" (click)="onSubmit()" [disabled]="isLoading"
           class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition disabled:opacity-50">
-          {{ isLoading ? 'Submitting...' : 'Submit' }}
+          <!-- {{ isLoading ? 'Submitting...' : 'Submit' }} -->
+          {{ isEditMode ? 'Update' : 'Submit' }}
         </button>
       </div>
     </div>

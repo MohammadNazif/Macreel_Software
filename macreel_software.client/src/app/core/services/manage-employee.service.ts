@@ -11,7 +11,7 @@ export class ManageEmployeeService {
 
   private baseUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   addEmployee(formData: FormData): Observable<any> {
     return this.http.post(
@@ -20,50 +20,44 @@ export class ManageEmployeeService {
     );
   }
 
-getAllStateList(): Observable<any> {
-  return this.http.get(`${this.baseUrl}Common/getAllStateList`);
-}
+  getAllStateList(): Observable<any> {
+    return this.http.get(`${this.baseUrl}Common/getAllStateList`);
+  }
 
-getCityByStateId(stateId: number): Observable<any> {
-  const params = new HttpParams().set('stateId', stateId.toString());
-  return this.http.get(`${this.baseUrl}Common/GetCityByStateId`, { params });
-}
+  getCityByStateId(stateId: number): Observable<any> {
+    const params = new HttpParams().set('stateId', stateId.toString());
+    return this.http.get(`${this.baseUrl}Common/GetCityByStateId`, { params });
+  }
 
+  getReportingManager(): Observable<any> {
+    return this.http.get(`${this.baseUrl}Admin/getReportingManager`);
+  }
 
-// getCityByStateId(stateId: number): Observable<any> {
-//   return this.http.get(`${this.baseUrl}Common/GetCityByStateId`, { params: { stateId } });
-// }
+  getAllEmployees(pageNumber: number | null = null, pageSize: number | null = null, searchText: string = '') {
+    let params = new HttpParams();
 
-getReportingManager(): Observable<any> {
-  return this.http.get(`${this.baseUrl}Admin/getReportingManager`);
-}
+    if (pageNumber !== null) params = params.set('pageNumber', pageNumber.toString());
+    if (pageSize !== null) params = params.set('pageSize', pageSize.toString());
+    if (searchText) params = params.set('searchTerm', searchText);
 
-getAllEmployees(pageNumber: number | null = null, pageSize: number | null = null, searchText: string = '') {
-  let params = new HttpParams();
+    return this.http.get<any>(`${this.baseUrl}Admin/GetAllEmployees`, { params });
+  }
 
-  if (pageNumber !== null) params = params.set('pageNumber', pageNumber.toString());
-  if (pageSize !== null) params = params.set('pageSize', pageSize.toString());
-  if (searchText) params = params.set('searchTerm', searchText);
+  getEmployeeById(id: number) {
+    return this.http.get(`${this.baseUrl}Admin/getEmployeeById?id=${id}`);
+  }
 
-  return this.http.get<any>(`${this.baseUrl}Admin/GetAllEmployees`, { params });
-}
+  // updateEmployee(id: number, data: any) {
+  //   return this.http.post(`${this.baseUrl}Admin/updateEmployeeRegistration?id=${id}`, data);
+  // }
 
-
-//   getAllEmployees(
-//   pageNumber: number | null = null,
-//   pageSize: number | null = null,
-//   searchText: string = ''
-// ) {
-//   let params = new HttpParams();
-
-//   if (pageNumber !== null) params = params.set('pageNumber', pageNumber);
-//   if (pageSize !== null) params = params.set('pageSize', pageSize);
-//   if (searchText) params = params.set('searchTerm', searchText);
-
-//   return this.http.get<any>(
-//     `${this.baseUrl}Admin/GetAllEmployees`,
-//     { params }
-//   );
-// }
+  updateEmployee(data: FormData) {
+    return this.http.post(
+      `${this.baseUrl}Admin/updateEmployeeRegistration`, data
+    );
+  }
+ deleteDepartmentById(id: number) {
+    return this.http.delete<any>(`${this.baseUrl}Admin/deleteEmployeeById?id=${id}`);
+  }
 
 }
