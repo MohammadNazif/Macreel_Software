@@ -89,4 +89,38 @@ export class ManageMasterdataService {
     return this.http.delete<any>(`${this.baseUrl}Master/deleteDepartmentById?depId=${id}`);
   }
 
+  // ================= TECHNOLOGY APIs =================
+
+// Add / Update Technology (USING FORM DATA)
+// addOrUpdateTechnology(formData: FormData) {
+//   return this.http.post<any>(`${this.baseUrl}Master/insertTechnology`, formData);
+// }
+
+addOrUpdateTechnology(payload: any) {
+  return this.http.post<any>(`${this.baseUrl}Master/insertTechnology`, payload);
+}
+
+
+// Get All Technology with pagination & search
+getAllTechnology(pageNumber: number | null = null, pageSize: number | null = null, searchText: string = '') {
+  let params = new HttpParams();
+
+  if (pageNumber !== null) params = params.set('pageNumber', pageNumber);
+  if (pageSize !== null) params = params.set('pageSize', pageSize);
+  if (searchText) params = params.set('searchTerm', searchText);
+
+  return this.http.get<any>(`${this.baseUrl}Master/GetAllTechnology`, { params });
+}
+
+// Get Technology By ID
+getTechnologyById(id: number) {
+  return this.http.get<any>(`${this.baseUrl}Master/GetAllTechnologyById?id=${id}`);
+}
+
+// Delete Technology
+deleteTechnologyById(id: number) {
+  return this.http.delete<any>(`${this.baseUrl}Master/deleteTechnologyById?id=${id}`);
+}
+
+
 }

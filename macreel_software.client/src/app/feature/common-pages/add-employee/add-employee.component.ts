@@ -26,6 +26,7 @@ export class AddEmployeeComponent implements OnInit {
 states: any[] = [];
 cities: any[] = [];
 reportingManagers: any[] = [];
+technologies: any[] = [];
 
   // ================= FORM =================
   employeeForm!: FormGroup;
@@ -81,6 +82,7 @@ isEditMode = false;
       bankBranch: [''],
       emergencyContactPersonName: [''],
       emergencyContactNum: [''],
+      technologyId: [''],
 
       // ===== STEP 2 (OPTIONAL) =====
       companyName: [''],
@@ -94,6 +96,7 @@ isEditMode = false;
     this.loadMasters();
     this.loadStates();
     this.loadReportingManagers();
+    this.loadTechnologies();
 
      // 👇 EDIT MODE CHECK
   this.employeeId = Number(this.route.snapshot.paramMap.get('id'));
@@ -116,6 +119,11 @@ isEditMode = false;
   }
   }
 
+  private loadTechnologies(): void {
+  this.masterService.getAllTechnology(1, 100).subscribe(res => {
+    this.technologies = res?.data ?? [];
+  });
+}
 
   // ================= MASTER DATA =================
   private loadMasters(): void {
@@ -268,6 +276,7 @@ imageBaseUrl = 'https://localhost:7253/api/'; // apna backend url
         bankBranch: emp.bankBranch,
         emergencyContactPersonName: emp.emergencyContactPersonName,
         emergencyContactNum: emp.emergencyContactNum,
+        technologyId: emp.technologyId,
         // profilePicPath:emp.profilePicPath,
         // aadharImgPath:emp.aadharImgPath,
         // panImgPath:emp.panImgPath,

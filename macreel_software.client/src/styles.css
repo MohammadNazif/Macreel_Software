@@ -8,3 +8,42 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.mat-mdc-cell {
+  border-color: #d1d1d1!important;
+}
+.mat-mdc-icon-button img, .mat-mdc-icon-button svg {
+    width: var(--mdc-icon-button-icon-size, 18px)!important;
+    height: var(--mdc-icon-button-icon-size, 18px)!important;
+}
+.mat-mdc-paginator-touch-target
+ {
+    height: 28px!important;
+  
+}
+.mat-mdc-form-field-flex {
+
+    height: 30px!important;
+}
+.mdc-text-field--outlined .mat-mdc-form-field-infix, .mdc-text-field--no-label .mat-mdc-form-field-infix {
+  padding: 0!important;
+  padding-top: 3px!important;
+}
+.mat-mdc-form-field-infix{
+  min-height: 10px!important;
+}
+
+ /* .mat-mdc-text-field-wrapper.mdc-text-field{
+ }
+.mat-mdc-text-field-wrapper.mdc-text-field.mdc-text-field--outlined.mdc-text-field--no-label{} */
+
+.table-search{
+  max-width: 180px;
+}
+.table-search::placeholder{
+  font-size: 12px;
+}
+.table-search i{
+  font-size: 12px!important;
+}
+

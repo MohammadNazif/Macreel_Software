@@ -5,20 +5,6 @@ import { environment } from '../../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-// export class ManageLeaveService {
-
-//   private baseUrl: string = environment.apiUrl;
-
-//   constructor(private http: HttpClient) {}
-
-// insertLeave(data: any) {
-//   return this.http.post<any>(
-//     `${this.baseUrl}Admin/insertLeave`,
-//     data
-//   );
-// }
-
-// }
 
 
 @Injectable({
@@ -51,12 +37,18 @@ export class ManageLeaveService {
     data
   );
 }
-
-
   // DELETE
   deleteLeaveById(id: number) {
     return this.http.delete<any>(
       `${this.baseUrl}Admin/DeleteLeaveById?id=${id}`
     );
   }
+
+  assignLeaveToEmployee(data: any) {
+  return this.http.post<any>(
+    `${this.baseUrl}Admin/AssignLeave`,
+    data
+  );
+}
+
 }

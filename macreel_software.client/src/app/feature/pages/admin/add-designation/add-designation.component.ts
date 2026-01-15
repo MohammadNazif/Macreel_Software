@@ -56,41 +56,37 @@ export class AddDesignationComponent implements OnInit {
       });
   }
 
+// ================= ADD / UPDATE =================
+onSubmit() {
+  if (!this.designationName.trim()) return;
 
-  // ================= ADD / UPDATE =================
-  onSubmit() {
-    if (!this.designationName.trim()) return;
+  // ✅ Send payload exactly as API expects
+  const payload = {
+    id: this.editingDesignationId ?? 0,  // 0 for new designation
+    designationName: this.designationName
+  };
 
-    // const payload = {
-    //   desId: this.editingDesignationId ?? 0,
-    //   designationName: this.designationName
-    // };
+  this.master.addOrUpdateDesignation(payload).subscribe({
+    next: () => {
+      Swal.fire({
+        icon: 'success',
+        title: this.editingDesignationId
+          ? 'Designation Updated'
+          : 'Designation Added',
+        timer: 1500,
+        showConfirmButton: false
+      });
 
-    const payload = {
-      id: this.editingDesignationId, // use the correct field your API expects
-      designationName: this.designationName
-    };
+      this.cancelEdit();
+      this.loadDesignations();
+    },
+    error: (err) => {
+      console.error(err);
+      Swal.fire('Error', 'Save failed', 'error');
+    }
+  });
+}
 
-
-    this.master.addOrUpdateDesignation(payload).subscribe({
-      next: () => {
-        Swal.fire({
-          icon: 'success',
-          title: this.editingDesignationId
-            ? 'Designation Updated'
-            : 'Designation Added',
-          timer: 1500,
-          showConfirmButton: false
-        });
-
-        this.cancelEdit();
-        this.loadDesignations();
-      },
-      error: () => {
-        Swal.fire('Error', 'Save failed', 'error');
-      }
-    });
-  }
 
   // ================= EDIT =================
   editDesignation(row: DesignationElement) {
