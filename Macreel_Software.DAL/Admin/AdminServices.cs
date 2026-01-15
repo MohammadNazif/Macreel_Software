@@ -1018,5 +1018,55 @@ namespace Macreel_Software.DAL.Admin
 
         #endregion
 
+
+        #region project
+        public async Task<bool> AddProject(project data)
+        {
+            try
+            {
+                SqlCommand cmd = new SqlCommand("sp_addAndAssignProject", _conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@id", data.id);
+                cmd.Parameters.AddWithValue("@category", data.category);
+                cmd.Parameters.AddWithValue("@projectTitle", data.projectTitle);
+                cmd.Parameters.AddWithValue("@description", data.description);
+                cmd.Parameters.AddWithValue("@web", data.web);
+                cmd.Parameters.AddWithValue("@app", data.app);
+                cmd.Parameters.AddWithValue("@androidApp", data.androidApp);
+                cmd.Parameters.AddWithValue("@IOSApp", data.IOSApp);
+                cmd.Parameters.AddWithValue("@appTechnology", data.appTechnology);
+                cmd.Parameters.AddWithValue("@appEmpId", data.appEmpId);
+                cmd.Parameters.AddWithValue("@webTechnology", data.webTechnology);
+                cmd.Parameters.AddWithValue("@webEmpId", data.webEmpId);
+                cmd.Parameters.AddWithValue("@startDate", data.startDate);
+                cmd.Parameters.AddWithValue("@assignDate", data.assignDate);
+                cmd.Parameters.AddWithValue("@endDate", data.endDate);
+                cmd.Parameters.AddWithValue("@completionDate", data.completionDate);
+                cmd.Parameters.AddWithValue("@sopDocument", data.sopDocumentPath);
+                cmd.Parameters.AddWithValue("@technicalDocument", data.technicalDocumentPath);
+                cmd.Parameters.AddWithValue("@SEO", data.SEO);
+                cmd.Parameters.AddWithValue("@SMO", data.SMO);
+                cmd.Parameters.AddWithValue("@paidAds", data.paidAds);
+                cmd.Parameters.AddWithValue("@GMB", data.GMB);
+                cmd.Parameters.AddWithValue("@action", data.id>0? "updateProject" : "insertProject");
+
+                if (_conn.State == ConnectionState.Closed)
+                    await _conn.OpenAsync();
+
+               int row= await cmd.ExecuteNonQueryAsync();
+                return row > 0;
+            }
+            catch(Exception ex)
+            {
+                throw;
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    await _conn.CloseAsync();
+            }
+        }
+
+        #endregion
     }
 }

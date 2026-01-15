@@ -833,5 +833,115 @@ namespace Macreel_Software.DAL.Master
 
 
         #endregion
+
+
+        #region skills
+
+        public async Task<ApiResponse<List<technologyDetails>>> EmpListForWebByTechId(int id)
+        {
+            List<technologyDetails> list = new List<technologyDetails>();
+            try
+            {
+                SqlCommand cmd = new SqlCommand("sp_technology", _conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@action", "empListForWebByTechId");
+                cmd.Parameters.AddWithValue("@id",id);
+                if (_conn.State == ConnectionState.Closed)
+                    await _conn.OpenAsync();
+
+                using (SqlDataReader sdr = await cmd.ExecuteReaderAsync())
+                {
+                    if (sdr.HasRows)
+                    {
+                        while(await sdr.ReadAsync())
+                        {
+                            list.Add(new technologyDetails
+                            {
+                                id = Convert.ToInt32(sdr["skillId"]),
+                                empId = sdr["empId"] != DBNull.Value ? Convert.ToInt32(sdr["empId"]):(int?)null,
+                                technologyId = sdr["technolgyId"] != DBNull.Value ? Convert.ToInt32(sdr["technolgyId"]):null,
+                                technologyName = sdr["technology"] != DBNull.Value ? sdr["technology"].ToString():null,
+                                empName = sdr["empName"] != DBNull.Value ? sdr["empName"].ToString():null
+
+                            });
+                        }
+                    }
+                }
+                if(list.Any())
+                {
+                    return ApiResponse<List<technologyDetails>>.SuccessResponse(list,"emp details for web fetched successfully!!");
+                }
+                else
+                {
+                    return ApiResponse<List<technologyDetails>>.FailureResponse("Failed to fetched emp list for web!!", 404);
+                }
+            }
+            catch(Exception ex)
+            {
+                return ApiResponse<List<technologyDetails>>.FailureResponse("An error occured during fetched emp list for web!!", 500, errorCode: "exception", validationErrors: null);
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                { 
+                await _conn.CloseAsync();
+                }
+            }
+        }
+
+
+        public async Task<ApiResponse<List<technologyDetails>>> empListForAppByTechId(int id)
+        {
+            List<technologyDetails> list = new List<technologyDetails>();
+            try
+            {
+                SqlCommand cmd = new SqlCommand("sp_technology", _conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@action", "empListForAppByTechId");
+                cmd.Parameters.AddWithValue("@id", id);
+
+                if (_conn.State == ConnectionState.Closed)
+                    await _conn.OpenAsync();
+
+                using(SqlDataReader sdr=await cmd.ExecuteReaderAsync())
+                {
+                    if(sdr.HasRows)
+                    {
+                        while(await sdr.ReadAsync())
+                        {
+                            list.Add(new technologyDetails
+                            {
+                                id = Convert.ToInt32(sdr["skillId"]),
+                                empId = sdr["empId"] != DBNull.Value ? Convert.ToInt32(sdr["empId"]):null,
+                                technologyId = sdr["technolgyId"] != DBNull.Value ? Convert.ToInt32(sdr["technolgyId"]):null,
+                                technologyName = sdr["technology"] != DBNull.Value ? sdr["technology"].ToString():null,
+                                empName = sdr["empName"] != DBNull.Value ? sdr["empName"].ToString():null
+                            });
+                        }
+                    }
+                }
+
+                if(list.Any())
+                {
+                    return ApiResponse<List<technologyDetails>>.SuccessResponse(list, "Emp details fetched successfully for App type!!");
+                }
+                else
+                {
+                    return ApiResponse<List<technologyDetails>>.FailureResponse("Failed to fetched emp details for App type!!", 404);
+                }
+            }
+            catch(Exception ex)
+            {
+                return ApiResponse<List<technologyDetails>>.FailureResponse("An error occured during fetched emp detail for App type!!", 500, errorCode: "exception", validationErrors: null);
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    await _conn.CloseAsync();
+            }
+        }
+
+
+        #endregion
     }
 }

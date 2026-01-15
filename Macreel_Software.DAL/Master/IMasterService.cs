@@ -35,6 +35,8 @@ namespace Macreel_Software.DAL.Master
         Task<ApiResponse<List<technology>>> getAllTechnologyById(int id);
 
         Task<bool> deleteTechnologyById(int id);
+        Task<ApiResponse<List<technologyDetails>>> EmpListForWebByTechId(int id);
+        Task<ApiResponse<List<technologyDetails>>> empListForAppByTechId(int id);
 
 
     }
