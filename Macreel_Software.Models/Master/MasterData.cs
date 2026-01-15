@@ -34,6 +34,14 @@ namespace Macreel_Software.Models.Master
         public string SoftwareType { get; set; }
         public string technologyName { get; set; }
     }
+    public class technologyDetails
+    {
+        public int? id { get; set; }
+        public int? empId { get; set; }
+        public int? technologyId { get; set; }
+        public string? technologyName { get; set; }
+        public string? empName { get; set; }
+    }
 
    
 }

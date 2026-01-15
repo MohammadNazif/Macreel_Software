@@ -537,6 +537,36 @@ namespace Macreel_Software.Server.Controllers
                 });
             }
         }
+        #endregion
+
+        #region
+        [HttpGet("EmpListForWebTypeByTechId")]
+        public async Task<IActionResult> EmpListForWebTypeByTechId(int techId)
+        {
+            try
+            {
+                var result = await _service.EmpListForWebByTechId(techId);
+                return Ok(result);
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, ApiResponse<List<technologyDetails>>.FailureResponse("An error occured while fetching skills for web type!!", 500, errorCode: "Server_Error"));
+            }
+        }
+
+        [HttpGet("EmpListForAppBtTechId")]
+        public async Task<IActionResult> EmpListForAppBtTechId(int techId)
+        {
+            try
+            {
+                var result = await _service.empListForAppByTechId(techId);
+                return Ok(result);
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, ApiResponse<List<technologyDetails>>.FailureResponse("An error occured while fetching skills for App type!!", 500, errorCode: "Server_Error"));
+            }
+        }
 
         #endregion
 

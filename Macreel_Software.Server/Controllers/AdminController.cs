@@ -435,19 +435,44 @@ namespace Macreel_Software.Server.Controllers
         }
 
         [HttpPost("AssignLeave")]
-        public async Task<IActionResult> AssignLeave([FromBody] assignLeave obj)
+        public async Task<IActionResult> AssignLeave([FromBody] AssignLeave obj)
         {
-            int row = 0;
-
             try
             {
-                obj.NoOfLeave = obj.leaveNo.Split(',');
-                obj.LeaveType = obj.Leave.Split(',');
+               
 
-                for (int i = 0; i < obj.LeaveType.Length; i++)
+                if (obj.EmployeeId <= 0 ||
+                    string.IsNullOrWhiteSpace(obj.Leave) ||
+                    string.IsNullOrWhiteSpace(obj.LeaveNo))
                 {
+                    return BadRequest(new
+                    {
+                        status = false,
+                        message = "EmployeeId, Leave and LeaveNo are required"
+                    });
+                }
 
-                    row = await _services.InsertAssignLeaveAsync(obj.EmployeeId,obj.NoOfLeave[i], obj.LeaveType[i] );
+                var leaveTypes = obj.Leave.Split(',', StringSplitOptions.RemoveEmptyEntries);
+                var leaveNos = obj.LeaveNo.Split(',', StringSplitOptions.RemoveEmptyEntries);
+
+                if (leaveTypes.Length != leaveNos.Length)
+                {
+                    return BadRequest(new
+                    {
+                        status = false,
+                        message = "Leave count and Leave type mismatch"
+                    });
+                }
+
+                int row = 0;
+
+                for (int i = 0; i < leaveTypes.Length; i++)
+                {
+                    row = await _services.InsertAssignLeaveAsync(
+                        obj.EmployeeId,
+                        leaveNos[i].Trim(),
+                        leaveTypes[i].Trim()
+                    );
                 }
 
                 if (row > 0)
@@ -460,7 +485,7 @@ namespace Macreel_Software.Server.Controllers
                     });
                 }
 
-                return Ok(new
+                return BadRequest(new
                 {
                     status = false,
                     StatusCode = 400,
@@ -477,6 +502,7 @@ namespace Macreel_Software.Server.Controllers
                 });
             }
         }
+
 
         [HttpGet("getAssignedLeaveById")]
         public async Task<IActionResult> getAssignedLeaveById(int empId)
