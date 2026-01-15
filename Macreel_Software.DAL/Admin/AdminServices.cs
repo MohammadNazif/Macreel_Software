@@ -241,7 +241,7 @@ namespace Macreel_Software.DAL.Admin
                                 EmergencyContactPersonName = sdr["emergencyContactPersonName"]?.ToString(),
                                 EmergencyContactNum = sdr["emergenctContactNum"]?.ToString(),
                                 CompanyName = sdr["city"] != DBNull.Value ? sdr["companyName"]?.ToString():null,
-                                Technology = sdr["technology"] != DBNull.Value ? sdr["technology"]?.ToString():null,
+                                //Technology = sdr["technology"] != DBNull.Value ? sdr["technology"]?.ToString():null,
                                 CompanyContactNo = sdr["companyContactNo"] != DBNull.Value ? sdr["companyContactNo"]?.ToString():null,
                                 ExperienceCertificatePath = sdr["experienceCertificate"] != DBNull.Value ? sdr["experienceCertificate"]?.ToString():null,
                                 TenthCertificatePath = sdr["tenthCertificate"] != DBNull.Value ? sdr["tenthCertificate"]?.ToString():null,
