@@ -31,6 +31,8 @@ namespace Macreel_Software.DAL.Admin
 
         Task<ApiResponse<List<EmpWorkingDetails>>> EmpWorkingDetailsByempCode(int empCode, int month, int year);
 
+        Task<bool> AddProject(project data);
+
 
     }
 }

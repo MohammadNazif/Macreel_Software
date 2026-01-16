@@ -8,6 +8,7 @@ using Macreel_Software.Models;
 using Macreel_Software.Models.Master;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using QuestPDF.Helpers;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Macreel_Software.DAL.Master
@@ -688,22 +689,39 @@ namespace Macreel_Software.DAL.Master
             }
         }
 
-        public async Task<ApiResponse<List<technology>>> getAllTechnology()
+        public async Task<ApiResponse<List<technology>>> getAllTechnology(
+    string? searchTerm,
+    int? pageNumber,
+    int? pageSize)
         {
             List<technology> list = new();
+            int totalRecords = 0;
 
             try
             {
                 using SqlCommand cmd = new SqlCommand("sp_technology", _conn);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@action", "selectAllTechnology");
+
+                cmd.Parameters.Add("@action", SqlDbType.VarChar, 100).Value = "selectAllTechnology";
+                cmd.Parameters.Add("@searchTerm", SqlDbType.VarChar, 250)
+                   .Value = string.IsNullOrWhiteSpace(searchTerm) ? DBNull.Value : searchTerm;
+
+                cmd.Parameters.Add("@pageNumber", SqlDbType.Int)
+                   .Value = pageNumber.HasValue ? pageNumber.Value : DBNull.Value;
+
+                cmd.Parameters.Add("@pageSize", SqlDbType.Int)
+                   .Value = pageSize.HasValue ? pageSize.Value : DBNull.Value;
 
                 if (_conn.State == ConnectionState.Closed)
                     await _conn.OpenAsync();
 
                 using SqlDataReader sdr = await cmd.ExecuteReaderAsync();
+
                 while (await sdr.ReadAsync())
                 {
+                    if (totalRecords == 0 && sdr["TotalRecords"] != DBNull.Value)
+                        totalRecords = Convert.ToInt32(sdr["TotalRecords"]);
+
                     list.Add(new technology
                     {
                         id = Convert.ToInt32(sdr["id"]),
@@ -712,8 +730,11 @@ namespace Macreel_Software.DAL.Master
                     });
                 }
 
-                return ApiResponse<List<technology>>.SuccessResponse(
+                return ApiResponse<List<technology>>.PagedResponse(
                     list,
+                    pageNumber ?? 1,
+                    pageSize ?? list.Count,
+                    totalRecords,
                     "Technology list fetched successfully"
                 );
             }
@@ -731,6 +752,7 @@ namespace Macreel_Software.DAL.Master
                     await _conn.CloseAsync();
             }
         }
+
 
 
         public async Task<ApiResponse<List<technology>>> getAllTechnologyById(int id)

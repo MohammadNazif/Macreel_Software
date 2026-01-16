@@ -1048,15 +1048,26 @@ namespace Macreel_Software.DAL.Admin
                 cmd.Parameters.AddWithValue("@SMO", data.SMO);
                 cmd.Parameters.AddWithValue("@paidAds", data.paidAds);
                 cmd.Parameters.AddWithValue("@GMB", data.GMB);
-                cmd.Parameters.AddWithValue("@action", data.id>0? "updateProject" : "insertProject");
+                cmd.Parameters.AddWithValue("@action", data.id > 0 ? "updateProject" : "insertProject");
 
-                if (_conn.State == ConnectionState.Closed)
-                    await _conn.OpenAsync();
+                SqlParameter resultParam = new SqlParameter("@result", SqlDbType.Int)
+                {
+                    Direction = ParameterDirection.Output
+                };
+                cmd.Parameters.Add(resultParam);
 
-               int row= await cmd.ExecuteNonQueryAsync();
-                return row > 0;
+                await _conn.OpenAsync();
+                await cmd.ExecuteNonQueryAsync();
+
+
+                int result = resultParam.Value != DBNull.Value
+                    ? Convert.ToInt32(resultParam.Value)
+                    : 0;
+
+                return result == 1;
+
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw;
             }
@@ -1067,6 +1078,9 @@ namespace Macreel_Software.DAL.Admin
             }
         }
 
+
+
+     
         #endregion
     }
 }
