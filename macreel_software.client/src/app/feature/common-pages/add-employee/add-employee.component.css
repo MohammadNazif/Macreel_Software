@@ -4,3 +4,19 @@
   font-size: 0.75rem; /* small text */
   color: #C5192F; /* match focus color */
 }
+
+.example-chip-list {
+  width: 100%;
+}
+
+
+.multiple-select-div .tech-label
+ {
+  position: absolute;
+  top: -8px;
+  background-color: #fff;
+  color: rgb(107 114 128);
+  left: 10px;
+  z-index: 11;
+  font-size:  0.75rem;
+}

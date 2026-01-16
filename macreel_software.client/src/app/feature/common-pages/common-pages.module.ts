@@ -6,10 +6,11 @@ import { AddEmployeeComponent } from './add-employee/add-employee.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EmployeeProfileComponent } from './employee-profile/employee-profile.component';
 
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
-import { MatChipsModule} from '@angular/material/chips';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatIconModule} from '@angular/material/icon';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import {MatIconModule} from '@angular/material/icon';
     MatIconModule,
     MatFormFieldModule,
     MatChipsModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatSelectModule
   ]
 })
 export class CommonPagesModule { }

@@ -15,6 +15,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { ManageEmployeeService } from '../../../../core/services/manage-employee.service';
 import { ManageLeaveService } from '../../../../core/services/manage-leave.service';
+import Swal from 'sweetalert2';
 
 interface Employee {
   id: number;
@@ -112,6 +113,14 @@ export class AssignLeaveComponent implements OnInit {
       });
   }
 
+ resetForm() {
+  this.selectedEmployeeId = null;
+  this.selectedEmployee = null;
+  this.dataSource.data = [];
+  this.pageIndex = 0;
+}
+
+
   // Pagination
   onPageChange(event: PageEvent) {
     this.pageSize = event.pageSize;
@@ -127,13 +136,22 @@ export class AssignLeaveComponent implements OnInit {
   // Submit assigned leaves
   submitAssignedLeave() {
     if (!this.selectedEmployeeId) {
-      alert("Please select an employee first!");
+     Swal.fire({
+  icon: 'warning',
+  title: 'Oops...',
+  text: 'Please select an employee first!'
+});
       return;
     }
 
     const selectedLeaves = this.dataSource.data.filter(l => l.isSelected);
     if (selectedLeaves.length === 0) {
-      alert("Please select at least one leave!");
+      Swal.fire({
+  icon: 'warning',
+  title: 'No Leave Selected',
+  text: 'Please select at least one leave!'
+});
+
       return;
     }
 
@@ -149,15 +167,29 @@ export class AssignLeaveComponent implements OnInit {
     this.leaveService.assignLeaveToEmployee(payload).subscribe({
       next: (res: any) => {
         if (res.status) {
-          alert(res.message || "Leave assigned successfully!!");
-          this.loadLeaveList();  // reset table
+         Swal.fire({
+  icon: 'success',
+  title: 'Success',
+  text: res.message || 'Leave assigned successfully!'
+});
+
+       this.resetForm();   // reset table
         } else {
-          alert("Failed to assign leave.");
+          Swal.fire({
+  icon: 'error',
+  title: 'Failed',
+  text: 'Failed to assign leave.'
+});
         }
       },
       error: (err) => {
         console.error(err);
-        alert("Error assigning leave!");
+       Swal.fire({
+  icon: 'error',
+  title: 'Error',
+  text: 'Leave assignment already exists for this employee.'
+});
+
       }
     });
   }
