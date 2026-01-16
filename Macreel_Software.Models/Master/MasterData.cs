@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace Macreel_Software.Models.Master
 {
@@ -41,6 +42,14 @@ namespace Macreel_Software.Models.Master
         public int? technologyId { get; set; }
         public string? technologyName { get; set; }
         public string? empName { get; set; }
+    }
+
+    public class ruleBook
+    {
+        public int id { get; set; }
+        public IFormFile? rule_Book { get; set; }
+
+        public string? rule_Book_Path { get; set; }
     }
 
    

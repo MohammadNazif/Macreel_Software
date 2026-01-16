@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Macreel_Software.Server;
 using Macreel_Software.Models;
+using Macreel_Software.Services.FileUpload.Services;
 
 namespace Macreel_Software.Server.Controllers
 {
@@ -13,10 +14,12 @@ namespace Macreel_Software.Server.Controllers
     public class MasterController : ControllerBase
     {
         private readonly IMasterService _service;
+        private readonly FileUploadService _fileUploadService;
 
-        public MasterController(IMasterService service)
+        public MasterController(IMasterService service, FileUploadService fileUploadService)
         {
             _service = service;
+            _fileUploadService = fileUploadService;
         }
 
         #region role api
@@ -567,6 +570,141 @@ namespace Macreel_Software.Server.Controllers
             catch(Exception ex)
             {
                 return StatusCode(500, ApiResponse<List<technologyDetails>>.FailureResponse("An error occured while fetching skills for App type!!", 500, errorCode: "Server_Error"));
+            }
+        }
+
+        #endregion
+
+
+        #region RuleBook
+        [HttpPost("Add-Update-RuleBook")]
+        public async Task<IActionResult> AddUpdateRuleBook([FromForm] ruleBook data)
+        {
+            if (data == null)
+                return BadRequest("Invalid request data.");
+
+            if (data.id == 0 && data.rule_Book == null)
+                return BadRequest("RuleBook file is required.");
+
+            try
+            {
+                string uploadRoot = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+
+                if (data.rule_Book != null)
+                {
+                    data.rule_Book_Path = await _fileUploadService.UploadFileAsync(
+                        data.rule_Book,
+                        uploadRoot,
+                        new[] { ".pdf", ".doc", ".docx" }
+                    );
+                }
+
+                bool result = await _service.AddUpdateRuleBook(data);
+
+                if (!result)
+                    return StatusCode(500, new
+                    {
+                        status = false,
+                        message = "Failed to save RuleBook."
+                    });
+
+                return Ok(new
+                {
+                    status = true,
+                    message = data.id > 0
+                        ? "RuleBook updated successfully."
+                        : "RuleBook added successfully."
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    status = false,
+                    message = "Internal server error."
+                });
+            }
+        }
+
+        [HttpGet("getAllRuleBook")]
+        public async Task<IActionResult> getAllRulebook(string? searchTerm = null, int? pageNumber = null, int? pageSize = null)
+        {
+            try
+            {
+                ApiResponse<List<ruleBook>> result =
+                    await _service.getAllRulrBook(searchTerm, pageNumber, pageSize);
+
+
+                return StatusCode(result.StatusCode, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<List<ruleBook>>.FailureResponse(
+                    "An error occurred while fetching rulebook",
+                    500,
+                    "SERVER_ERROR"
+                ));
+            }
+        }
+
+        [HttpGet("getAllRuleBookById")]
+        public async Task<IActionResult> getAllRulebookByID(int id)
+        {
+            try
+            {
+                ApiResponse<List<ruleBook>> result =
+                    await _service.GetRuleBookByIdAsync(id);
+
+
+                return StatusCode(result.StatusCode, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<List<ruleBook>>.FailureResponse(
+                    "An error occurred while fetching rulebook",
+                    500,
+                    "SERVER_ERROR"
+                ));
+            }
+        }
+
+
+        [HttpDelete("deleteRuleBookById")]
+        public async Task<IActionResult> deleteRuleBookById(int id)
+        {
+            try
+            {
+                var res = await _service.deleteRuleBookById(id);
+                if (res)
+                {
+                    return Ok(new
+                    {
+                        status = true,
+                        StatusCode = 200,
+                        message = "RuleBook deleted successfully!!!"
+
+                    });
+                }
+                else
+                {
+                    return Ok(new
+                    {
+                        status = false,
+                        StatusCode = 404,
+                        message = "RuleBook not deleted!!"
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, new
+                {
+                    status = false,
+                    StatusCode = 500,
+                    message = "An error occurred while deleting RuleBook.",
+                    error = ex.Message
+                });
             }
         }
 
