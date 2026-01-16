@@ -39,7 +39,10 @@ namespace Macreel_Software.DAL.Master
         Task<bool> deleteTechnologyById(int id);
         Task<ApiResponse<List<technologyDetails>>> EmpListForWebByTechId(int id);
         Task<ApiResponse<List<technologyDetails>>> empListForAppByTechId(int id);
-
+        Task<bool> AddUpdateRuleBook(ruleBook data);
+        Task<ApiResponse<List<ruleBook>>> getAllRulrBook( string? searchTerm,int? pageNumber, int? pageSize);
+        Task<ApiResponse<List<ruleBook>>> GetRuleBookByIdAsync(int id);
+        Task<bool> deleteRuleBookById(int id);
 
     }
 }
