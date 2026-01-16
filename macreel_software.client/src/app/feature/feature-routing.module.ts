@@ -6,14 +6,6 @@ const routes: Routes = [
   { path: '', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule) },
   { path: 'auth', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule) },
   {path:'commmon',loadChildren:()=>import('../feature/common-pages/common-pages.module').then(n=>n.CommonPagesModule)}
-
-  // {
-  //   path: '', component: LayoutComponent,
-  //   children: [
-  //     { path: 'pages', loadChildren: () => import('./pages/pages.module').then(m => m.PagesModule) },
-
-  //   ]
-  // } 
 ];
 
 @NgModule({

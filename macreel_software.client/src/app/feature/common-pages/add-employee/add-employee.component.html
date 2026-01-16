@@ -20,7 +20,7 @@
             class="absolute left-3 top-3 text-sm text-gray-500 bg-white px-1 transition-all peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#C5192F] peer-valid:-top-2 peer-valid:text-xs">
             Employee Role
           </label>
-          <span class="absolute right-3 top-3 text-gray-400">▼</span>
+          <span class="absolute right-3 top-3 text-gray-400"><i class="fa-solid fa-angle-down"></i></span>
         </div>
 
         <!-- Employee Code -->
@@ -60,8 +60,7 @@
 
         <!-- Department -->
         <div class="relative">
-          <select formControlName="departmentId" name="departmentId" class="peer w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700
-           focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
+          <select formControlName="departmentId" name="departmentId" class="peer w-full appearance-none rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700 focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
 
             <!-- placeholder -->
             <option value="" disabled hidden></option>
@@ -77,7 +76,7 @@
             Department
           </label>
 
-          <span class="absolute right-3 top-2 text-gray-400 pointer-events-none"></span>
+          <span class="absolute right-3 top-2 text-gray-400 pointer-events-none"><i class="fa-solid fa-angle-down"></i></span>
         </div>
 
 
@@ -101,7 +100,7 @@
             Designation
           </label>
 
-          <span class="absolute right-3 top-2 text-gray-400 pointer-events-none">▼</span>
+          <span class="absolute right-3 top-2 text-gray-400 pointer-events-none"><i class="fa-solid fa-angle-down"></i></span>
         </div>
 
 
@@ -122,87 +121,8 @@
            peer-valid:-top-2 peer-valid:text-xs">
             Reporting Manager
           </label>
+          <span class="absolute right-3 top-2 text-gray-400 pointer-events-none"><i class="fa-solid fa-angle-down"></i></span>
         </div>
-
-        <!-- <div class="relative"> -->
-        <!-- <select formControlName="technologyId" name="technologyId" class="peer w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700 bg-white
-          focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
-          
-          
-            <option *ngFor="let tech of technologies" [value]="tech.id">
-              {{ tech.technologyName }}
-            </option>
-          </select>
-
-          <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
-          peer-focus:-top-2 peer-focus:text-xs
-          peer-valid:-top-2 peer-valid:text-xs">
-          Technology
-        </label> -->
-
-
-        <!-- <div class="w-full max-w-md p-4 bg-white rounded-lg">
-          <form>
-            <div class="relative flex flex-col group">
-              <mat-form-field appearance="outline" class="w-full transition-all duration-200">
-                <mat-label class="text-gray-500 font-medium group-focus-within:text-[#C5192F]">
-                  Favorite Fruits
-                </mat-label>
-               <mat-chip-grid #chipGrid aria-label="Fruit selection">
-                  @for (fruit of fruits(); track $index) {
-                  <mat-chip-row (removed)="remove(fruit)"
-                    class="!bg-gray-100 !border-gray-200 !text-gray-700 hover:!bg-gray-200 transition-colors">
-                    {{fruit}}
-                    <button matChipRemove [attr.aria-label]="'remove ' + fruit">
-                      <mat-icon class="!text-gray-400 hover:!text-red-600">cancel</mat-icon>
-                    </button>
-                  </mat-chip-row>
-                  }
-                </mat-chip-grid>
-                <input name="currentFruit" placeholder="New Fruit..." #fruitInput [(ngModel)]="currentFruit"
-                  [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
-                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="add($event)"
-                  class="placeholder:text-gray-400" />
-                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event); fruitInput.value = ''">
-                  @for (fruit of filteredFruits(); track fruit) {
-                  <mat-option *ngFor="let tech of technologies" [value]="tech.id" class="hover:!bg-gray-50">
-                    <span class="text-sm text-gray-700"> {{ tech.technologyName }}</span>
-                  </mat-option>
-                  }
-                </mat-autocomplete>
-              </mat-form-field>
-
-            </div>
-          </form>
-        </div> -->
-
-
-        <!-- ✅ TECHNOLOGY MULTI-SELECT (Angular Material Chips) -->
-        <!-- <div class="relative">
-          <mat-form-field appearance="outline" class="w-full">
-            <mat-label>Technology</mat-label>
-
-            <mat-chip-grid #chipGrid aria-label="Technology selection">
-              <mat-chip-row *ngFor="let tech of selectedTechnologies" (removed)="removeTechnology(tech)">
-                {{ tech.technologyName }}
-                <button matChipRemove>
-                  <mat-icon>cancel</mat-icon>
-                </button>
-              </mat-chip-row>
-            </mat-chip-grid>
-
-            <input placeholder="Select technology..." [formControl]="technologyCtrl" [matChipInputFor]="chipGrid"
-              [matAutocomplete]="auto" [matChipInputSeparatorKeyCodes]="separatorKeysCodes" />
-
-            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onTechnologySelected($event)">
-
-              <mat-option *ngFor="let tech of technologies" [value]="tech.id">
-                {{ tech.technologyName }}
-              </mat-option>
-
-            </mat-autocomplete>
-          </mat-form-field>
-        </div> -->
 
         <!-- Email ID -->
         <div class="relative">
@@ -286,7 +206,8 @@
             Gender
           </label>
 
-          <span class="absolute right-3 top-2 text-gray-400 pointer-events-none">▼</span>
+          <span class="absolute right-3 top-2 text-gray-400 pointer-events-none"><i
+              class="fa-solid fa-angle-down"></i></span>
         </div>
 
 
@@ -323,7 +244,8 @@
             Marital Status
           </label>
 
-          <span class="absolute right-3 top-2 text-gray-400 pointer-events-none">▼</span>
+          <span class="absolute right-3 top-2 text-gray-400 pointer-events-none"><i
+              class="fa-solid fa-angle-down"></i></span>
         </div>
 
 
@@ -353,6 +275,7 @@
        peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
             State
           </label>
+          <span class="absolute right-3 top-2 text-gray-400 pointer-events-none"><i class="fa-solid fa-angle-down"></i></span>
         </div>
 
         <!-- CITY -->
@@ -366,6 +289,7 @@
        peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
             City
           </label>
+          <span class="absolute right-3 top-2 text-gray-400 pointer-events-none"><i class="fa-solid fa-angle-down"></i></span>
         </div>
 
         <!-- Pin code -->
@@ -430,8 +354,6 @@
           </label>
         </div>
 
-
-        <!-- Emergency Contact Name -->
         <!-- Emergency Contact Name -->
         <div class="relative">
           <input type="text" formControlName="emergencyContactPersonName" name="emergencyContactPersonName"
@@ -487,7 +409,7 @@
         <!-- ✅ TECHNOLOGY MULTI-SELECT (Aligned with other fields) -->
         <div class="relative  flex items-center w-full min-h-[48px] multiple-select-div">
           <mat-label class="tech-label">Technology</mat-label>
-          <mat-form-field  floatLabel="always" class="w-full d-flex !p-0 !m-0
+          <mat-form-field floatLabel="always" class="w-full d-flex !p-0 !m-0
            [&_.mat-form-field-outline]:!text-gray-300 ">
 
 
@@ -500,7 +422,7 @@
                 {{ tech.technologyName }}
 
                 <button matChipRemove>
-                 <i class="fa-solid fa-close text-[10px]"></i>
+                  <i class="fa-solid fa-close text-[10px]"></i>
                 </button>
               </mat-chip-row>
               <input placeholder="Select technology..." [formControl]="technologyCtrl" [matChipInputFor]="chipGrid"

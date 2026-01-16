@@ -8,5 +8,6 @@ namespace Macreel_Software.DAL.Common
         Task<List<state>> GetAllState();
 
         Task<List<city>> getCityById(int stateId);
+        Task<bool> RegisterAdmin(string Username, string Password);
     }
 }

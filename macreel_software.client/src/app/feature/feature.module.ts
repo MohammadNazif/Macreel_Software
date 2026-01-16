@@ -14,6 +14,6 @@ import { ReactiveFormsModule } from '@angular/forms';
     CommonModule,
     FeatureRoutingModule,
     ReactiveFormsModule
-  ]
+]
 })
 export class FeatureModule { }

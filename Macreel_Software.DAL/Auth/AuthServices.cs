@@ -48,7 +48,7 @@ namespace Macreel_Software.DAL.Auth
                     {
                         user = new UserData
                         {
-                            UserId = Convert.ToInt32(dr["UserId"]),
+                            UserId = dr["UserId"] != DBNull.Value? Convert.ToInt32(dr["UserId"]):0,
                             Username = dr["UserName"].ToString(),
                             Role = dr["Role"].ToString()
                         };
