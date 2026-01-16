@@ -633,7 +633,7 @@ namespace Macreel_Software.DAL.Admin
                 return ApiResponse<List<Leave>>.FailureResponse(
                     ex.Message,
                     500,
-                    "ROLE_FETCH_ERROR");
+                    "Leave_FETCH_ERROR");
             }
             finally
             {
@@ -641,6 +641,86 @@ namespace Macreel_Software.DAL.Admin
                     await _conn.CloseAsync();
             }
         }
+
+
+        public async Task<ApiResponse<List<AssignLeaveDetails>>> getAllAssignedLeave(string? searchTerm, int? pageNumber, int? pageSize)
+        {
+            List<AssignLeaveDetails> list = new();
+            int totalRecords = 0;
+
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("sp_assignLeave", _conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@action", "getAllAssignedLeave");
+
+                    cmd.Parameters.AddWithValue("@searchTerm",
+                        string.IsNullOrWhiteSpace(searchTerm) ? DBNull.Value : searchTerm);
+
+                    cmd.Parameters.AddWithValue("@pageNumber",
+                        pageNumber.HasValue ? pageNumber.Value : DBNull.Value);
+
+                    cmd.Parameters.AddWithValue("@pageSize",
+                        pageSize.HasValue ? pageSize.Value : DBNull.Value);
+
+                    if (_conn.State != ConnectionState.Open)
+                        await _conn.OpenAsync();
+
+                    using (SqlDataReader sdr = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await sdr.ReadAsync())
+                        {
+
+                            if (totalRecords == 0)
+                                totalRecords = Convert.ToInt32(sdr["TotalRecords"]);
+
+                            list.Add(new AssignLeaveDetails
+                            {
+                                id = Convert.ToInt32(sdr["id"]),
+                                EmpId = sdr["empId"] != DBNull.Value ? Convert.ToInt32(sdr["empId"]):null,
+                                NoOfLeave = sdr["noOfLeave"] != DBNull.Value ? Convert.ToInt32(sdr["noOfLeave"]):null,
+                                Leave = sdr["leaveType"] != DBNull.Value ? sdr["leaveType"].ToString() : null,
+                                description = sdr["description"] != DBNull.Value ? sdr["description"].ToString() : null,
+                            });
+                        }
+                    }
+                }
+
+
+                if (pageNumber.HasValue && pageSize.HasValue)
+                {
+                    return ApiResponse<List<AssignLeaveDetails>>.PagedResponse(
+                        list,
+                        pageNumber.Value,
+                        pageSize.Value,
+                        totalRecords,
+                        "Assigned Leave list fetched successfully");
+                }
+
+
+                var response = ApiResponse<List<AssignLeaveDetails>>.SuccessResponse(
+                    list,
+                    "Assigned Leave list fetched successfully");
+
+                response.TotalRecords = totalRecords;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<List<AssignLeaveDetails>>.FailureResponse(
+                    ex.Message,
+                    500,
+                    "Assigned_Leave_FETCH_ERROR");
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    await _conn.CloseAsync();
+            }
+        }
+
 
 
         public async Task<ApiResponse<List<Leave>>> getAllLeaveById(int id)
@@ -1079,9 +1159,203 @@ namespace Macreel_Software.DAL.Admin
             }
         }
 
+        public async Task<ApiResponse<List<project>>> GetAllProject(string? SearchTerm,int? pageNumber,int?pageSize)
+        {
+            List<project> list = new List<project>();
+            int totalRecords = 0;
+            try
+            {
+                SqlCommand cmd = new SqlCommand("sp_addAndAssignProject", _conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@action" ,"getAllProjectDetail");
+                cmd.Parameters.AddWithValue("@searchTerm",string.IsNullOrWhiteSpace(SearchTerm)?DBNull.Value:SearchTerm);
+                cmd.Parameters.AddWithValue("@pageNumber",pageNumber.HasValue?pageNumber.Value:DBNull.Value);
+                cmd.Parameters.AddWithValue("@pageSize",pageSize.HasValue?pageSize.Value:DBNull.Value);
+                if (_conn.State == ConnectionState.Closed)
+                    await _conn.OpenAsync();
+
+                using(SqlDataReader sdr=await cmd.ExecuteReaderAsync())
+                {
+                    if(sdr.HasRows)
+                    {
+                        while(await sdr.ReadAsync())
+                        {
+                            if (totalRecords == 0)
+                                totalRecords = Convert.ToInt32(sdr["TotalRecords"]);
+                            list.Add(new project
+                            {
+                                id = Convert.ToInt32(sdr["id"]),
+                                category = sdr["category"] != DBNull.Value ? sdr["category"].ToString():null,
+                                projectTitle = sdr["projectTitle"] != DBNull.Value ? sdr["projectTitle"].ToString():null,
+                                description = sdr["description"] != DBNull.Value ? sdr["description"].ToString():null,
+                                web = sdr["web"] != DBNull.Value ? sdr["web"].ToString():null,
+                                app = sdr["app"] != DBNull.Value ? sdr["app"].ToString():null,
+                                androidApp = sdr["androidApp"] != DBNull.Value ? sdr["androidApp"].ToString():null,
+                                IOSApp = sdr["IOSApp"] != DBNull.Value ? sdr["IOSApp"].ToString():null,
+                                appTechnology = sdr["appTechnology"] != DBNull.Value ? Convert.ToInt32(sdr["appTechnology"]):null,
+                                appTechnologyName = sdr["AppTechnology"] != DBNull.Value ? sdr["AppTechnology"].ToString():null,
+                                webTechnology = sdr["webTechnology"] != DBNull.Value ? Convert.ToInt32(sdr["webTechnology"]):null,
+                                webTechnologyName = sdr["webTechnology"] != DBNull.Value ? sdr["webTechnology"].ToString():null,
+                                appEmpId = sdr["appEmpId"] != DBNull.Value ? Convert.ToInt32(sdr["appEmpId"]):null,
+                                appEmpName = sdr["appEmp"] != DBNull.Value ?sdr["appEmp"].ToString():null,
+                                webEmpId = sdr["webEmpId"] != DBNull.Value ? Convert.ToInt32(sdr["webEmpId"]):null,
+                                webEmpName = sdr["webEmp"] != DBNull.Value ? sdr["webEmp"].ToString():null,
+                                startDate = sdr["startDate"] != DBNull.Value ?Convert.ToDateTime(sdr["startDate"]):DateTime.MinValue,
+                                assignDate = sdr["assignDate"] != DBNull.Value ? Convert.ToDateTime(sdr["assignDate"]):DateTime.MinValue,
+                                endDate = sdr["endDate"] != DBNull.Value ? Convert.ToDateTime(sdr["endDate"]):DateTime.MinValue,
+                                completionDate = sdr["completionDate"] != DBNull.Value ? Convert.ToDateTime(sdr["completionDate"]):DateTime.MinValue,
+                                SEO = sdr["SEO"] != DBNull.Value ? sdr["SEO"].ToString():null,
+                                SMO = sdr["SMO"] != DBNull.Value ? sdr["SMO"].ToString():null,
+                                paidAds = sdr["paidAds"] != DBNull.Value ? sdr["paidAds"].ToString():null,
+                                GMB = sdr["GMB"] != DBNull.Value ? sdr["GMB"].ToString():null,
+                                sopDocumentPath = sdr["sopDocument"] != DBNull.Value ? sdr["sopDocument"].ToString():null,
+                                technicalDocumentPath = sdr["technicalDocument"] != DBNull.Value ? sdr["technicalDocument"].ToString():null,
+                            });
+                        }
+                    }
+                }
+
+                if (pageNumber.HasValue && pageSize.HasValue)
+                {
+                    return ApiResponse<List<project>>.PagedResponse(
+                        list,
+                        pageNumber.Value,
+                        pageSize.Value,
+                        totalRecords,
+                        "Project data list fetched successfully");
+                }
+
+                var response = ApiResponse<List<project>>.SuccessResponse(
+                    list,
+                    "Project data list fetched successfully");
+
+                response.TotalRecords = totalRecords;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<List<project>>.FailureResponse(
+                    "Failed to fetch Project data",
+                    500,
+                    "PROJECT_FETCH_ERROR");
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    await _conn.CloseAsync();
+            }
+        }
 
 
-     
+        public async Task<ApiResponse<List<project>>> GetAllProjectById(int id)
+        {
+            List<project> list = new List<project>();
+            try
+            {
+                SqlCommand cmd = new SqlCommand("sp_addAndAssignProject", _conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@action", "getProjectDetailById");
+                cmd.Parameters.AddWithValue("@id", id);
+            
+                if (_conn.State == ConnectionState.Closed)
+                    await _conn.OpenAsync();
+
+                using (SqlDataReader sdr = await cmd.ExecuteReaderAsync())
+                {
+                    if (sdr.HasRows)
+                    {
+                        while (await sdr.ReadAsync())
+                        {
+                            
+                            list.Add(new project
+                            {
+                                id = Convert.ToInt32(sdr["id"]),
+                                category = sdr["category"] != DBNull.Value ? sdr["category"].ToString() : null,
+                                projectTitle = sdr["projectTitle"] != DBNull.Value ? sdr["projectTitle"].ToString() : null,
+                                description = sdr["description"] != DBNull.Value ? sdr["description"].ToString() : null,
+                                web = sdr["web"] != DBNull.Value ? sdr["web"].ToString() : null,
+                                app = sdr["app"] != DBNull.Value ? sdr["app"].ToString() : null,
+                                androidApp = sdr["androidApp"] != DBNull.Value ? sdr["androidApp"].ToString() : null,
+                                IOSApp = sdr["IOSApp"] != DBNull.Value ? sdr["IOSApp"].ToString() : null,
+                                appTechnology = sdr["appTechnology"] != DBNull.Value ? Convert.ToInt32(sdr["appTechnology"]) : null,
+                                appTechnologyName = sdr["AppTechnology"] != DBNull.Value ? sdr["AppTechnology"].ToString() : null,
+                                webTechnology = sdr["webTechnology"] != DBNull.Value ? Convert.ToInt32(sdr["webTechnology"]) : null,
+                                webTechnologyName = sdr["webTechnology"] != DBNull.Value ? sdr["webTechnology"].ToString() : null,
+                                appEmpId = sdr["appEmpId"] != DBNull.Value ? Convert.ToInt32(sdr["appEmpId"]) : null,
+                                appEmpName = sdr["appEmp"] != DBNull.Value ? sdr["appEmp"].ToString() : null,
+                                webEmpId = sdr["webEmpId"] != DBNull.Value ? Convert.ToInt32(sdr["webEmpId"]) : null,
+                                webEmpName = sdr["webEmp"] != DBNull.Value ? sdr["webEmp"].ToString() : null,
+                                startDate = sdr["startDate"] != DBNull.Value ? Convert.ToDateTime(sdr["startDate"]) : DateTime.MinValue,
+                                assignDate = sdr["assignDate"] != DBNull.Value ? Convert.ToDateTime(sdr["assignDate"]) : DateTime.MinValue,
+                                endDate = sdr["endDate"] != DBNull.Value ? Convert.ToDateTime(sdr["endDate"]) : DateTime.MinValue,
+                                completionDate = sdr["completionDate"] != DBNull.Value ? Convert.ToDateTime(sdr["completionDate"]) : DateTime.MinValue,
+                                SEO = sdr["SEO"] != DBNull.Value ? sdr["SEO"].ToString() : null,
+                                SMO = sdr["SMO"] != DBNull.Value ? sdr["SMO"].ToString() : null,
+                                paidAds = sdr["paidAds"] != DBNull.Value ? sdr["paidAds"].ToString() : null,
+                                GMB = sdr["GMB"] != DBNull.Value ? sdr["GMB"].ToString() : null,
+                                sopDocumentPath = sdr["sopDocument"] != DBNull.Value ? sdr["sopDocument"].ToString() : null,
+                                technicalDocumentPath = sdr["technicalDocument"] != DBNull.Value ? sdr["technicalDocument"].ToString() : null,
+                            });
+                        }
+                    }
+                }
+
+                if (!list.Any())
+                    return ApiResponse<List<project>>.FailureResponse(
+                        "No project found",
+                        404,
+                        "PROJECT_NOT_FOUND");
+
+                return ApiResponse<List<project>>.SuccessResponse(
+                    list,
+                    "Project data list fetched successfully");
+            }
+            catch (Exception)
+            {
+                return ApiResponse<List<project>>.FailureResponse(
+                    "Failed to fetch Project data",
+                    500,
+                    "PROJECT_FETCH_ERROR");
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    await _conn.CloseAsync();
+            }
+        }
+
+        public async Task<bool> deleteProjectById(int id)
+        {
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("sp_addAndAssignProject", _conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@action", "deletedProjectById");
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    if (_conn.State != ConnectionState.Open)
+                        await _conn.OpenAsync();
+
+                    int rowsAffected = await cmd.ExecuteNonQueryAsync();
+                    return rowsAffected > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    _conn.CloseAsync();
+            }
+        }
+
+
+
         #endregion
     }
 }

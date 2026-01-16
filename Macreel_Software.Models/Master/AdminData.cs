@@ -123,6 +123,16 @@ namespace Macreel_Software.Models.Master
         public string LeaveNo { get; set; }   // "10,5,2"
     }
 
+    public class AssignLeaveDetails
+    {
+        public int id { get; set; }
+        public int? EmpId { get; set; }
+        public int? NoOfLeave { get; set; }   // "10,5,2"
+        public string Leave { get; set; }     // "CL,SL,PL"
+        public string description { get; set; }     // "CL,SL,PL"
+    }
+
+
 
     public class showLeave
     {
@@ -182,10 +192,10 @@ namespace Macreel_Software.Models.Master
         public string? androidApp { get; set; }
         public string? IOSApp { get; set; }
 
-        public int appTechnology { get; set; }
-        public int appEmpId { get; set; }
-        public int webTechnology { get; set; }
-        public int webEmpId { get; set; }
+        public int? appTechnology { get; set; }
+        public int? appEmpId { get; set; }
+        public int? webTechnology { get; set; }
+        public int? webEmpId { get; set; }
 
         public DateTime? startDate { get; set; }
         public DateTime? assignDate { get; set; }
@@ -194,10 +204,10 @@ namespace Macreel_Software.Models.Master
         public IFormFile? sopDocument { get; set; }
         public IFormFile? technicalDocument { get; set; }
 
-        public string SEO { get; set; }
-        public string SMO { get; set; }
-        public string paidAds { get; set; }
-        public string GMB { get; set; }
+        public string? SEO { get; set; }
+        public string? SMO { get; set; }
+        public string? paidAds { get; set; }
+        public string? GMB { get; set; }
         public string? sopDocumentPath { get; set; }
         public string? technicalDocumentPath { get; set; }
         public string? appTechnologyName { get; set; }
@@ -205,6 +215,7 @@ namespace Macreel_Software.Models.Master
         public string? appEmpName { get; set; }
         public string? webEmpName { get; set; }
     }
+
 
 
 
