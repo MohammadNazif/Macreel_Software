@@ -30,7 +30,9 @@ namespace Macreel_Software.DAL.Master
 
         Task<bool> deleteDesignationById(int id);
         Task<int> insertTechnology(technology data);
-        Task<ApiResponse<List<technology>>> getAllTechnology();
+      Task<ApiResponse<List<technology>>> getAllTechnology(string? searchTerm,
+          int? pageNumber,
+          int? pageSize);
 
         Task<ApiResponse<List<technology>>> getAllTechnologyById(int id);
 

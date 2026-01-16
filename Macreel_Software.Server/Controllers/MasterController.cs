@@ -463,11 +463,13 @@ namespace Macreel_Software.Server.Controllers
 
 
         [HttpGet("GetAllTechnology")]
-        public async Task<IActionResult> getAllTechnology()
+        public async Task<IActionResult> getAllTechnology(string? searchTerm,
+          int? pageNumber,
+          int? pageSize)
         {
             try
             {
-                var result = await _service.getAllTechnology();
+                var result = await _service.getAllTechnology(searchTerm, pageNumber, pageSize);
                 return Ok(result);
             }
             catch (Exception ex)

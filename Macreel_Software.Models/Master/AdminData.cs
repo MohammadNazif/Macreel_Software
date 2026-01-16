@@ -173,31 +173,37 @@ namespace Macreel_Software.Models.Master
     public class project
     {
         public int id { get; set; }
+        public string? category { get; set; }
+        public string? projectTitle { get; set; }
+        public string? description { get; set; }
 
-        public string category { get; set; }
-        public string projectTitle { get; set; }
-        public string description { get; set; }
-        public string web { get; set; }
-        public string app { get; set; }
-        public string androidApp { get; set; }
-        public string IOSApp { get; set; }
+        public string? web { get; set; }
+        public string? app { get; set; }
+        public string? androidApp { get; set; }
+        public string? IOSApp { get; set; }
+
         public int appTechnology { get; set; }
         public int appEmpId { get; set; }
         public int webTechnology { get; set; }
         public int webEmpId { get; set; }
-        public string startDate { get; set; }
-        public string assignDate { get; set; }
-        public string endDate { get; set; }
-        public string completionDate { get; set; }
 
+        public DateTime? startDate { get; set; }
+        public DateTime? assignDate { get; set; }
+        public DateTime? endDate { get; set; }
+        public DateTime? completionDate { get; set; }
         public IFormFile? sopDocument { get; set; }
         public IFormFile? technicalDocument { get; set; }
-        public string sopDocumentPath { get; set; }
-        public string technicalDocumentPath { get; set; }
+
         public string SEO { get; set; }
         public string SMO { get; set; }
         public string paidAds { get; set; }
         public string GMB { get; set; }
+        public string? sopDocumentPath { get; set; }
+        public string? technicalDocumentPath { get; set; }
+        public string? appTechnologyName { get; set; }
+        public string? webTechnologyName { get; set; }
+        public string? appEmpName { get; set; }
+        public string? webEmpName { get; set; }
     }
 
 
