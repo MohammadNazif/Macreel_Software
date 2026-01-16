@@ -7,9 +7,11 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { CommonModule } from '@angular/common';
-// import { MatSelectModule } from '@angular/material/select';
+
 // import { MatFormFieldModule } from '@angular/material/form-field';
-// import { MatChipsModule } from '@angular/material/chips';
+// import { MatSelectModule } from '@angular/material/select';
+// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+// import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -20,9 +22,12 @@ import { CommonModule } from '@angular/common';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    // MatSelectModule,
+
+
+    // BrowserAnimationsModule,
     // MatFormFieldModule,
-    // MatChipsModule,
+    // MatSelectModule,
+    // ReactiveFormsModule,
     HttpClientModule,
      SweetAlert2Module.forRoot() 
   ],

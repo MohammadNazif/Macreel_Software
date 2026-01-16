@@ -124,23 +124,90 @@
           </label>
         </div>
 
-        <!-- add technology -->
-   <div class="relative">
-  <select formControlName="technologyId" name="technologyId"
-    class="peer w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700 bg-white
-           focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
+        <!-- <div class="relative"> -->
+        <!-- <select formControlName="technologyId" name="technologyId" class="peer w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700 bg-white
+          focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
+          
+          
+            <option *ngFor="let tech of technologies" [value]="tech.id">
+              {{ tech.technologyName }}
+            </option>
+          </select>
+
+          <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
+          peer-focus:-top-2 peer-focus:text-xs
+          peer-valid:-top-2 peer-valid:text-xs">
+          Technology
+        </label> -->
 
 
-    <option *ngFor="let tech of technologies" [value]="tech.id">
-      {{ tech.technologyName }}
-    </option>
-  </select>
+        <!-- <div class="w-full max-w-md p-4 bg-white rounded-lg">
+          <form>
+            <div class="relative flex flex-col group">
+              <mat-form-field appearance="outline" class="w-full transition-all duration-200">
+                <mat-label class="text-gray-500 font-medium group-focus-within:text-[#C5192F]">
+                  Favorite Fruits
+                </mat-label>
+               <mat-chip-grid #chipGrid aria-label="Fruit selection">
+                  @for (fruit of fruits(); track $index) {
+                  <mat-chip-row (removed)="remove(fruit)"
+                    class="!bg-gray-100 !border-gray-200 !text-gray-700 hover:!bg-gray-200 transition-colors">
+                    {{fruit}}
+                    <button matChipRemove [attr.aria-label]="'remove ' + fruit">
+                      <mat-icon class="!text-gray-400 hover:!text-red-600">cancel</mat-icon>
+                    </button>
+                  </mat-chip-row>
+                  }
+                </mat-chip-grid>
+                <input name="currentFruit" placeholder="New Fruit..." #fruitInput [(ngModel)]="currentFruit"
+                  [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
+                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="add($event)"
+                  class="placeholder:text-gray-400" />
+                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event); fruitInput.value = ''">
+                  @for (fruit of filteredFruits(); track fruit) {
+                  <mat-option *ngFor="let tech of technologies" [value]="tech.id" class="hover:!bg-gray-50">
+                    <span class="text-sm text-gray-700"> {{ tech.technologyName }}</span>
+                  </mat-option>
+                  }
+                </mat-autocomplete>
+              </mat-form-field>
 
-  <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
-           peer-focus:-top-2 peer-focus:text-xs
-           peer-valid:-top-2 peer-valid:text-xs">
-    Technology
-  </label>
+            </div>
+          </form>
+        </div> -->
+
+
+<!-- ✅ TECHNOLOGY MULTI-SELECT (Angular Material Chips) -->
+<div class="relative w-full">
+  <mat-form-field appearance="outline" class="w-full">
+    <mat-label>Technology</mat-label>
+
+    <mat-chip-grid #chipGrid aria-label="Technology selection">
+      <mat-chip-row *ngFor="let tech of selectedTechnologies"
+        (removed)="removeTechnology(tech)">
+        {{ tech.technologyName }}
+        <button matChipRemove>
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </mat-chip-row>
+    </mat-chip-grid>
+
+    <input
+      placeholder="Select technology..."
+      [formControl]="technologyCtrl"
+      [matChipInputFor]="chipGrid"
+      [matAutocomplete]="auto"
+      [matChipInputSeparatorKeyCodes]="separatorKeysCodes" />
+
+    <mat-autocomplete #auto="matAutocomplete"
+      (optionSelected)="onTechnologySelected($event)">
+
+      <mat-option *ngFor="let tech of technologies" [value]="tech.id">
+        {{ tech.technologyName }}
+      </mat-option>
+
+    </mat-autocomplete>
+  </mat-form-field>
 </div>
 
 
@@ -386,7 +453,7 @@
         </div>
 
 
-        <!-- Emergency Contact Number -->
+
         <!-- Emergency Contact Number -->
         <div class="relative">
           <input type="tel" formControlName="emergencyContactNum" name="emergencyContactNum" placeholder=" "
