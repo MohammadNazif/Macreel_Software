@@ -1,6 +1,7 @@
 ﻿using Macreel_Software.DAL;
 using Macreel_Software.DAL.Auth;
 using Macreel_Software.DAL.Common;
+using Macreel_Software.Services.MailSender;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,10 +12,12 @@ namespace Macreel_Software.Server.Controllers
     public class CommonController : ControllerBase
     {
         private readonly ICommonServices _service;
+        private readonly PasswordEncrypt _pass;
 
-        public CommonController(ICommonServices service)
+        public CommonController(ICommonServices service, PasswordEncrypt pass)
         {
             _service = service;
+            _pass = pass;
         }
 
         [HttpGet("getAllStateList")]
@@ -95,5 +98,30 @@ namespace Macreel_Software.Server.Controllers
             }
         }
 
+        #region Register Admin
+        [HttpPost("register-admin")]
+        public async Task<IActionResult> RegisterAdmin([FromQuery] string Username,string Password)
+        {
+            try
+            {
+                Password = _pass.EncryptPassword(Password);
+                bool result = await _service.RegisterAdmin(Username,Password);
+
+                return Ok(new
+                {
+                    status = true,
+                    message = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    status = false,
+                    message = ex.Message
+                });
+            }
+        }
+        #endregion
     }
 }

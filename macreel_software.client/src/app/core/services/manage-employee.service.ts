@@ -56,7 +56,7 @@ export class ManageEmployeeService {
       `${this.baseUrl}Admin/updateEmployeeRegistration`, data
     );
   }
- deleteDepartmentById(id: number) {
+  deleteDepartmentById(id: number) {
     return this.http.delete<any>(`${this.baseUrl}Admin/deleteEmployeeById?id=${id}`);
   }
 

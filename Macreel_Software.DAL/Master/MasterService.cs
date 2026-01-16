@@ -856,7 +856,6 @@ namespace Macreel_Software.DAL.Master
 
         #endregion
 
-
         #region skills
 
         public async Task<ApiResponse<List<technologyDetails>>> EmpListForWebByTechId(int id)

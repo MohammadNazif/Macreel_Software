@@ -36,8 +36,6 @@ namespace Macreel_Software.Server.Controllers
             _pass = pass;
         }
 
-
-
         #region employee api
         [HttpPost("insertEmployeeRegistration")]
         public async Task<IActionResult> InsertEmployee([FromForm] employeeRegistration model)
@@ -293,7 +291,6 @@ namespace Macreel_Software.Server.Controllers
         }
 
         #endregion
-
 
         #region leave api
 
