@@ -598,5 +598,87 @@ namespace Macreel_Software.Server.Controllers
         }
         #endregion
 
+        #region add project
+
+
+        [HttpPost("add-update-Project")]
+        public async Task<IActionResult> AddOrUpdateProject([FromForm] project data)
+        {
+            if (string.IsNullOrWhiteSpace(data.projectTitle))
+                return BadRequest("Project title is required.");
+
+            if (data.sopDocument == null)
+                return BadRequest("SOP document is required.");
+
+            if (data.startDate == null)
+                return BadRequest("Start date is required.");
+
+            if (data.assignDate == null)
+                return BadRequest("Assign date is required.");
+
+            if (data.assignDate < data.startDate)
+                return BadRequest("Assign date cannot be less than start date.");
+
+            if (data.endDate != null &&
+                (data.endDate <= data.startDate || data.endDate <= data.assignDate))
+                return BadRequest("End date must be greater than start date and assign date.");
+
+            if (data.completionDate != null &&
+                (data.completionDate <= data.startDate || data.completionDate <= data.assignDate))
+                return BadRequest("Completion date must be greater than start date and assign date.");
+
+            bool isAnySoftwareSelected =
+      !string.IsNullOrWhiteSpace(data.web) ||
+      !string.IsNullOrWhiteSpace(data.app) ||
+      !string.IsNullOrWhiteSpace(data.androidApp) ||
+      !string.IsNullOrWhiteSpace(data.IOSApp) ||
+      !string.IsNullOrWhiteSpace(data.SEO) ||
+      !string.IsNullOrWhiteSpace(data.SMO) ||
+      !string.IsNullOrWhiteSpace(data.paidAds) ||
+      !string.IsNullOrWhiteSpace(data.GMB);
+
+            if (!isAnySoftwareSelected)
+                return BadRequest("Please select at least one software type.");
+
+
+            // 🔹 File Upload
+            var uploadService = new FileUploadService();
+            string uploadRoot = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+
+            Directory.CreateDirectory(uploadRoot);
+
+            if (data.sopDocument != null)
+            {
+                data.sopDocumentPath = await uploadService.UploadFileAsync(
+                    data.sopDocument,
+                    uploadRoot,
+                    new[] { ".pdf", ".doc", ".docx" }
+                );
+            }
+
+            if (data.technicalDocument != null)
+            {
+                data.technicalDocumentPath = await uploadService.UploadFileAsync(
+                    data.technicalDocument,
+                    uploadRoot,
+                    new[] { ".pdf", ".doc", ".docx" }
+                );
+            }
+
+            bool result = await _services.AddProject(data);
+
+            if (!result)
+                return StatusCode(500, "Failed to save project.");
+
+            return Ok(new
+            {
+                success = true,
+                message = data.id > 0
+                    ? "Project updated successfully."
+                    : "Project added successfully."
+            });
+        }
+
+        #endregion
     }
 }
