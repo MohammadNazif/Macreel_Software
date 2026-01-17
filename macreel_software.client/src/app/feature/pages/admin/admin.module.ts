@@ -21,8 +21,12 @@ import { AddTechnologyComponent } from './add-technology/add-technology.componen
 import { AssignLeaveComponent } from './assign-leave/assign-leave.component';
 import { UploadAttendanceComponent } from './upload-attendance/upload-attendance.component';
 import { ViewAttendanceComponent } from './view-attendance/view-attendance.component';
+
 import { AllEmployeeLeaveListComponent } from './all-employee-leave-list/all-employee-leave-list.component';
 import { AddProjectComponent } from './add-project/add-project.component';
+
+import { AddTaskComponent } from './add-task/add-task.component';
+import { ViewTaskComponent } from './view-task/view-task.component';
 
 
 @NgModule({
@@ -40,12 +44,14 @@ import { AddProjectComponent } from './add-project/add-project.component';
     ViewAttendanceComponent,
     AllEmployeeLeaveListComponent,
     AddProjectComponent,
-    
+    AddTaskComponent,
+    ViewTaskComponent
+
 
   ],
   imports: [
     CommonModule,
-    FormsModule, 
+    FormsModule,
     AdminRoutingModule,
     MatTableModule,
     MatIconModule,
@@ -54,6 +60,7 @@ import { AddProjectComponent } from './add-project/add-project.component';
     MatSortModule,
     MatInputModule,
     ReactiveFormsModule
-  ]
+    
+]
 })
 export class AdminModule { }

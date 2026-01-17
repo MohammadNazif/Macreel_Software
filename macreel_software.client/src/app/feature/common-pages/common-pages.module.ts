@@ -13,10 +13,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 
 
+
 @NgModule({
   declarations: [
     AddEmployeeComponent,
     EmployeeProfileComponent
+
   ],
   imports: [
     CommonModule,

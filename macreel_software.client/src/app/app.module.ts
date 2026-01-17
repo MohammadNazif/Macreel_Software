@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { CommonModule } from '@angular/common';
+import { NgxUiLoaderModule, NgxUiLoaderHttpModule } from 'ngx-ui-loader';
 
 // import { MatFormFieldModule } from '@angular/material/form-field';
 // import { MatSelectModule } from '@angular/material/select';
@@ -23,7 +24,15 @@ import { CommonModule } from '@angular/common';
     AppRoutingModule,
     FormsModule,
 
-
+    NgxUiLoaderModule.forRoot({
+      fgsType: 'ball-spin-fade-rotating',
+      fgsColor: '#ffffff',
+      pbColor: '#ffffff'
+    }),
+    NgxUiLoaderModule,
+        NgxUiLoaderHttpModule.forRoot({
+      showForeground: true
+    }),
     // BrowserAnimationsModule,
     // MatFormFieldModule,
     // MatSelectModule,
