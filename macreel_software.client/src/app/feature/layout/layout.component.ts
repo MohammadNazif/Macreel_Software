@@ -96,14 +96,10 @@ export class LayoutComponent implements OnInit {
         },
         {
           label: 'Project Task List',
-          route: '/home/admin/task-list',
-          roles: ['admin']
-        },
-        {
-          label: 'Employee Task Sheet',
           route: '/home/admin/view-task',
           roles: ['admin']
         },
+      
         {
           label: 'Assigned Tasks',
           route: '/home/admin/view-task',
