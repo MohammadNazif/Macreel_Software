@@ -2,7 +2,7 @@
 
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { ManageMasterdataService } from '../../../../core/services/manage-masterdata.service';
+import { ManageMasterdataService } from '../../../../../core/services/manage-masterdata.service';
 import Swal from 'sweetalert2';
 
 @Component({

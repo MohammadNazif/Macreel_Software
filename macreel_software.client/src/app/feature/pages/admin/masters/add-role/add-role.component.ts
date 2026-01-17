@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ViewChild, OnInit } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { ManageMasterdataService } from '../../../../core/services/manage-masterdata.service';
+import { ManageMasterdataService } from '../../../../../core/services/manage-masterdata.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -29,49 +29,25 @@ export class AddRoleComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadRoles();
-
   }
 
-  // ngAfterViewInit() {
-  //   this.dataSource.paginator = this.paginator;
-  // }
-
-  // loadRoles() {
-  //   this.master.getRoles(this.pageNumber, this.pageSize, this.searchText).subscribe({
-  //     next: (res) => {
-  //       const roles = res.data || [];
-  //       this.totalRecords = res.totalRecords || roles.length;
-
-  //       this.dataSource.data = roles.map((item: any, index: number) => ({
-  //         srNo: (this.pageNumber - 1) * this.pageSize + index + 1,
-  //         id: item.id,
-  //         name: item.rolename
-  //       }));
-  //     },
-  //     error: (err) => {
-  //       console.error(err);
-  //       Swal.fire({ icon: 'error', title: 'Error!', text: 'Failed to load roles' });
-  //     }
-  //   });
-  // }
-
   loadRoles() {
-  this.master.getRoles(this.pageNumber, this.pageSize, this.searchText)
-    .subscribe(res => {
+    this.master.getRoles(this.pageNumber, this.pageSize, this.searchText)
+      .subscribe(res => {
 
-      console.log('TOTAL RECORDS 👉', res.totalRecords);
-      console.log('PAGE SIZE 👉', this.pageSize);
+        console.log('TOTAL RECORDS 👉', res.totalRecords);
+        console.log('PAGE SIZE 👉', this.pageSize);
 
-      const roles = res.data || [];
+        const roles = res.data || [];
 
-      this.totalRecords = res.totalRecords; // IMPORTANT
-      this.dataSource.data = roles.map((item: any, index: number) => ({
-        srNo: (this.pageNumber - 1) * this.pageSize + index + 1,
-        id: item.id,
-        name: item.rolename
-      }));
-    });
-}
+        this.totalRecords = res.totalRecords; // IMPORTANT
+        this.dataSource.data = roles.map((item: any, index: number) => ({
+          srNo: (this.pageNumber - 1) * this.pageSize + index + 1,
+          id: item.id,
+          name: item.rolename
+        }));
+      });
+  }
 
 
   // Pagination change
@@ -111,35 +87,35 @@ export class AddRoleComponent implements OnInit {
     });
   }
 
- editRole(role: PeriodicElement) {
-  this.master.getRoleById(role.id).subscribe({
-    next: (res) => {
+  editRole(role: PeriodicElement) {
+    this.master.getRoleById(role.id).subscribe({
+      next: (res) => {
 
-      // API ke hisaab se
-      if (res.success && res.data && res.data.length > 0) {
+        // API ke hisaab se
+        if (res.success && res.data && res.data.length > 0) {
 
-        const roleData = res.data[0];
+          const roleData = res.data[0];
 
-        this.roleName = roleData.rolename;   // 👈 bind yahin ho raha
-        this.editingRoleId = roleData.id;
+          this.roleName = roleData.rolename;   // 👈 bind yahin ho raha
+          this.editingRoleId = roleData.id;
 
-      } else {
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: 'Role data not found'
+          });
+        }
+      },
+      error: () => {
         Swal.fire({
           icon: 'error',
           title: 'Error!',
-          text: 'Role data not found'
+          text: 'Failed to fetch role data'
         });
       }
-    },
-    error: () => {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error!',
-        text: 'Failed to fetch role data'
-      });
-    }
-  });
-}
+    });
+  }
 
 
   deleteRole(role: PeriodicElement) {

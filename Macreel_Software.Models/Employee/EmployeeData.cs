@@ -8,7 +8,7 @@ namespace Macreel_Software.Models.Employee
 {
     public class EmployeeData
     {
-        public int id { get; set; }
+        public int? id { get; set; }
         public int empId { get; set; }
         public int ruleBookId { get; set; }
         public string response { get; set; }

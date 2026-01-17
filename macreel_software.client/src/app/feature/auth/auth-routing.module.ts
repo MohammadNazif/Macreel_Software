@@ -5,12 +5,15 @@ import { LayoutComponent } from '../layout/layout.component';
 import { AddEmployeeComponent } from '../common-pages/add-employee/add-employee.component';
 import { EmployeeProfileComponent } from '../common-pages/employee-profile/employee-profile.component';
 import { AssignLeaveComponent } from '../pages/admin/assign-leave/assign-leave.component';
+import { authGuard } from '../../core/guards/guards/auth.guard';
+import { roleGuard } from '../../core/guards/guards/role.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   {
     path: 'home', component: LayoutComponent,
+    canActivate:[authGuard],
     children: [
       { path: '', loadChildren: () => import('../pages/pages.module').then(m => m.PagesModule) },
       { path: 'add-employee', component: AddEmployeeComponent },

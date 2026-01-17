@@ -417,7 +417,6 @@ namespace Macreel_Software.Server.Controllers
         }
         #endregion
 
-
         #region technology api
 
         [HttpPost("insertTechnology")]
@@ -425,6 +424,14 @@ namespace Macreel_Software.Server.Controllers
         {
             try
             {
+                string[] softwareTypes = new string[] { "app", "web" };
+                if (!softwareTypes.Contains(data.SoftwareType))
+                {
+                    return Ok(ApiResponse<object>.FailureResponse(
+                        "Software type should be only web/app",
+                        400
+                        ));
+                }
                 int result = await _service.insertTechnology(data);
 
                 if (result == 1)

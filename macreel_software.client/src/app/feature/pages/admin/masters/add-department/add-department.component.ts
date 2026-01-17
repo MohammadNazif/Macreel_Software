@@ -1,10 +1,8 @@
-
-
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { ManageMasterdataService } from '../../../../core/services/manage-masterdata.service';
 import Swal from 'sweetalert2';
+import { ManageMasterdataService } from '../../../../../core/services/manage-masterdata.service';
 
 @Component({
   selector: 'app-add-department',
@@ -131,7 +129,7 @@ editDepartment(row: DepartmentRow) {
   // ================= DELETE =================
   deleteDepartment(row: DepartmentRow) {
     Swal.fire({
-      title: `Are you sure you want to delete ${row.name}?`, 
+      title: `Are you sure you want to delete ${row.name}?`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#C5192F'

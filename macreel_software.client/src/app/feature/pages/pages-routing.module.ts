@@ -1,10 +1,17 @@
+import { roleGuard } from './../../core/guards/guards/role.guard';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { authGuard } from '../../core/guards/guards/auth.guard';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'admin', pathMatch: 'full' },
-  { path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)},
-  {path:'employee',loadChildren:()=>import('./employee/employee.module').then(m => m.EmployeeModule)}
+  { path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
+    canActivate:[authGuard,roleGuard],
+    data:{roles:[57]}
+  },
+  {path:'employee',loadChildren:()=>import('./employee/employee.module').then(m => m.EmployeeModule),
+    canActivate:[authGuard,roleGuard],
+    data:{roles:[63]}
+  }
 
 ];
 
