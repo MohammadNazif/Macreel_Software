@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MatTableModule } from '@angular/material/table';
@@ -27,6 +27,8 @@ import { AddProjectComponent } from './add-project/add-project.component';
 
 import { AddTaskComponent } from './add-task/add-task.component';
 import { ViewTaskComponent } from './view-task/view-task.component';
+import {  ViewProjectComponent } from './view-project/view-project.component';
+
 
 
 @NgModule({
@@ -45,8 +47,8 @@ import { ViewTaskComponent } from './view-task/view-task.component';
     AllEmployeeLeaveListComponent,
     AddProjectComponent,
     AddTaskComponent,
-    ViewTaskComponent
-
+    ViewTaskComponent,
+    ViewProjectComponent
 
   ],
   imports: [
@@ -61,6 +63,9 @@ import { ViewTaskComponent } from './view-task/view-task.component';
     MatInputModule,
     ReactiveFormsModule
     
+],
+providers:[
+  DatePipe
 ]
 })
 export class AdminModule { }

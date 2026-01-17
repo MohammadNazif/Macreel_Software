@@ -105,6 +105,28 @@ export class LayoutComponent implements OnInit {
           route: '/home/admin/view-task',
           roles: ['employee']
         }
+        
+      ]
+    },
+    {
+      label: 'Project Management',
+      icon: 'fa-solid fa-tasks',
+      key: 'project',
+      roles: ['admin','employee'],
+      children: [
+        {
+          label: 'Add Project',
+          route: '/home/admin/add-project',
+          roles: ['admin']
+        },
+        {
+          label: 'View Project',
+          route: '/home/admin/view-project',
+          roles: ['admin']
+        },
+      
+      
+        
       ]
     }
 
