@@ -38,5 +38,11 @@ namespace Macreel_Software.DAL.Admin
 
         Task<ApiResponse<List<AssignLeaveDetails>>> getAllAssignedLeave(string? searchTerm, int? pageNumber, int? pageSize);
         Task<ApiResponse<List<project>>> GetEmpProjectDetailByEmpId(int empId);
+
+        Task<bool> insertTask(Taskassign data);
+        Task<ApiResponse<List<Taskassign>>> getAllAssignTask(string? searchTerm, int? pageNumber, int? pageSize);
+
+        Task<ApiResponse<List<Taskassign>>> getAllAssignTaskById(int id);
+        Task<bool> deleteTaskById(int id);
     }
 }

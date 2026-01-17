@@ -1,17 +1,16 @@
 ﻿using Macreel_Software.DAL.Admin;
-using Macreel_Software.DAL.Admin;
-using Macreel_Software.DAL.Common;
 using Macreel_Software.Models;
 using Macreel_Software.Models.Common;
+using Macreel_Software.Models.Employee;
 using Macreel_Software.Models.Master;
-using Macreel_Software.Server;
 using Macreel_Software.Services.FileUpload.Services;
 using Macreel_Software.Services.MailSender;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Macreel_Software.Server.Controllers
 {
+    [Authorize(Roles = "57")]
     [Route("api/[controller]")]
     [ApiController]
     public class AdminController : ControllerBase
@@ -35,6 +34,17 @@ namespace Macreel_Software.Server.Controllers
             _mailservice = mailservice;
             _pass = pass;
         }
+
+        [HttpGet("checkauth")]
+        public IActionResult CheckAuth()
+        {
+            return Ok(new
+            {
+                StatusCode = 200,
+                message = "ho gya"
+            });
+        }
+
 
         #region employee api
         [HttpPost("insertEmployeeRegistration")]
@@ -305,9 +315,9 @@ namespace Macreel_Software.Server.Controllers
                 {
                     return Ok(new
                     {
-                        status=true,
-                        statusCode=200,
-                        message="Leave Inserted Successfully!!"
+                        status = true,
+                        statusCode = 200,
+                        message = "Leave Inserted Successfully!!"
                     });
                 }
 
@@ -400,22 +410,22 @@ namespace Macreel_Software.Server.Controllers
             try
             {
                 bool res = await _services.deleteLeaveById(id);
-                if(res)
+                if (res)
                 {
                     return Ok(new
                     {
-                        status=true,
-                        StatusCode=200,
-                        message="Leave deleted successfully!!"
+                        status = true,
+                        StatusCode = 200,
+                        message = "Leave deleted successfully!!"
                     });
                 }
                 else
                 {
                     return Ok(new
                     {
-                        status=false,
-                        StatusCode=400,
-                        messsag="Leave not deleted!!"
+                        status = false,
+                        StatusCode = 400,
+                        messsag = "Leave not deleted!!"
                     });
                 }
             }
@@ -424,9 +434,9 @@ namespace Macreel_Software.Server.Controllers
 
                 return Ok(new
                 {
-                    StatusCode=500,
-                    status=false,
-                    message="Interval server error!!"
+                    StatusCode = 500,
+                    status = false,
+                    message = "Interval server error!!"
                 });
             }
         }
@@ -436,7 +446,7 @@ namespace Macreel_Software.Server.Controllers
         {
             try
             {
-               
+
 
                 if (obj.EmployeeId <= 0 ||
                     string.IsNullOrWhiteSpace(obj.Leave) ||
@@ -575,7 +585,7 @@ namespace Macreel_Software.Server.Controllers
                     status = false,
                     statusCode = 400,
                     message = "Some error occured!!"
-                   
+
                 });
             }
         }
@@ -597,7 +607,7 @@ namespace Macreel_Software.Server.Controllers
 
 
         [HttpGet("EmpMonthlyWorkingDetailByEmpCode")]
-        public async Task<IActionResult> EmpMonthlyWorkingDetailByEmpCode( int empCode,  int month, int year)
+        public async Task<IActionResult> EmpMonthlyWorkingDetailByEmpCode(int empCode, int month, int year)
         {
             try
             {
@@ -647,7 +657,7 @@ namespace Macreel_Software.Server.Controllers
 
             if (data.category != null && data.category.Equals("Software", StringComparison.OrdinalIgnoreCase))
             {
-                bool isAnySoftwareSelected = !string.IsNullOrWhiteSpace(data.web) ||!string.IsNullOrWhiteSpace(data.app) ||
+                bool isAnySoftwareSelected = !string.IsNullOrWhiteSpace(data.web) || !string.IsNullOrWhiteSpace(data.app) ||
                     !string.IsNullOrWhiteSpace(data.androidApp) || !string.IsNullOrWhiteSpace(data.IOSApp);
 
                 if (!isAnySoftwareSelected)
@@ -685,14 +695,14 @@ namespace Macreel_Software.Server.Controllers
             if (!result)
                 return Ok(new
                 {
-                    status=false,
-                    message="Project no saved"
+                    status = false,
+                    message = "Project no saved"
                 });
 
             return Ok(new
             {
                 success = true,
-                StatusCode=200,
+                StatusCode = 200,
                 message = data.id > 0
                     ? "Project updated successfully."
                     : "Project added successfully."
@@ -798,6 +808,156 @@ namespace Macreel_Software.Server.Controllers
                     status = false,
                     StatusCode = 500,
                     message = "An error occurred while deleting Project.",
+                    error = ex.Message
+                });
+            }
+        }
+
+        [HttpPost("insert-update-Task")]
+        public async Task<IActionResult> insertUpdateTask([FromForm] Taskassign data)
+        {
+            if (data == null)
+            {
+                return BadRequest(new
+                {
+                    status = false,
+                    statusCode = 400,
+                    message = "Invalid request data."
+                });
+            }
+
+            try
+            {
+                string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+
+                if (!Directory.Exists(folderPath))
+                    Directory.CreateDirectory(folderPath);
+
+                var fileService = new FileUploadService();
+
+                if (data.document1 != null)
+                {
+                    data.document1Path = await fileService.UploadFileAsync(
+                        data.document1,
+                        folderPath,
+                        allowedExtensions: null 
+                    );
+                }
+
+                if (data.document2 != null)
+                {
+                    data.document2Path = await fileService.UploadFileAsync(
+                        data.document2,
+                        folderPath,
+                        allowedExtensions: null
+                    );
+                }
+
+                bool res = await _services.insertTask(data);
+
+                if (res)
+                {
+                    return Ok(ApiResponse<object>.SuccessResponse(
+                         null,
+                       data.id>0?"Task update & assign successfully":  "Task Create & Assign inserted successfully"
+                     ));
+                }
+                else
+                {
+                    return BadRequest(ApiResponse<object>.FailureResponse(
+                      data.id>0?"Some error occured while updating Task and assign":  "Some error occurred while saving Task Create & Assign response",
+                        400
+                    ));
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<object>.FailureResponse(
+                   $"Internal server error: {ex.Message}",
+                   500
+               ));
+            }
+        }
+
+
+        [HttpGet("getAllAssignTask")]
+        public async Task<IActionResult> getAllAssignTask(string? searchTerm = null, int? pageNumber = null, int? pageSize = null)
+        {
+            try
+            {
+                ApiResponse<List<Taskassign>> result =
+                    await _services.getAllAssignTask(searchTerm, pageNumber, pageSize);
+
+
+                return StatusCode(result.StatusCode, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<List<Taskassign>>.FailureResponse(
+                    "An error occurred while fetching assign task details",
+                    500,
+                    "SERVER_ERROR"
+                ));
+            }
+        }
+
+
+        [HttpGet("getAllTaskById")]
+        public async Task<IActionResult> getAllTaskById(int id)
+        {
+            try
+            {
+                ApiResponse<List<Taskassign>> result =
+                    await _services.getAllAssignTaskById(id);
+
+
+                return StatusCode(result.StatusCode, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<List<Taskassign>>.FailureResponse(
+                    "An error occurred while fetching project details",
+                    500,
+                    "SERVER_ERROR"
+                ));
+            }
+        }
+
+
+        [HttpDelete("deleteTaskAssignById")]
+        public async Task<IActionResult> deleteTaskAssignById(int id)
+        {
+            try
+            {
+                var res = await _services.deleteTaskById(id);
+                if (res)
+                {
+                    return Ok(new
+                    {
+                        status = true,
+                        StatusCode = 200,
+                        message = "Assign task deleted successfully!!!"
+
+                    });
+                }
+                else
+                {
+                    return Ok(new
+                    {
+                        status = false,
+                        StatusCode = 404,
+                        message = "Assign Task not deleted!!"
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, new
+                {
+                    status = false,
+                    StatusCode = 500,
+                    message = "An error occurred while deleting task.",
                     error = ex.Message
                 });
             }

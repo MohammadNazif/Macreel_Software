@@ -87,6 +87,18 @@ builder.Services.AddAuthentication(options =>
             context.Response.StatusCode = 401;
             context.Response.ContentType = "application/json";
             return context.Response.WriteAsync("{\"error\": \"Unauthorized\"}");
+        },
+        OnMessageReceived = context =>
+        {
+            var authHeader = context.Request.Headers["Authorization"].FirstOrDefault();
+            if(!string.IsNullOrEmpty(authHeader) && authHeader.StartsWith("Bearer "))
+            {
+                context.Token = authHeader.Substring("Bearer ".Length);
+                return Task.CompletedTask;
+            }
+
+            context.Token = context.Request.Cookies["access_token"];
+            return Task.CompletedTask;
         }
     };
 });
