@@ -4,6 +4,7 @@ using Macreel_Software.Services.MailSender;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using static Macreel_Software.DAL.Auth.main;
 
 namespace Macreel_Software.DAL.Auth
 {
@@ -90,6 +91,101 @@ namespace Macreel_Software.DAL.Auth
             }
         }
 
-      
+        public async Task<RefreshTokenData?> GetRefreshTokenAsync(string refreshToken)
+        {
+            RefreshTokenData? tokenData = null;
+
+            try
+            {
+                using SqlConnection con =
+                    new SqlConnection(_config.GetConnectionString("DefaultConnection"));
+
+                using SqlCommand cmd = new SqlCommand("sp_Login", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@RefreshToken", refreshToken);
+                cmd.Parameters.AddWithValue("@Action", "GET_REFRESH");
+
+                await con.OpenAsync();
+
+                using SqlDataReader dr = await cmd.ExecuteReaderAsync();
+
+                if (await dr.ReadAsync())
+                {
+                    tokenData = new RefreshTokenData
+                    {
+                        UserId = Convert.ToInt32(dr["UserId"]),
+                        RefreshToken = dr["RefreshToken"].ToString()!,
+                        Expiry = Convert.ToDateTime(dr["ExpireDate"])
+                    };
+                }
+            }
+            catch
+            {
+                return null;
+            }
+
+            return tokenData;
+        }
+        public async Task<UserData?> GetUserByIdAsync(int userId)
+        {
+            UserData? user = null;
+
+            try
+            {
+                using SqlConnection con =
+                    new SqlConnection(_config.GetConnectionString("DefaultConnection"));
+
+                using SqlCommand cmd = new SqlCommand("sp_Login", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@UserId", userId);
+                cmd.Parameters.AddWithValue("@Action", "GET_USER_BY_ID");
+
+                await con.OpenAsync();
+
+                using SqlDataReader dr = await cmd.ExecuteReaderAsync();
+
+                if (await dr.ReadAsync())
+                {
+                    user = new UserData
+                    {
+                        UserId = Convert.ToInt32(dr["UserId"]),
+                        Username = dr["UserName"].ToString(),
+                        Role = dr["Role"].ToString()
+                    };
+                }
+            }
+            catch
+            {
+                return null;
+            }
+
+            return user;
+        }
+        public async Task<bool> RevokeRefreshTokenAsync(string refreshToken)
+        {
+            try
+            {
+                using SqlConnection con =
+                    new SqlConnection(_config.GetConnectionString("DefaultConnection"));
+
+                using SqlCommand cmd = new SqlCommand("sp_Login", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@RefreshToken", refreshToken);
+                cmd.Parameters.AddWithValue("@Action", "REVOKE_REFRESH");
+
+                await con.OpenAsync();
+                int rows = await cmd.ExecuteNonQueryAsync();
+
+                return rows > 0;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
     }
 }

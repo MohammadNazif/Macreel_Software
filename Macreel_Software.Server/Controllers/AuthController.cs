@@ -13,14 +13,11 @@ namespace Macreel_Software.Server.Controllers
     {
         private readonly IAuthServices _authServices;
         private readonly JwtTokenProvider _jwtProvider;
-        private readonly PasswordEncrypt _pass;
 
         public AuthController(IAuthServices authServices,JwtTokenProvider jwtProvider, PasswordEncrypt pass)
         {
             _authServices = authServices;
             _jwtProvider = jwtProvider;
-            _pass = pass;
-
         }
 
         [HttpPost("login")]
@@ -42,6 +39,14 @@ namespace Macreel_Software.Server.Controllers
 
             await _authServices.SaveRefreshTokenAsync(user.UserId, refreshToken, refreshExpire);
 
+            Response.Cookies.Append("access_token", accessToken, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                Expires = DateTime.UtcNow.AddDays(1)
+            });
+
             return Ok(new
             {
                 Status = 200,
@@ -50,7 +55,48 @@ namespace Macreel_Software.Server.Controllers
             });
         }
 
+        [HttpPost("refresh")]
+        public async Task<IActionResult> RefreshToken()
+        {
+            var refreshToken = Request.Cookies["refresh_token"];
+            if (string.IsNullOrEmpty(refreshToken))
+                return Unauthorized("Refresh token missing");
 
+            var tokenData = await _authServices.GetRefreshTokenAsync(refreshToken);
+            if (tokenData == null || tokenData.Expiry < DateTime.UtcNow)
+                return Unauthorized("Invalid or expired refresh token");
+
+            var user = await _authServices.GetUserByIdAsync(tokenData.UserId);
+            if (user == null)
+                return Unauthorized();
+
+            // 🔑 Generate new access token
+            var newAccessToken = _jwtProvider.CreateToken(user);
+
+            // 🍪 Set new access token cookie
+            Response.Cookies.Append("access_token", newAccessToken, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,               // prod
+                SameSite = SameSiteMode.None,
+                Expires = DateTime.UtcNow.AddMinutes(30)
+            });
+
+            return Ok(new { message = "Token refreshed" });
+        }
+
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            //var refreshToken = Request.Cookies["refresh_token"];
+            //if (!string.IsNullOrEmpty(refreshToken))
+            //    await _authServices.RevokeRefreshTokenAsync(refreshToken);
+
+            Response.Cookies.Delete("access_token");
+            Response.Cookies.Delete("refresh_token");
+
+            return Ok();
+        }
 
     }
 }
