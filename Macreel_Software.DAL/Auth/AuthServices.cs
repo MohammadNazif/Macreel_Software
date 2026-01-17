@@ -116,7 +116,7 @@ namespace Macreel_Software.DAL.Auth
                     {
                         UserId = Convert.ToInt32(dr["UserId"]),
                         RefreshToken = dr["RefreshToken"].ToString()!,
-                        Expiry = Convert.ToDateTime(dr["ExpireDate"])
+                        Expiry = Convert.ToDateTime(dr["RefreshTokenExpire"])
                     };
                 }
             }

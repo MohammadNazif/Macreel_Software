@@ -33,15 +33,11 @@ namespace Macreel_Software.DAL
 
             var creds = new SigningCredentials(key,SecurityAlgorithms.HmacSha256);
 
-            int expireMinutes = _configuration.GetValue<int>(
-                "JwtSettings:AccessTokenExpireMinutes"
-            );
-
             var token = new JwtSecurityToken(
                 issuer: _configuration.GetValue<string>("JwtSettings:Issuer"),
                 audience: _configuration.GetValue<string>("JwtSettings:Audience"),
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(expireMinutes),
+                expires: DateTime.UtcNow.AddSeconds(20),
                 signingCredentials: creds
             );
 
