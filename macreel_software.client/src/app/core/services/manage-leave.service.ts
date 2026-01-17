@@ -51,4 +51,10 @@ export class ManageLeaveService {
   );
 }
 
+  // GET ASSIGNED LEAVE FOR EMPLOYEE
+  getAssignedLeaveById(empId: number) {
+    return this.http.get<any>(`${this.baseUrl}Admin/getAssignedLeaveById?empId=${empId}`);
+  }
+
+
 }
