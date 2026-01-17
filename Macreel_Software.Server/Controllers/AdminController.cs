@@ -1,17 +1,15 @@
 ﻿using Macreel_Software.DAL.Admin;
-using Macreel_Software.DAL.Admin;
-using Macreel_Software.DAL.Common;
 using Macreel_Software.Models;
 using Macreel_Software.Models.Common;
 using Macreel_Software.Models.Master;
-using Macreel_Software.Server;
 using Macreel_Software.Services.FileUpload.Services;
 using Macreel_Software.Services.MailSender;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Macreel_Software.Server.Controllers
 {
+    [Authorize(Roles = "57")]
     [Route("api/[controller]")]
     [ApiController]
     public class AdminController : ControllerBase
@@ -35,6 +33,17 @@ namespace Macreel_Software.Server.Controllers
             _mailservice = mailservice;
             _pass = pass;
         }
+
+        [HttpGet("checkauth")]
+        public IActionResult CheckAuth()
+        {
+            return Ok(new
+            {
+                StatusCode = 200,
+                message = "ho gya"
+            });
+        }
+
 
         #region employee api
         [HttpPost("insertEmployeeRegistration")]
@@ -305,9 +314,9 @@ namespace Macreel_Software.Server.Controllers
                 {
                     return Ok(new
                     {
-                        status=true,
-                        statusCode=200,
-                        message="Leave Inserted Successfully!!"
+                        status = true,
+                        statusCode = 200,
+                        message = "Leave Inserted Successfully!!"
                     });
                 }
 
@@ -400,22 +409,22 @@ namespace Macreel_Software.Server.Controllers
             try
             {
                 bool res = await _services.deleteLeaveById(id);
-                if(res)
+                if (res)
                 {
                     return Ok(new
                     {
-                        status=true,
-                        StatusCode=200,
-                        message="Leave deleted successfully!!"
+                        status = true,
+                        StatusCode = 200,
+                        message = "Leave deleted successfully!!"
                     });
                 }
                 else
                 {
                     return Ok(new
                     {
-                        status=false,
-                        StatusCode=400,
-                        messsag="Leave not deleted!!"
+                        status = false,
+                        StatusCode = 400,
+                        messsag = "Leave not deleted!!"
                     });
                 }
             }
@@ -424,9 +433,9 @@ namespace Macreel_Software.Server.Controllers
 
                 return Ok(new
                 {
-                    StatusCode=500,
-                    status=false,
-                    message="Interval server error!!"
+                    StatusCode = 500,
+                    status = false,
+                    message = "Interval server error!!"
                 });
             }
         }
@@ -436,7 +445,7 @@ namespace Macreel_Software.Server.Controllers
         {
             try
             {
-               
+
 
                 if (obj.EmployeeId <= 0 ||
                     string.IsNullOrWhiteSpace(obj.Leave) ||
@@ -575,7 +584,7 @@ namespace Macreel_Software.Server.Controllers
                     status = false,
                     statusCode = 400,
                     message = "Some error occured!!"
-                   
+
                 });
             }
         }
@@ -597,7 +606,7 @@ namespace Macreel_Software.Server.Controllers
 
 
         [HttpGet("EmpMonthlyWorkingDetailByEmpCode")]
-        public async Task<IActionResult> EmpMonthlyWorkingDetailByEmpCode( int empCode,  int month, int year)
+        public async Task<IActionResult> EmpMonthlyWorkingDetailByEmpCode(int empCode, int month, int year)
         {
             try
             {
@@ -647,7 +656,7 @@ namespace Macreel_Software.Server.Controllers
 
             if (data.category != null && data.category.Equals("Software", StringComparison.OrdinalIgnoreCase))
             {
-                bool isAnySoftwareSelected = !string.IsNullOrWhiteSpace(data.web) ||!string.IsNullOrWhiteSpace(data.app) ||
+                bool isAnySoftwareSelected = !string.IsNullOrWhiteSpace(data.web) || !string.IsNullOrWhiteSpace(data.app) ||
                     !string.IsNullOrWhiteSpace(data.androidApp) || !string.IsNullOrWhiteSpace(data.IOSApp);
 
                 if (!isAnySoftwareSelected)
@@ -685,14 +694,14 @@ namespace Macreel_Software.Server.Controllers
             if (!result)
                 return Ok(new
                 {
-                    status=false,
-                    message="Project no saved"
+                    status = false,
+                    message = "Project no saved"
                 });
 
             return Ok(new
             {
                 success = true,
-                StatusCode=200,
+                StatusCode = 200,
                 message = data.id > 0
                     ? "Project updated successfully."
                     : "Project added successfully."
