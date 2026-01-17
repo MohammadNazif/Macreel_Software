@@ -10,6 +10,8 @@ import { AddEmployeeComponent } from '../../common-pages/add-employee/add-employ
 import { AddLeaveTypeComponent } from './add-leave-type/add-leave-type.component';
 import { AddTechnologyComponent } from './add-technology/add-technology.component';
 import { AssignLeaveComponent } from './assign-leave/assign-leave.component';
+import { UploadAttendanceComponent } from './upload-attendance/upload-attendance.component';
+import { ViewAttendanceComponent } from './view-attendance/view-attendance.component';
 
 
 const routes: Routes = [
@@ -23,7 +25,9 @@ const routes: Routes = [
   { path: 'edit-employee/:id',component: AddEmployeeComponent},
   { path:'add-leave',component:AddLeaveTypeComponent},
   { path:'add-technology',component:AddTechnologyComponent},
-  { path:'assign-leave',component:AssignLeaveComponent}
+  { path:'assign-leave',component:AssignLeaveComponent},
+ { path: 'upload-attendance', component: UploadAttendanceComponent },
+  { path: 'view-attendance', component: ViewAttendanceComponent },
 ];
 
 @NgModule({

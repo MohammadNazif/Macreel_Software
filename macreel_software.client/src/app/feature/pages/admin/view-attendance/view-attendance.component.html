@@ -1,0 +1,107 @@
+<!-- ================= Filter Section ================= -->
+<div class="bg-white rounded-xl shadow p-6 mb-6">
+
+  <h2 class="text-lg font-semibold mb-4 text-gray-700">View Attendance</h2>
+
+  <form [formGroup]="filterForm" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+
+    <!-- Employee Code -->
+    <input
+      type="text"
+      placeholder="Employee Code"
+      formControlName="empCode"
+      class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#dd3d4f]" />
+
+    <!-- Month -->
+    <select
+      formControlName="month"
+      class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#dd3d4f]">
+      <option value="">Select Month</option>
+      <option *ngFor="let m of months" [value]="m.value">{{ m.label }}</option>
+    </select>
+
+    <!-- Year -->
+    <select
+      formControlName="year"
+      class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#dd3d4f]">
+      <option value="">Select Year</option>
+      <option *ngFor="let y of years">{{ y }}</option>
+    </select>
+
+    <!-- View Button -->
+    <button
+      type="button"
+      [disabled]="filterForm.invalid || isLoading"
+      (click)="loadAttendance()"
+      class="bg-[#dd3d4f] text-white rounded-lg font-medium flex justify-center items-center gap-2 px-4 py-2 hover:bg-red-600 disabled:opacity-50">
+      
+      <span *ngIf="!isLoading">View</span>
+      <div *ngIf="isLoading" class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+    </button>
+
+  </form>
+</div>
+
+<!-- ================= Summary Cards ================= -->
+<div *ngIf="attendanceSummary" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+
+  <div class="bg-white shadow rounded-xl p-4 text-center">
+    <p class="text-gray-500 text-sm">Total Days</p>
+    <h3 class="text-gray-700 font-semibold text-lg">{{ attendanceSummary.total }}</h3>
+  </div>
+
+  <div class="bg-green-50 shadow rounded-xl p-4 text-center">
+    <p class="text-green-600 text-sm">Present</p>
+    <h3 class="text-green-800 font-semibold text-lg">{{ attendanceSummary.present }}</h3>
+  </div>
+
+  <div class="bg-red-50 shadow rounded-xl p-4 text-center">
+    <p class="text-red-600 text-sm">Absent</p>
+    <h3 class="text-red-800 font-semibold text-lg">{{ attendanceSummary.absent }}</h3>
+  </div>
+
+  <div class="bg-yellow-50 shadow rounded-xl p-4 text-center">
+    <p class="text-yellow-600 text-sm">Half Day</p>
+    <h3 class="text-yellow-800 font-semibold text-lg">{{ attendanceSummary.halfDay }}</h3>
+  </div>
+
+</div>
+
+<!-- ================= Attendance Table ================= -->
+<div *ngIf="attendanceList?.length"
+  class="bg-white rounded-xl shadow overflow-x-auto">
+
+  <table class="w-full border-collapse text-sm">
+    <thead class="bg-gray-100">
+      <tr>
+        <th class="py-2 px-4 text-left">Date</th>
+        <th class="py-2 px-4 text-left">Day</th>
+        <th class="py-2 px-4 text-left">Status</th>
+        <th class="py-2 px-4 text-left">Check In</th>
+        <th class="py-2 px-4 text-left">Check Out</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let a of attendanceList" class="border-b hover:bg-gray-50">
+        <td class="py-2 px-4">{{ a.date | date:'dd MMM yyyy' }}</td>
+        <td class="py-2 px-4">{{ a.day }}</td>
+        <td class="py-2 px-4">
+          <span [ngClass]="{
+            'text-green-600 font-semibold': a.status === 'Present',
+            'text-red-600 font-semibold': a.status === 'Absent',
+            'text-yellow-600 font-semibold': a.status === 'Half Day'
+          }">{{ a.status }}</span>
+        </td>
+        <td class="py-2 px-4">{{ a.inTime || '-' }}</td>
+        <td class="py-2 px-4">{{ a.outTime || '-' }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+<!-- ================= No Data State ================= -->
+<div *ngIf="attendanceList?.length === 0 && !isLoading" class="text-center py-10 text-gray-500">
+  No attendance found for selected criteria
+</div>
