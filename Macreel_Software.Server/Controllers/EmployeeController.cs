@@ -78,7 +78,7 @@ namespace Macreel_Software.Server.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, ApiResponse<List<assignedLeave>>.FailureResponse(
-                    "An error occurred while fetching assigned role",
+                    "An error occurred while fetching assigned leave",
                     500,
                     "SERVER_ERROR"
                 ));
@@ -118,11 +118,21 @@ namespace Macreel_Software.Server.Controllers
             try
             {
                 bool res = await _service.insertApplyLeaveByEmpId(data);
-
-                return Ok(ApiResponse<object>.SuccessResponse(
-                 null,
-                    "Leave applied successfully"
-                ));
+                if (res)
+                {
+                    return Ok(ApiResponse<object>.SuccessResponse(
+                     null,
+                       data.id > 0 ? "Applied leave updated successfully" : "Leave applied successfully"
+                    ));
+                }
+                else
+                {
+                    return Ok(ApiResponse<object>.FailureResponse(
+                     
+                       data.id > 0 ? "Some error occured during update applied leave" : "Some error occured during save applied leave",
+                       400
+                    ));
+                }
             }
             catch (Exception ex)
             {
@@ -135,5 +145,86 @@ namespace Macreel_Software.Server.Controllers
 
 
 
+        [HttpGet("ApplyLeaveListByEmpId")]
+        public async Task<IActionResult> ApplyLeaveListByEmpId(int empId, string? searchTerm, int? pageNumber, int? pageSize)
+        {
+            try
+            {
+                ApiResponse<List<applyLeave>> result =
+                    await _service.applyLeaveListByEmpId(empId, searchTerm, pageNumber, pageSize);
+
+
+                return StatusCode(result.StatusCode, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<List<applyLeave>>.FailureResponse(
+                    "An error occurred while fetching  apply leave",
+                    500,
+                    "SERVER_ERROR"
+                ));
+            }
+        }
+
+
+        [HttpGet("getAssignLeaveById")]
+        public async Task<IActionResult> getAssignLeaveById(int id,int empId)
+        {
+            try
+            {
+
+                var result = await _service.getAllApplyLeaveById(id,empId);
+
+
+                return StatusCode(result.StatusCode, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<role>.FailureResponse(
+                    "An error occurred while fetching apply leave.",
+                    500,
+                    "SERVER_ERROR"
+                ));
+            }
+        }
+
+        [HttpDelete("deleteAssignLeaveById")]
+        public async Task<IActionResult> deleteAssignLeaveById(int id,int empId)
+        {
+            try
+            {
+                var res = await _service.deleteApplyLeaveById(id,empId);
+                if (res)
+                {
+                    return Ok(new
+                    {
+                        status = true,
+                        StatusCode = 200,
+                        message = "Apply leave deleted successfully!!!"
+
+                    });
+                }
+                else
+                {
+                    return Ok(new
+                    {
+                        status = false,
+                        StatusCode = 404,
+                        message = "Apply leave not deleted!!"
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, new
+                {
+                    status = false,
+                    StatusCode = 500,
+                    message = "An error occurred while deleting Apply leave.",
+                    error = ex.Message
+                });
+            }
+        }
     }
 }

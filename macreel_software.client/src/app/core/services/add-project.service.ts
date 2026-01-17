@@ -23,6 +23,16 @@ getEmpListForAppByTechId(techId: number): Observable<any> {
     `${this.baseUrl}Master/EmpListForAppBtTechId?techId=${techId}`
   );
 }
+getProjectDetailsByEmpId(empId: number): Observable<any> {
+  return this.http.get<any>(
+    `${this.baseUrl}Admin/getProjectDetailsByEmpId?empId=${empId}`
+  );
+}
+
+addProject(formData: FormData): Observable<any> {
+  return this.http.post<any>(`${this.baseUrl}Admin/add-update-Project`, formData);
+}
+
 
 
 }
