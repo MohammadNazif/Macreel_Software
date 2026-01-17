@@ -1,0 +1,128 @@
+<div class="panel-header panel-header-sm"></div>
+
+<div class="content px-3 py-1">
+
+<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 w-full">
+
+  <!-- HEADING -->
+  <h1 class="text-lg md:text-[16px] font-semibold text-[#444] text-center md:text-left md:flex-1">
+    Designation List
+  </h1>
+
+  <!-- SEARCH + PAGINATOR -->
+  <div class="flex flex-col sm:flex-row items-center gap-2 w-full md:w-auto">
+
+    <!-- SEARCH INPUT --> 
+     <div class="relative w-full sm:w-48 md:w-64"> <input type="text" placeholder="Search employee..." 
+      (input)="onSearchChange($event)" class="w-full pl-10 pr-3 py-[6px] text-[12px] md:text-[14px]
+       rounded-lg bg-[#F6F7FB] border border-gray-300 
+      focus:outline-none focus:ring-2 focus:ring-[#C5192F] table-search" /> 
+      <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-[12px] md:text-[14px]"></i> 
+    </div>
+
+    <!-- PAGINATOR -->
+    <div class="w-full sm:w-auto">
+      <mat-paginator
+        [length]="totalRecords"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="[5, 10, 20, 30]"
+        showFirstLastButtons
+        (page)="onPageChange($event)">
+      </mat-paginator>
+    </div>
+
+  </div>
+
+</div>
+
+
+
+  <!-- ================= TABLE ================= -->
+  <div class="bg-white shadow rounded-lg relative overflow-x-auto w-full">
+
+    <table mat-table [dataSource]="dataSource" class="min-w-[700px] w-full border border-gray-300 divide-y divide-gray-300 table-fixed text-sm md:text-base">
+
+      <!-- Sr No -->
+      <ng-container matColumnDef="srNo">
+        <th mat-header-cell *matHeaderCellDef class="w-[50px] whitespace-nowrap md:w-[70px] text-[12px] md:text-[14px] px-1 py-1 text-center !bg-[#dd3d4f] text-white">Sr No.</th>
+        <td mat-cell *matCellDef="let element; let i = index" class="px-1 py-1 text-center text-[12px] md:text-[14px]">{{i + 1}}</td>
+      </ng-container>
+
+      <!-- Emp Code -->
+      <ng-container matColumnDef="empCode">
+        <th mat-header-cell *matHeaderCellDef class="min-w-[80px] md:min-w-[100px] text-[12px] md:text-[14px] px-1 py-1 !bg-[#dd3d4f] text-white">Emp Code</th>
+        <td mat-cell *matCellDef="let element" class="px-1 py-1 text-[12px] md:text-[14px] text-center">{{element.empCode}}</td>
+      </ng-container>
+
+      <!-- Name -->
+      <ng-container matColumnDef="empName">
+        <th mat-header-cell *matHeaderCellDef class="min-w-[150px] md:min-w-[200px] text-[12px] md:text-[14px] px-1 py-1 !bg-[#dd3d4f] text-white">Name</th>
+        <td mat-cell *matCellDef="let element" class="px-1 py-1 text-[12px] md:text-[14px] text-center">
+          <button class="text-[#C5192F] hover:underline text-[12px] md:text-[14px]" (click)="showLeave(element.id, element.empName)">
+            {{element.empName}}
+          </button>
+        </td>
+      </ng-container>
+
+      <!-- Designation -->
+      <ng-container matColumnDef="designation">
+        <th mat-header-cell *matHeaderCellDef class="min-w-[120px] md:min-w-[150px] text-[12px] md:text-[14px] px-1 py-1 !bg-[#dd3d4f] text-white">Designation</th>
+        <td mat-cell *matCellDef="let element" class="px-1 py-1 text-[12px] md:text-[14px] text-center">{{element.designationName}}</td>
+      </ng-container>
+
+      <!-- Email -->
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef class="min-w-[150px] md:min-w-[200px] text-[12px] md:text-[14px] px-1 py-1 !bg-[#dd3d4f] text-white">Email</th>
+        <td mat-cell *matCellDef="let element" class="px-1 py-1 text-[12px] md:text-[14px] text-center">{{element.emailId}}</td>
+      </ng-container>
+
+      <!-- Contact -->
+      <ng-container matColumnDef="contact">
+        <th mat-header-cell *matHeaderCellDef class="min-w-[100px] md:min-w-[120px] text-[12px] md:text-[14px] px-1 py-1 !bg-[#dd3d4f] text-white">Contact</th>
+        <td mat-cell *matCellDef="let element" class="px-1 py-1 text-[12px] md:text-[14px] text-center">{{element.mobile}}</td>
+      </ng-container>
+
+      <!-- ROWS -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns" class="!h-9"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="hover:bg-gray-100 !h-9"></tr>
+
+    </table>
+  </div>
+
+  <!-- ================= EMPLOYEE LEAVE MODAL ================= -->
+  <div 
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2"
+    *ngIf="showLeaveDropdown">
+    
+    <div class="bg-white rounded-lg w-full md:w-2/3 lg:w-1/2 p-4 relative max-h-[90vh] overflow-y-auto">
+
+      <button class="absolute top-2 right-2 text-red-500 font-bold text-lg" (click)="closeLeaveDropdown()">X</button>
+
+      <h3 class="font-semibold text-gray-700 mb-4 text-sm md:text-base">Leave Details - {{selectedEmployeeName}}</h3>
+
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-300 border border-gray-300 table-fixed text-sm md:text-base">
+          <thead>
+            <tr class="!bg-[#dd3d4f] text-white text-center text-[12px] md:text-[14px]">
+              <th class="px-1 py-1">S.No</th>
+              <th class="px-1 py-1">Leave Type</th>
+              <th class="px-1 py-1">Total Leave</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let leave of selectedEmployeeLeaves; let i = index" class="text-center border-b">
+              <td class="px-1 py-1 text-[12px] md:text-[14px]">{{i + 1}}</td>
+              <td class="px-1 py-1 text-[12px] md:text-[14px]">{{leave.leaveType}}</td>
+              <td class="px-1 py-1 text-[12px] md:text-[14px]">{{leave.noOfLeave}}</td>
+            </tr>
+            <tr *ngIf="selectedEmployeeLeaves.length === 0">
+              <td colspan="3" class="text-center px-1 py-1 text-red-500 text-[12px] md:text-[14px]">No leave assigned</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+</div>
