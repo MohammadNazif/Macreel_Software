@@ -12,7 +12,12 @@ import { AddTechnologyComponent } from './add-technology/add-technology.componen
 import { AssignLeaveComponent } from './assign-leave/assign-leave.component';
 import { UploadAttendanceComponent } from './upload-attendance/upload-attendance.component';
 import { ViewAttendanceComponent } from './view-attendance/view-attendance.component';
+
 import { AllEmployeeLeaveListComponent } from './all-employee-leave-list/all-employee-leave-list.component';
+
+import { AddTaskComponent } from './add-task/add-task.component';
+import { ViewTaskComponent } from './view-task/view-task.component';
+
 
 
 const routes: Routes = [
@@ -29,8 +34,13 @@ const routes: Routes = [
   { path:'assign-leave',component:AssignLeaveComponent},
  { path: 'upload-attendance', component: UploadAttendanceComponent },
   { path: 'view-attendance', component: ViewAttendanceComponent },
+
   { path:'assign-leave',component:AssignLeaveComponent},
-  { path:'AllEmployeeLeave',component:AllEmployeeLeaveListComponent}
+  { path:'AllEmployeeLeave',component:AllEmployeeLeaveListComponent},
+
+  {path: 'add-task',component:AddTaskComponent},
+  {path: 'view-task',component:ViewTaskComponent}
+
 ];
 
 @NgModule({

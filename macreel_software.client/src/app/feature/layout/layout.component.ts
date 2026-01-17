@@ -11,7 +11,7 @@ export class LayoutComponent implements OnInit {
   sidebarOpen = true;
   isMobile = false;
   openMenu: string | null = null;
-  currentRole: 'admin' | 'employee' = 'employee'; // This should be set based on actual user role
+  currentRole: 'admin' | 'employee' = 'admin'; // This should be set based on actual user role
 
 
   menus = [
@@ -96,21 +96,18 @@ export class LayoutComponent implements OnInit {
         },
         {
           label: 'Project Task List',
-          route: '/home/admin/task-list',
+          route: '/home/admin/view-task',
           roles: ['admin']
         },
-        {
-          label: 'Employee Task Sheet',
-          route: '/home/admin/employee-task-sheet',
-          roles: ['admin']
-        },
+      
         {
           label: 'Assigned Tasks',
-          route: '/home/employee/assigned-tasks',
+          route: '/home/admin/view-task',
           roles: ['employee']
         }
       ]
     }
+
   ];
 
   get filteredMenus() {
@@ -123,8 +120,6 @@ export class LayoutComponent implements OnInit {
         )
       }));
   }
-
-
 
 
   ngOnInit(): void {
