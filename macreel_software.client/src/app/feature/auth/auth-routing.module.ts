@@ -4,6 +4,7 @@ import { LoginComponent } from './login/login.component';
 import { LayoutComponent } from '../layout/layout.component';
 import { AddEmployeeComponent } from '../common-pages/add-employee/add-employee.component';
 import { EmployeeProfileComponent } from '../common-pages/employee-profile/employee-profile.component';
+import { AssignLeaveComponent } from '../pages/admin/assign-leave/assign-leave.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
