@@ -1,4 +1,5 @@
-﻿using Macreel_Software.Models.Common;
+﻿using Macreel_Software.Models;
+using Macreel_Software.Models.Common;
 using Microsoft.AspNetCore.Http;
 
 namespace Macreel_Software.DAL.Common
@@ -9,5 +10,9 @@ namespace Macreel_Software.DAL.Common
 
         Task<List<city>> getCityById(int stateId);
         Task<bool> RegisterAdmin(string Username, string Password);
+        Task<bool> AddUpdateRuleBook(ruleBook data);
+        Task<ApiResponse<List<ruleBook>>> getAllRulrBook(string? searchTerm, int? pageNumber, int? pageSize);
+        Task<ApiResponse<List<ruleBook>>> GetRuleBookByIdAsync(int id);
+        Task<bool> deleteRuleBookById(int id);
     }
 }

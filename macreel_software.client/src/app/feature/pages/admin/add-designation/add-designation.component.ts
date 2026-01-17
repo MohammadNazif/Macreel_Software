@@ -2,7 +2,6 @@
 
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-// import { MatTableDataSource } from '@angular/material/table';
 import { ManageMasterdataService } from '../../../../core/services/manage-masterdata.service';
 import Swal from 'sweetalert2';
 
@@ -18,7 +17,6 @@ export class AddDesignationComponent implements OnInit {
   editingDesignationId: number | null = null;
 
   displayedColumns: string[] = ['srNo', 'name', 'action'];
-  // dataSource = new MatTableDataSource<DesignationElement>([]);
 
   pageSize = 5;
   pageNumber = 1;

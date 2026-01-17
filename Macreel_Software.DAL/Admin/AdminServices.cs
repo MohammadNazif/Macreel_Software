@@ -929,36 +929,37 @@ namespace Macreel_Software.DAL.Admin
             return count;
         }
 
-        private async Task SaveAttendance(Attendance data)
+        private async Task<int> SaveAttendance(Attendance data)
         {
-            using (SqlCommand cmd = new SqlCommand("sp_attendance", _conn))
+            try
             {
-                cmd.CommandType = CommandType.StoredProcedure;
+                using (SqlCommand cmd = new SqlCommand("sp_attendance", _conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("@empCode", data.EmpCode);
-                cmd.Parameters.AddWithValue("@empName", data.EmpName);
-                cmd.Parameters.AddWithValue("@attendanceDate", data.AttendanceDate);
-                cmd.Parameters.AddWithValue("@status", data.Status);
+                    cmd.Parameters.AddWithValue("@empCode", data.EmpCode);
+                    cmd.Parameters.AddWithValue("@empName", data.EmpName);
+                    cmd.Parameters.AddWithValue("@attendanceDate", data.AttendanceDate);
+                    cmd.Parameters.AddWithValue("@status", data.Status);
+                    cmd.Parameters.AddWithValue("@inTime", data.InTime == TimeSpan.Zero ? DBNull.Value : (object)data.InTime);
+                    cmd.Parameters.AddWithValue("@outTime", data.OutTime == TimeSpan.Zero ? DBNull.Value : (object)data.OutTime);
+                    cmd.Parameters.AddWithValue("@totalHours", data.TotalHours ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@day", data.Day);
+                    cmd.Parameters.AddWithValue("@month", data.Month);
+                    cmd.Parameters.AddWithValue("@year", data.Year);
+                    cmd.Parameters.AddWithValue("@action", "uploadAttendance");
 
-                cmd.Parameters.AddWithValue("@inTime",
-                    data.InTime == TimeSpan.Zero ? DBNull.Value : data.InTime);
+                    if (_conn.State != ConnectionState.Open)
+                        await _conn.OpenAsync();
 
-                cmd.Parameters.AddWithValue("@outTime",
-                    data.OutTime == TimeSpan.Zero ? DBNull.Value : data.OutTime);
+                    await cmd.ExecuteNonQueryAsync();
+                }
 
-                cmd.Parameters.AddWithValue("@totalHours",
-                    data.TotalHours == null ? DBNull.Value : data.TotalHours);
-
-                cmd.Parameters.AddWithValue("@day", data.Day);
-                cmd.Parameters.AddWithValue("@month", data.Month);
-                cmd.Parameters.AddWithValue("@year", data.Year);
-
-                cmd.Parameters.AddWithValue("@action", "uploadAttendance");
-
-                if (_conn.State != ConnectionState.Open)
-                    await _conn.OpenAsync();
-
-                await cmd.ExecuteNonQueryAsync();
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                return 0; // indicate failure for this row
             }
         }
 
@@ -1268,6 +1269,83 @@ namespace Macreel_Software.DAL.Admin
                         while (await sdr.ReadAsync())
                         {
                             
+                            list.Add(new project
+                            {
+                                id = Convert.ToInt32(sdr["id"]),
+                                category = sdr["category"] != DBNull.Value ? sdr["category"].ToString() : null,
+                                projectTitle = sdr["projectTitle"] != DBNull.Value ? sdr["projectTitle"].ToString() : null,
+                                description = sdr["description"] != DBNull.Value ? sdr["description"].ToString() : null,
+                                web = sdr["web"] != DBNull.Value ? sdr["web"].ToString() : null,
+                                app = sdr["app"] != DBNull.Value ? sdr["app"].ToString() : null,
+                                androidApp = sdr["androidApp"] != DBNull.Value ? sdr["androidApp"].ToString() : null,
+                                IOSApp = sdr["IOSApp"] != DBNull.Value ? sdr["IOSApp"].ToString() : null,
+                                appTechnology = sdr["appTechnology"] != DBNull.Value ? Convert.ToInt32(sdr["appTechnology"]) : null,
+                                appTechnologyName = sdr["AppTechnology"] != DBNull.Value ? sdr["AppTechnology"].ToString() : null,
+                                webTechnology = sdr["webTechnology"] != DBNull.Value ? Convert.ToInt32(sdr["webTechnology"]) : null,
+                                webTechnologyName = sdr["webTechnology"] != DBNull.Value ? sdr["webTechnology"].ToString() : null,
+                                appEmpId = sdr["appEmpId"] != DBNull.Value ? Convert.ToInt32(sdr["appEmpId"]) : null,
+                                appEmpName = sdr["appEmp"] != DBNull.Value ? sdr["appEmp"].ToString() : null,
+                                webEmpId = sdr["webEmpId"] != DBNull.Value ? Convert.ToInt32(sdr["webEmpId"]) : null,
+                                webEmpName = sdr["webEmp"] != DBNull.Value ? sdr["webEmp"].ToString() : null,
+                                startDate = sdr["startDate"] != DBNull.Value ? Convert.ToDateTime(sdr["startDate"]) : DateTime.MinValue,
+                                assignDate = sdr["assignDate"] != DBNull.Value ? Convert.ToDateTime(sdr["assignDate"]) : DateTime.MinValue,
+                                endDate = sdr["endDate"] != DBNull.Value ? Convert.ToDateTime(sdr["endDate"]) : DateTime.MinValue,
+                                completionDate = sdr["completionDate"] != DBNull.Value ? Convert.ToDateTime(sdr["completionDate"]) : DateTime.MinValue,
+                                SEO = sdr["SEO"] != DBNull.Value ? sdr["SEO"].ToString() : null,
+                                SMO = sdr["SMO"] != DBNull.Value ? sdr["SMO"].ToString() : null,
+                                paidAds = sdr["paidAds"] != DBNull.Value ? sdr["paidAds"].ToString() : null,
+                                GMB = sdr["GMB"] != DBNull.Value ? sdr["GMB"].ToString() : null,
+                                sopDocumentPath = sdr["sopDocument"] != DBNull.Value ? sdr["sopDocument"].ToString() : null,
+                                technicalDocumentPath = sdr["technicalDocument"] != DBNull.Value ? sdr["technicalDocument"].ToString() : null,
+                            });
+                        }
+                    }
+                }
+
+                if (!list.Any())
+                    return ApiResponse<List<project>>.FailureResponse(
+                        "No project found",
+                        404,
+                        "PROJECT_NOT_FOUND");
+
+                return ApiResponse<List<project>>.SuccessResponse(
+                    list,
+                    "Project data list fetched successfully");
+            }
+            catch (Exception)
+            {
+                return ApiResponse<List<project>>.FailureResponse(
+                    "Failed to fetch Project data",
+                    500,
+                    "PROJECT_FETCH_ERROR");
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    await _conn.CloseAsync();
+            }
+        }
+
+        public async Task<ApiResponse<List<project>>> GetEmpProjectDetailByEmpId(int empId)
+        {
+            List<project> list = new List<project>();
+            try
+            {
+                SqlCommand cmd = new SqlCommand("sp_addAndAssignProject", _conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@action", "getEmpProjectDetailByEmpId");
+                cmd.Parameters.AddWithValue("@id", empId);
+
+                if (_conn.State == ConnectionState.Closed)
+                    await _conn.OpenAsync();
+
+                using (SqlDataReader sdr = await cmd.ExecuteReaderAsync())
+                {
+                    if (sdr.HasRows)
+                    {
+                        while (await sdr.ReadAsync())
+                        {
+
                             list.Add(new project
                             {
                                 id = Convert.ToInt32(sdr["id"]),

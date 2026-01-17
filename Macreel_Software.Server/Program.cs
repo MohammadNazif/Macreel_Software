@@ -6,6 +6,7 @@ using Macreel_Software.DAL.Admin;
 using Macreel_Software.DAL.Auth;
 using Macreel_Software.DAL.Common;
 using Macreel_Software.DAL.Master;
+using Macreel_Software.DAL.Employee;
 using Macreel_Software.Server;
 using Macreel_Software.Services;
 using Macreel_Software.Services.AttendanceUpload;
@@ -40,6 +41,8 @@ builder.Services.AddScoped<JwtTokenProvider>();
 builder.Services.AddScoped<ICommonServices, CommonService>();
 builder.Services.AddScoped<IMasterService, MasterService>();
 builder.Services.AddScoped<IAdminServices, AdminServices>();
+builder.Services.AddScoped<IEmployeeService, EmployeeServices>();
+
 builder.Services.AddScoped<FileUploadService>();
 builder.Services.AddScoped<MailSender>();
 builder.Services.AddScoped<PasswordEncrypt>();
