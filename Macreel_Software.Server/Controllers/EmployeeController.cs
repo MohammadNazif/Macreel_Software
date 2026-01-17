@@ -1,6 +1,7 @@
 ﻿using Macreel_Software.DAL.Employee;
 using Macreel_Software.Models;
 using Macreel_Software.Models.Employee;
+using Macreel_Software.Models.Master;
 using Microsoft.AspNetCore.Mvc;
 namespace Macreel_Software.Server.Controllers
 {
