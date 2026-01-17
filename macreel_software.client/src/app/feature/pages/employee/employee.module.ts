@@ -6,6 +6,9 @@ import { AssignedTaskComponent } from './assigned-task/assigned-task.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AssignedLeavesComponent } from './assigned-leaves/assigned-leaves.component';
 import { ApplyLeaveComponent } from './apply-leave/apply-leave.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material/table';
 
 
 @NgModule({
@@ -17,7 +20,11 @@ import { ApplyLeaveComponent } from './apply-leave/apply-leave.component';
   ],
   imports: [
     CommonModule,
-    EmployeeRoutingModule
+    EmployeeRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatTableModule,
+    MatPaginator
   ]
 })
 export class EmployeeModule { }
