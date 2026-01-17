@@ -111,6 +111,7 @@ export class LayoutComponent implements OnInit {
         }
       ]
     }
+
   ];
 
   get filteredMenus() {
@@ -123,8 +124,6 @@ export class LayoutComponent implements OnInit {
         )
       }));
   }
-
-
 
 
   ngOnInit(): void {
