@@ -1,7 +1,6 @@
 ﻿using Macreel_Software.DAL;
 using Macreel_Software.DAL.Auth;
 using Macreel_Software.Models;
-using Macreel_Software.Services.FileUpload.Services;
 using Macreel_Software.Services.MailSender;
 using Microsoft.AspNetCore.Mvc;
 
@@ -44,6 +43,14 @@ namespace Macreel_Software.Server.Controllers
                 HttpOnly = true,
                 Secure = true,
                 SameSite = SameSiteMode.None,
+                Expires = DateTime.UtcNow.AddSeconds(20)
+            });
+
+            Response.Cookies.Append("refresh_token", refreshToken, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.None,
                 Expires = DateTime.UtcNow.AddDays(1)
             });
 
@@ -70,16 +77,16 @@ namespace Macreel_Software.Server.Controllers
             if (user == null)
                 return Unauthorized();
 
-            // 🔑 Generate new access token
+            // Generate new access token
             var newAccessToken = _jwtProvider.CreateToken(user);
 
-            // 🍪 Set new access token cookie
+            // Set new access token cookie
             Response.Cookies.Append("access_token", newAccessToken, new CookieOptions
             {
                 HttpOnly = true,
                 Secure = true,               // prod
                 SameSite = SameSiteMode.None,
-                Expires = DateTime.UtcNow.AddMinutes(30)
+                Expires = DateTime.UtcNow.AddSeconds(20)
             });
 
             return Ok(new { message = "Token refreshed" });
@@ -88,7 +95,7 @@ namespace Macreel_Software.Server.Controllers
         [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {
-            //var refreshToken = Request.Cookies["refresh_token"];
+            var refreshToken = Request.Cookies["refresh_token"];
             //if (!string.IsNullOrEmpty(refreshToken))
             //    await _authServices.RevokeRefreshTokenAsync(refreshToken);
 

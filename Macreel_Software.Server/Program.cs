@@ -52,9 +52,10 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy
-                .AllowAnyOrigin()
+                .WithOrigins("http://localhost:54266", "https://vakiluncle.co.in", "https://macreel-software.firebaseapp.com")
                 .AllowAnyHeader()
-                .AllowAnyMethod();
+                .AllowAnyMethod()
+                .AllowCredentials();
         });
 });
 
@@ -83,7 +84,7 @@ builder.Services.AddAuthentication(options =>
     {
         OnChallenge = context =>
         {
-            context.HandleResponse(); // ⛔ Prevent redirect to login/index.html
+            context.HandleResponse(); 
             context.Response.StatusCode = 401;
             context.Response.ContentType = "application/json";
             return context.Response.WriteAsync("{\"error\": \"Unauthorized\"}");

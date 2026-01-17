@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private readonly auth:AuthService,
     private readonly fb:FormBuilder,
-    private router:Router
+    private readonly router:Router
   ){}
 
   ngOnInit(): void {
@@ -40,7 +40,6 @@ export class LoginComponent implements OnInit {
     const loginData = this.loginForm.value;
     this.auth.login(loginData).subscribe({
       next: (res: any) => {
-        debugger
 
         // Success alert
         Swal.fire({

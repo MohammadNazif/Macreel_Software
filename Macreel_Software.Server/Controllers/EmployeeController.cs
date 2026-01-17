@@ -1,9 +1,6 @@
 ﻿using Macreel_Software.DAL.Employee;
-using Macreel_Software.DAL.Master;
 using Macreel_Software.Models;
 using Macreel_Software.Models.Employee;
-using Macreel_Software.Models.Master;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 namespace Macreel_Software.Server.Controllers
 {
@@ -12,11 +9,16 @@ namespace Macreel_Software.Server.Controllers
     public class EmployeeController : ControllerBase
     {
         private readonly IEmployeeService _service;
+        private readonly int _userId;
 
-        public EmployeeController(IEmployeeService service)
+        public EmployeeController(IEmployeeService service,IHttpContextAccessor http)
         {
             _service = service;
-
+            var user = http.HttpContext?.User;
+            if(user != null && user.Identity?.IsAuthenticated == true)
+            {
+                _userId = Convert.ToInt32(user.FindFirst("UserId")?.Value);
+            }
         }
 
         [HttpPost("saveRuleBookResponseByEmpId")]

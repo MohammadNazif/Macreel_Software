@@ -35,13 +35,10 @@ const routes: Routes = [
   { path:'assign-leave',component:AssignLeaveComponent},
   { path: 'upload-attendance', component: UploadAttendanceComponent },
   { path: 'view-attendance', component: ViewAttendanceComponent },
-
   { path:'assign-leave',component:AssignLeaveComponent},
   { path:'AllEmployeeLeave',component:AllEmployeeLeaveListComponent},
-
   {path: 'add-task',component:AddTaskComponent},
-  {path: 'view-task',component:ViewTaskComponent}
-
+  {path: 'view-task',component:ViewTaskComponent},
   { path:'AllEmployeeLeave',component:AllEmployeeLeaveListComponent},
   { path:'add-project',component:AddProjectComponent}
 ];

@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Macreel_Software.Server;
 using Macreel_Software.Models;
 using Macreel_Software.Services.FileUpload.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Macreel_Software.Server.Controllers
 {
+    [Authorize(Roles ="57")]
     [Route("api/[controller]")]
     [ApiController]
     public class MasterController : ControllerBase
