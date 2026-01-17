@@ -17,6 +17,8 @@ import { AllEmployeeLeaveListComponent } from './all-employee-leave-list/all-emp
 
 import { AddTaskComponent } from './add-task/add-task.component';
 import { ViewTaskComponent } from './view-task/view-task.component';
+import { ViewProjectComponent } from './view-project/view-project.component';
+
 
 
 
@@ -39,7 +41,8 @@ const routes: Routes = [
   { path:'AllEmployeeLeave',component:AllEmployeeLeaveListComponent},
 
   {path: 'add-task',component:AddTaskComponent},
-  {path: 'view-task',component:ViewTaskComponent}
+  {path: 'view-task',component:ViewTaskComponent},
+    {path: 'view-project',component:ViewProjectComponent}
 
 ];
 
