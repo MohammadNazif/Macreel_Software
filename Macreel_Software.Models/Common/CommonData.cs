@@ -1,4 +1,6 @@
-﻿namespace Macreel_Software.Models.Common
+﻿using Microsoft.AspNetCore.Http;
+
+namespace Macreel_Software.Models.Common
 {
     public class CommonData
 
@@ -56,5 +58,12 @@
         public int stateId { get; set; }
         public string stateName { get; set; }
         public string cityName { get; set; }
+    }
+    public class ruleBook
+    {
+        public int id { get; set; }
+        public IFormFile? rule_Book { get; set; }
+
+        public string? rule_Book_Path { get; set; }
     }
 }
