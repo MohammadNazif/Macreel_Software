@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.Data;
+﻿using System.Data;
+using Macreel_Software.Models;
+using Macreel_Software.Models.Common;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
-using Macreel_Software.Models.Common;
 namespace Macreel_Software.DAL.Common
 {
     public class CommonService : ICommonServices
@@ -12,18 +13,18 @@ namespace Macreel_Software.DAL.Common
 
         public CommonService(IConfiguration config)
         {
-            _config = config;          
+            _config = config;
             string connectionString = _config.GetConnectionString("DefaultConnection");
             _conn = new SqlConnection(connectionString);
         }
 
         #region Register Admin
-        public async Task<bool> RegisterAdmin(string Username,string Password)
+        public async Task<bool> RegisterAdmin(string Username, string Password)
         {
-            using(SqlCommand cmd = new SqlCommand("sp_Login",_conn))
+            using (SqlCommand cmd = new SqlCommand("sp_Login", _conn))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@Username",Username);
+                cmd.Parameters.AddWithValue("@Username", Username);
                 cmd.Parameters.AddWithValue("@Password", Password);
                 cmd.Parameters.AddWithValue("@Action", "adminreg");
                 if (_conn.State != ConnectionState.Open)
@@ -82,16 +83,16 @@ namespace Macreel_Software.DAL.Common
             List<city> list = new List<city>();
             try
             {
-                using(SqlCommand cmd=new SqlCommand("sp_state", _conn))
+                using (SqlCommand cmd = new SqlCommand("sp_state", _conn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@action", "getCityByStateId");
                     cmd.Parameters.AddWithValue("@id", stateId);
                     if (_conn.State != ConnectionState.Open)
                         await _conn.OpenAsync();
-                    using(SqlDataReader sdr=await cmd.ExecuteReaderAsync())
+                    using (SqlDataReader sdr = await cmd.ExecuteReaderAsync())
                     {
-                        while(await sdr.ReadAsync())
+                        while (await sdr.ReadAsync())
                         {
                             list.Add(new city
                             {
@@ -115,6 +116,191 @@ namespace Macreel_Software.DAL.Common
             }
             return list;
         }
-    }
 
+        #region ruleBook
+
+        public async Task<bool> AddUpdateRuleBook(ruleBook data)
+        {
+            try
+            {
+                SqlCommand cmd = new SqlCommand("sp_ruleBook", _conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@id", data.id);
+                cmd.Parameters.AddWithValue("@ruleBook", data.rule_Book_Path);
+                cmd.Parameters.AddWithValue("@action", data.id > 0 ? "updateRuleBook" : "insert");
+                if (_conn.State == ConnectionState.Closed)
+                    await _conn.OpenAsync();
+
+                int affectedRow = await cmd.ExecuteNonQueryAsync();
+                return affectedRow > 0;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    await _conn.CloseAsync();
+            }
+        }
+
+
+        public async Task<ApiResponse<List<ruleBook>>> getAllRulrBook(string? searchTerm, int? pageNumber, int? pageSize)
+        {
+            List<ruleBook> list = new();
+            int totalRecords = 0;
+
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("sp_ruleBook", _conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@action", "getAllRuleBook");
+
+                    cmd.Parameters.AddWithValue("@searchTerm",
+                        string.IsNullOrWhiteSpace(searchTerm) ? DBNull.Value : searchTerm);
+
+                    cmd.Parameters.AddWithValue("@pageNumber",
+                        pageNumber.HasValue ? pageNumber.Value : DBNull.Value);
+
+                    cmd.Parameters.AddWithValue("@pageSize",
+                        pageSize.HasValue ? pageSize.Value : DBNull.Value);
+
+                    if (_conn.State != ConnectionState.Open)
+                        await _conn.OpenAsync();
+
+                    using (SqlDataReader sdr = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await sdr.ReadAsync())
+                        {
+
+                            if (totalRecords == 0)
+                                totalRecords = Convert.ToInt32(sdr["TotalRecords"]);
+
+                            list.Add(new ruleBook
+                            {
+                                id = Convert.ToInt32(sdr["id"]),
+                                rule_Book_Path = sdr["ruleBook"].ToString()
+                            });
+                        }
+                    }
+                }
+
+
+                if (pageNumber.HasValue && pageSize.HasValue)
+                {
+                    return ApiResponse<List<ruleBook>>.PagedResponse(
+                        list,
+                        pageNumber.Value,
+                        pageSize.Value,
+                        totalRecords,
+                        "Rulebook list fetched successfully");
+                }
+
+
+                var response = ApiResponse<List<ruleBook>>.SuccessResponse(
+                    list,
+                    "Rulebook list fetched successfully");
+
+                response.TotalRecords = totalRecords;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<List<ruleBook>>.FailureResponse(
+                    ex.Message,
+                    500,
+                    "Rulebook_FETCH_ERROR");
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    await _conn.CloseAsync();
+            }
+        }
+
+
+        public async Task<ApiResponse<List<ruleBook>>> GetRuleBookByIdAsync(int id)
+        {
+            List<ruleBook> list = new();
+
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("sp_ruleBook", _conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@action", "getRuleBookById");
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    if (_conn.State != ConnectionState.Open)
+                        await _conn.OpenAsync();
+
+                    using (SqlDataReader sdr = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await sdr.ReadAsync())
+                        {
+                            list.Add(new ruleBook
+                            {
+                                id = Convert.ToInt32(sdr["id"]),
+                                rule_Book_Path = sdr["ruleBook"].ToString()
+                            });
+                        }
+                    }
+                }
+
+                return ApiResponse<List<ruleBook>>.SuccessResponse(
+                    list,
+                    "Rulebook fetched successfully");
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<List<ruleBook>>.FailureResponse(
+                    ex.Message,
+                    500,
+                    "RULEBOOK_FETCH_ERROR");
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    await _conn.CloseAsync();
+            }
+        }
+
+
+        public async Task<bool> deleteRuleBookById(int id)
+        {
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("sp_ruleBook", _conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@action", "deleteRuleBookById");
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    if (_conn.State != ConnectionState.Open)
+                        await _conn.OpenAsync();
+
+                    int rowsAffected = await cmd.ExecuteNonQueryAsync();
+                    return rowsAffected > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    _conn.CloseAsync();
+            }
+        }
+
+    }
+    #endregion
 }
+
+
+    
