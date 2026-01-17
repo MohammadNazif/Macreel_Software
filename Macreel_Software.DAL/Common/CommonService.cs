@@ -12,12 +12,27 @@ namespace Macreel_Software.DAL.Common
 
         public CommonService(IConfiguration config)
         {
-            _config = config;
-
-          
+            _config = config;          
             string connectionString = _config.GetConnectionString("DefaultConnection");
             _conn = new SqlConnection(connectionString);
         }
+
+        #region Register Admin
+        public async Task<bool> RegisterAdmin(string Username,string Password)
+        {
+            using(SqlCommand cmd = new SqlCommand("sp_Login",_conn))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Username",Username);
+                cmd.Parameters.AddWithValue("@Password", Password);
+                cmd.Parameters.AddWithValue("@Action", "adminreg");
+                if (_conn.State != ConnectionState.Open)
+                    await _conn.OpenAsync();
+                int res = await cmd.ExecuteNonQueryAsync();
+                return res > 0;
+            }
+        }
+        #endregion
 
         public async Task<List<state>> GetAllState()
         {

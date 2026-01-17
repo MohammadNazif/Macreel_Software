@@ -87,7 +87,7 @@ export class AddEmployeeComponent implements OnInit {
       emergencyContactNum: [''],
 
       // 🔥 IMPORTANT - Multi select array
-      technologyId: [[]],
+      skillIds: [[]],
 
       companyName: [''],
       yearOfExperience: [''],
@@ -100,25 +100,29 @@ export class AddEmployeeComponent implements OnInit {
     this.loadMasters();
     this.loadStates();
     this.loadReportingManagers();
+
     this.loadTechnologies();
 
-    this.employeeId = Number(this.route.snapshot.paramMap.get('id'));
+    
+  this.employeeId = Number(this.route.snapshot.paramMap.get('id'));
 
-    if (this.employeeId) {
-      this.isEditMode = true;
-
-      this.employeeForm.get('password')?.disable();
-      this.employeeForm.get('emailId')?.disable();
-
-      this.getEmployeeById(this.employeeId);
-    }
+  if (this.employeeId) {
+    this.isEditMode = true;
+    this.employeeForm.get('password')?.disable();
+    this.employeeForm.get('emailId')?.disable();
+    this.getEmployeeById(this.employeeId);
+  }
   }
 
-  private loadTechnologies(): void {
+private loadTechnologies(): Promise<void> {
+  return new Promise((resolve) => {
     this.masterService.getAllTechnology(1, 100).subscribe(res => {
       this.technologies = res?.data ?? [];
+      resolve();
     });
-  }
+  });
+}
+
 
   private loadMasters(): void {
     this.masterService.getRoles(1, 100).subscribe(res => this.roles = res?.data ?? []);
@@ -170,7 +174,9 @@ export class AddEmployeeComponent implements OnInit {
       this.selectedTechnologies.push(tech);
 
       const ids = this.selectedTechnologies.map(t => t.id);
-      this.employeeForm.get('technologyId')?.setValue(ids);
+      // this.employeeForm.get('technologyId')?.setValue(ids);
+      this.employeeForm.get('skillIds')?.setValue(ids);
+
     }
 
     this.technologyCtrl.setValue('');
@@ -181,10 +187,11 @@ export class AddEmployeeComponent implements OnInit {
     this.selectedTechnologies = this.selectedTechnologies.filter(t => t.id !== tech.id);
 
     const ids = this.selectedTechnologies.map(t => t.id);
-    this.employeeForm.get('technologyId')?.setValue(ids);
+    this.employeeForm.get('skillIds')?.setValue(ids);
 
     this.announcer.announce(`Removed ${tech.technologyName}`);
   }
+
 
   // ================= EDIT MODE =================
 
@@ -224,17 +231,20 @@ export class AddEmployeeComponent implements OnInit {
           companyContactNo: emp.companyContactNo,
         });
 
-        if (emp.technologyId) {
-          const techIds = Array.isArray(emp.technologyId)
-            ? emp.technologyId
-            : emp.technologyId.toString().split(',').map((id: string) => +id);
+       if (emp.skill && emp.skill.length) {
+
+        // Wait for technologies to load first
+        this.loadTechnologies().then(() => {
+
+          const skillIds = emp.skill.map((s: any) => s.id);
 
           this.selectedTechnologies = this.technologies.filter(t =>
-            techIds.includes(t.id)
+            skillIds.includes(t.id)
           );
 
-          this.employeeForm.get('technologyId')?.setValue(techIds);
-        }
+          this.employeeForm.get('skillIds')?.setValue(skillIds);
+        });
+      }
 
         if (emp.stateId) {
           this.employeeService.getCityByStateId(emp.stateId).subscribe((res: any) => {
@@ -320,15 +330,15 @@ export class AddEmployeeComponent implements OnInit {
 
     this.isLoading = true;
 
-// 🔥 ADD vs UPDATE decision
-const apiCall = this.isEditMode
-  ? this.employeeService.updateEmployee(
-    (() => {
-      formData.append('Id', this.employeeId.toString());
-      return formData;
-    })()
-  )
-  : this.employeeService.addEmployee(formData);
+    // 🔥 ADD vs UPDATE decision
+    const apiCall = this.isEditMode
+      ? this.employeeService.updateEmployee(
+        (() => {
+          formData.append('Id', this.employeeId.toString());
+          return formData;
+        })()
+      )
+      : this.employeeService.addEmployee(formData);
 
     apiCall
       .pipe(finalize(() => this.isLoading = false))

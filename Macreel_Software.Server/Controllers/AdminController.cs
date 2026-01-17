@@ -36,8 +36,6 @@ namespace Macreel_Software.Server.Controllers
             _pass = pass;
         }
 
-
-
         #region employee api
         [HttpPost("insertEmployeeRegistration")]
         public async Task<IActionResult> InsertEmployee([FromForm] employeeRegistration model)
@@ -294,7 +292,6 @@ namespace Macreel_Software.Server.Controllers
 
         #endregion
 
-
         #region leave api
 
         [HttpPost("insertLeave")]
@@ -526,6 +523,27 @@ namespace Macreel_Software.Server.Controllers
         }
 
 
+        [HttpGet("getAllAssignLeave")]
+        public async Task<IActionResult> getAllAssignLeave(string? searchTerm = null, int? pageNumber = null, int? pageSize = null)
+        {
+            try
+            {
+                ApiResponse<List<AssignLeaveDetails>> result =
+                    await _services.getAllAssignedLeave(searchTerm, pageNumber, pageSize);
+
+
+                return StatusCode(result.StatusCode, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<List<AssignLeaveDetails>>.FailureResponse(
+                    "An error occurred while fetching leave",
+                    500,
+                    "SERVER_ERROR"
+                ));
+            }
+        }
+
 
 
         #endregion
@@ -627,19 +645,16 @@ namespace Macreel_Software.Server.Controllers
                 (data.completionDate <= data.startDate || data.completionDate <= data.assignDate))
                 return BadRequest("Completion date must be greater than start date and assign date.");
 
-            bool isAnySoftwareSelected =
-      !string.IsNullOrWhiteSpace(data.web) ||
-      !string.IsNullOrWhiteSpace(data.app) ||
-      !string.IsNullOrWhiteSpace(data.androidApp) ||
-      !string.IsNullOrWhiteSpace(data.IOSApp) ||
-      !string.IsNullOrWhiteSpace(data.SEO) ||
-      !string.IsNullOrWhiteSpace(data.SMO) ||
-      !string.IsNullOrWhiteSpace(data.paidAds) ||
-      !string.IsNullOrWhiteSpace(data.GMB);
+            if (data.category != null && data.category.Equals("Software", StringComparison.OrdinalIgnoreCase))
+            {
+                bool isAnySoftwareSelected = !string.IsNullOrWhiteSpace(data.web) ||!string.IsNullOrWhiteSpace(data.app) ||
+                    !string.IsNullOrWhiteSpace(data.androidApp) || !string.IsNullOrWhiteSpace(data.IOSApp);
 
-            if (!isAnySoftwareSelected)
-                return BadRequest("Please select at least one software type.");
-
+                if (!isAnySoftwareSelected)
+                {
+                    return BadRequest("Please select at least one software type.");
+                }
+            }
 
             // 🔹 File Upload
             var uploadService = new FileUploadService();
@@ -668,15 +683,104 @@ namespace Macreel_Software.Server.Controllers
             bool result = await _services.AddProject(data);
 
             if (!result)
-                return StatusCode(500, "Failed to save project.");
+                return Ok(new
+                {
+                    status=false,
+                    message="Project no saved"
+                });
 
             return Ok(new
             {
                 success = true,
+                StatusCode=200,
                 message = data.id > 0
                     ? "Project updated successfully."
                     : "Project added successfully."
             });
+        }
+
+
+
+        [HttpGet("getAllProject")]
+        public async Task<IActionResult> getAllProject(string? searchTerm = null, int? pageNumber = null, int? pageSize = null)
+        {
+            try
+            {
+                ApiResponse<List<project>> result =
+                    await _services.GetAllProject(searchTerm, pageNumber, pageSize);
+
+
+                return StatusCode(result.StatusCode, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<List<project>>.FailureResponse(
+                    "An error occurred while fetching project details",
+                    500,
+                    "SERVER_ERROR"
+                ));
+            }
+        }
+
+        [HttpGet("getAllProjectById")]
+        public async Task<IActionResult> getAllProjectById(int id)
+        {
+            try
+            {
+                ApiResponse<List<project>> result =
+                    await _services.GetAllProjectById(id);
+
+
+                return StatusCode(result.StatusCode, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<List<project>>.FailureResponse(
+                    "An error occurred while fetching project details",
+                    500,
+                    "SERVER_ERROR"
+                ));
+            }
+        }
+
+
+        [HttpDelete("deleteProjectById")]
+        public async Task<IActionResult> deleteProjectById(int id)
+        {
+            try
+            {
+                var res = await _services.deleteProjectById(id);
+                if (res)
+                {
+                    return Ok(new
+                    {
+                        status = true,
+                        StatusCode = 200,
+                        message = "Project deleted successfully!!!"
+
+                    });
+                }
+                else
+                {
+                    return Ok(new
+                    {
+                        status = false,
+                        StatusCode = 404,
+                        message = "Project not deleted!!"
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, new
+                {
+                    status = false,
+                    StatusCode = 500,
+                    message = "An error occurred while deleting Project.",
+                    error = ex.Message
+                });
+            }
         }
 
         #endregion
