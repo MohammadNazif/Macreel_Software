@@ -1,0 +1,121 @@
+<div class="max-w-4xl mx-auto px-4 py-8">
+  <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+
+    <!-- Header -->
+    <div class="px-6 py-4 border-b">
+      <h2 class="text-lg font-semibold text-gray-800">
+        Upload Attendance
+      </h2>
+      <p class="text-sm text-gray-500 mt-1">
+        Upload monthly attendance Excel for employees
+      </p>
+    </div>
+
+    <!-- Form -->
+    <form [formGroup]="attendanceForm"
+          (ngSubmit)="submit()"
+          class="px-6 py-6 space-y-6">
+
+      <!-- Year & Month -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div>
+          <label class="text-sm font-medium text-gray-700 mb-1 block">
+            Year
+          </label>
+          <select formControlName="year"
+            class="w-full h-[46px] px-3 rounded-lg border
+                   focus:ring-2 focus:ring-[#dd3d4f] focus:outline-none">
+            <option value="">Select year</option>
+            <option *ngFor="let y of years" [value]="y">{{ y }}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-sm font-medium text-gray-700 mb-1 block">
+            Month
+          </label>
+          <select
+  formControlName="month"
+  class="w-full rounded-lg border px-4 py-3">
+
+  <option value="">Select Month</option>
+
+  <option *ngFor="let m of months" [value]="m.value">
+    {{ m.label }}
+  </option>
+
+</select>
+        </div>
+      </div>
+
+      <!-- Upload -->
+      <div>
+        <label class="text-sm font-medium text-gray-700 mb-2 block">
+          Attendance File
+        </label>
+
+        <div
+          (drop)="onDrop($event)"
+          (dragover)="$event.preventDefault(); isDragging=true"
+          (dragleave)="isDragging=false"
+          class="border border-dashed rounded-lg px-5 py-5 text-center
+                 transition bg-gray-50 cursor-pointer"
+          [ngClass]="{
+            'border-[#dd3d4f] bg-red-50': isDragging,
+            'border-gray-300': !isDragging
+          }">
+
+          <input type="file" accept=".xls,.xlsx"
+                 class="hidden" #fileInput
+                 (change)="onFileSelect($event)">
+
+          <div (click)="fileInput.click()">
+            <p class="text-sm text-gray-700 font-medium">
+              Drop Excel file here or click to upload
+            </p>
+            <p class="text-xs text-gray-500 mt-1">
+              Supported formats: .xls, .xlsx
+            </p>
+
+            <p *ngIf="selectedFile"
+               class="text-xs text-[rgb(136_221_61)] mt-2 font-medium truncate">
+              {{ selectedFile.name }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="flex justify-end pt-4 border-t">
+        <button type="submit"
+          [disabled]="attendanceForm.invalid"
+          class="bg-[#dd3d4f] text-white px-7 py-2.5 rounded-lg text-sm font-medium
+                 hover:bg-red-600 transition disabled:opacity-50">
+          Upload Attendance
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
+<!-- Loader Overlay -->
+<div *ngIf="isSubmitting"
+     class="fixed inset-0 z-50 flex flex-col items-center justify-center gap-3
+            bg-black/10 backdrop-blur-[2px] pointer-events-none">
+
+  <div class="flex items-center gap-2">
+    <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 bg-[#dd3d4f] rounded-full animate-bounce"></span>
+    <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 bg-[#dd3d4f] rounded-full animate-bounce [animation-delay:150ms]"></span>
+    <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 bg-[#dd3d4f] rounded-full animate-bounce [animation-delay:300ms]"></span>
+  </div>
+
+  <div class="text-center text-xs sm:text-sm font-medium text-gray-700">
+    Uploading attendance…
+  </div>
+
+</div>
+
+
+
+    <!-- Text -->
+   

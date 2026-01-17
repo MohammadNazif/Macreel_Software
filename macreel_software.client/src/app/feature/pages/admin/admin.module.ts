@@ -19,6 +19,8 @@ import { EmployeeListComponent } from './employee-list/employee-list.component';
 import { AddLeaveTypeComponent } from './add-leave-type/add-leave-type.component';
 import { AddTechnologyComponent } from './add-technology/add-technology.component';
 import { AssignLeaveComponent } from './assign-leave/assign-leave.component';
+import { UploadAttendanceComponent } from './upload-attendance/upload-attendance.component';
+import { ViewAttendanceComponent } from './view-attendance/view-attendance.component';
 
 
 @NgModule({
@@ -32,6 +34,8 @@ import { AssignLeaveComponent } from './assign-leave/assign-leave.component';
     AddLeaveTypeComponent,
     AddTechnologyComponent,
     AssignLeaveComponent,
+    UploadAttendanceComponent,
+    ViewAttendanceComponent,
     
 
   ],

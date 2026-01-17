@@ -1,0 +1,10 @@
+.summary-card {
+  padding: 16px;
+  border-radius: 12px;
+  background: #f9fafb;
+  text-align: center;
+}
+.summary-card h3 {
+  font-size: 22px;
+  font-weight: bold;
+}
