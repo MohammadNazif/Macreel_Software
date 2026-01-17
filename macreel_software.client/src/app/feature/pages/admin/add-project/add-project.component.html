@@ -1,6 +1,5 @@
 <div class="max-w-7xl mx-auto bg-gray-100 p-4">
-
-  <form>
+  <form [formGroup]="projectForm">
 
     <div class="bg-white p-6 rounded-lg shadow">
 
@@ -11,124 +10,83 @@
 
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-5">
 
-        <!-- CATEGORY DROPDOWN -->
-
+        <!-- CATEGORY -->
         <div class="relative">
-  <select 
-    [(ngModel)]="category"
-    name="category"
-    (ngModelChange)="onCategoryChange()"
-    class="peer w-full appearance-none rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
-           focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
-
-    <option value="" disabled hidden>Select Category</option>
-    <option value="software">Software</option>
-    <option value="website">Website</option>
-    <option value="digital">Digital Marketing</option>
-
-  </select>
-
-  <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
-               peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
-    Project Category
-  </label>
-
-  <span class="absolute right-3 top-2 text-gray-400 pointer-events-none">▼</span>
-</div>
-
-
-        <!-- <div class="relative">
-        <select [(ngModel)]="category"
-        name="category"
-        (ngModelChange)="onCategoryChange()">
-
+          <select 
+            formControlName="category"
             class="peer w-full appearance-none rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
-            focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
-
+                  focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
             <option value="" disabled hidden>Select Category</option>
             <option value="software">Software</option>
             <option value="website">Website</option>
             <option value="digital">Digital Marketing</option>
-
           </select>
-
           <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
-          peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
+                        peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
             Project Category
           </label>
-
           <span class="absolute right-3 top-2 text-gray-400 pointer-events-none">▼</span>
-        </div> -->
+        </div>
 
-        <!-- Project Title -->
+        <!-- PROJECT TITLE -->
         <div class="relative">
-          <input type="text" name="projectTitle" placeholder=" "
+          <input type="text" formControlName="projectTitle" placeholder=" "
             class="peer w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700
-            focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none" />
-
+                  focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none" />
           <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
-            peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
+                        peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
             Project Title
           </label>
         </div>
 
-        <!-- Description -->
+        <!-- DESCRIPTION -->
         <div class="relative col-span-2">
-          <textarea rows="1" name="description" placeholder=" "
+          <textarea rows="1" formControlName="description" placeholder=" "
             class="peer w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
-            focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none resize-none">
-          </textarea>
-
+                  focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none resize-none"></textarea>
           <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
-            peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
+                        peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
             Description
           </label>
         </div>
 
-        <!-- START DATE -->
+        <!-- DATES -->
         <div class="relative">
-          <input type="date" name="startDate" placeholder=" "
+          <input type="date" formControlName="startDate" placeholder=" "
             class="peer w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
-            focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none" />
-
+                  focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none" />
           <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
-            peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
+                        peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
             Start Date
           </label>
         </div>
 
-        <!-- ASSIGN DATE -->
         <div class="relative">
-          <input type="date" name="assignDate" placeholder=" "
+          <input type="date" formControlName="assignDate" placeholder=" "
             class="peer w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
-            focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none" />
-
+                  focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none" />
           <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
-            peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
+                        peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
             Assign Date
           </label>
         </div>
 
-        <!-- END DATE -->
         <div class="relative">
-          <input type="date" name="endDate" placeholder=" "
+          <input type="date" formControlName="endDate" placeholder=" "
             class="peer w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
-            focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none" />
-
+                  focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none" />
           <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
-            peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
+                        peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
             End Date
           </label>
         </div>
 
-        <!-- COMPLETION DATE -->
         <div class="relative">
-          <input type="date" name="completionDate" placeholder=" "
+          <input type="date" formControlName="completionDate" placeholder=" "
             class="peer w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
-            focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none" />
-
+                  focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none" />
           <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
-            peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
+                        peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
             Completion Date
           </label>
         </div>
@@ -136,312 +94,110 @@
         <!-- SOP DOCUMENT -->
         <div class="relative">
           <label class="block text-sm font-medium text-gray-500 mb-1">SOP Document</label>
-          <input type="file" accept=".pdf"
+          <input #sopFile type="file" accept=".pdf"
             class="w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-3 file:border-0 file:text-sm
-            file:font-semibold file:bg-[#C5192F] file:text-white hover:file:bg-[#a41526]
-            cursor-pointer border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#C5192F]/30" />
+                  file:font-semibold file:bg-[#C5192F] file:text-white hover:file:bg-[#a41526]
+                  cursor-pointer border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#C5192F]/30" />
         </div>
 
-        <!-- TECHNICAL DOCUMENT (HIDE FOR DIGITAL) -->
+        <!-- TECHNICAL DOCUMENT -->
         <div class="relative" *ngIf="category !== 'digital'">
           <label class="block text-sm font-medium text-gray-500 mb-1">Technical Document</label>
-          <input type="file" accept=".pdf"
+          <input #technicalFile type="file" accept=".pdf"
             class="w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-3 file:border-0 file:text-sm
-            file:font-semibold file:bg-[#C5192F] file:text-white hover:file:bg-[#a41526]
-            cursor-pointer border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#C5192F]/30" />
+                  file:font-semibold file:bg-[#C5192F] file:text-white hover:file:bg-[#a41526]
+                  cursor-pointer border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#C5192F]/30" />
         </div>
 
-      </div>
-
-      <!-- ================== WEBSITE SECTION ================== -->
-<div *ngIf="category === 'website'" class="mt-6 border-t pt-4">
-
-  <h3 class="text-lg font-semibold mb-3">Website Details</h3>
-
-  <!-- WEB SKILL DROPDOWN -->
- <div class="relative">
-  <select name="webSkill"
-    (change)="onWebSkillChange($any($event.target).value)"
-    class="peer w-full appearance-none rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
-           focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
-
-    <option value="" disabled selected hidden>Select Web Skill</option>
-
-    <option *ngFor="let skill of webSkills" [value]="skill.id">
-      {{ skill.technologyName }}
-    </option>
-  </select>
-
-  <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
-               peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
-    Web Technology Skill
-  </label>
-
-  <span class="absolute right-3 top-2 text-gray-400 pointer-events-none">▼</span>
-</div>
-
-
-  <!-- WEB EMPLOYEE DROPDOWN -->
-  <div class="relative mt-3" *ngIf="filteredWebEmployees.length">
-    <select name="webEmployee"
-      [(ngModel)]="selectedWebEmployeeId"
-      (change)="onSelectWebEmployeeById($any($event.target).value)"
-      class="peer w-full appearance-none rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
-             focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
-
-      <option value="" disabled hidden>Select Employee</option>
-      <option *ngFor="let emp of filteredWebEmployees" [value]="emp.id">
-  {{ emp.empName }}
-</option>
-
-    </select>
-
-    <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
-                 peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
-      Web Team Member
-    </label>
-
-    <span class="absolute right-3 top-2 text-gray-400 pointer-events-none">▼</span>
-  </div>
-
-  <!-- EMPLOYEE DETAILS -->
-  <div *ngIf="selectedWebEmployee" class="mt-4 p-3 border rounded bg-gray-50">
-    <h4 class="font-semibold mb-2">Employee Details</h4>
-    <p><b>Name:</b> {{ selectedWebEmployee.name }}</p>
-    <p><b>Experience:</b> {{ selectedWebEmployee.exp }}</p>
-    <p><b>Technology:</b> {{ selectedWebEmployee.tech }}</p>
-  </div>
-
-</div>
-
+      </div> <!-- END GRID -->
 
       <!-- ================== SOFTWARE SECTION ================== -->
       <div *ngIf="category === 'software'" class="mt-6 border-t pt-4">
-
         <h3 class="text-lg font-semibold mb-3">Software Details</h3>
 
-        <!-- ✅ SOFTWARE TYPE CHECKBOX (NEW) -->
         <div class="mt-2 mb-4">
           <h4 class="font-semibold mb-2">Software Type</h4>
-
           <div class="flex gap-6">
             <label class="flex items-center gap-2">
-             <input type="checkbox"
-  [(ngModel)]="isMobileSoftware"
-  name="isMobileSoftware"
-  (change)="onMobileCheckboxChange()" />
-              App
+              <input type="checkbox" formControlName="isMobileSoftware" /> App
             </label>
-
             <label class="flex items-center gap-2">
-            <input type="checkbox"
-  [(ngModel)]="isWebSoftware"
-  name="isWebSoftware"
-  (change)="onWebCheckboxChange()" />
-              Web
+              <input type="checkbox" formControlName="isWebSoftware" /> Web
             </label>
           </div>
         </div>
 
-        <!-- ============ MOBILE SECTION ============ -->
+        <!-- MOBILE SECTION -->
         <div *ngIf="isMobileSoftware" class="mt-4">
-
           <h4 class="font-semibold mb-2">Mobile App Type</h4>
-
           <div class="flex gap-4">
             <label class="flex items-center gap-2">
-              <input type="checkbox" [(ngModel)]="isAndroid" name="android" />
-              Android
+              <input type="checkbox" formControlName="isAndroid" /> Android
             </label>
-
             <label class="flex items-center gap-2">
-              <input type="checkbox" [(ngModel)]="isIOS" name="ios" />
-              iOS
+              <input type="checkbox" formControlName="isIOS" /> iOS
             </label>
           </div>
 
-        
+          <div class="relative mt-3">
+            <select formControlName="mobileSkill">
+              <option value="" disabled hidden>Select Mobile Skill</option>
+              <option *ngFor="let skill of mobileSkills" [value]="skill.id">{{ skill.technologyName }}</option>
+            </select>
+          </div>
 
-          <!-- MOBILE SKILL (FLOATING LABEL DESIGN - SAME AS CATEGORY) -->
-<div class="relative mt-3">
- <select 
-  [(ngModel)]="selectedMobileSkill"
-  name="mobileSkill"
-  (ngModelChange)="onMobileSkillChange($event)"
-  class="peer w-full appearance-none rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
-         focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
-
-
-    <option value="" disabled hidden>Select Mobile Skill</option>
-
-
-    <option *ngFor="let skill of mobileSkills" [value]="skill.id">
-      {{ skill.technologyName }}
-    </option>
-
-  </select>
-
-  <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
-               peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
-    Mobile Technology Skill
-  </label>
-
-  <span class="absolute right-3 top-2 text-gray-400 pointer-events-none">▼</span>
-</div>
-
-
-
-<div class="relative mt-3" *ngIf="filteredMobileEmployees.length">
-  <select name="mobileEmployee"
-    [(ngModel)]="selectedMobileEmployeeId"
-    (change)="onSelectEmployeeById($any($event.target).value)"
-    class="peer w-full appearance-none rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
-           focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
-
-    <option value="" disabled hidden>Select Employee</option>
-    <option *ngFor="let emp of filteredMobileEmployees" [value]="emp.id">
-      {{ emp.empName }}
-    </option>
-  </select>
-</div>
-
-
-
+          <div class="relative mt-3" *ngIf="filteredMobileEmployees.length">
+            <select formControlName="mobileEmpId">
+              <option value="" disabled hidden>Select Employee</option>
+              <option *ngFor="let emp of filteredMobileEmployees" [value]="emp.id">{{ emp.empName }}</option>
+            </select>
+          </div>
         </div>
 
-        <!-- ============ WEB SECTION ============ -->
+        <!-- WEB SECTION -->
         <div *ngIf="isWebSoftware" class="mt-4">
-
           <h4 class="font-semibold mb-2">Web Details</h4>
 
-      <div class="relative">
-<select name="webSkill"
-  (change)="onWebSkillChange($any($event.target).value)"
-  class="peer w-full appearance-none rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
-         focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
+          <div class="relative mt-3">
+            <select formControlName="webSkill">
+              <option value="" disabled hidden>Select Web Skill</option>
+              <option *ngFor="let skill of webSkills" [value]="skill.id">{{ skill.technologyName }}</option>
+            </select>
+          </div>
 
-   <option value="" disabled hidden>Select Web Skill</option>
-<option *ngFor="let skill of webSkills" [value]="skill.id">
-  {{ skill.technologyName }}
-</option>
-  </select>
-
-  <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
-               peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
-    Web Technology Skill
-  </label>
-
-  <span class="absolute right-3 top-2 text-gray-400 pointer-events-none">▼</span>
-</div>
-
-<div class="relative mt-3" *ngIf="filteredWebEmployees.length">
-  <select name="webEmployee"
-    [(ngModel)]="selectedWebEmployeeId"
-    (change)="onSelectWebEmployeeById($any($event.target).value)"
-    class="peer w-full appearance-none rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
-           focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
-
-    <option value="" disabled hidden>Select Employee</option>
-    <option *ngFor="let emp of filteredWebEmployees" [value]="emp.id">
-      {{ emp.empName }}
-    </option>
-  </select>
-</div>
-
-
-
-
-        
-
+          <div class="relative mt-3" *ngIf="filteredWebEmployees.length">
+            <select formControlName="webEmpId">
+              <option value="" disabled hidden>Select Employee</option>
+              <option *ngFor="let emp of filteredWebEmployees" [value]="emp.id">{{ emp.empName }}</option>
+            </select>
+          </div>
         </div>
 
-        <!-- EMPLOYEE DETAILS (MOBILE) -->
-        <div *ngIf="selectedMobileEmployee" class="mt-4 p-3 border rounded bg-gray-50">
-          <h4 class="font-semibold mb-2">Employee Details</h4>
-          <p><b>Name:</b> {{ selectedMobileEmployee.name }}</p>
-          <p><b>Experience:</b> {{ selectedMobileEmployee.exp }}</p>
-          <p><b>Technology:</b> {{ selectedMobileEmployee.tech }}</p>
-        </div>
+      </div> <!-- END SOFTWARE -->
 
-        <!-- EMPLOYEE DETAILS (WEB) -->
-<div *ngIf="selectedWebEmployee" class="mt-4 p-3 border rounded bg-gray-50">
-  <h4 class="font-semibold mb-2">Employee Details</h4>
-  <p><b>Name:</b> {{ selectedWebEmployee.name }}</p>
-  <p><b>Experience:</b> {{ selectedWebEmployee.exp }}</p>
-  <p><b>Technology:</b> {{ selectedWebEmployee.tech }}</p>
-</div>
-
-
-      </div>
-
-      <!-- ================== DIGITAL MARKETING SECTION ================== -->
+      <!-- ================== DIGITAL MARKETING ================== -->
       <div *ngIf="category === 'digital'" class="mt-6 border-t pt-4">
-
         <h3 class="text-lg font-semibold mb-3">Digital Marketing Details</h3>
-
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-
-         <div class="relative">
-  <input type="text" name="seo" placeholder=" "
-    class="peer w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700
-    focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none" />
-
-  <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
-    peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
-    SEO
-  </label>
-</div>
-
-
-         <div class="relative">
-  <input type="text" name="smo" placeholder=" "
-    class="peer w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700
-    focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none" />
-
-  <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
-    peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
-    SMO
-  </label>
-</div>
-
-
-         <div class="relative">
-  <input type="text" name="smo" placeholder=" "
-    class="peer w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700
-    focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none" />
-
-  <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
-    peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
-    SMO
-  </label>
-</div>
-
-
-        <div class="relative">
-  <input type="text" name="paidAds" placeholder=" "
-    class="peer w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700
-    focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none" />
-
-  <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
-    peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
-    Paid Ads
-  </label>
-</div>
-
-
+          <input type="text" formControlName="SEO" placeholder="SEO"
+                 class="peer w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700" />
+          <input type="text" formControlName="SMO" placeholder="SMO"
+                 class="peer w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700" />
+          <input type="text" formControlName="GMB" placeholder="GMB"
+                 class="peer w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700" />
+          <input type="text" formControlName="paidAds" placeholder="Paid Ads"
+                 class="peer w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700" />
         </div>
-
       </div>
 
       <!-- SUBMIT BUTTON -->
       <div class="flex justify-end mt-6">
-        <button type="submit"
-          class="bg-green-600 text-white font-semibold px-6 py-2.5 rounded-md shadow-md hover:bg-green-700 transition">
+        <button type="button" (click)="submitProject()"
+                class="bg-green-600 text-white font-semibold px-6 py-2.5 rounded-md shadow-md hover:bg-green-700 transition">
           Submit Project
         </button>
       </div>
 
-    </div>
-
+    </div> <!-- END MAIN CARD -->
   </form>
 </div>

@@ -40,7 +40,7 @@ const routes: Routes = [
   { path:'AllEmployeeLeave',component:AllEmployeeLeaveListComponent},
 
   {path: 'add-task',component:AddTaskComponent},
-  {path: 'view-task',component:ViewTaskComponent}
+  {path: 'view-task',component:ViewTaskComponent},
 
   { path:'AllEmployeeLeave',component:AllEmployeeLeaveListComponent},
   { path:'add-project',component:AddProjectComponent}
