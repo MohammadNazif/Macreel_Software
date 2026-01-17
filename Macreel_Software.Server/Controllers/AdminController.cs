@@ -850,13 +850,13 @@ namespace Macreel_Software.Server.Controllers
                 {
                     return Ok(ApiResponse<object>.SuccessResponse(
                          null,
-                         "Task Create & Assign inserted successfully"
+                       data.id>0?"Task update & assign successfully":  "Task Create & Assign inserted successfully"
                      ));
                 }
                 else
                 {
                     return BadRequest(ApiResponse<object>.FailureResponse(
-                        "Some error occurred while saving Task Create & Assign response",
+                      data.id>0?"Some error occured while updating Task and assign":  "Some error occurred while saving Task Create & Assign response",
                         400
                     ));
                 }
@@ -870,6 +870,89 @@ namespace Macreel_Software.Server.Controllers
             }
         }
 
+
+        [HttpGet("getAllAssignTask")]
+        public async Task<IActionResult> getAllAssignTask(string? searchTerm = null, int? pageNumber = null, int? pageSize = null)
+        {
+            try
+            {
+                ApiResponse<List<Taskassign>> result =
+                    await _services.getAllAssignTask(searchTerm, pageNumber, pageSize);
+
+
+                return StatusCode(result.StatusCode, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<List<Taskassign>>.FailureResponse(
+                    "An error occurred while fetching assign task details",
+                    500,
+                    "SERVER_ERROR"
+                ));
+            }
+        }
+
+
+        [HttpGet("getAllTaskById")]
+        public async Task<IActionResult> getAllTaskById(int id)
+        {
+            try
+            {
+                ApiResponse<List<Taskassign>> result =
+                    await _services.getAllAssignTaskById(id);
+
+
+                return StatusCode(result.StatusCode, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<List<Taskassign>>.FailureResponse(
+                    "An error occurred while fetching project details",
+                    500,
+                    "SERVER_ERROR"
+                ));
+            }
+        }
+
+
+        [HttpDelete("deleteTaskAssignById")]
+        public async Task<IActionResult> deleteTaskAssignById(int id)
+        {
+            try
+            {
+                var res = await _services.deleteTaskById(id);
+                if (res)
+                {
+                    return Ok(new
+                    {
+                        status = true,
+                        StatusCode = 200,
+                        message = "Assign task deleted successfully!!!"
+
+                    });
+                }
+                else
+                {
+                    return Ok(new
+                    {
+                        status = false,
+                        StatusCode = 404,
+                        message = "Assign Task not deleted!!"
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, new
+                {
+                    status = false,
+                    StatusCode = 500,
+                    message = "An error occurred while deleting task.",
+                    error = ex.Message
+                });
+            }
+        }
 
         #endregion
     }

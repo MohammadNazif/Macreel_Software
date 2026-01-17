@@ -221,6 +221,7 @@ namespace Macreel_Software.Models.Master
     {
         public int id { get; set; }
         public int? empId { get; set; }
+        public string? empName { get; set; }
         public string? title { get; set; }
         public string? description { get; set; }
         public DateTime? CompletedDate { get; set; }
