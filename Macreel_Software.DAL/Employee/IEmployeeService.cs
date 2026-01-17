@@ -14,5 +14,11 @@ namespace Macreel_Software.DAL.Employee
         Task<ApiResponse<List<assignedLeave>>> AssignedLeaveListByEmpId( int empId, string? searchTerm, int? pageNumber,
          int? pageSize);
         Task<bool> insertApplyLeaveByEmpId(applyLeave data);
+        Task<ApiResponse<List<applyLeave>>> applyLeaveListByEmpId(int empId, string? searchTerm,
+     int? pageNumber, int? pageSize);
+
+        Task<ApiResponse<List<applyLeave>>> getAllApplyLeaveById(int id, int empId);
+
+        Task<bool> deleteApplyLeaveById(int id, int empId);
     }
 }
