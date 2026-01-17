@@ -217,7 +217,7 @@ namespace Macreel_Software.Models.Master
     }
 
 
-    public class Task
+    public class Taskassign
     {
         public int id { get; set; }
         public int? empId { get; set; }
