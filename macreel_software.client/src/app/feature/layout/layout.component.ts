@@ -58,9 +58,12 @@ export class LayoutComponent implements OnInit {
     key: 'leave',
     children: [
       { label: 'Add Leave', route: '/home/add-leave' },
-      { label: 'Assign Leave', route: '/home/assign-leave' }
+      { label: 'Assign Leave', route: '/home/assign-leave' },
+      { label: 'All Employee Leave', route: '/home/AllEmployeeLeave' }
+
     ]
   },
+
   {
     label: 'Attendance Management',
     icon: 'fa-solid fa-calendar-check',
