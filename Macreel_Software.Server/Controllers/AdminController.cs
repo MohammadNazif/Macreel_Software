@@ -3,6 +3,7 @@ using Macreel_Software.DAL.Admin;
 using Macreel_Software.DAL.Common;
 using Macreel_Software.Models;
 using Macreel_Software.Models.Common;
+using Macreel_Software.Models.Employee;
 using Macreel_Software.Models.Master;
 using Macreel_Software.Server;
 using Macreel_Software.Services.FileUpload.Services;
@@ -802,6 +803,73 @@ namespace Macreel_Software.Server.Controllers
                 });
             }
         }
+
+        [HttpPost("insert-update-Task")]
+        public async Task<IActionResult> insertUpdateTask([FromForm] Taskassign data)
+        {
+            if (data == null)
+            {
+                return BadRequest(new
+                {
+                    status = false,
+                    statusCode = 400,
+                    message = "Invalid request data."
+                });
+            }
+
+            try
+            {
+                string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+
+                if (!Directory.Exists(folderPath))
+                    Directory.CreateDirectory(folderPath);
+
+                var fileService = new FileUploadService();
+
+                if (data.document1 != null)
+                {
+                    data.document1Path = await fileService.UploadFileAsync(
+                        data.document1,
+                        folderPath,
+                        allowedExtensions: null 
+                    );
+                }
+
+                if (data.document2 != null)
+                {
+                    data.document2Path = await fileService.UploadFileAsync(
+                        data.document2,
+                        folderPath,
+                        allowedExtensions: null
+                    );
+                }
+
+                bool res = await _services.insertTask(data);
+
+                if (res)
+                {
+                    return Ok(ApiResponse<object>.SuccessResponse(
+                         null,
+                         "Task Create & Assign inserted successfully"
+                     ));
+                }
+                else
+                {
+                    return BadRequest(ApiResponse<object>.FailureResponse(
+                        "Some error occurred while saving Task Create & Assign response",
+                        400
+                    ));
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<object>.FailureResponse(
+                   $"Internal server error: {ex.Message}",
+                   500
+               ));
+            }
+        }
+
 
         #endregion
     }

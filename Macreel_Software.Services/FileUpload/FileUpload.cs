@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Http;
 namespace Macreel_Software.Services.FileUpload.Services
 {
 
-
     public class FileUploadService
     {
         public async Task<string> UploadFileAsync(IFormFile file, string folderPath, string[] allowedExtensions = null, long maxFileSize = 10485760)
@@ -50,6 +49,7 @@ namespace Macreel_Software.Services.FileUpload.Services
         }
     }
    
+
 
 
 

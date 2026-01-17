@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using FirebaseAdmin.Messaging;
 using Macreel_Software.Models;
 using Macreel_Software.Models.Common;
+using Macreel_Software.Models.Employee;
 using Macreel_Software.Models.Master;
 using Macreel_Software.Services.AttendanceUpload;
 using Microsoft.AspNetCore.Http;
@@ -1432,6 +1433,46 @@ namespace Macreel_Software.DAL.Admin
             }
         }
 
+
+
+        #endregion
+
+
+        #region task 
+
+        public async Task<bool> insertTask(Taskassign data)
+        {
+            try
+            {
+                using SqlCommand cmd = new SqlCommand("sp_assignTask", _conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@action", "insert");
+                cmd.Parameters.AddWithValue("@id", data.id);
+                cmd.Parameters.AddWithValue("@empId", data.empId);
+                cmd.Parameters.AddWithValue("@title", data.title);
+                cmd.Parameters.AddWithValue("@description", data.description);
+                cmd.Parameters.AddWithValue("@completedDate", data.CompletedDate);
+                cmd.Parameters.AddWithValue("@assignedBy", data.assignedBy);
+                cmd.Parameters.AddWithValue("@document1", data.document1Path ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@document2", data.document2Path ?? (object)DBNull.Value);
+
+                if (_conn.State == ConnectionState.Closed)
+                    await _conn.OpenAsync();
+
+                int rows = await cmd.ExecuteNonQueryAsync();
+                return rows > 0;
+            }
+            catch
+            {
+                throw;
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    await _conn.CloseAsync();
+            }
+        }
 
 
         #endregion
