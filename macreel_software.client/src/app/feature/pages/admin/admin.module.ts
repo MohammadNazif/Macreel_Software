@@ -20,6 +20,7 @@ import { AddLeaveTypeComponent } from './add-leave-type/add-leave-type.component
 import { AddTechnologyComponent } from './add-technology/add-technology.component';
 import { AssignLeaveComponent } from './assign-leave/assign-leave.component';
 import { AllEmployeeLeaveListComponent } from './all-employee-leave-list/all-employee-leave-list.component';
+import { AddProjectComponent } from './add-project/add-project.component';
 
 
 @NgModule({
@@ -34,6 +35,7 @@ import { AllEmployeeLeaveListComponent } from './all-employee-leave-list/all-emp
     AddTechnologyComponent,
     AssignLeaveComponent,
     AllEmployeeLeaveListComponent,
+    AddProjectComponent,
     
 
   ],
