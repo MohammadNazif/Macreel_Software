@@ -47,10 +47,6 @@ export class ManageEmployeeService {
     return this.http.get(`${this.baseUrl}Admin/getEmployeeById?id=${id}`);
   }
 
-  // updateEmployee(id: number, data: any) {
-  //   return this.http.post(`${this.baseUrl}Admin/updateEmployeeRegistration?id=${id}`, data);
-  // }
-
   updateEmployee(data: FormData) {
     return this.http.post(
       `${this.baseUrl}Admin/updateEmployeeRegistration`, data

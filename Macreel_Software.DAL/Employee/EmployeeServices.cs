@@ -163,7 +163,6 @@ namespace Macreel_Software.DAL.Employee
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
 
-                    cmd.Parameters.AddWithValue("@action", "insertLeave");
                     cmd.Parameters.AddWithValue("@id", data.id);
                     cmd.Parameters.AddWithValue("@empId", data.empId);
                     cmd.Parameters.AddWithValue("@fromDate", fromDate);
@@ -171,6 +170,7 @@ namespace Macreel_Software.DAL.Employee
                     cmd.Parameters.AddWithValue("@leaveType", data.leaveId);
                     cmd.Parameters.AddWithValue("@description", data.description);
                     cmd.Parameters.AddWithValue("@leaveCount", leaveCount);
+                    cmd.Parameters.AddWithValue("@action", data.id>0? "updateApplyLeave" : "insertLeave");
 
                     if (_conn.State == ConnectionState.Closed)
                         await _conn.OpenAsync();
@@ -187,6 +187,197 @@ namespace Macreel_Software.DAL.Employee
             {
                 if (_conn.State == ConnectionState.Open)
                     await _conn.CloseAsync();
+            }
+        }
+
+
+
+        public async Task<ApiResponse<List<applyLeave>>> applyLeaveListByEmpId(int empId, string? searchTerm,
+     int? pageNumber, int? pageSize)
+        {
+            List<applyLeave> list = new();
+            int totalRecords = 0;
+
+            try
+            {
+                using SqlCommand cmd = new SqlCommand("sp_applyLeave", _conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@action", "getAllAppliedLeave");
+
+                cmd.Parameters.AddWithValue("@empId", empId);
+
+                cmd.Parameters.AddWithValue(
+                    "@searchTerm",
+                    string.IsNullOrWhiteSpace(searchTerm) ? (object)DBNull.Value : searchTerm
+                );
+
+                cmd.Parameters.AddWithValue(
+                    "@pageNumber",
+                    pageNumber.HasValue ? (object)pageNumber.Value : DBNull.Value
+                );
+
+                cmd.Parameters.AddWithValue(
+                    "@pageSize",
+                    pageSize.HasValue ? (object)pageSize.Value : DBNull.Value
+                );
+
+
+                if (_conn.State == ConnectionState.Closed)
+                    await _conn.OpenAsync();
+
+                using SqlDataReader sdr = await cmd.ExecuteReaderAsync();
+
+                while (await sdr.ReadAsync())
+                {
+                    if (totalRecords == 0 && sdr["TotalRecords"] != DBNull.Value)
+                        totalRecords = Convert.ToInt32(sdr["TotalRecords"]);
+
+                    list.Add(new applyLeave
+                    {
+                        id = Convert.ToInt32(sdr["id"]),
+                        empId = sdr["empId"] as int?,
+                        leaveId= sdr["leaveType"] as int?,
+                        fromDate = sdr["fromDate"] != DBNull.Value ? Convert.ToDateTime(sdr["fromDate"]):null,
+                        toDate = sdr["toDate"] != DBNull.Value ? Convert.ToDateTime(sdr["toDate"]):null, 
+                        leaveCount = sdr["leaveCount"] as int?,
+                        leaveName = sdr["leaveName"]?.ToString(),
+                        description = sdr["description"]?.ToString(),
+                        applieddate = sdr["appliedDate"] != DBNull.Value ? Convert.ToDateTime(sdr["appliedDate"]):null,
+                    });
+                }
+
+                if (pageNumber.HasValue && pageSize.HasValue)
+                {
+                    return ApiResponse<List<applyLeave>>.PagedResponse(
+                        list,
+                        pageNumber.Value,
+                        pageSize.Value,
+                        totalRecords,
+                        list.Any()
+                            ? "Assigned leave list fetched successfully"
+                            : "No assigned leave found");
+                }
+
+                var response = ApiResponse<List<applyLeave>>.SuccessResponse(
+                    list,
+                    list.Any()
+                        ? "Assigned leave list fetched successfully"
+                        : "No assigned leave found");
+
+                response.TotalRecords = totalRecords;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<List<applyLeave>>.FailureResponse(
+                    ex.Message,
+                    500,
+                    "ASSIGNED_LEAVE_FETCH_ERROR");
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    await _conn.CloseAsync();
+            }
+        }
+
+
+        public async Task<ApiResponse<List<applyLeave>>> getAllApplyLeaveById(int id , int empId)
+        {
+            List<applyLeave> list = new();
+
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("sp_applyLeave", _conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@action", "getAppliedLeaveById");
+                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.Parameters.AddWithValue("@empId", empId);
+
+                    if (_conn.State != ConnectionState.Open)
+                        await _conn.OpenAsync();
+
+                    using (SqlDataReader sdr = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await sdr.ReadAsync())
+                        {
+                            list.Add(new applyLeave
+                            {
+                                id = Convert.ToInt32(sdr["id"]),
+                                empId = sdr["empId"] as int?,
+                                leaveId = sdr["leaveType"] as int?,
+                                fromDate = sdr["fromDate"] != DBNull.Value ? Convert.ToDateTime(sdr["fromDate"]) : null,
+                                toDate = sdr["toDate"] != DBNull.Value ? Convert.ToDateTime(sdr["toDate"]) : null,
+                                leaveCount = sdr["leaveCount"] as int?,
+                                leaveName = sdr["leaveName"]?.ToString(),
+                                description = sdr["description"]?.ToString(),
+                                applieddate = sdr["appliedDate"] != DBNull.Value ? Convert.ToDateTime(sdr["appliedDate"]) : null,
+                            });
+                        }
+                    }
+                }
+
+                if (!list.Any())
+                {
+                    return ApiResponse<List<applyLeave>>.FailureResponse(
+                        "Apply leave not found",
+                        404,
+                        "APPLY_LEAVE_FOUND"
+                    );
+                }
+
+
+                return ApiResponse<List<applyLeave>>.SuccessResponse(
+                    list,
+                    "Apply leave fetched successfully"
+                );
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<List<applyLeave>>.FailureResponse(
+                    ex.Message,
+                    500,
+                    "APPLY_LEAVE_ERROR"
+                );
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    await _conn.CloseAsync();
+            }
+        }
+
+
+        public async Task<bool> deleteApplyLeaveById(int id,int empId)
+        {
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("sp_applyLeave", _conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@action", "deleteAppliedLeaveByid");
+                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.Parameters.AddWithValue("@empId", empId);
+
+                    if (_conn.State != ConnectionState.Open)
+                        await _conn.OpenAsync();
+
+                    int rowsAffected = await cmd.ExecuteNonQueryAsync();
+                    return rowsAffected > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    _conn.CloseAsync();
             }
         }
 
