@@ -12,11 +12,11 @@ namespace Macreel_Software.Server.Controllers
         private readonly IEmployeeService _service;
         private readonly int _userId;
 
-        public EmployeeController(IEmployeeService service,IHttpContextAccessor http)
+        public EmployeeController(IEmployeeService service, IHttpContextAccessor http)
         {
             _service = service;
             var user = http.HttpContext?.User;
-            if(user != null && user.Identity?.IsAuthenticated == true)
+            if (user != null && user.Identity?.IsAuthenticated == true)
             {
                 _userId = Convert.ToInt32(user.FindFirst("UserId")?.Value);
             }
@@ -37,18 +37,18 @@ namespace Macreel_Software.Server.Controllers
 
             try
             {
+                data.empId = _userId;
                 bool res = await _service.insertResponseByEmpId(data);
 
                 if (res)
                 {
                     return Ok(ApiResponse<object>.SuccessResponse(
                          null,
-                         "RuleBook inserted successfully"
+                         "Response submitted successfully"
                      ));
                 }
                 else
                 {
-
                     return BadRequest(ApiResponse<object>.FailureResponse(
                         "Some error occurred while saving rulebook response",
                         400
@@ -66,12 +66,12 @@ namespace Macreel_Software.Server.Controllers
 
 
         [HttpGet("AssignedLeaveListByEmpId")]
-        public async Task<IActionResult> assignedLeaveList(int empId, string? searchTerm,int? pageNumber,int? pageSize)
+        public async Task<IActionResult> assignedLeaveList(string? searchTerm, int? pageNumber, int? pageSize)
         {
             try
             {
                 ApiResponse<List<assignedLeave>> result =
-                    await _service.AssignedLeaveListByEmpId(empId,searchTerm, pageNumber, pageSize);
+                    await _service.AssignedLeaveListByEmpId(_userId, searchTerm, pageNumber, pageSize);
 
 
                 return StatusCode(result.StatusCode, result);
@@ -118,6 +118,7 @@ namespace Macreel_Software.Server.Controllers
 
             try
             {
+                data.empId = _userId;
                 bool res = await _service.insertApplyLeaveByEmpId(data);
                 if (res)
                 {
@@ -129,7 +130,7 @@ namespace Macreel_Software.Server.Controllers
                 else
                 {
                     return Ok(ApiResponse<object>.FailureResponse(
-                     
+
                        data.id > 0 ? "Some error occured during update applied leave" : "Some error occured during save applied leave",
                        400
                     ));
@@ -147,14 +148,11 @@ namespace Macreel_Software.Server.Controllers
 
 
         [HttpGet("ApplyLeaveListByEmpId")]
-        public async Task<IActionResult> ApplyLeaveListByEmpId(int empId, string? searchTerm, int? pageNumber, int? pageSize)
+        public async Task<IActionResult> ApplyLeaveListByEmpId(string? searchTerm, int? pageNumber, int? pageSize)
         {
             try
             {
-                ApiResponse<List<applyLeave>> result =
-                    await _service.applyLeaveListByEmpId(empId, searchTerm, pageNumber, pageSize);
-
-
+                ApiResponse<List<applyLeave>> result = await _service.applyLeaveListByEmpId(_userId, searchTerm, pageNumber, pageSize);
                 return StatusCode(result.StatusCode, result);
             }
             catch (Exception ex)
@@ -169,12 +167,12 @@ namespace Macreel_Software.Server.Controllers
 
 
         [HttpGet("getAssignLeaveById")]
-        public async Task<IActionResult> getAssignLeaveById(int id,int empId)
+        public async Task<IActionResult> getAssignLeaveById(int id)
         {
             try
             {
 
-                var result = await _service.getAllApplyLeaveById(id,empId);
+                var result = await _service.getAllApplyLeaveById(id, _userId);
 
 
                 return StatusCode(result.StatusCode, result);
@@ -190,11 +188,11 @@ namespace Macreel_Software.Server.Controllers
         }
 
         [HttpDelete("deleteAssignLeaveById")]
-        public async Task<IActionResult> deleteAssignLeaveById(int id,int empId)
+        public async Task<IActionResult> deleteAssignLeaveById(int id)
         {
             try
             {
-                var res = await _service.deleteApplyLeaveById(id,empId);
+                var res = await _service.deleteApplyLeaveById(id, _userId);
                 if (res)
                 {
                     return Ok(new

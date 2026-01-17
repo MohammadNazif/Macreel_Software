@@ -1,20 +1,8 @@
-// import { Component } from '@angular/core';
-
-// @Component({
-//   selector: 'app-add-technology',
-//   standalone: false,
-//   templateUrl: './add-technology.component.html',
-//   styleUrl: './add-technology.component.css'
-// })
-// export class AddTechnologyComponent {
-
-// }
-
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { ManageMasterdataService } from '../../../../core/services/manage-masterdata.service';
 import Swal from 'sweetalert2';
+import { ManageMasterdataService } from '../../../../../core/services/manage-masterdata.service';
 
 @Component({
   selector: 'app-add-technology',
@@ -31,7 +19,7 @@ export class AddTechnologyComponent implements OnInit {
   dataSource = new MatTableDataSource<TechnologyElement>([]);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-   ngAfterViewInit() {
+  ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
 
@@ -42,7 +30,7 @@ export class AddTechnologyComponent implements OnInit {
 
   editingId: number | null = null;
 
-  constructor(private master: ManageMasterdataService) {}
+  constructor(private master: ManageMasterdataService) { }
 
   ngOnInit(): void {
     this.loadTechnology();
@@ -70,56 +58,53 @@ export class AddTechnologyComponent implements OnInit {
     this.loadTechnology();
   }
 
-  // applyFilter(event: Event) {
-  //   const filterValue = (event.target as HTMLInputElement).value.trim();
-  //   this.searchText = filterValue;
-  //   this.pageNumber = 1;
-  //   this.loadTechnology();
-  // }
-
   applyFilter(event: Event) {
-  const filterValue = (event.target as HTMLInputElement).value.trim();
-  this.searchText = filterValue;
-  this.pageNumber = 1;
+    const filterValue = (event.target as HTMLInputElement).value.trim();
+    this.searchText = filterValue;
+    this.pageNumber = 1;
 
-  // 🔥 IMPORTANT FIX
-  if (this.paginator) {
-    this.paginator.pageIndex = 0;
+    // 🔥 IMPORTANT FIX
+    if (this.paginator) {
+      this.paginator.pageIndex = 0;
+    }
+
+    this.loadTechnology();
   }
-
-  this.loadTechnology();
-}
 
 
   onSubmit() {
-  if (!this.softwareType || !this.technologyName) {
-    Swal.fire({ icon: 'warning', title: 'Please fill all fields' });
-    return;
-  }
-
-  const payload = {
-    id: this.editingId || 0,
-    softwareType: this.softwareType,
-    technologyName: this.technologyName
-  };
-
-  this.master.addOrUpdateTechnology(payload).subscribe({
-    next: () => {
-      Swal.fire({
-        icon: 'success',
-        title: this.editingId ? 'Updated Successfully' : 'Added Successfully',
-        showConfirmButton: false,
-        timer: 1500
-      });
-
-      this.resetForm();
-      this.loadTechnology();
-    },
-    error: () => {
-      Swal.fire({ icon: 'error', title: 'Error saving data' });
+    if (!this.softwareType || !this.technologyName) {
+      Swal.fire({ icon: 'warning', title: 'Please fill all fields' });
+      return;
     }
-  });
-}
+
+    const payload = {
+      id: this.editingId || 0,
+      softwareType: this.softwareType,
+      technologyName: this.technologyName
+    };
+
+    this.master.addOrUpdateTechnology(payload).subscribe({
+      next: (res) => {
+        if (res.success) {
+          Swal.fire({
+            icon: 'success',
+            title: this.editingId ? 'Updated Successfully' : 'Added Successfully',
+            showConfirmButton: false,
+            timer: 1500
+          });
+        } else {
+          Swal.fire("Warning", res.message, "error")
+        }
+
+        this.resetForm();
+        this.loadTechnology();
+      },
+      error: () => {
+        Swal.fire({ icon: 'error', title: 'Error saving data' });
+      }
+    });
+  }
 
   editTechnology(row: TechnologyElement) {
     this.master.getTechnologyById(row.id).subscribe({

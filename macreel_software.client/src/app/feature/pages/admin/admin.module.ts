@@ -11,13 +11,9 @@ import { MatInputModule } from '@angular/material/input';
 
 import { AdminRoutingModule } from './admin-routing.module';
 import { EmployeeTaskSheetComponent } from './employee-task-sheet/employee-task-sheet.component';
-import { AddDepartmentComponent } from './add-department/add-department.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { AddRoleComponent } from './add-role/add-role.component';
-import { AddDesignationComponent } from './add-designation/add-designation.component';
 import { EmployeeListComponent } from './employee-list/employee-list.component';
 import { AddLeaveTypeComponent } from './add-leave-type/add-leave-type.component';
-import { AddTechnologyComponent } from './add-technology/add-technology.component';
 import { AssignLeaveComponent } from './assign-leave/assign-leave.component';
 import { UploadAttendanceComponent } from './upload-attendance/upload-attendance.component';
 import { ViewAttendanceComponent } from './view-attendance/view-attendance.component';
@@ -34,13 +30,9 @@ import {  ViewProjectComponent } from './view-project/view-project.component';
 @NgModule({
   declarations: [
     EmployeeTaskSheetComponent,
-    AddDepartmentComponent,
     DashboardComponent,
-    AddRoleComponent,
-    AddDesignationComponent,
     EmployeeListComponent,
     AddLeaveTypeComponent,
-    AddTechnologyComponent,
     AssignLeaveComponent,
     UploadAttendanceComponent,
     ViewAttendanceComponent,
@@ -62,7 +54,7 @@ import {  ViewProjectComponent } from './view-project/view-project.component';
     MatSortModule,
     MatInputModule,
     ReactiveFormsModule
-    
+
 ],
 providers:[
   DatePipe

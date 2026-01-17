@@ -89,7 +89,7 @@ namespace Macreel_Software.Server.Controllers
                 Expires = DateTime.UtcNow.AddSeconds(20)
             });
 
-            return Ok(new { message = "Token refreshed" });
+            return Ok(new { message = "Token refreshed",token = newAccessToken });
         }
 
         [HttpPost("logout")]
