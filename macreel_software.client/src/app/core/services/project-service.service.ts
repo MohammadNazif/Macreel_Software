@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { PaginatedResult, Project } from '../models/interface';
+
+
 
 @Injectable({ providedIn: 'root' })
 export class ProjectService {
@@ -11,17 +14,13 @@ export class ProjectService {
   constructor(private readonly http: HttpClient) {}
 
   // Get projects with table-only loader (disable global loader)
-  getProjects(
-    searchTerm: string = '',
-    pageNumber: number = 1,
-    pageSize: number = 20
-  ): Observable<any> {
+ getProjects(search: string, page: number, size: number): Observable<PaginatedResult<Project>> {
+    let params = new HttpParams()
+      .set('searchTerm', search)
+      .set('pageNumber', page)
+      .set('pageSize', size);
 
-const headers = new HttpHeaders({ 'ignoreLoadingBar': 'true' });
-    return this.http.get(`${this.baseUrl}Admin/getAllProject`, {
-      params: { searchTerm, pageNumber, pageSize },
-      headers 
-    });
+    return this.http.get<PaginatedResult<Project>>(`${this.baseUrl}Admin/getAllProject`, { params });
   }
 
   // Delete project with table-only loader

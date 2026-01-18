@@ -32,7 +32,8 @@ getProjectDetailsByEmpId(empId: number): Observable<any> {
 addProject(formData: FormData): Observable<any> {
   return this.http.post<any>(`${this.baseUrl}Admin/add-update-Project`, formData);
 }
-
-
+getProjectById(id: number): Observable<any> {
+  return this.http.get<any>(`${this.baseUrl}Admin/getAllProjectById?id=${id}`);
+}
 
 }
