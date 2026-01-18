@@ -41,7 +41,6 @@ namespace Macreel_Software.DAL.Auth
                 if (await dr.ReadAsync())
                 {
                     string encryptedDbPassword = dr["Password"].ToString()!;
-                    //string enteredPass = _pass.EncryptPassword(enteredPassword);
                     string decryptedDbPassword = _pass.DecryptPassword(encryptedDbPassword);
 
                  
@@ -50,8 +49,8 @@ namespace Macreel_Software.DAL.Auth
                         user = new UserData
                         {
                             UserId = dr["UserId"] != DBNull.Value? Convert.ToInt32(dr["UserId"]):0,
-                            Username = dr["UserName"].ToString(),
-                            Role = dr["Role"].ToString()
+                            Username = dr["UserName"].ToString()!,
+                            Role = dr["Role"].ToString()!
                         };
                     }
                 }
@@ -151,8 +150,8 @@ namespace Macreel_Software.DAL.Auth
                     user = new UserData
                     {
                         UserId = Convert.ToInt32(dr["UserId"]),
-                        Username = dr["UserName"].ToString(),
-                        Role = dr["Role"].ToString()
+                        Username = dr["UserName"].ToString()!,
+                        Role = dr["Role"].ToString()!
                     };
                 }
             }

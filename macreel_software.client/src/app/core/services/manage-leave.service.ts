@@ -12,9 +12,9 @@ import { environment } from '../../../environments/environment';
 })
 export class ManageLeaveService {
 
-  private baseUrl = environment.apiUrl;
+  private readonly baseUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) { }
 
   // GET ALL (pagination + search)
   getAllLeave(searchTerm = '', pageNumber = 1, pageSize = 10) {
@@ -31,12 +31,13 @@ export class ManageLeaveService {
   }
 
   // INSERT / UPDATE
- insertLeave(data: any) {
-  return this.http.post<any>(
-    `${this.baseUrl}Admin/insertLeave`,
-    data
-  );
-}
+  insertLeave(data: any) {
+    return this.http.post<any>(
+      `${this.baseUrl}Admin/insertLeave`,
+      data
+    );
+  }
+
   // DELETE
   deleteLeaveById(id: number) {
     return this.http.delete<any>(
@@ -45,16 +46,15 @@ export class ManageLeaveService {
   }
 
   assignLeaveToEmployee(data: any) {
-  return this.http.post<any>(
-    `${this.baseUrl}Admin/AssignLeave`,
-    data
-  );
-}
+    return this.http.post<any>(
+      `${this.baseUrl}Admin/AssignLeave`,
+      data
+    );
+  }
 
   // GET ASSIGNED LEAVE FOR EMPLOYEE
   getAssignedLeaveById(empId: number) {
     return this.http.get<any>(`${this.baseUrl}Admin/getAssignedLeaveById?empId=${empId}`);
   }
-
 
 }
