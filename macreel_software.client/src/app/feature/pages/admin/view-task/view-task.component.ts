@@ -6,6 +6,7 @@ import { PaginatedList } from '../../../../core/utils/paginated-list';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { TableColumn, Task } from '../../../../core/models/interface';
+import { Router } from '@angular/router';
 
 
 
@@ -24,13 +25,14 @@ export class ViewTaskComponent implements OnInit {
     { key: 'title', label: 'Task' },
     { key: 'assignedBy', label: 'Assigned By' },
     { key: 'assignedDate', label: 'Assigned Date', type: 'date' },
-    // { key: 'completedDate', label: 'Completion Date', type: 'date' },
-    { key: 'status', label: 'Status' }
+    { key: 'completedDate', label: 'Completion Date', type: 'date' },
+    { key: 'taskStatus', label: 'Status' }
   ];
 
   constructor(
     private fb: FormBuilder,
-    private taskService : TaskService
+    private taskService : TaskService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -55,10 +57,14 @@ export class ViewTaskComponent implements OnInit {
   onScroll(event: Event): void {
     this.paginator.handleScroll(event, this.searchForm.value.search);
   }
+  
+onEdit(task: Task) {
+  console.log('Edit task:', task);
 
-  onEdit(task: Task) {
-    console.log('Edit task:', task);
-  }
+  this.router.navigate(['/home/admin/add-task'], {
+    state: { task }
+  });
+}
 
   onDelete(task: Task) {
     Swal.fire({

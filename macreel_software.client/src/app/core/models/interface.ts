@@ -18,7 +18,7 @@ export interface Task {
   assignedBy: string;
   assignedDate: string;
   completionDate: string;
-  status: 'Pending' | 'In Progress' | 'Completed';
+  taskStatus: string;
 }
 
 export interface Project {
@@ -66,7 +66,7 @@ export interface Task {
   empName: string;
   title: string;
   description: string;
-  completedDate: string; // or Date
+  completedDate: Date; // or Date
   assignedBy: string;
   document1: string | null;
   document2: string | null;

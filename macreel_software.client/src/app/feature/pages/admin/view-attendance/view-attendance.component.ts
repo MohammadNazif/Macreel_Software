@@ -43,30 +43,6 @@ export class ViewAttendanceComponent implements OnInit {
   }
 
   loadAttendance() {
-    if (this.filterForm.invalid) return;
-
-    this.isLoading = true;
-    this.attendanceList = [];
-    this.attendanceSummary = null;
-
-    // Simulate API call
-    setTimeout(() => {
-      // Sample data, replace with API
-      this.attendanceList = [
-        { date: new Date(), day: 'Monday', status: 'Present', inTime: '09:00', outTime: '18:00' },
-        { date: new Date(), day: 'Tuesday', status: 'Absent', inTime: '', outTime: '' },
-        { date: new Date(), day: 'Wednesday', status: 'Half Day', inTime: '09:00', outTime: '13:00' }
-      ];
-
-      // Summary calculation
-      this.attendanceSummary = {
-        total: this.attendanceList.length,
-        present: this.attendanceList.filter(a => a.status === 'Present').length,
-        absent: this.attendanceList.filter(a => a.status === 'Absent').length,
-        halfDay: this.attendanceList.filter(a => a.status === 'Half Day').length
-      };
-
-      this.isLoading = false;
-    }, 1000);
+   
   }
 }
