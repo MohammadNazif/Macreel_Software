@@ -183,46 +183,7 @@ namespace Macreel_Software.Server.Controllers
                     "SERVER_ERROR"
                 ));
             }
-        }
-
-        [HttpDelete("deleteAssignLeaveById")]
-        public async Task<IActionResult> deleteAssignLeaveById(int id)
-        {
-            try
-            {
-                var res = await _service.deleteApplyLeaveById(id, _userId);
-                if (res)
-                {
-                    return Ok(new
-                    {
-                        status = true,
-                        StatusCode = 200,
-                        message = "Apply leave deleted successfully!!!"
-
-                    });
-                }
-                else
-                {
-                    return Ok(new
-                    {
-                        status = false,
-                        StatusCode = 404,
-                        message = "Apply leave not deleted!!"
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-
-                return StatusCode(500, new
-                {
-                    status = false,
-                    StatusCode = 500,
-                    message = "An error occurred while deleting Apply leave.",
-                    error = ex.Message
-                });
-            }
-        }
+        }        
 
         [HttpGet("getEmpDashBoardCountByEmpId")]
         public async Task<IActionResult> GetEmpDashBoardCountByEmpId()
