@@ -23,7 +23,7 @@ export class DashboardComponent {
   getDashboardCount(): void {
     this.dashboardService.getEmpDashboardCount().subscribe({
       next: (res) => {
-        this.dashboardCount = res;
+         this.dashboardCount = res.data;
         this.isLoading = false;
       },
       error: (err) => {

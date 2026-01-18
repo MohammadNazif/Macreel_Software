@@ -66,4 +66,10 @@ namespace Macreel_Software.Models.Common
 
         public string? rule_Book_Path { get; set; }
     }
+
+    public class sendMailForReg
+    {
+        public string email { get; set; }
+        public string accessId { get; set; }
+    }
 }

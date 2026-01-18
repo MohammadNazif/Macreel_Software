@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Macreel_Software.Models;
+﻿using Macreel_Software.Models;
 using Macreel_Software.Models.Master;
+
 using Microsoft.AspNetCore.Http;
 
 namespace Macreel_Software.DAL.Admin
@@ -40,7 +36,7 @@ namespace Macreel_Software.DAL.Admin
         Task<ApiResponse<List<project>>> GetEmpProjectDetailByEmpId(int empId);
 
         Task<bool> insertTask(Taskassign data);
-        Task<ApiResponse<List<Taskassign>>> getAllAssignTask(string? searchTerm, int? pageNumber, int? pageSize);
+        Task<ApiResponse<List<Taskassign>>> getAllAssignTask(string? searchTerm, int? pageNumber, int? pageSize, int? empId = null);
 
         Task<ApiResponse<List<Taskassign>>> getAllAssignTaskById(int id);
         Task<bool> deleteTaskById(int id);
