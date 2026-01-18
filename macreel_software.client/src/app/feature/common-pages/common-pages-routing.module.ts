@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AddEmployeeComponent } from './add-employee/add-employee.component';
 import { EmployeeProfileComponent } from './employee-profile/employee-profile.component';
+import { GenericTableComponent } from './generic-table/generic-table.component';
 
 const routes: Routes = [
   {path:'',redirectTo:'add-employee',pathMatch:'full'},

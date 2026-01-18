@@ -1,3 +1,4 @@
+<<<<<<< HEAD:macreel_software.client/src/app/core/models/interface.ts
 export interface LeaveRequest {
   id: number
   appliedDate: Date
@@ -7,6 +8,10 @@ export interface LeaveRequest {
   description: string
   status: string 
 }
+=======
+import { TemplateRef } from "@angular/core";
+
+>>>>>>> 8ad8211 (reusable Component):macreel_software.client/src/app/core/models/employee.interface.ts
 export interface Task {
   id: number;
   title: string;
@@ -32,6 +37,7 @@ export interface Project {
   paidAds?: string;
   gmb?: string;
 }
+<<<<<<< HEAD:macreel_software.client/src/app/core/models/interface.ts
 export interface LeaveRow {
   srNo: number;
   id: number;
@@ -47,3 +53,39 @@ export interface EmpDashboardCount {
   CompletedTasks: number;
 }
 
+=======
+export interface ApiResponse<T> {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data: T;
+}
+export interface Task {
+  id: number;
+  empId: number;
+  empName: string;
+  title: string;
+  description: string;
+  completedDate: string; // or Date
+  assignedBy: string;
+  document1: string | null;
+  document2: string | null;
+  document1Path: string | null;
+  document2Path: string | null;
+}
+export interface PaginatedResult<T> {
+  data: T[];
+  totalPages: number;
+}
+export type TableColumnType = 'text' | 'date' | 'custom';
+export type TableColumnAlign = 'left' | 'center' | 'right';
+
+export interface TableColumn<T> {
+  key: keyof T;
+  label: string;
+  type?: TableColumnType;
+  align?: TableColumnAlign;
+  width?: string;
+  template?: TemplateRef<any>;
+}
+>>>>>>> 8ad8211 (reusable Component):macreel_software.client/src/app/core/models/employee.interface.ts
