@@ -38,3 +38,12 @@ export interface LeaveRow {
   leaveName: string;
   description: string;
 }
+export interface EmpDashboardCount {
+  TotalProjects: number;
+  OngoingProjects : number;
+  AssignedLeave: number;
+  RequestedLeave: number;
+  TotalTasks: number;
+  CompletedTasks: number;
+}
+
