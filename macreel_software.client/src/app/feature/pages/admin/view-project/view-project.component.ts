@@ -1,28 +1,35 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+
 import { ProjectService } from '../../../../core/services/project-service.service';
-import { Project } from '../../../../core/models/employee.interface';
+
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { AddProjectService } from '../../../../core/services/add-project.service';
+import { Project, TableColumn } from '../../../../core/models/interface';
+
+import { PaginatedList } from '../../../../core/utils/paginated-list';
+
 
 @Component({
   selector: 'app-view-project',
-  standalone: false,
+  standalone:false,
   templateUrl: './view-project.component.html',
   styleUrls: ['./view-project.component.css']
 })
 export class ViewProjectComponent implements OnInit {
 
-  projects: Project[] = [];
   searchForm!: FormGroup;
+  paginator!: PaginatedList<Project>;
 
-  tableLoading = false;   // ✅ only ONE loader
-  pageNumber = 1;
-  pageSize = 30;
-  totalPages = 0;
-  hasMore = true;
+  projectColumns: TableColumn<Project>[] = [
+    { key: 'projectTitle', label: 'Project' },
+    { key: 'category', label: 'Category' },
+    { key: 'startDate', label: 'Start Date', type: 'date' },
+    { key: 'completionDate', label: 'Completion Date', type: 'date' },
+    { key: 'endDate', label: 'Delivery Date', type: 'date' }
+  ];
 
   constructor(
     private fb: FormBuilder,
@@ -33,60 +40,31 @@ export class ViewProjectComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-
     this.searchForm = this.fb.group({
       search: ['']
     });
 
-    this.loadProjects();
+    this.paginator = new PaginatedList<Project>(
+      30,
+      (search, page, size) => this.projectService.getProjects(search, page, size)
+    );
 
-    // ✅ Debounced search
+    this.paginator.load();
+
     this.searchForm.get('search')!
       .valueChanges
       .pipe(
         debounceTime(400),
         distinctUntilChanged()
       )
-      .subscribe(() => this.resetAndLoad());
-  }
-loadProjects(): void {
-  if (this.tableLoading || !this.hasMore) return;
-
-  this.tableLoading = true;
-
-  this.projectService.getProjects(
-    this.searchForm.value.search,
-    this.pageNumber,
-    this.pageSize
-  ).subscribe({
-    next: (res) => {
-      this.projects.push(...res.data);
-      this.totalPages = res.totalPages;
-      if (this.pageNumber >= this.totalPages) this.hasMore = false;
-      this.pageNumber++;
-      this.tableLoading = false; // ✅ hide loader
-    },
-    error: () => {
-      this.tableLoading = false; // ✅ hide loader on error
-    }
-  });
-}
-
-  resetAndLoad(): void {
-    this.projects = [];
-    this.pageNumber = 1;
-    this.totalPages = 0;
-    this.hasMore = true;
-    this.loadProjects();
+      .subscribe(search => {
+        this.paginator.reset();
+        this.paginator.load(search);
+      });
   }
 
   onScroll(event: Event): void {
-    const el = event.target as HTMLElement;
-
-    // ✅ more stable threshold
-    if (el.scrollTop + el.clientHeight >= el.scrollHeight - 80) {
-      this.loadProjects();
-    }
+    this.paginator.handleScroll(event, this.searchForm.value.search);
   }
 
 // edit(p: Project) {
@@ -125,14 +103,14 @@ edit(p: Project) {
       text: `Delete project "${p.projectTitle}"?`,
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Yes, delete',
-      cancelButtonText: 'Cancel'
+      confirmButtonText: 'Yes, delete'
     }).then(result => {
       if (result.isConfirmed) {
         this.projectService.delete(p.id).subscribe({
           next: () => {
             Swal.fire('Deleted!', 'Project has been deleted.', 'success');
-            this.resetAndLoad();   // ✅ IMPORTANT FIX
+            this.paginator.reset();
+            this.paginator.load(this.searchForm.value.search);
           },
           error: (err) => {
             Swal.fire(

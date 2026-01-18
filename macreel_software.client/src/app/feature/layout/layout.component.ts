@@ -151,7 +151,6 @@ export class LayoutComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    debugger
     this.currentRole = this.auth.getRole() as any;
     this.checkScreen();
     window.addEventListener('resize', () => this.checkScreen());

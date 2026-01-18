@@ -26,13 +26,14 @@ namespace Macreel_Software.Server.Controllers
             FileUploadService fileUploadService,
             IWebHostEnvironment env,
             MailSender mailservice,
-            PasswordEncrypt pass)
+            PasswordEncrypt pass, IHttpContextAccessor http)
         {
             _services = service;
             _fileUploadService = fileUploadService;
             _env = env;
             _mailservice = mailservice;
             _pass = pass;
+        
         }
 
         [HttpGet("checkauth")]
@@ -356,29 +357,6 @@ namespace Macreel_Software.Server.Controllers
                     statusCode = 500,
                     message = "Internal Server error!!"
                 });
-            }
-        }
-
-
-
-        [HttpGet("getAllLeave")]
-        public async Task<IActionResult> getAllLeave(string? searchTerm = null, int? pageNumber = null, int? pageSize = null)
-        {
-            try
-            {
-                ApiResponse<List<Leave>> result =
-                    await _services.getAllLeave(searchTerm, pageNumber, pageSize);
-
-
-                return StatusCode(result.StatusCode, result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ApiResponse<List<role>>.FailureResponse(
-                    "An error occurred while fetching leave",
-                    500,
-                    "SERVER_ERROR"
-                ));
             }
         }
 

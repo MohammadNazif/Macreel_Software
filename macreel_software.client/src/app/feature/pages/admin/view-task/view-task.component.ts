@@ -1,7 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 import { TaskService } from '../../../../core/services/add-task.service';
-import { Task } from '../../../../core/models/employee.interface';
+
+import { PaginatedList } from '../../../../core/utils/paginated-list';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { TableColumn, Task } from '../../../../core/models/interface';
+
 
 
 @Component({
@@ -12,43 +17,46 @@ import { Task } from '../../../../core/models/employee.interface';
 })
 export class ViewTaskComponent implements OnInit {
 
-  tasks: Task[] = [];
-  isLoading = false;
+  searchForm!: FormGroup;
+  paginator!: PaginatedList<Task>;
 
-  constructor(private taskService : TaskService) {}
+  taskColumns: TableColumn<Task>[] = [
+    { key: 'title', label: 'Task' },
+    { key: 'assignedBy', label: 'Assigned By' },
+    { key: 'assignedDate', label: 'Assigned Date', type: 'date' },
+    // { key: 'completedDate', label: 'Completion Date', type: 'date' },
+    { key: 'status', label: 'Status' }
+  ];
+
+  constructor(
+    private fb: FormBuilder,
+    private taskService : TaskService
+  ) {}
 
   ngOnInit(): void {
-    this.loadTasks();
-  }
+    this.searchForm = this.fb.group({ search: [''] });
 
-  loadTasks() {
-    this.isLoading = true;
-    this.taskService.getTasks().subscribe({
-      next: (res: Task[]) => {
-        this.tasks = res;
-        this.isLoading = false;
-      },
-      error: (err) => {
-        this.isLoading = false;
-        Swal.fire('Error', err?.error?.message || 'Failed to load tasks', 'error');
-      }
+    this.paginator = new PaginatedList<Task>(
+      20,
+      (search, page, size) => this.taskService.getTasks(search, page, size)
+    );
+
+    this.paginator.load();
+
+    this.searchForm.get('search')!.valueChanges.pipe(
+      debounceTime(400),
+      distinctUntilChanged()
+    ).subscribe(search => {
+      this.paginator.reset();
+      this.paginator.load(search);
     });
   }
 
-  onView(task: Task) {
-    Swal.fire({
-      title: task.title,
-      html: `
-        <p><strong>Assigned By:</strong> ${task.assignedBy}</p>
-        <p><strong>Assigned Date:</strong> ${new Date(task.assignedDate).toLocaleDateString()}</p>
-        <p><strong>Completion Date:</strong> ${new Date(task.completionDate).toLocaleDateString()}</p>
-        <p><strong>Status:</strong> ${task.status}</p>
-      `
-    });
+  onScroll(event: Event): void {
+    this.paginator.handleScroll(event, this.searchForm.value.search);
   }
 
   onEdit(task: Task) {
-    // Navigate to edit form (implement routing as needed)
     console.log('Edit task:', task);
   }
 
@@ -65,7 +73,8 @@ export class ViewTaskComponent implements OnInit {
         this.taskService.deleteTask(task.id).subscribe({
           next: () => {
             Swal.fire('Deleted!', 'Task has been deleted.', 'success');
-            this.loadTasks();
+            this.paginator.reset();
+            this.paginator.load(this.searchForm.value.search);
           },
           error: (err) => {
             Swal.fire('Error', err?.error?.message || 'Failed to delete task', 'error');

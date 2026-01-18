@@ -6,9 +6,10 @@ import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { NgxUiLoaderModule, NgxUiLoaderHttpModule } from 'ngx-ui-loader';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
+import { GenericTableComponent } from './feature/common-pages/generic-table/generic-table.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { authInterceptor } from './core/interceptors/auth.interceptor';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+   
 
     NgxUiLoaderModule.forRoot({
       fgsType: 'ball-spin-fade-rotating',
@@ -27,7 +29,11 @@ import { authInterceptor } from './core/interceptors/auth.interceptor';
     }),
     NgxUiLoaderModule,
         NgxUiLoaderHttpModule.forRoot({
-      showForeground: true
+      showForeground: true,
+      excludeRegexp : [
+    'api/Admin/getAllProject',
+    'api/Auth/refresh'
+  ]
     }),
     HttpClientModule,
      SweetAlert2Module.forRoot() 
@@ -35,7 +41,8 @@ import { authInterceptor } from './core/interceptors/auth.interceptor';
   providers: [
     provideHttpClient(
       withInterceptors([authInterceptor])
-    )
+    ),
+    DatePipe
   ],
   bootstrap: [AppComponent]
 })
