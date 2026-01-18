@@ -27,7 +27,11 @@ import { authInterceptor } from './core/interceptors/auth.interceptor';
     }),
     NgxUiLoaderModule,
         NgxUiLoaderHttpModule.forRoot({
-      showForeground: true
+      showForeground: true,
+      excludeRegexp : [
+    'api/Admin/getAllProject',
+    'api/Auth/refresh'
+  ]
     }),
     HttpClientModule,
      SweetAlert2Module.forRoot() 

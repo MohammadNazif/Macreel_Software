@@ -6,13 +6,17 @@ import { environment } from '../../../environments/environment';
 import { jwtDecode } from 'jwt-decode';
 import { AuthService } from '../services/auth.service';
 
+
 let isRefreshing = false;
 const refreshSubject = new BehaviorSubject<boolean>(false);
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const http = inject(HttpClient);
   const router = inject(Router);
   const baseUrl = environment.apiUrl;
+
   const auth = inject(AuthService);
+
+
 
   // Always send cookies
   const authReq = req.clone({
@@ -38,8 +42,9 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         refreshSubject.next(false);
 
         return http.post(`${baseUrl}Auth/refresh`, {}, { withCredentials: true }).pipe(
+
           switchMap((res : any) => {
-            debugger
+
             isRefreshing = false;
             refreshSubject.next(true);
             const decodeToken: any = jwtDecode(res.token);
@@ -53,10 +58,9 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
             isRefreshing = false;
             router.navigate(['/login']);
             return throwError(() => err);
+          
           })
-        );
-      }
-
+    )}
       return throwError(() => error);
     })
   );

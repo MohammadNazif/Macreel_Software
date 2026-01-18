@@ -1,4 +1,3 @@
-// src/app/core/services/task.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
@@ -10,9 +9,9 @@ import { Task } from '../models/employee.interface';
 })
 export class TaskService {
 
-   private baseUrl = environment.apiUrl;
+   private readonly baseUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   getTasks(): Observable<Task[]> {
 
@@ -51,6 +50,6 @@ export class TaskService {
   }
 
   addTask(formData: FormData): Observable<any> {
-    return this.http.post(this.baseUrl, formData);
+    return this.http.post(`${this.baseUrl}Admin/insert-update-Task`, formData);
   }
 }
