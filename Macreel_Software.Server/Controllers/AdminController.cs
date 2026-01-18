@@ -359,29 +359,6 @@ namespace Macreel_Software.Server.Controllers
             }
         }
 
-
-
-        [HttpGet("getAllLeave")]
-        public async Task<IActionResult> getAllLeave(string? searchTerm = null, int? pageNumber = null, int? pageSize = null)
-        {
-            try
-            {
-                ApiResponse<List<Leave>> result =
-                    await _services.getAllLeave(searchTerm, pageNumber, pageSize);
-
-
-                return StatusCode(result.StatusCode, result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ApiResponse<List<role>>.FailureResponse(
-                    "An error occurred while fetching leave",
-                    500,
-                    "SERVER_ERROR"
-                ));
-            }
-        }
-
         [HttpGet("getLeaveById")]
         public async Task<IActionResult> getLeaveById(int id)
         {

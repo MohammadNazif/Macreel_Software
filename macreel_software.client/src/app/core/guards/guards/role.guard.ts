@@ -4,7 +4,6 @@ import { AuthService } from '../../services/auth.service';
 import Swal from 'sweetalert2';
 
 export const roleGuard: CanActivateFn = (route, state) => {
-  debugger
   const authService = inject(AuthService);
   const router = inject(Router);
   const allowedRoles  = route.data['roles'] as string;

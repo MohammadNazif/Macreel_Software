@@ -2,14 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Project } from '../models/employee.interface';
 
 @Injectable({ providedIn: 'root' })
 export class ProjectService {
 
-  private baseUrl = environment.apiUrl;
+  private readonly baseUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   // Get projects with table-only loader (disable global loader)
   getProjects(

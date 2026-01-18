@@ -1,8 +1,10 @@
 ﻿using Macreel_Software.DAL;
+using Macreel_Software.DAL.Admin;
 using Macreel_Software.DAL.Auth;
 using Macreel_Software.DAL.Common;
 using Macreel_Software.Models;
 using Macreel_Software.Models.Common;
+using Macreel_Software.Models.Master;
 using Macreel_Software.Services.FileUpload.Services;
 using Macreel_Software.Services.MailSender;
 using Microsoft.AspNetCore.Http;
@@ -17,13 +19,15 @@ namespace Macreel_Software.Server.Controllers
         private readonly ICommonServices _service;
         private readonly PasswordEncrypt _pass;
         private readonly FileUploadService _fileUploadService;
+        private readonly IAdminServices _adminservice;
 
 
-        public CommonController(ICommonServices service, PasswordEncrypt pass, FileUploadService fileUploadService)
+        public CommonController(ICommonServices service, PasswordEncrypt pass, FileUploadService fileUploadService,IAdminServices adminservice)
         {
             _service = service;
             _pass = pass;
             _fileUploadService = fileUploadService;
+            _adminservice = adminservice;
         }
 
         [HttpGet("getAllStateList")]
@@ -65,6 +69,7 @@ namespace Macreel_Software.Server.Controllers
                 });
             }
         }
+
         [HttpGet("GetCityByStateId")]
         public async Task<IActionResult> getCityByStateId(int stateId)
         {
@@ -129,7 +134,6 @@ namespace Macreel_Software.Server.Controllers
             }
         }
         #endregion
-
 
         #region RuleBook
         [HttpPost("Add-Update-RuleBook")]
@@ -263,6 +267,29 @@ namespace Macreel_Software.Server.Controllers
             }
         }
 
+        #endregion
+
+        #region Leave
+        [HttpGet("getAllLeave")]
+        public async Task<IActionResult> getAllLeave(string? searchTerm = null, int? pageNumber = null, int? pageSize = null)
+        {
+            try
+            {
+                ApiResponse<List<Leave>> result =
+                    await _adminservice.getAllLeave(searchTerm, pageNumber, pageSize);
+
+
+                return StatusCode(result.StatusCode, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<List<role>>.FailureResponse(
+                    "An error occurred while fetching leave",
+                    500,
+                    "SERVER_ERROR"
+                ));
+            }
+        }
         #endregion
     }
 }
