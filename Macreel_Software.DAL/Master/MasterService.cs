@@ -878,7 +878,7 @@ namespace Macreel_Software.DAL.Master
                         {
                             list.Add(new technologyDetails
                             {
-                                id = Convert.ToInt32(sdr["skillId"]),
+                                //id = Convert.ToInt32(sdr["skillId"]),
                                 empId = sdr["empId"] != DBNull.Value ? Convert.ToInt32(sdr["empId"]):(int?)null,
                                 technologyId = sdr["technolgyId"] != DBNull.Value ? Convert.ToInt32(sdr["technolgyId"]):null,
                                 technologyName = sdr["technology"] != DBNull.Value ? sdr["technology"].ToString():null,
