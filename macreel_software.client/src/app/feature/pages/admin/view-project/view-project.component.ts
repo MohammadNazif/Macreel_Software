@@ -4,6 +4,8 @@ import { ProjectService } from '../../../../core/services/project-service.servic
 import { Project } from '../../../../core/models/employee.interface';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
+import { AddProjectService } from '../../../../core/services/add-project.service';
 
 @Component({
   selector: 'app-view-project',
@@ -24,7 +26,10 @@ export class ViewProjectComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private projectService: ProjectService
+    private projectService: ProjectService,
+    private router: Router,
+    private addProjectService: AddProjectService 
+
   ) {}
 
   ngOnInit(): void {
@@ -84,9 +89,35 @@ loadProjects(): void {
     }
   }
 
-  edit(p: Project): void {
-    console.log('Edit', p.id);
-  }
+// edit(p: Project) {
+//   // Navigate to AddProjectComponent or open the form
+//    console.log('Clicked project ID:', p.id);
+//   this.router.navigate(['/home/admin/add-project'], { queryParams: { id: p.id } });
+// }
+
+edit(p: Project) {
+  console.log('Clicked project ID:', p.id);
+
+  this.addProjectService.getProjectById(p.id).subscribe({
+    next: (res) => {
+      if (res && res.data && res.data.length) {
+        const projectData = res.data[0];
+        
+        // ✅ Yeh important hai: Directly navigate karein aur data pass karein
+        this.router.navigate(['/home/admin/add-project'], {
+          state: { project: projectData }
+        });
+      } else {
+        Swal.fire('Error', 'Project not found', 'error');
+      }
+    },
+    error: () => {
+      Swal.fire('Error', 'Failed to fetch project', 'error');
+    }
+  });
+}
+
+
 
   Delete(p: Project): void {
     Swal.fire({
