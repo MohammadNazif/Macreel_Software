@@ -4,13 +4,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import Swal from 'sweetalert2';
 import { ManageLeaveService } from '../../../../core/services/manage-leave.service';
-
-export interface LeaveRow {
-  srNo: number;
-  id: number;
-  leaveName: string;
-  description: string;
-}
+import { LeaveRow } from '../../../../core/models/interface';
 
 @Component({
   selector: 'app-add-leave-type',
@@ -37,8 +31,8 @@ export class AddLeaveTypeComponent implements OnInit {
   isSubmitting = false;
 
   constructor(
-    private fb: FormBuilder,
-    private leaveService: ManageLeaveService
+    private readonly fb: FormBuilder,
+    private readonly leaveService: ManageLeaveService
   ) {}
 
   ngOnInit(): void {

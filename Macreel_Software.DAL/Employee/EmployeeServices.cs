@@ -167,7 +167,7 @@ namespace Macreel_Software.DAL.Employee
                     cmd.Parameters.AddWithValue("@empId", data.empId);
                     cmd.Parameters.AddWithValue("@fromDate", fromDate);
                     cmd.Parameters.AddWithValue("@toDate", toDate);
-                    cmd.Parameters.AddWithValue("@leaveType", data.leaveId);
+                    cmd.Parameters.AddWithValue("@leaveType", data.leaveTypeId);
                     cmd.Parameters.AddWithValue("@description", data.description);
                     cmd.Parameters.AddWithValue("@leaveCount", leaveCount);
                     cmd.Parameters.AddWithValue("@action", data.id>0? "updateApplyLeave" : "insertLeave");
@@ -237,7 +237,7 @@ namespace Macreel_Software.DAL.Employee
                     {
                         id = Convert.ToInt32(sdr["id"]),
                         empId = sdr["empId"] as int?,
-                        leaveId= sdr["leaveType"] as int?,
+                        leaveTypeId= sdr["leaveType"] as int?,
                         fromDate = sdr["fromDate"] != DBNull.Value ? Convert.ToDateTime(sdr["fromDate"]):null,
                         toDate = sdr["toDate"] != DBNull.Value ? Convert.ToDateTime(sdr["toDate"]):null, 
                         leaveCount = sdr["leaveCount"] as int?,
@@ -308,7 +308,7 @@ namespace Macreel_Software.DAL.Employee
                             {
                                 id = Convert.ToInt32(sdr["id"]),
                                 empId = sdr["empId"] as int?,
-                                leaveId = sdr["leaveType"] as int?,
+                                leaveTypeId = sdr["leaveType"] as int?,
                                 fromDate = sdr["fromDate"] != DBNull.Value ? Convert.ToDateTime(sdr["fromDate"]) : null,
                                 toDate = sdr["toDate"] != DBNull.Value ? Convert.ToDateTime(sdr["toDate"]) : null,
                                 leaveCount = sdr["leaveCount"] as int?,

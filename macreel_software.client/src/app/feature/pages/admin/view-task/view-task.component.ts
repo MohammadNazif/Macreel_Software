@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 import { TaskService } from '../../../../core/services/add-task.service';
-import { Task } from '../../../../core/models/employee.interface';
+import { Task } from '../../../../core/models/interface';
 
 
 @Component({
