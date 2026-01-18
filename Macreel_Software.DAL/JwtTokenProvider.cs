@@ -37,7 +37,7 @@ namespace Macreel_Software.DAL
                 issuer: _configuration.GetValue<string>("JwtSettings:Issuer"),
                 audience: _configuration.GetValue<string>("JwtSettings:Audience"),
                 claims: claims,
-                expires: DateTime.UtcNow.AddSeconds(20),
+                expires: DateTime.UtcNow.AddMinutes(30),
                 signingCredentials: creds
             );
 

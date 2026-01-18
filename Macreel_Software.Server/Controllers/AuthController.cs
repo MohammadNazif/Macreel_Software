@@ -34,7 +34,7 @@ namespace Macreel_Software.Server.Controllers
 
             var accessToken = _jwtProvider.CreateToken(user);
             var refreshToken = _jwtProvider.GenerateRefreshToken();
-            var refreshExpire = DateTime.UtcNow.AddDays(1);
+            var refreshExpire = DateTime.UtcNow.AddDays(2);
 
             await _authServices.SaveRefreshTokenAsync(user.UserId, refreshToken, refreshExpire);
 
@@ -43,7 +43,7 @@ namespace Macreel_Software.Server.Controllers
                 HttpOnly = true,
                 Secure = true,
                 SameSite = SameSiteMode.None,
-                Expires = DateTime.UtcNow.AddSeconds(20)
+                Expires = DateTime.UtcNow.AddMinutes(30)
             });
 
             Response.Cookies.Append("refresh_token", refreshToken, new CookieOptions
@@ -51,7 +51,7 @@ namespace Macreel_Software.Server.Controllers
                 HttpOnly = true,
                 Secure = true,
                 SameSite = SameSiteMode.None,
-                Expires = DateTime.UtcNow.AddDays(1)
+                Expires = DateTime.UtcNow.AddDays(2)
             });
 
             return Ok(new
@@ -86,7 +86,7 @@ namespace Macreel_Software.Server.Controllers
                 HttpOnly = true,
                 Secure = true,               // prod
                 SameSite = SameSiteMode.None,
-                Expires = DateTime.UtcNow.AddSeconds(20)
+                Expires = DateTime.UtcNow.AddMinutes(30)
             });
 
             return Ok(new { message = "Token refreshed",token = newAccessToken });
