@@ -39,4 +39,13 @@ namespace Macreel_Software.Models.Employee
         public string? leaveName { get; set; }
 
     }
+    public class Dashboard
+    {
+        public int? TotalProjects { get; set; }
+        public int? OngoingProjects { get; set; }
+        public int? AssignedLeave { get; set; }
+        public int? RequestedLeave { get; set; }
+        public int? TotalTasks { get; set; }
+        public int? CompletedTasks { get; set; }
+    }
 }

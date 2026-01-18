@@ -20,5 +20,7 @@ namespace Macreel_Software.DAL.Employee
         Task<ApiResponse<List<applyLeave>>> getAllApplyLeaveById(int id, int empId);
 
         Task<bool> deleteApplyLeaveById(int id, int empId);
+
+        Task<ApiResponse<Dashboard>> DashboardCount(int empId);
     }
 }
