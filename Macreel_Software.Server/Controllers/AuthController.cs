@@ -3,6 +3,7 @@ using Macreel_Software.DAL.Auth;
 using Macreel_Software.Models;
 using Macreel_Software.Services.MailSender;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Macreel_Software.Server.Controllers
 {
@@ -96,13 +97,25 @@ namespace Macreel_Software.Server.Controllers
         public async Task<IActionResult> Logout()
         {
             var refreshToken = Request.Cookies["refresh_token"];
-            //if (!string.IsNullOrEmpty(refreshToken))
-            //    await _authServices.RevokeRefreshTokenAsync(refreshToken);
+            if (!string.IsNullOrEmpty(refreshToken))
+                await _authServices.RevokeRefreshTokenAsync(refreshToken);
 
             Response.Cookies.Delete("access_token");
             Response.Cookies.Delete("refresh_token");
 
             return Ok();
+        }
+        [HttpGet("me")]
+        public IActionResult Me()
+        {
+            var userId = User.FindFirst("UserId")?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            return Ok(new
+            {
+                userId,
+                role
+            });
         }
 
     }
