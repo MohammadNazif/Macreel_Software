@@ -5,8 +5,8 @@ import { TaskService } from '../../../../core/services/add-task.service';
 import { PaginatedList } from '../../../../core/utils/paginated-list';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { Task } from '../../../../core/models/interface';
-import { TableColumn } from '../../../../core/models/employee.interface';
+import { TableColumn, Task } from '../../../../core/models/interface';
+
 
 
 @Component({

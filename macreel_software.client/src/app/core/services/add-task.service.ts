@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { PaginatedResult, Task } from '../models/employee.interface';
+import { PaginatedResult, Task } from '../models/interface';
+
 
 
 

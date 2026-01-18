@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter, TemplateRef } from '@angular/core';
-import { TableColumn } from '../../../core/models/employee.interface';
+
 import { DatePipe } from '@angular/common';
+import { TableColumn } from '../../../core/models/interface';
 
 @Component({
   selector: 'app-generic-table',

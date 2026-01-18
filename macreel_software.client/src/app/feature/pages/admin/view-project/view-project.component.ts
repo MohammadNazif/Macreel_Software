@@ -5,10 +5,10 @@ import { ProjectService } from '../../../../core/services/project-service.servic
 
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import Swal from 'sweetalert2';
-import { Project } from '../../../../core/models/interface';
+import { Project, TableColumn } from '../../../../core/models/interface';
 
 import { PaginatedList } from '../../../../core/utils/paginated-list';
-import { TableColumn } from '../../../../core/models/employee.interface';
+
 
 @Component({
   selector: 'app-view-project',

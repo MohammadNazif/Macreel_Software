@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { PaginatedResult, Project } from '../models/interface';
 
-import { PaginatedResult, Project } from '../models/employee.interface';
 
 
 @Injectable({ providedIn: 'root' })
