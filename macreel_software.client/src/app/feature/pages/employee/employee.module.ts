@@ -7,7 +7,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { AssignedLeavesComponent } from './assigned-leaves/assigned-leaves.component';
 import { ApplyLeaveComponent } from './apply-leave/apply-leave.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 
 
@@ -24,7 +24,8 @@ import { MatTableModule } from '@angular/material/table';
     FormsModule,
     ReactiveFormsModule,
     MatTableModule,
-    MatPaginator
+    MatPaginator,
+    MatPaginatorModule
   ]
 })
 export class EmployeeModule { }

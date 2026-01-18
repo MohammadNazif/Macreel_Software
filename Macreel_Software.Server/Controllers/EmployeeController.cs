@@ -1,9 +1,10 @@
 ﻿using Macreel_Software.DAL.Employee;
 using Macreel_Software.Models;
+using Macreel_Software.Contracts.DTOs;
 using Macreel_Software.Models.Employee;
 using Macreel_Software.Models.Master;
 using Microsoft.AspNetCore.Mvc;
-using QuestPDF.Helpers;
+using Macreel_Software.DAL.Admin;
 namespace Macreel_Software.Server.Controllers
 {
     [Route("api/[controller]")]
@@ -12,10 +13,11 @@ namespace Macreel_Software.Server.Controllers
     {
         private readonly IEmployeeService _service;
         private readonly int _userId;
-
-        public EmployeeController(IEmployeeService service, IHttpContextAccessor http)
+        private readonly IAdminServices _adminService;
+        public EmployeeController(IEmployeeService service, IHttpContextAccessor http,IAdminServices adminservices)
         {
             _service = service;
+            _adminService = adminservices;
             var user = http.HttpContext?.User;
             if (user != null && user.Identity?.IsAuthenticated == true)
             {
@@ -81,6 +83,27 @@ namespace Macreel_Software.Server.Controllers
             {
                 return StatusCode(500, ApiResponse<List<assignedLeave>>.FailureResponse(
                     "An error occurred while fetching assigned leave",
+                    500,
+                    "SERVER_ERROR"
+                ));
+            }
+        }
+
+        [HttpGet("allAssignedLeavesByEmpCode")]
+        public async Task<IActionResult> AssignedLeaveListByEmpId()
+        {
+            try
+            {
+                var response = await _adminService.GetAllEmpDataById(_userId);
+                int empcode = response.Data.FirstOrDefault()?.EmpCode ?? 0;
+                var result = await _service.GetAllAssignedLeaveByEmpCode(empcode);
+
+                return StatusCode(result.StatusCode, result);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, ApiResponse<List<AssignedLeaveDto>>.FailureResponse(
+                    "Error while fetching leave balance",
                     500,
                     "SERVER_ERROR"
                 ));

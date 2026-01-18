@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { PageEvent } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { ManageLeaveService } from '../../../../core/services/manage-leave.service';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({
   selector: 'app-assigned-leaves',
@@ -10,53 +12,62 @@ import { MatTableDataSource } from '@angular/material/table';
   styleUrl: './assigned-leaves.component.css'
 })
 export class AssignedLeavesComponent {
-dataSource = new MatTableDataSource<any>();
   displayedColumns: string[] = [
     'srNo',
-    'leaveType',
+    'leaveName',
     'noOfLeaves'
   ];
-  pageSize = 5;
+  dataSource = new MatTableDataSource<any>([]);
   pageNumber = 1;
+  pageSize = 5;
   totalRecords = 0;
-  searchText = '';
-
+  searchTerm: string = '';
+  allLeaves: any[] = [];
   pageSizeControl = new FormControl<string>("10")
-  searchControl = new FormControl<string>("")
+  searchControl = new FormControl<string>("");
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-    // ================= SEARCH =================
-  applyFilter(event: Event) {
-    this.searchText = (event.target as HTMLInputElement).value.trim();
-    this.pageNumber = 1;
-    // this.loadDesignations();
+  constructor(
+    private readonly leaveService: ManageLeaveService
+  ) { }
+
+  ngOnInit(): void {
+    this.loadAssignedLeaves();
+    // Server-side search subscription
+    this.searchControl.valueChanges
+      .pipe(
+        debounceTime(400),
+        distinctUntilChanged()
+      )
+      .subscribe(value => {
+        this.searchTerm = value?.trim() || '';
+        this.pageNumber = 1; // reset page
+        this.loadAssignedLeaves();
+      });
   }
 
-  // ================= PAGINATION =================
-  onPageChange(event: PageEvent) {
-    this.pageSize = event.pageSize;
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
+
+  // MUST be called on paginator event
+  onPageChange(event: PageEvent): void {
+    console.log('PAGE CLICKED', event);
     this.pageNumber = event.pageIndex + 1;
+    this.pageSize = event.pageSize;
+    this.loadAssignedLeaves();
   }
 
-
-  // Change page size
-  onPageSizeChange(): void {
-    this.pageSize = Number.parseInt(this.pageSizeControl.value || "10", 10)
-    this.pageNumber = 1
-    this.applyPagination()
-  }
-
-  // Apply pagination
-  applyPagination(): void {
-    const startIndex = (this.pageNumber - 1) * this.pageSize
-    const endIndex = startIndex + this.pageSize
-    // this.filteredRequests = this.leaveRequests.slice(startIndex, endIndex)
-  }
-
-  // Next page
-  nextPage(): void {
-    if (this.pageNumber * this.pageSize < this.totalRecords) {
-      this.pageNumber++
-      this.applyPagination()
-    }
+  loadAssignedLeaves(): void {
+    this.leaveService
+      .getAssignedLeaves(this.searchTerm, this.pageNumber, this.pageSize)
+      .subscribe({
+        next: res => {
+          if (res.success) {
+            this.dataSource.data = res.data;
+            this.totalRecords = res.totalRecords;
+          }
+        }
+      });
   }
 }

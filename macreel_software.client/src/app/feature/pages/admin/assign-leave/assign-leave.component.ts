@@ -1,15 +1,3 @@
-// import { Component } from '@angular/core';
-
-// @Component({
-//   selector: 'app-assign-leave',
-//   standalone: false,
-//   templateUrl: './assign-leave.component.html',
-//   styleUrl: './assign-leave.component.css'
-// })
-// export class AssignLeaveComponent {
-
-// }
-
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
@@ -60,8 +48,8 @@ export class AssignLeaveComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
-    private empService: ManageEmployeeService,
-    private leaveService: ManageLeaveService
+    private readonly empService: ManageEmployeeService,
+    private readonly leaveService: ManageLeaveService
   ) { }
 
   ngOnInit() {
@@ -74,6 +62,7 @@ export class AssignLeaveComponent implements OnInit {
     this.empService.getAllEmployees(null, null, '').subscribe({
       next: (res: any) => {
         this.employees = res.data;
+        console.log("Employees loaded:", this.employees);
         this.isLoading = false;
       },
       error: () => this.isLoading = false

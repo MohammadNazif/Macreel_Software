@@ -1,11 +1,11 @@
 export interface LeaveRequest {
   id: number
-  appliedDate: Date
+  applieddate: Date
   fromDate: Date
   toDate: Date
-  leaveType: string
+  leaveName: string
   description: string
-  status: string 
+  // status: string 
 }
 export interface Task {
   id: number;
@@ -13,7 +13,7 @@ export interface Task {
   assignedBy: string;
   assignedDate: string;
   completionDate: string;
-  status: 'Pending' | 'In Progress' | 'Completed';
+  status: string;
 }
 
 export interface Project {
@@ -37,4 +37,11 @@ export interface LeaveRow {
   id: number;
   leaveName: string;
   description: string;
+}
+
+export interface LeaveBalance {
+  leaveType: string;
+  assignedLeave: number;
+  usedLeave: number;
+  remainingLeave: number;
 }

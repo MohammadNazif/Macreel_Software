@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Macreel_Software.Models;
+﻿using Macreel_Software.Models;
 using Macreel_Software.Models.Master;
 using Microsoft.AspNetCore.Http;
 

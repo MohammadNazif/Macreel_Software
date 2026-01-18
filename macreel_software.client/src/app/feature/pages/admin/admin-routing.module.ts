@@ -28,15 +28,10 @@ const routes: Routes = [
   { path: 'upload-attendance', component: UploadAttendanceComponent },
   { path: 'view-attendance', component: ViewAttendanceComponent },
   { path:'assign-leave',component:AssignLeaveComponent},
-  { path:'AllEmployeeLeave',component:AllEmployeeLeaveListComponent},
+  { path:'assigned-employees-leaves',component:AllEmployeeLeaveListComponent},
   {path: 'add-task',component:AddTaskComponent},
   {path: 'view-task',component:ViewTaskComponent},
-
   {path: 'view-project',component:ViewProjectComponent},
-
-    {path: 'view-project',component:ViewProjectComponent},
-
-  { path:'AllEmployeeLeave',component:AllEmployeeLeaveListComponent},
   { path:'add-project',component:AddProjectComponent},
   {path:'master',loadChildren:()=>import('./masters/masters.module').then(n=>n.MastersModule)}
 ];
