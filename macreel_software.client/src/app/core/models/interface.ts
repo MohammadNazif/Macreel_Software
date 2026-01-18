@@ -1,4 +1,4 @@
-<<<<<<< HEAD:macreel_software.client/src/app/core/models/interface.ts
+
 export interface LeaveRequest {
   id: number
   appliedDate: Date
@@ -8,10 +8,10 @@ export interface LeaveRequest {
   description: string
   status: string 
 }
-=======
+
 import { TemplateRef } from "@angular/core";
 
->>>>>>> 8ad8211 (reusable Component):macreel_software.client/src/app/core/models/employee.interface.ts
+
 export interface Task {
   id: number;
   title: string;
@@ -37,7 +37,7 @@ export interface Project {
   paidAds?: string;
   gmb?: string;
 }
-<<<<<<< HEAD:macreel_software.client/src/app/core/models/interface.ts
+
 export interface LeaveRow {
   srNo: number;
   id: number;
@@ -53,7 +53,7 @@ export interface EmpDashboardCount {
   CompletedTasks: number;
 }
 
-=======
+
 export interface ApiResponse<T> {
   success: boolean;
   statusCode: number;
@@ -88,4 +88,4 @@ export interface TableColumn<T> {
   width?: string;
   template?: TemplateRef<any>;
 }
->>>>>>> 8ad8211 (reusable Component):macreel_software.client/src/app/core/models/employee.interface.ts
+

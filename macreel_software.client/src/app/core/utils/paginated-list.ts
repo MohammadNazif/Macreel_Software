@@ -1,5 +1,6 @@
 import { Observable } from 'rxjs';
-import { PaginatedResult } from '../models/employee.interface';
+import { PaginatedResult } from '../models/interface';
+
 
 
 export class PaginatedList<T> {
