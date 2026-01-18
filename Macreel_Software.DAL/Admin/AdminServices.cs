@@ -1475,7 +1475,7 @@ namespace Macreel_Software.DAL.Admin
         }
 
 
-        public async Task<ApiResponse<List<Taskassign>>> getAllAssignTask(string? searchTerm, int? pageNumber, int? pageSize)
+        public async Task<ApiResponse<List<Taskassign>>> getAllAssignTask(string? searchTerm, int? pageNumber, int? pageSize, int? empId = null)
         {
             List<Taskassign> list = new();
             int totalRecords = 0;
@@ -1486,9 +1486,9 @@ namespace Macreel_Software.DAL.Admin
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@action", "selectAll");
+                    cmd.Parameters.AddWithValue("@empId", empId);
 
-                    cmd.Parameters.AddWithValue("@searchTerm",
-                        string.IsNullOrWhiteSpace(searchTerm) ? DBNull.Value : searchTerm);
+                    cmd.Parameters.AddWithValue("@searchTerm", string.IsNullOrWhiteSpace(searchTerm) ? DBNull.Value :searchTerm);
 
                     cmd.Parameters.AddWithValue("@pageNumber",
                         pageNumber.HasValue ? pageNumber.Value : DBNull.Value);

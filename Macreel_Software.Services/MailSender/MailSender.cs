@@ -83,10 +83,8 @@ public class MailSender
 
     private string RegistrationLink(string res)
     {
-        var request = _httpContextAccessor.HttpContext?.Request;
-        var baseUrl = $"{request.Scheme}://{request.Host}";
         return $@"
-       <html>
+<html>
 <head>
     <style>
         body {{
@@ -149,24 +147,50 @@ public class MailSender
         <div class=""email-header"">
             Welcome to Our Team!
         </div>
+
         <div class=""email-content"">
             <p>Dear <span class=""bold"">Employee</span>,</p>
-            <p>We are thrilled to have you onboard at <span class=""bold"">Macreel</span>. We’re looking forward to achieving great things together.</p>
-            <p>To complete your registration and activate your account, please click the button below:</p>
-            <p style=""text-align: center;"">
-              <a class=""btn"" href=""{baseUrl}/registeremployee?accessId={res}"" target=""_blank"">Register Here</a>
 
-</p>
-            <p>Once your account is verified, you can access your dashboard and begin your journey with Macreel. If you have any questions, feel free to reach out to our support team at <span class=""bold"">hr@macreel.com</span>.</p>
+            <p>
+                We are thrilled to have you onboard at 
+                <span class=""bold"">Macreel</span>. 
+                We’re looking forward to achieving great things together.
+            </p>
+
+            <p>
+                To complete your registration and activate your account,
+                please click the button below:
+            </p>
+
+            <p style=""text-align: center;"">
+                <a class=""btn""
+                   href=""http://localhost:54266/home/add-employee?email={res}""
+                   target=""_blank"">
+                   Register Here
+                </a>
+            </p>
+
+            <p>
+                Once your account is verified, you can access your dashboard
+                and begin your journey with Macreel.
+            </p>
+
+            <p>
+                If you have any questions, feel free to reach out to our
+                support team at <span class=""bold"">hr@macreel.com</span>.
+            </p>
+
             <p>We wish you a successful and fulfilling experience with us!</p>
         </div>
+
         <div class=""email-footer"">
-            &copy; {{DateTime.Now.Year}} Macreel. All rights reserved.
+            &copy; {DateTime.Now.Year} Macreel. All rights reserved.
         </div>
     </div>
 </body>
 </html>";
     }
+
 
     private string UserCredential(string username, string password)
     {

@@ -8,6 +8,7 @@ using Macreel_Software.DAL.Common;
 using Macreel_Software.DAL.Master;
 using Macreel_Software.DAL.Employee;
 using Macreel_Software.Server;
+using Macreel_Software.Server.DTOs;
 using Macreel_Software.Services;
 using Macreel_Software.Services.AttendanceUpload;
 using Macreel_Software.Services.FileUpload.Services;

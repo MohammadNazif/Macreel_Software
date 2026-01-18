@@ -24,10 +24,10 @@
     </ProjectReference>
     <ProjectReference Include="..\Macreel_Software.DAL\Macreel_Software.DAL.csproj" />
     <ProjectReference Include="..\Macreel_Software.Models\Macreel_Software.Models.csproj" />
+    <ProjectReference Include="..\Macreel_Software.Services\Macreel_Software.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\" />
     <Folder Include="wwwroot\uploads\" />
     <Folder Include="wwwroot\uploads\" />
   </ItemGroup>

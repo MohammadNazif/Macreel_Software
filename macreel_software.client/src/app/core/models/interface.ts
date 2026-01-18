@@ -18,7 +18,7 @@ export interface Task {
   assignedBy: string;
   assignedDate: string;
   completionDate: string;
-  status: 'Pending' | 'In Progress' | 'Completed';
+  taskStatus: string;
 }
 
 export interface Project {
@@ -45,12 +45,12 @@ export interface LeaveRow {
   description: string;
 }
 export interface EmpDashboardCount {
-  TotalProjects: number;
-  OngoingProjects : number;
-  AssignedLeave: number;
-  RequestedLeave: number;
-  TotalTasks: number;
-  CompletedTasks: number;
+  totalProjects: number;
+  ongoingProjects : number;
+  assignedLeave: number;
+  requestedLeave: number;
+  totalTasks: number;
+  completedTasks: number;
 }
 
 
@@ -66,7 +66,7 @@ export interface Task {
   empName: string;
   title: string;
   description: string;
-  completedDate: string; // or Date
+  completedDate: Date; // or Date
   assignedBy: string;
   document1: string | null;
   document2: string | null;
