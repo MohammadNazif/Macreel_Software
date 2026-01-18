@@ -107,12 +107,6 @@ export class LayoutComponent implements OnInit {
           route: '/home/admin/view-task',
           roles: ['57']
         },
-
-        {
-          label: 'Assigned Tasks',
-          route: '/home/admin/view-task',
-          roles: ['57']
-        },
         {
           label: 'Assigned Tasks',
           route: '/home/employee/assigned-tasks',

@@ -49,5 +49,10 @@ export class AuthService {
   logout(): Observable<any> {
     return this.http.post(`${this.baseUrl}Auth/logout`, {}, { withCredentials: true });
   }
+  loadUser(): Observable<any> {
+    return this.http.get(`${this.baseUrl}Auth/me`, {
+      withCredentials: true
+    });
+  }
 }
 
