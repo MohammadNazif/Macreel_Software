@@ -1516,8 +1516,9 @@ namespace Macreel_Software.DAL.Admin
                                 CompletedDate = sdr["CompletedDate"] != DBNull.Value ? Convert.ToDateTime(sdr["CompletedDate"]) : null,
                                 document1Path = sdr["document1"] != DBNull.Value ? sdr["document1"].ToString() : null,
                                 document2Path = sdr["document2"] != DBNull.Value ? sdr["document2"].ToString() : null,
-                                empName = sdr["empName"] != DBNull.Value ? sdr["empName"].ToString() : null
-                              
+                                empName = sdr["empName"] != DBNull.Value ? sdr["empName"].ToString() : null,
+                                assignedDate= sdr["createdAt"] != DBNull.Value ? Convert.ToDateTime(sdr["CompletedDate"]) : null,
+                                taskStatus = sdr["taskStatus"] != DBNull.Value ? sdr["taskStatus"].ToString() : null,
 
                             });
                         }
