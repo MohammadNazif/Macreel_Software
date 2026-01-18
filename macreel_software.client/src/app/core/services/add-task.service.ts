@@ -50,6 +50,6 @@ export class TaskService {
   }
 
   addTask(formData: FormData): Observable<any> {
-    return this.http.post(this.baseUrl, formData);
+    return this.http.post(`${this.baseUrl}Admin/insert-update-Task`, formData);
   }
 }
