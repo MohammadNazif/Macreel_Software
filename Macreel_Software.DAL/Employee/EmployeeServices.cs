@@ -384,5 +384,56 @@ namespace Macreel_Software.DAL.Employee
 
         #endregion
 
+
+        #region dashboard
+        public async Task<ApiResponse<Dashboard>> DashboardCount(int empId)
+        {
+            try
+            {
+                Dashboard dashboard = new();
+
+                using SqlCommand cmd = new SqlCommand("sp_empDashboard", _conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@action", "EmpDashCount");
+                cmd.Parameters.AddWithValue("@empId", empId);
+
+                if (_conn.State == ConnectionState.Closed)
+                    await _conn.OpenAsync();
+
+                using SqlDataReader sdr = await cmd.ExecuteReaderAsync();
+
+                if (await sdr.ReadAsync())
+                {
+                    dashboard.TotalProjects = Convert.ToInt32(sdr["TotalProjects"]);
+                    dashboard.OngoingProjects = Convert.ToInt32(sdr["OngoingProjects"]);
+                    dashboard.AssignedLeave = Convert.ToInt32(sdr["AssignedLeave"]);
+                    dashboard.RequestedLeave = Convert.ToInt32(sdr["RequestedLeave"]);
+                    dashboard.TotalTasks = Convert.ToInt32(sdr["TotalTasks"]);
+                    dashboard.CompletedTasks = Convert.ToInt32(sdr["CompletedTasks"]);
+                }
+
+                return ApiResponse<Dashboard>.SuccessResponse(
+                    dashboard,
+                    "Dashboard count fetched successfully"
+                );
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<Dashboard>.FailureResponse(
+                    ex.Message,
+                    500,
+                    "DASHBOARD_COUNT_FETCH_ERROR"
+                );
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    await _conn.CloseAsync();
+            }
+        }
+
+
+        #endregion
     }
 }

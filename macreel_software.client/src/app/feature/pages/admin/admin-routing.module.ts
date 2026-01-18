@@ -31,7 +31,11 @@ const routes: Routes = [
   { path:'AllEmployeeLeave',component:AllEmployeeLeaveListComponent},
   {path: 'add-task',component:AddTaskComponent},
   {path: 'view-task',component:ViewTaskComponent},
+
   {path: 'view-project',component:ViewProjectComponent},
+
+    {path: 'view-project',component:ViewProjectComponent},
+
   { path:'AllEmployeeLeave',component:AllEmployeeLeaveListComponent},
   { path:'add-project',component:AddProjectComponent},
   {path:'master',loadChildren:()=>import('./masters/masters.module').then(n=>n.MastersModule)}

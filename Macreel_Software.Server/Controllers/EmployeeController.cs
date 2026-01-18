@@ -3,6 +3,7 @@ using Macreel_Software.Models;
 using Macreel_Software.Models.Employee;
 using Macreel_Software.Models.Master;
 using Microsoft.AspNetCore.Mvc;
+using QuestPDF.Helpers;
 namespace Macreel_Software.Server.Controllers
 {
     [Route("api/[controller]")]
@@ -183,5 +184,66 @@ namespace Macreel_Software.Server.Controllers
                 ));
             }
         }
+
+        [HttpDelete("deleteAssignLeaveById")]
+        public async Task<IActionResult> deleteAssignLeaveById(int id)
+        {
+            try
+            {
+                var res = await _service.deleteApplyLeaveById(id, _userId);
+                if (res)
+                {
+                    return Ok(new
+                    {
+                        status = true,
+                        StatusCode = 200,
+                        message = "Apply leave deleted successfully!!!"
+
+                    });
+                }
+                else
+                {
+                    return Ok(new
+                    {
+                        status = false,
+                        StatusCode = 404,
+                        message = "Apply leave not deleted!!"
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, new
+                {
+                    status = false,
+                    StatusCode = 500,
+                    message = "An error occurred while deleting Apply leave.",
+                    error = ex.Message
+                });
+            }
+        }
+
+        [HttpGet("getEmpDashBoardCountByEmpId")]
+        public async Task<IActionResult> GetEmpDashBoardCountByEmpId()
+        {
+            try
+            {
+                ApiResponse<Dashboard> result =
+                    await _service.DashboardCount(_userId);
+
+                return StatusCode(result.StatusCode, result);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500,
+                    ApiResponse<Dashboard>.FailureResponse(
+                        "An error occurred while fetching dashboard count",
+                        500,
+                        "SERVER_ERROR"
+                    ));
+            }
+        }
+
     }
 }
