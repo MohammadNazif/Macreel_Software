@@ -53,14 +53,14 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy
-                .WithOrigins("http://localhost:54266", "https://vakiluncle.co.in", "https://macreel-software.firebaseapp.com")
+                .WithOrigins("http://localhost:54266/", "https://vakiluncle.co.in", "https://macreel-software.firebaseapp.com")
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials();
         });
 });
 
-var key = Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"]);
+var key = Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"]!);
 
 builder.Services.AddAuthentication(options =>
 {

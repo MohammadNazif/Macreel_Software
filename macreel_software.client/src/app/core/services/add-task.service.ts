@@ -48,6 +48,6 @@ getTasks(search = '', page = 1, size = 20) {
       params = params.set('pageSize', pageSize.toString());
     }
 
-    return this.http.get<any>(`${this.baseUrl}Employee/AssignedTask`, { params, withCredentials: true });
+    return this.http.get<any>(`${this.baseUrl}Employee/AssignTask`, { params, withCredentials: true });
   }
 }
