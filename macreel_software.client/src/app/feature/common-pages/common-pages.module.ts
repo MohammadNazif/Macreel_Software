@@ -13,6 +13,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { GenericTableComponent } from './generic-table/generic-table.component';
 import { CdkAutofill } from "@angular/cdk/text-field";
+import { SafeUrlPipe } from "../../core/pipes/capitalize.pipe";
 
 
 
@@ -33,7 +34,8 @@ import { CdkAutofill } from "@angular/cdk/text-field";
     MatChipsModule,
     MatAutocompleteModule,
     MatSelectModule,
-    CdkAutofill
+    CdkAutofill,
+    SafeUrlPipe
 ],
     exports: [
     GenericTableComponent

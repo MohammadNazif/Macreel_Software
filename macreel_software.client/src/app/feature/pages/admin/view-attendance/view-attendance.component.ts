@@ -50,9 +50,9 @@ export class ViewAttendanceComponent implements OnInit {
 attendanceColumns: TableColumn<Attendance>[] = [
 
   { key: 'attendanceDate', label: 'Date', type: 'date' },
-  { key: 'status', label: 'Status' },
-  { key: 'inTime', label: 'In Time' },
-  { key: 'outTime', label: 'Out Time' },
+  { key: 'status', label: 'Status',align:'center' },
+  { key: 'inTime', label: 'In Time',align:'center' },
+  { key: 'outTime', label: 'Out Time',align:'center' },
  
 ];
 

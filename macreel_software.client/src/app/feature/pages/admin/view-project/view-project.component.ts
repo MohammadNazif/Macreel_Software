@@ -24,9 +24,9 @@ export class ViewProjectComponent implements OnInit {
   projectColumns: TableColumn<Project>[] = [
     { key: 'projectTitle', label: 'Project' },
     { key: 'category', label: 'Category' },
-    { key: 'startDate', label: 'Start Date', type: 'date' },
-    { key: 'completionDate', label: 'Completion Date', type: 'date' },
-    { key: 'endDate', label: 'Delivery Date', type: 'date' }
+    { key: 'startDate', label: 'Start Date', type: 'date',align:'center' },
+    { key: 'completionDate', label: 'Completion Date', type: 'date',align:'center' },
+    { key: 'endDate', label: 'Delivery Date', type: 'date',align:'center' }
   ];
 
   constructor(
