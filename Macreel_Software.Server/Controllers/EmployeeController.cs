@@ -3,6 +3,7 @@ using Macreel_Software.Models;
 using Macreel_Software.Models.Employee;
 using Macreel_Software.Models.Master;
 using Microsoft.AspNetCore.Mvc;
+using QuestPDF.Helpers;
 namespace Macreel_Software.Server.Controllers
 {
     [Route("api/[controller]")]
@@ -225,5 +226,27 @@ namespace Macreel_Software.Server.Controllers
                 });
             }
         }
+
+        [HttpGet("getEmpDashBoardCountByEmpId")]
+        public async Task<IActionResult> GetEmpDashBoardCountByEmpId()
+        {
+            try
+            {
+                ApiResponse<Dashboard> result =
+                    await _service.DashboardCount(_userId);
+
+                return StatusCode(result.StatusCode, result);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500,
+                    ApiResponse<Dashboard>.FailureResponse(
+                        "An error occurred while fetching dashboard count",
+                        500,
+                        "SERVER_ERROR"
+                    ));
+            }
+        }
+
     }
 }
