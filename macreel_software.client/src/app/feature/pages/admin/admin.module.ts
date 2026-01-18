@@ -23,7 +23,9 @@ import { AddProjectComponent } from './add-project/add-project.component';
 
 import { AddTaskComponent } from './add-task/add-task.component';
 import { ViewTaskComponent } from './view-task/view-task.component';
-import {  ViewProjectComponent } from './view-project/view-project.component';
+import { ViewProjectComponent } from './view-project/view-project.component';
+import { CommonPagesModule } from '../../common-pages/common-pages.module';
+
 
 
 
@@ -40,7 +42,7 @@ import {  ViewProjectComponent } from './view-project/view-project.component';
     AddProjectComponent,
     AddTaskComponent,
     ViewTaskComponent,
-    ViewProjectComponent
+   ViewProjectComponent
 
   ],
   imports: [
@@ -53,9 +55,11 @@ import {  ViewProjectComponent } from './view-project/view-project.component';
     MatPaginatorModule,
     MatSortModule,
     MatInputModule,
-    ReactiveFormsModule
-
+    ReactiveFormsModule,
+    CommonPagesModule
+   
 ],
+
 providers:[
   DatePipe
 ]

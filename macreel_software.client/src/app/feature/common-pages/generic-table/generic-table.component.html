@@ -1,0 +1,81 @@
+<div class="relative overflow-x-auto overflow-y-auto rounded-xl border border-gray-200"
+     style="max-height: 72vh;"
+     (scroll)="onScroll($event)">
+  <table class="w-full min-w-[950px] text-[12px] text-left">
+
+    <thead class="sticky top-0 z-10 bg-[#dd3d4f]">
+      <tr class="text-white border-b border-gray-300">
+        <th class="px-2 py-1 font-semibold">S.N.</th>
+
+        <th *ngFor="let col of columns"
+            class="px-2 py-1 font-semibold"
+            [style.text-align]="col.align || 'left'"
+            [style.width]="col.width || 'auto'">
+          {{ col.label }}
+        </th>
+
+        <th class="px-2 py-1 text-center font-semibold">Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let item of data; let i = index"
+          class="border-b border-gray-100 hover:bg-gray-50 transition">
+        <td class="px-2 py-1 text-gray-500 font-medium">{{ i + 1 }}</td>
+
+        <td *ngFor="let col of columns"
+            class="px-2 py-1 text-gray-700"
+            [style.text-align]="col.align || 'left'">
+          <ng-container *ngIf="col.template; else defaultCell">
+            <ng-container *ngTemplateOutlet="col.template; context: { $implicit: item }"></ng-container>
+          </ng-container>
+
+          <ng-template #defaultCell>
+            <span *ngIf="col.type === 'date'">
+              {{ formatCell(item, col) }}
+            </span>
+            <span *ngIf="!col.type || col.type === 'text'">
+              {{ item[col.key] }}
+            </span>
+          </ng-template>
+        </td>
+
+        <td class="px-2 py-1">
+          <div class="flex justify-center gap-2">
+            <!-- Edit Icon Button -->
+            <button class="w-7 h-7 flex items-center justify-center rounded-md border border-[#dd3d4f] text-[#dd3d4f] hover:bg-[#dd3d4f] hover:text-white transition"
+                    (click)="edit.emit(item)">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
+                   viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M11 5h-1a2 2 0 00-2 2v1m0 0L17 15l3-3L9 4zm0 0L7 6a2 2 0 00-2 2v1m0 0L3 14a2 2 0 002 2h1l5-5"/>
+              </svg>
+            </button>
+
+            <!-- Delete Icon Button -->
+            <button class="w-7 h-7 flex items-center justify-center rounded-md border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition"
+                    (click)="delete.emit(item)">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
+                   viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            </button>
+          </div>
+        </td>
+      </tr>
+
+      <tr *ngIf="loading">
+        <td [attr.colspan]="columns.length + 1" class="py-8 text-center">
+          Loading...
+        </td>
+      </tr>
+
+      <tr *ngIf="!loading && data.length === 0">
+        <td [attr.colspan]="columns.length + 1" class="py-8 text-center text-gray-400">
+          No records found
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

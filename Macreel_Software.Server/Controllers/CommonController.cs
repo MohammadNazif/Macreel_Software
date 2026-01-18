@@ -1,4 +1,5 @@
-﻿using Macreel_Software.DAL;
+﻿using System.Reflection;
+using Macreel_Software.DAL;
 using Macreel_Software.DAL.Admin;
 using Macreel_Software.DAL.Auth;
 using Macreel_Software.DAL.Common;
@@ -20,14 +21,16 @@ namespace Macreel_Software.Server.Controllers
         private readonly PasswordEncrypt _pass;
         private readonly FileUploadService _fileUploadService;
         private readonly IAdminServices _adminservice;
+        private readonly MailSender _mailservice;
 
 
-        public CommonController(ICommonServices service, PasswordEncrypt pass, FileUploadService fileUploadService,IAdminServices adminservice)
+        public CommonController(ICommonServices service, PasswordEncrypt pass, FileUploadService fileUploadService,IAdminServices adminservice, MailSender mailservice)
         {
             _service = service;
             _pass = pass;
             _fileUploadService = fileUploadService;
             _adminservice = adminservice;
+            _mailservice = mailservice;
         }
 
         [HttpGet("getAllStateList")]
@@ -290,6 +293,64 @@ namespace Macreel_Software.Server.Controllers
                 ));
             }
         }
+        #endregion
+
+
+        #region send mail for reg
+
+        [HttpPost("sendEmailForReg")]
+        public async Task<IActionResult> SendEmailForReg([FromBody] sendMailForReg data)
+        {
+            try
+            {
+                string accessId = Guid.NewGuid().ToString();
+
+                var mailRequest = new MailRequest
+                {
+                    ToEmail = data.email,
+                    Subject = "Register Yourself - Macreel Infosoft Pvt. Ltd.",
+                    BodyType = MailBodyType.RegistrationLink,
+                    Value = data.email
+                };
+                data.accessId = accessId;
+                var mailResponse = await _mailservice.SendMailAsync(mailRequest);
+
+                if (!mailResponse.Status)
+                {
+                    return BadRequest(new
+                    {
+                        status = false,
+                        message = "Mail sending failed"
+                    });
+                }
+
+                bool isSaved = await _service.sendMailForReg(data);
+
+                if (!isSaved)
+                {
+                    return StatusCode(500, new
+                    {
+                        status = false,
+                        message = "Mail sent but failed to save data"
+                    });
+                }
+
+                return Ok(new
+                {
+                    status = true,
+                    message = "Registration mail sent successfully"
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    status = false,
+                    message = ex.Message
+                });
+            }
+        }
+
         #endregion
     }
 }

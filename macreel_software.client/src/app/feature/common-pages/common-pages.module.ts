@@ -11,13 +11,15 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
+import { GenericTableComponent } from './generic-table/generic-table.component';
 
 
 
 @NgModule({
   declarations: [
     AddEmployeeComponent,
-    EmployeeProfileComponent
+    EmployeeProfileComponent,
+     GenericTableComponent
 
   ],
   imports: [
@@ -30,6 +32,9 @@ import { MatSelectModule } from '@angular/material/select';
     MatChipsModule,
     MatAutocompleteModule,
     MatSelectModule
+  ],
+    exports: [
+    GenericTableComponent
   ]
 })
 export class CommonPagesModule { }

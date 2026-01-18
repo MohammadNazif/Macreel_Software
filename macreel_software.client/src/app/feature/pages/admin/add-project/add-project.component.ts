@@ -1,25 +1,28 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ManageMasterdataService } from '../../../../core/services/manage-masterdata.service';
-
+import Swal from 'sweetalert2';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AddProjectService } from '../../../../core/services/add-project.service';
+import { Project } from '../../../../core/models/interface';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-project',
   standalone: false,
   templateUrl: './add-project.component.html',
-  styleUrls: ['./add-project.component.css'] 
+  styleUrls: ['./add-project.component.css']
 })
 
 
-
-
 export class AddProjectComponent implements OnInit {
+  isEditMode : boolean = false;
+ editProjectId :number = 0;
 
   @ViewChild('sopFile') sopFile!: ElementRef<HTMLInputElement>;
   @ViewChild('technicalFile') technicalFile!: ElementRef<HTMLInputElement>;
 
   projectForm!: FormGroup;
+
 
   allTechnologies: any[] = [];
   mobileSkills: any[] = [];
@@ -33,80 +36,90 @@ export class AddProjectComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private masterService: ManageMasterdataService,
-    private addProjectService: AddProjectService
-  ) {}
+    private addProjectService: AddProjectService,
+      private router: Router
+  ) { }
 
-  ngOnInit() {
-    this.initForm();
-    this.loadTechnologies();
+ngOnInit() {
+  this.initForm();
+  this.loadTechnologies();
 
-     // Mobile Skill change
+  const nav = this.router.getCurrentNavigation();
+   const project = history.state?.project;
+ console.log('Received project data:', project);
+  if (project) {
+    this.bindEditData(project);
+  }
+
   this.projectForm.get('mobileSkill')?.valueChanges.subscribe(val => {
     this.onMobileSkillChange(val);
   });
 
-  // Mobile Employee change
   this.projectForm.get('mobileEmpId')?.valueChanges.subscribe(val => {
     this.onSelectMobileEmployee(val);
   });
 
-  // Web Skill change
   this.projectForm.get('webSkill')?.valueChanges.subscribe(val => {
     this.onWebSkillChange(val);
   });
 
-  // Web Employee change
   this.projectForm.get('webEmpId')?.valueChanges.subscribe(val => {
     this.onSelectWebEmployee(val);
   });
-  }
+}
+
 
 
 
   initForm() {
-   this.projectForm = this.fb.group({
-  category: ['', Validators.required],
-  projectTitle: ['', Validators.required],
-  description: [''],
-  startDate: ['', Validators.required],
-  assignDate: ['', Validators.required],
-  endDate: [''],
-  completionDate: [''],
+    this.projectForm = this.fb.group({
+      category: ['', Validators.required],
+      projectTitle: ['', Validators.required],
+      description: [''],
+      startDate: ['', Validators.required],
+      assignDate: ['', Validators.required],
+      endDate: [''],
+      completionDate: [''],
 
-  // software type
-  isMobileSoftware: [false],
-  isWebSoftware: [false],
-  isAndroid: [false],
-  isIOS: [false],
+      // software type
+      isMobileSoftware: [false],
+      isWebSoftware: [false],
+      isAndroid: [false],
+      isIOS: [false],
 
-  // mobile
-  mobileSkill: [''],
-  mobileEmpId: [''],
+      // mobile
+      mobileSkill: [''],
+      mobileEmpId: [''],
 
-  // web
-  webSkill: ['null'],
-  webEmpId: ['null'],
+      // web
+      webSkill: [''],
+      webEmpId: [''],
 
-  // digital marketing
-  SEO: [''],
-  SMO: [''],
-  GMB: [''],
-  paidAds: ['']
-});
+      // digital marketing
+      SEO: [''],
+      SMO: [''],
+      GMB: [''],
+      paidAds: ['']
+    });
 
   }
 
-  get category(): string {
-  return this.projectForm.get('category')?.value || '';
-}
+  //   get category(): string {
+  //   return this.projectForm.get('category')?.value || '';
+  // }
 
-get isMobileSoftware(): boolean {
-  return this.projectForm.get('isMobileSoftware')?.value;
-}
+  get category(): 'Software' | 'Website' | 'Digital Marketing' | '' {
+    return this.projectForm.get('category')?.value || '';
+  }
 
-get isWebSoftware(): boolean {
-  return this.projectForm.get('isWebSoftware')?.value;
-}
+
+  get isMobileSoftware(): boolean {
+    return this.projectForm.get('isMobileSoftware')?.value;
+  }
+
+  get isWebSoftware(): boolean {
+    return this.projectForm.get('isWebSoftware')?.value;
+  }
 
   // ================= LOAD TECHNOLOGIES =================
   loadTechnologies() {
@@ -140,81 +153,222 @@ get isWebSoftware(): boolean {
   }
 
   // ================= MOBILE METHODS =================
-onMobileSkillChange(skillId: any) {
-  const id = skillId ? Number(skillId) : null;
-  if (!id) {
-    this.filteredMobileEmployees = [];
-    return;
-  }
-  this.addProjectService.getEmpListForAppByTechId(id).subscribe({
-    next: res => this.filteredMobileEmployees = res?.data || [],
-    error: err => this.filteredMobileEmployees = []
-  });
-}
-
-
-  onSelectMobileEmployee(empId: any) {
-    this.projectForm.patchValue({ mobileEmpId: empId });
-    this.addProjectService.getProjectDetailsByEmpId(empId).subscribe({
-      next: res => this.selectedEmployeeProjects = res?.data || [],
-      error: err => this.selectedEmployeeProjects = []
+  onMobileSkillChange(skillId: any) {
+    const id = skillId ? Number(skillId) : null;
+    if (!id) {
+      this.filteredMobileEmployees = [];
+      return;
+    }
+    this.addProjectService.getEmpListForAppByTechId(id).subscribe({
+      next: res => this.filteredMobileEmployees = res?.data || [],
+      error: err => this.filteredMobileEmployees = []
     });
   }
 
-  // ================= WEB METHODS =================
-onWebSkillChange(skillId: any) {
-  const id = skillId ? Number(skillId) : null;
-  if (!id) {
-    this.filteredWebEmployees = [];
-    return;
-  }
-  this.addProjectService.getEmpListForWebByTechId(id).subscribe({
-    next: res => this.filteredWebEmployees = res?.data || [],
-    error: err => this.filteredWebEmployees = []
-  });
-}
 
-onSelectWebEmployee(empId: any) {
-  const id = Number(empId);
-  this.projectForm.patchValue({ webEmpId: id });
-  this.addProjectService.getProjectDetailsByEmpId(id).subscribe({
-    next: res => this.selectedEmployeeProjects = res?.data || [],
-    error: err => this.selectedEmployeeProjects = []
+
+  onSelectMobileEmployee(empId: any) {
+    if (!empId) return;
+
+    const id = Number(empId);
+    this.addProjectService.getProjectDetailsByEmpId(id).subscribe({
+      next: res => this.selectedEmployeeProjects = res?.data || [],
+      error: () => this.selectedEmployeeProjects = []
+    });
+  }
+
+
+  // ================= WEB METHODS =================
+  onWebSkillChange(skillId: any) {
+    const id = skillId ? Number(skillId) : null;
+    if (!id) {
+      this.filteredWebEmployees = [];
+      return;
+    }
+    this.addProjectService.getEmpListForWebByTechId(id).subscribe({
+      next: res => this.filteredWebEmployees = res?.data || [],
+      error: err => this.filteredWebEmployees = []
+    });
+
+  }
+
+  // onSelectWebEmployee(empId: any) {
+  //   const id = Number(empId);
+  //   this.projectForm.patchValue({ webEmpId: id });
+  //   this.addProjectService.getProjectDetailsByEmpId(id).subscribe({
+  //     next: res => this.selectedEmployeeProjects = res?.data || [],
+  //     error: err => this.selectedEmployeeProjects = []
+  //   });
+  // }
+
+  onSelectWebEmployee(empId: any) {
+    if (!empId) return;
+
+    const id = Number(empId);
+    this.addProjectService.getProjectDetailsByEmpId(id).subscribe({
+      next: res => this.selectedEmployeeProjects = res?.data || [],
+      error: () => this.selectedEmployeeProjects = []
+    });
+  }
+
+
+  bindEditData(emp: any) {
+  this.isEditMode = true;
+  this.editProjectId = emp.id;
+
+  // BASIC DATA
+  this.projectForm.patchValue({
+    id : emp.id,
+    category: emp.category,
+    projectTitle: emp.projectTitle,
+    description: emp.description,
+
+    startDate: emp.startDate?.split('T')[0],
+    assignDate: emp.assignDate?.split('T')[0],
+    endDate: emp.endDate?.split('T')[0],
+    completionDate: emp.completionDate?.split('T')[0],
+
+    isMobileSoftware: emp.app === 'App',
+    isWebSoftware: emp.web === 'Web',
+    isAndroid: emp.androidApp === 'Android',
+    isIOS: emp.iosApp === 'IOS',
+
+    SEO: emp.seo,
+    SMO: emp.smo,
+    GMB: emp.gmb,
+    paidAds: emp.paidAds
   });
+
+  // MOBILE
+  if (emp.appTechnology) {
+    this.projectForm.patchValue({ mobileSkill: emp.appTechnology });
+
+    this.addProjectService
+      .getEmpListForAppByTechId(emp.appTechnology)
+      .subscribe(res => {
+        this.filteredMobileEmployees = res?.data || [];
+        this.projectForm.patchValue({ mobileEmpId: emp.appEmpId });
+      });
+  }
+
+  // WEB
+  if (emp.webTechnology) {
+    this.projectForm.patchValue({ webSkill: emp.webTechnology });
+
+    this.addProjectService
+      .getEmpListForWebByTechId(emp.webTechnology)
+      .subscribe(res => {
+        this.filteredWebEmployees = res?.data || [];
+        this.projectForm.patchValue({ webEmpId: emp.webEmpId });
+      });
+  }
+
+  
 }
 
 
   // ================= FORM SUBMISSION =================
+
   submitProject() {
+
     if (this.projectForm.invalid) {
-      alert('Please fill required fields');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Required Fields Missing',
+        text: 'Please fill required fields',
+      });
       return;
     }
 
     const formData = new FormData();
-    Object.entries(this.projectForm.value).forEach(([key, value]: any) => {
-      if (value !== null && value !== undefined) formData.append(key, value);
-    });
+    const f = this.projectForm.value;
 
-    // FILES
+    // ================= BASIC FIELDS =================
+    formData.append('id', this.editProjectId.toString());
+    formData.append('category', f.category);
+    formData.append('projectTitle', f.projectTitle);
+    formData.append('description', f.description || '');
+    formData.append('startDate', f.startDate);
+    formData.append('assignDate', f.assignDate);
+    formData.append('endDate', f.endDate || '');
+    formData.append('completionDate', f.completionDate || '');
+
+    // ================= SOFTWARE TYPE =================
+    if (f.isMobileSoftware) {
+      formData.append('app', 'App');   // ✅ BACKEND KEY
+
+      if (f.isAndroid) {
+        formData.append('androidApp', 'Android');
+      }
+
+      if (f.isIOS) {
+        formData.append('iosApp', 'IOS');
+      }
+
+      if (f.mobileSkill) {
+        formData.append('appTechnology', f.mobileSkill);
+      }
+
+      if (f.mobileEmpId) {
+        formData.append('appEmpId', f.mobileEmpId);
+      }
+    }
+
+    if (f.isWebSoftware) {
+      formData.append('web', 'Web');  
+
+      if (f.webSkill) {
+        formData.append('webTechnology', f.webSkill);
+      }
+
+      if (f.webEmpId) {
+        formData.append('webEmpId', f.webEmpId);
+      }
+    }
+
+    // ================= DIGITAL MARKETING =================
+    if (f.category === 'Digital Marketing') {
+      formData.append('SEO', f.SEO || '');
+      formData.append('SMO', f.SMO || '');
+      formData.append('GMB', f.GMB || '');
+      formData.append('paidAds', f.paidAds || '');
+    }
+
+    // ================= FILES =================
     const sop = this.sopFile?.nativeElement.files?.[0];
-    if(sop) formData.append('sopDocument', sop);
+    if (sop) formData.append('sopDocument', sop);
 
     const techDoc = this.technicalFile?.nativeElement.files?.[0];
-    if(techDoc) formData.append('technicalDocument', techDoc);
+    if (techDoc) formData.append('technicalDocument', techDoc);
 
-   this.addProjectService.addProject(formData).subscribe({
+    // ================= API CALL =================
+    this.addProjectService.addProject(formData).subscribe({
       next: res => {
-        if(res.success) {
-          alert(res.message);
+        if (res.success) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Project Added',
+            text: res.message,
+            confirmButtonColor: '#3085d6',
+          });;
           this.projectForm.reset();
           this.sopFile.nativeElement.value = '';
           this.technicalFile.nativeElement.value = '';
-        } else alert(res.message || 'Error adding project');
+          this.selectedEmployeeProjects = [];
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: res.message || 'Error adding project',
+          });
+        }
       },
-      error: err => {
-        console.error(err);
-        alert('Something went wrong while adding project.');
+      error: () => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Something went wrong while adding project!',
+        });
       }
     });
   }

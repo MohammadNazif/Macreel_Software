@@ -26,13 +26,14 @@ namespace Macreel_Software.Server.Controllers
             FileUploadService fileUploadService,
             IWebHostEnvironment env,
             MailSender mailservice,
-            PasswordEncrypt pass)
+            PasswordEncrypt pass, IHttpContextAccessor http)
         {
             _services = service;
             _fileUploadService = fileUploadService;
             _env = env;
             _mailservice = mailservice;
             _pass = pass;
+        
         }
 
         [HttpGet("checkauth")]

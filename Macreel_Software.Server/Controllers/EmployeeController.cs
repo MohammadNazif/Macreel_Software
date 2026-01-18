@@ -1,4 +1,5 @@
-﻿using Macreel_Software.DAL.Employee;
+﻿using Macreel_Software.DAL.Admin;
+using Macreel_Software.DAL.Employee;
 using Macreel_Software.Models;
 using Macreel_Software.Contracts.DTOs;
 using Macreel_Software.Models.Employee;
@@ -228,6 +229,34 @@ namespace Macreel_Software.Server.Controllers
                     ));
             }
         }
+
+        #region task 
+        [HttpGet("AssignTask")]
+        public async Task<IActionResult> AssignTask(string? searchTerm = null, int? pageNumber = null, int? pageSize = null)
+        {
+            try
+            {
+                ApiResponse<List<Taskassign>> result =
+                    await _adminService.getAllAssignTask(searchTerm, pageNumber, pageSize,_userId);
+
+
+                return StatusCode(result.StatusCode, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<List<Taskassign>>.FailureResponse(
+                    "An error occurred while fetching assign task details",
+                    500,
+                    "SERVER_ERROR"
+                ));
+            }
+        }
+
+
+
+
+
+        #endregion
 
     }
 }

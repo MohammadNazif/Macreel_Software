@@ -2,7 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Task } from '../models/interface';
+import { PaginatedResult, Task } from '../models/interface';
+
+
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -13,37 +17,13 @@ export class TaskService {
 
   constructor(private readonly http: HttpClient) {}
 
-  getTasks(): Observable<Task[]> {
+getTasks(search = '', page = 1, size = 20) {
+  return this.http.get<PaginatedResult<Task>>(
+    `${this.baseUrl}Admin/getAllAssignTask`,
+    { params: { search, page, size } }
+  );
+}
 
-    const dummyTasks: Task[] = [
-      {
-        id: 1,
-        title: 'Prepare Attendance Report',
-        assignedBy: 'Admin',
-        assignedDate: '2026-01-10',
-        completionDate: '2026-01-15',
-        status: 'Pending'
-      },
-      {
-        id: 2,
-        title: 'Employee Onboarding',
-        assignedBy: 'HR',
-        assignedDate: '2026-01-08',
-        completionDate: '2026-01-18',
-        status: 'In Progress'
-      },
-      {
-        id: 3,
-        title: 'Monthly Salary Processing',
-        assignedBy: 'Finance',
-        assignedDate: '2026-01-05',
-        completionDate: '2026-01-12',
-        status: 'Completed'
-      }
-    ];
-
-    return of(dummyTasks);
-  }
 
   deleteTask(id: number): Observable<any> {
     return this.http.delete(`${this.baseUrl}/${id}`);

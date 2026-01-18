@@ -42,7 +42,7 @@ export class AuthService {
     return this.roleId;
   }
 
-  isTokenValid() {
+  isTokenValid() { debugger
     return !!this.roleId;
   }
 

@@ -5,10 +5,8 @@ import { finalize } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ManageEmployeeService } from '../../../core/services/manage-employee.service';
 import { ManageMasterdataService } from '../../../core/services/manage-masterdata.service';
-
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { MatChipInputEvent } from '@angular/material/chips';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 
 @Component({
@@ -21,7 +19,6 @@ export class AddEmployeeComponent implements OnInit {
 
   step = 1;
   isLoading = false;
-
   roles: any[] = [];
   departments: any[] = [];
   designations: any[] = [];
@@ -29,9 +26,7 @@ export class AddEmployeeComponent implements OnInit {
   cities: any[] = [];
   reportingManagers: any[] = [];
   technologies: any[] = [];
-
   employeeForm!: FormGroup;
-
   profilePic?: File;
   aadharImg?: File;
   panImg?: File;

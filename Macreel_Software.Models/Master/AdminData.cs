@@ -232,7 +232,7 @@ namespace Macreel_Software.Models.Master
 
         public string document1Path { get; set; }
         public string document2Path { get; set; }
-        public string taskStatus { get; set; }
+        public string? taskStatus { get; set; }
         public DateTime? assignedDate { get; set; }
     }
 
