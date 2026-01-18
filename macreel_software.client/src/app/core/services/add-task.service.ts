@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { PaginatedResult, Task } from '../models/interface';
@@ -31,5 +31,23 @@ getTasks(search = '', page = 1, size = 20) {
 
   addTask(formData: FormData): Observable<any> {
     return this.http.post(`${this.baseUrl}Admin/insert-update-Task`, formData);
+  }
+
+  //Employee Assigned Tasks
+  getAssignedTasks(searchTerm?: string, pageNumber?: number, pageSize?: number): Observable<any> {
+    let params = new HttpParams();
+    if (searchTerm) {
+      params = params.set('searchTerm', searchTerm);
+    }
+
+    if (pageNumber !== null && pageNumber !== undefined) {
+      params = params.set('pageNumber', pageNumber.toString());
+    }
+
+    if (pageSize !== null && pageSize !== undefined) {
+      params = params.set('pageSize', pageSize.toString());
+    }
+
+    return this.http.get<any>(`${this.baseUrl}Employee/AssignedTask`, { params, withCredentials: true });
   }
 }

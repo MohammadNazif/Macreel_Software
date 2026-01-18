@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Macreel_Software.Contracts\Macreel_Software.Contracts.csproj" />
     <ProjectReference Include="..\Macreel_Software.Models\Macreel_Software.Models.csproj" />
     <ProjectReference Include="..\Macreel_Software.Services\Macreel_Software.Services.csproj" />
   </ItemGroup>

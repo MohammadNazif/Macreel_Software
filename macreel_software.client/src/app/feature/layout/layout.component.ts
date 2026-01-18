@@ -71,6 +71,7 @@ export class LayoutComponent implements OnInit {
       children: [
         { label: 'Add Leave', route: '/home/admin/add-leave', roles: ['57'] },
         { label: 'Assign Leave', route: '/home/admin/assign-leave', roles: ['57'] },
+        { label: 'Assigned Leaves', route: '/home/admin/assigned-employees-leaves', roles: ['57'] },
         { label: 'Apply Leave', route: '/home/employee/apply-leave', roles: ['63'] },
         { label: 'Assigned Leave', route: '/home/employee/assigned-leaves', roles: ['63'] }
       ]
@@ -112,14 +113,13 @@ export class LayoutComponent implements OnInit {
           route: '/home/employee/assigned-tasks',
           roles: ['63']
         }
-
       ]
     },
     {
       label: 'Project Management',
       icon: 'fa-solid fa-tasks',
       key: 'project',
-      roles: ['57', '63'],
+      roles: ['57'],
       children: [
         {
           label: 'Add Project',
@@ -130,10 +130,7 @@ export class LayoutComponent implements OnInit {
           label: 'View Project',
           route: '/home/admin/view-project',
           roles: ['57']
-        },
-
-
-
+        }
       ]
     }
 

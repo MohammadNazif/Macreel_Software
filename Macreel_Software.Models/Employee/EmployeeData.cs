@@ -31,7 +31,7 @@ namespace Macreel_Software.Models.Employee
         public DateTime? toDate { get; set; }
         public int? leaveTypeId { get; set; }
         public string? description { get; set; }
-
+        public string? status { get; set; }
 
         public string? empName { get; set; }
         public DateTime? applieddate { get; set; }

@@ -1,12 +1,12 @@
 
 export interface LeaveRequest {
   id: number
-  appliedDate: Date
+  applieddate: Date
   fromDate: Date
   toDate: Date
-  leaveType: string
+  leaveName: string
   description: string
-  status: string 
+  // status: string 
 }
 
 import { TemplateRef } from "@angular/core";
@@ -89,3 +89,11 @@ export interface TableColumn<T> {
   template?: TemplateRef<any>;
 }
 
+}
+
+export interface LeaveBalance {
+  leaveType: string;
+  assignedLeave: number;
+  usedLeave: number;
+  remainingLeave: number;
+}
