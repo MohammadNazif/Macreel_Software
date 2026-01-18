@@ -84,8 +84,8 @@ export class AddProjectComponent implements OnInit {
   mobileEmpId: [''],
 
   // web
-  webSkill: ['null'],
-  webEmpId: ['null'],
+  webSkill: [''],
+  webEmpId: [''],
 
   // digital marketing
   SEO: [''],
@@ -153,13 +153,24 @@ onMobileSkillChange(skillId: any) {
 }
 
 
+  // onSelectMobileEmployee(empId: any) {
+  //   this.projectForm.patchValue({ mobileEmpId: empId });
+  //   this.addProjectService.getProjectDetailsByEmpId(empId).subscribe({
+  //     next: res => this.selectedEmployeeProjects = res?.data || [],
+  //     error: err => this.selectedEmployeeProjects = []
+  //   });
+  // }
+
   onSelectMobileEmployee(empId: any) {
-    this.projectForm.patchValue({ mobileEmpId: empId });
-    this.addProjectService.getProjectDetailsByEmpId(empId).subscribe({
-      next: res => this.selectedEmployeeProjects = res?.data || [],
-      error: err => this.selectedEmployeeProjects = []
-    });
-  }
+  if (!empId) return;
+
+  const id = Number(empId);
+  this.addProjectService.getProjectDetailsByEmpId(id).subscribe({
+    next: res => this.selectedEmployeeProjects = res?.data || [],
+    error: () => this.selectedEmployeeProjects = []
+  });
+}
+
 
   // ================= WEB METHODS =================
 onWebSkillChange(skillId: any) {
@@ -174,49 +185,144 @@ onWebSkillChange(skillId: any) {
   });
 }
 
+// onSelectWebEmployee(empId: any) {
+//   const id = Number(empId);
+//   this.projectForm.patchValue({ webEmpId: id });
+//   this.addProjectService.getProjectDetailsByEmpId(id).subscribe({
+//     next: res => this.selectedEmployeeProjects = res?.data || [],
+//     error: err => this.selectedEmployeeProjects = []
+//   });
+// }
+
 onSelectWebEmployee(empId: any) {
+  if (!empId) return;
+
   const id = Number(empId);
-  this.projectForm.patchValue({ webEmpId: id });
   this.addProjectService.getProjectDetailsByEmpId(id).subscribe({
     next: res => this.selectedEmployeeProjects = res?.data || [],
-    error: err => this.selectedEmployeeProjects = []
+    error: () => this.selectedEmployeeProjects = []
   });
 }
 
 
+
   // ================= FORM SUBMISSION =================
+  // submitProject() {
+  //   if (this.projectForm.invalid) {
+  //     alert('Please fill required fields');
+  //     return;
+  //   }
+
+  //   const formData = new FormData();
+  //   Object.entries(this.projectForm.value).forEach(([key, value]: any) => {
+  //     if (value !== null && value !== undefined) formData.append(key, value);
+  //   });
+
+  //   // FILES
+  //   const sop = this.sopFile?.nativeElement.files?.[0];
+  //   if(sop) formData.append('sopDocument', sop);
+
+  //   const techDoc = this.technicalFile?.nativeElement.files?.[0];
+  //   if(techDoc) formData.append('technicalDocument', techDoc);
+
+  //  this.addProjectService.addProject(formData).subscribe({
+  //     next: res => {
+  //       if(res.success) {
+  //         alert(res.message);
+  //         this.projectForm.reset();
+  //         this.sopFile.nativeElement.value = '';
+  //         this.technicalFile.nativeElement.value = '';
+  //       } else alert(res.message || 'Error adding project');
+  //     },
+  //     error: err => {
+  //       console.error(err);
+  //       alert('Something went wrong while adding project.');
+  //     }
+  //   });
+  // }
+
   submitProject() {
-    if (this.projectForm.invalid) {
-      alert('Please fill required fields');
-      return;
+
+  if (this.projectForm.invalid) {
+    alert('Please fill required fields');
+    return;
+  }
+
+  const formData = new FormData();
+  const f = this.projectForm.value;
+
+  // ================= BASIC FIELDS =================
+  formData.append('category', f.category);
+  formData.append('projectTitle', f.projectTitle);
+  formData.append('description', f.description || '');
+  formData.append('startDate', f.startDate);
+  formData.append('assignDate', f.assignDate);
+  formData.append('endDate', f.endDate || '');
+  formData.append('completionDate', f.completionDate || '');
+
+  // ================= SOFTWARE TYPE =================
+  if (f.isMobileSoftware) {
+    formData.append('app', 'App');   // ✅ BACKEND KEY
+
+    if (f.isAndroid) {
+      formData.append('androidApp', 'Android');
     }
 
-    const formData = new FormData();
-    Object.entries(this.projectForm.value).forEach(([key, value]: any) => {
-      if (value !== null && value !== undefined) formData.append(key, value);
-    });
+    if (f.isIOS) {
+      formData.append('iosApp', 'IOS');
+    }
 
-    // FILES
-    const sop = this.sopFile?.nativeElement.files?.[0];
-    if(sop) formData.append('sopDocument', sop);
+    if (f.mobileSkill) {
+      formData.append('appTechnology', f.mobileSkill);
+    }
 
-    const techDoc = this.technicalFile?.nativeElement.files?.[0];
-    if(techDoc) formData.append('technicalDocument', techDoc);
-
-   this.addProjectService.addProject(formData).subscribe({
-      next: res => {
-        if(res.success) {
-          alert(res.message);
-          this.projectForm.reset();
-          this.sopFile.nativeElement.value = '';
-          this.technicalFile.nativeElement.value = '';
-        } else alert(res.message || 'Error adding project');
-      },
-      error: err => {
-        console.error(err);
-        alert('Something went wrong while adding project.');
-      }
-    });
+    if (f.mobileEmpId) {
+      formData.append('appEmpId', f.mobileEmpId);
+    }
   }
+
+  if (f.isWebSoftware) {
+    formData.append('web', 'Web');   // ✅ BACKEND KEY
+
+    if (f.webSkill) {
+      formData.append('webTechnology', f.webSkill);
+    }
+
+    if (f.webEmpId) {
+      formData.append('webEmpId', f.webEmpId);
+    }
+  }
+
+  // ================= DIGITAL MARKETING =================
+  if (f.category === 'Digital Marketing') {
+    formData.append('SEO', f.SEO || '');
+    formData.append('SMO', f.SMO || '');
+    formData.append('GMB', f.GMB || '');
+    formData.append('paidAds', f.paidAds || '');
+  }
+
+  // ================= FILES =================
+  const sop = this.sopFile?.nativeElement.files?.[0];
+  if (sop) formData.append('sopDocument', sop);
+
+  const techDoc = this.technicalFile?.nativeElement.files?.[0];
+  if (techDoc) formData.append('technicalDocument', techDoc);
+
+  // ================= API CALL =================
+  this.addProjectService.addProject(formData).subscribe({
+    next: res => {
+      if (res.success) {
+        alert(res.message);
+        this.projectForm.reset();
+        this.sopFile.nativeElement.value = '';
+        this.technicalFile.nativeElement.value = '';
+      } else {
+        alert(res.message || 'Error adding project');
+      }
+    },
+    error: () => alert('Something went wrong')
+  });
+}
+
 
 }
