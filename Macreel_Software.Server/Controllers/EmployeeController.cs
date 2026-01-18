@@ -25,7 +25,7 @@ namespace Macreel_Software.Server.Controllers
                 _userId = Convert.ToInt32(user.FindFirst("UserId")?.Value);
             }
         }
-
+        #region Rule Book
         [HttpPost("saveRuleBookResponseByEmpId")]
         public async Task<IActionResult> SaveRuleBookResponse([FromForm] EmployeeData data)
         {
@@ -67,8 +67,9 @@ namespace Macreel_Software.Server.Controllers
                ));
             }
         }
+        #endregion
 
-
+        #region Leave Management     
         [HttpGet("AssignedLeaveListByEmpId")]
         public async Task<IActionResult> assignedLeaveList(string? searchTerm, int? pageNumber, int? pageSize)
         {
@@ -207,8 +208,10 @@ namespace Macreel_Software.Server.Controllers
                     "SERVER_ERROR"
                 ));
             }
-        }        
+        }
+        #endregion
 
+        #region Dashboard
         [HttpGet("getEmpDashBoardCountByEmpId")]
         public async Task<IActionResult> GetEmpDashBoardCountByEmpId()
         {
@@ -229,8 +232,9 @@ namespace Macreel_Software.Server.Controllers
                     ));
             }
         }
+        #endregion
 
-        #region task 
+        #region Task Management            
         [HttpGet("AssignTask")]
         public async Task<IActionResult> AssignTask(string? searchTerm = null, int? pageNumber = null, int? pageSize = null)
         {
@@ -257,6 +261,5 @@ namespace Macreel_Software.Server.Controllers
 
 
         #endregion
-
     }
 }

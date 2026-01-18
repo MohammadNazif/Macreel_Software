@@ -1,7 +1,7 @@
 <Solution>
   <Project Path="macreel_software.client/macreel_software.client.esproj">
     <Build />
-    <Deploy />
+    <Deploy Solution="Release|*" />
   </Project>
   <Project Path="Macreel_Software.Contracts/Macreel_Software.Contracts.csproj" Id="5df3a5c2-7a38-4ca7-a522-707c490eb466" />
   <Project Path="Macreel_Software.DAL/Macreel_Software.DAL.csproj" />

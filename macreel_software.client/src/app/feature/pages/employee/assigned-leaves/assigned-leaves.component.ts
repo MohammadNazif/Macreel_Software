@@ -46,17 +46,13 @@ export class AssignedLeavesComponent {
       });
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-  }
-
   // MUST be called on paginator event
   onPageChange(event: PageEvent): void {
-    console.log('PAGE CLICKED', event);
     this.pageNumber = event.pageIndex + 1;
     this.pageSize = event.pageSize;
     this.loadAssignedLeaves();
   }
+
 
   loadAssignedLeaves(): void {
     this.leaveService
