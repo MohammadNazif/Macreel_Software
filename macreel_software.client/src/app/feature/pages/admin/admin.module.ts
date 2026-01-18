@@ -44,8 +44,6 @@ import { CommonPagesModule } from '../../common-pages/common-pages.module';
     ViewTaskComponent,
    ViewProjectComponent
 
-
-
   ],
   imports: [
     CommonModule,

@@ -135,7 +135,7 @@
             <select formControlName="mobileSkill" class="peer w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700
                  focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
               <option value="" disabled hidden></option>
-              <option *ngFor="let skill of mobileSkills" [value]="skill.id">{{ skill.technologyName }}</option>
+              <option *ngFor="let skill of mobileSkills" [ngValue]="skill.id">{{ skill.technologyName }}</option>
             </select>
             <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
                 peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
@@ -168,7 +168,7 @@
             <select formControlName="webSkill" class="peer w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700
                  focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
               <option value="" disabled hidden></option>
-              <option *ngFor="let skill of webSkills" [value]="skill.id">{{ skill.technologyName }}</option>
+              <option *ngFor="let skill of webSkills" [ngValue]="skill.id">{{ skill.technologyName }}</option>
             </select>
             <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
                 peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
