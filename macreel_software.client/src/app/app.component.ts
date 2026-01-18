@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from './core/services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -8,10 +9,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AppComponent implements OnInit {
 
-  constructor() { }
+  constructor(private readonly auth : AuthService) { }
 
   ngOnInit() {
+    this.auth.loadUser().subscribe({
+      next: (res) => {
+        console.log('User loaded:', res);
+        this.auth.setRole(res.role);
+      },
+      error: () => {
+        this.auth.logout().subscribe();
+      }
+    });
   }
 
-  //  title = 'macreel_software.client';
 }
