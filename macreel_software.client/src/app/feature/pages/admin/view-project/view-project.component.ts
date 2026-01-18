@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ProjectService } from '../../../../core/services/project-service.service';
-import { Project } from '../../../../core/models/employee.interface';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import Swal from 'sweetalert2';
+import { Project } from '../../../../core/models/interface';
 
 @Component({
   selector: 'app-view-project',

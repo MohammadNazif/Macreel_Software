@@ -29,7 +29,7 @@ namespace Macreel_Software.Models.Employee
         public int? empId { get; set; }
         public DateTime? fromDate { get; set; }
         public DateTime? toDate { get; set; }
-        public int? leaveId { get; set; }
+        public int? leaveTypeId { get; set; }
         public string? description { get; set; }
 
 

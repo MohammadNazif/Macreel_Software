@@ -35,10 +35,9 @@
                         <select id="leaveType" formControlName="leaveType"
                             class="w-full px-3 py-2 border border-gray-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-[#dd3d4f] bg-white">
                             <option value="">Select</option>
-                            <option value="SL">SL</option>
-                            <option value="CL">CL</option>
-                            <option value="EL">EL</option>
-                            <option value="GL">GL</option>
+                            <option *ngFor="let type of leaveTypeList" [value]="type.id">
+                                {{ type.leaveName }}
+                            </option>
                         </select>
                         <div *ngIf="isFieldInvalid('leaveType')" class="text-red-500 text-xs mt-1">Required</div>
                     </div>

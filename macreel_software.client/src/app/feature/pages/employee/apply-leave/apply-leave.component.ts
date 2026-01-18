@@ -3,15 +3,10 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
 import { MatTableDataSource } from '@angular/material/table';
 import { PageEvent } from '@angular/material/paginator';
-interface LeaveRequest {
-  id: number
-  appliedDate: Date
-  fromDate: Date
-  toDate: Date
-  leaveType: string
-  description: string
-  status: "Pending" | "Approved" | "Rejected"
-}
+import { ManageLeaveService } from '../../../../core/services/manage-leave.service';
+import Swal from 'sweetalert2';
+import { LeaveRequest, LeaveRow } from '../../../../core/models/interface';
+
 @Component({
   selector: 'app-apply-leave',
   standalone: false,
@@ -31,26 +26,24 @@ export class ApplyLeaveComponent {
     'status'
   ];
 
-
   pageSize = 5;
   pageNumber = 1;
   totalRecords = 0;
   searchText = '';
   leaveForm!: FormGroup
+  leaveTypeList: LeaveRow[] = [];
 
   // Leave requests list
   leaveRequests: LeaveRequest[] = []
   filteredRequests: LeaveRequest[] = []
-
   pageSizeControl = new FormControl<string>("10")
   searchControl = new FormControl<string>("")
-
   Math = Math
-
   // For cleanup
   private readonly destroy$ = new Subject<void>()
-
-  constructor(private readonly fb: FormBuilder) {
+  constructor(
+    private readonly fb: FormBuilder,
+    private readonly leaveService: ManageLeaveService) {
     this.leaveForm = this.fb.group({
       fromDate: ["", Validators.required],
       toDate: ["", Validators.required],
@@ -59,7 +52,18 @@ export class ApplyLeaveComponent {
     })
   }
 
+  getAllLeaveTypes() {
+    this.leaveService.getAllLeave().subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.leaveTypeList = res.data
+        }
+      }
+    });
+  }
+
   ngOnInit(): void {
+    this.getAllLeaveTypes();
     this.loadLeaveRequests()
     this.searchControl.valueChanges
       .pipe(debounceTime(300), distinctUntilChanged(), takeUntil(this.destroy$))
@@ -99,28 +103,32 @@ export class ApplyLeaveComponent {
 
   // Submit leave request
   onSubmit(): void {
-    if (!this.leaveForm.valid) {
-      return
+    if (this.leaveForm.invalid) {
+      return;
     }
 
-    const formValue = this.leaveForm.value
-    const newRequest: LeaveRequest = {
-      id: this.leaveRequests.length + 1,
-      appliedDate: new Date(),
-      fromDate: new Date(formValue.fromDate),
-      toDate: new Date(formValue.toDate),
-      leaveType: formValue.leaveType,
-      description: formValue.description,
-      status: "Pending",
-    }
+    const formValue = this.leaveForm.value;
 
-    this.leaveRequests.unshift(newRequest)
-    this.filteredRequests = [...this.leaveRequests]
-    this.totalRecords = this.leaveRequests.length
-    this.resetForm()
-    this.pageNumber = 1
-    this.searchControl.setValue("")
-    this.applyPagination()
+    const formData = new FormData();
+    formData.append('fromDate', formValue.fromDate);
+    formData.append('toDate', formValue.toDate);
+    formData.append('leaveTypeId', formValue.leaveType);
+    formData.append('description', formValue.description);
+
+    // call API
+    this.leaveService.applyLeave(formData).subscribe({
+      next: (res) => {
+        if (res.success) {
+          Swal.fire('Success', 'Leave applied successfully', 'success');
+          this.resetForm();
+        } else {
+          console.error('Error', res.message, 'error');
+        }
+      },
+      error: (err) => {
+        console.error('Apply leave failed', err);
+      }
+    });
   }
 
   // Reset form
