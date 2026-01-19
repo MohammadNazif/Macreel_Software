@@ -4,13 +4,12 @@ import { LoginComponent } from './login/login.component';
 import { LayoutComponent } from '../layout/layout.component';
 import { AddEmployeeComponent } from '../common-pages/add-employee/add-employee.component';
 import { EmployeeProfileComponent } from '../common-pages/employee-profile/employee-profile.component';
-import { AssignLeaveComponent } from '../pages/admin/assign-leave/assign-leave.component';
 import { authGuard } from '../../core/guards/guards/auth.guard';
-import { roleGuard } from '../../core/guards/guards/role.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
+  { path: 'employee-registration', component: AddEmployeeComponent },
   {
     path: 'home', component: LayoutComponent,
     canActivate:[authGuard],

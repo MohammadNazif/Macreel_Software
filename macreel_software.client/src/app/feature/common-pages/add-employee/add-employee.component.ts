@@ -35,19 +35,23 @@ export class AddEmployeeComponent implements OnInit {
   twelthCertificate?: File;
   graduationCertificate?: File;
   mastersCertificate?: File;
+  showPassword = false;
 
+  togglePassword(): void {
+    this.showPassword = !this.showPassword;
+  }
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   technologyCtrl = new FormControl('');
 
   selectedTechnologies: any[] = [];
 
   constructor(
-    private fb: FormBuilder,
-    private employeeService: ManageEmployeeService,
-    private masterService: ManageMasterdataService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private announcer: LiveAnnouncer
+    private readonly fb: FormBuilder,
+    private readonly employeeService: ManageEmployeeService,
+    private readonly masterService: ManageMasterdataService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly announcer: LiveAnnouncer
   ) { }
 
   employeeId!: number;
@@ -98,25 +102,25 @@ export class AddEmployeeComponent implements OnInit {
 
     this.loadTechnologies();
 
-    
-  this.employeeId = Number(this.route.snapshot.paramMap.get('id'));
 
-  if (this.employeeId) {
-    this.isEditMode = true;
-    this.employeeForm.get('password')?.disable();
-    this.employeeForm.get('emailId')?.disable();
-    this.getEmployeeById(this.employeeId);
-  }
+    this.employeeId = Number(this.route.snapshot.paramMap.get('id'));
+
+    if (this.employeeId) {
+      this.isEditMode = true;
+      this.employeeForm.get('password')?.disable();
+      this.employeeForm.get('emailId')?.disable();
+      this.getEmployeeById(this.employeeId);
+    }
   }
 
-private loadTechnologies(): Promise<void> {
-  return new Promise((resolve) => {
-    this.masterService.getAllTechnology(1, 100).subscribe(res => {
-      this.technologies = res?.data ?? [];
-      resolve();
+  private loadTechnologies(): Promise<void> {
+    return new Promise((resolve) => {
+      this.masterService.getAllTechnology(1, 100).subscribe(res => {
+        this.technologies = res?.data ?? [];
+        resolve();
+      });
     });
-  });
-}
+  }
 
 
   private loadMasters(): void {
@@ -169,7 +173,6 @@ private loadTechnologies(): Promise<void> {
       this.selectedTechnologies.push(tech);
 
       const ids = this.selectedTechnologies.map(t => t.id);
-      // this.employeeForm.get('technologyId')?.setValue(ids);
       this.employeeForm.get('skillIds')?.setValue(ids);
 
     }
@@ -226,20 +229,20 @@ private loadTechnologies(): Promise<void> {
           companyContactNo: emp.companyContactNo,
         });
 
-       if (emp.skill && emp.skill.length) {
+        if (emp.skill! && emp.skill.length!) {
 
-        // Wait for technologies to load first
-        this.loadTechnologies().then(() => {
+          // Wait for technologies to load first
+          this.loadTechnologies().then(() => {
 
-          const skillIds = emp.skill.map((s: any) => s.id);
+            const skillIds = emp.skill.map((s: any) => s.id);
 
-          this.selectedTechnologies = this.technologies.filter(t =>
-            skillIds.includes(t.id)
-          );
+            this.selectedTechnologies = this.technologies.filter(t =>
+              skillIds.includes(t.id)
+            );
 
-          this.employeeForm.get('skillIds')?.setValue(skillIds);
-        });
-      }
+            this.employeeForm.get('skillIds')?.setValue(skillIds);
+          });
+        }
 
         if (emp.stateId) {
           this.employeeService.getCityByStateId(emp.stateId).subscribe((res: any) => {

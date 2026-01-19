@@ -6,11 +6,11 @@ import { authGuard } from '../../core/guards/guards/auth.guard';
 const routes: Routes = [
   { path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
     canActivate:[authGuard,roleGuard],
-    data:{roles:[57]}
+    data:{roles:["admin"]}
   },
   {path:'employee',loadChildren:()=>import('./employee/employee.module').then(m => m.EmployeeModule),
     canActivate:[authGuard,roleGuard],
-    data:{roles:[63]}
+    data:{roles:["employee"]}
   }
 
 ];

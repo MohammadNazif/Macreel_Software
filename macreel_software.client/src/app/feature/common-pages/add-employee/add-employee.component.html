@@ -74,7 +74,8 @@
 
         <!-- Department -->
         <div class="relative">
-          <select formControlName="departmentId" name="departmentId" class="peer w-full appearance-none rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700 focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
+          <select formControlName="departmentId" name="departmentId"
+            class="peer w-full appearance-none rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700 focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
 
             <!-- placeholder -->
             <option value="" disabled hidden></option>
@@ -90,7 +91,8 @@
             Department
           </label>
 
-          <span class="absolute right-3 top-2 text-gray-400 pointer-events-none"><i class="fa-solid fa-angle-down"></i></span>
+          <span class="absolute right-3 top-2 text-gray-400 pointer-events-none"><i
+              class="fa-solid fa-angle-down"></i></span>
         </div>
 
 
@@ -114,7 +116,8 @@
             Designation
           </label>
 
-          <span class="absolute right-3 top-2 text-gray-400 pointer-events-none"><i class="fa-solid fa-angle-down"></i></span>
+          <span class="absolute right-3 top-2 text-gray-400 pointer-events-none"><i
+              class="fa-solid fa-angle-down"></i></span>
         </div>
 
 
@@ -135,12 +138,13 @@
            peer-valid:-top-2 peer-valid:text-xs">
             Reporting Manager
           </label>
-          <span class="absolute right-3 top-2 text-gray-400 pointer-events-none"><i class="fa-solid fa-angle-down"></i></span>
+          <span class="absolute right-3 top-2 text-gray-400 pointer-events-none"><i
+              class="fa-solid fa-angle-down"></i></span>
         </div>
 
         <!-- Email ID -->
         <div class="relative">
-          <input type="email" formControlName="emailId" name="emailId" placeholder=" " class="peer w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
+          <input type="email" formControlName="emailId" name="emailId" autocomplete="off" placeholder=" " class="peer w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
            focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none" />
 
           <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
@@ -190,17 +194,45 @@
 
         <!-- Password -->
         <div class="relative">
-          <input type="password" formControlName="password" name="password" placeholder=" " class="peer w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
+          <input [type]="showPassword ? 'text' : 'password'" formControlName="password" name="user_password"
+            autocomplete="new-password" placeholder=" " class="peer w-full rounded-md border border-gray-300 px-4 py-2 pr-10 text-sm text-gray-700
            focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none" />
 
+          <!-- Floating Label -->
           <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
            peer-focus:-top-2 peer-focus:text-xs
            peer-valid:-top-2 peer-valid:text-xs">
             Password
           </label>
+
+          <!-- Eye Button -->
+          <button type="button" (click)="togglePassword()" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500
+           hover:text-gray-700 focus:outline-none">
+            <!-- Eye Open -->
+            <svg *ngIf="!showPassword" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+              viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5
+               c4.478 0 8.268 2.943 9.542 7
+               -1.274 4.057-5.064 7-9.542 7
+               -4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
+
+            <!-- Eye Closed -->
+            <svg *ngIf="showPassword" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19
+               c-4.478 0-8.268-2.943-9.542-7
+               a9.956 9.956 0 012.152-3.362M6.223 6.223
+               A9.956 9.956 0 0112 5
+               c4.478 0 8.268 2.943 9.542 7
+               a9.978 9.978 0 01-4.043 5.135M15 12
+               a3 3 0 00-3-3M3 3l18 18" />
+            </svg>
+          </button>
         </div>
-
-
+        
         <!-- Gender -->
         <div class="relative">
           <select formControlName="gender" name="gender" class="peer w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700 bg-white
@@ -289,7 +321,8 @@
        peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
             State
           </label>
-          <span class="absolute right-3 top-2 text-gray-400 pointer-events-none"><i class="fa-solid fa-angle-down"></i></span>
+          <span class="absolute right-3 top-2 text-gray-400 pointer-events-none"><i
+              class="fa-solid fa-angle-down"></i></span>
         </div>
 
         <!-- CITY -->
@@ -303,7 +336,8 @@
        peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
             City
           </label>
-          <span class="absolute right-3 top-2 text-gray-400 pointer-events-none"><i class="fa-solid fa-angle-down"></i></span>
+          <span class="absolute right-3 top-2 text-gray-400 pointer-events-none"><i
+              class="fa-solid fa-angle-down"></i></span>
         </div>
 
         <!-- Pin code -->
@@ -580,6 +614,7 @@
     </div>
 
   </form>
+</div>
 </div>
 
 <!--Modal for send link for registration-->

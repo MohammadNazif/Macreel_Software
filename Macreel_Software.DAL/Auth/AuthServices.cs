@@ -50,7 +50,8 @@ namespace Macreel_Software.DAL.Auth
                         {
                             UserId = dr["UserId"] != DBNull.Value? Convert.ToInt32(dr["UserId"]):0,
                             Username = dr["UserName"].ToString()!,
-                            Role = dr["Role"].ToString()!
+                            Role = dr["roleName"].ToString()!.ToLower(),
+                            
                         };
                     }
                 }
@@ -151,7 +152,7 @@ namespace Macreel_Software.DAL.Auth
                     {
                         UserId = Convert.ToInt32(dr["UserId"]),
                         Username = dr["UserName"].ToString()!,
-                        Role = dr["Role"].ToString()!
+                        Role = dr["roleName"].ToString()!.ToLower()
                     };
                 }
             }

@@ -1,5 +1,4 @@
 ﻿using Macreel_Software.Services.FirebaseNotification;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Macreel_Software.Server.Controllers

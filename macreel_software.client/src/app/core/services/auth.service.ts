@@ -9,7 +9,7 @@ import { jwtDecode } from 'jwt-decode';
 })
 export class AuthService {
   private readonly baseUrl = environment.apiUrl;
-  private roleId: string | null = null;
+  private role: string | null = null;
   constructor(
     private readonly http: HttpClient
   ) { }
@@ -34,16 +34,16 @@ export class AuthService {
     }
   }
 
-  setRole(roleId: string) {
-    this.roleId = roleId;
+  setRole(role: string) {
+    this.role = role;
   }
 
   getRole() {
-    return this.roleId;
+    return this.role;
   }
 
   isTokenValid() { debugger
-    return !!this.roleId;
+    return !!this.role;
   }
 
   logout(): Observable<any> {

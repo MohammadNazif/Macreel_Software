@@ -27,40 +27,40 @@ export class LayoutComponent implements OnInit {
       label: 'Master',
       icon: 'fas fa-id-card',
       key: 'master',
-      roles: ['57'],
+      roles: ['admin'],
       children: [
         {
           label: 'Add Role',
-          route: '/home/admin/master/add-role', roles: ['57']
+          route: '/home/admin/master/add-role', roles: ['admin']
         },
         {
           label: 'Add Designation',
-          route: '/home/admin/master/add-designation', roles: ['57']
+          route: '/home/admin/master/add-designation', roles: ['admin']
         },
         {
           label: 'Add Department',
-          route: '/home/admin/master/add-department', roles: ['57']
+          route: '/home/admin/master/add-department', roles: ['admin']
         },
         {
           label: 'Add Technology',
-          route: '/home/admin/master/add-technology', roles: ['57']
+          route: '/home/admin/master/add-technology', roles: ['admin']
         },
-        { label: 'Add Leave', route: '/home/admin/master/add-leave', roles: ['57'] },
+        { label: 'Add Leave', route: '/home/admin/master/add-leave', roles: ['admin'] },
       ]
     },
     {
       label: 'Employee Management',
       icon: 'fa-solid fa-users',
-      key: '63',
-      roles: ['57'],
+      key: 'employee',
+      roles: ['admin'],
       children: [
         {
           label: 'Add Employee',
-          route: '/home/add-employee', roles: ['57']
+          route: '/home/add-employee', roles: ['admin']
         },
         {
           label: 'Employee List',
-          route: '/home/admin/employee-list', roles: ['57']
+          route: '/home/admin/employee-list', roles: ['admin']
         }
       ]
     },
@@ -68,27 +68,27 @@ export class LayoutComponent implements OnInit {
       label: 'Leave Management',
       icon: 'fas fa-id-card',
       key: 'leave',
-      roles: ['57', '63'],
+      roles: ['admin', 'employee'],
       children: [
-        { label: 'Assign Leave', route: '/home/admin/assign-leave', roles: ['57'] },
-        { label: 'Assigned Leaves', route: '/home/admin/assigned-employees-leaves', roles: ['57'] },
-        { label: 'Apply Leave', route: '/home/employee/apply-leave', roles: ['63'] },
-        { label: 'Assigned Leave', route: '/home/employee/assigned-leaves', roles: ['63'] }
+        { label: 'Assign Leave', route: '/home/admin/assign-leave', roles: ['admin'] },
+        { label: 'Assigned Leaves', route: '/home/admin/assigned-employees-leaves', roles: ['admin'] },
+        { label: 'Apply Leave', route: '/home/employee/apply-leave', roles: ['employee'] },
+        { label: 'Assigned Leave', route: '/home/employee/assigned-leaves', roles: ['employee'] }
       ]
     },
     {
       label: 'Attendance Management',
       icon: 'fa-solid fa-calendar-check',
       key: 'attendance',
-      roles: ['57'],
+      roles: ['admin'],
       children: [
         {
           label: 'Upload Attendance',
-          route: '/home/admin/upload-attendance', roles: ['57']
+          route: '/home/admin/upload-attendance', roles: ['admin']
         },
         {
           label: 'View Attendance',
-          route: '/home/admin/view-attendance', roles: ['57']
+          route: '/home/admin/view-attendance', roles: ['admin']
         }
       ]
     },
@@ -96,22 +96,22 @@ export class LayoutComponent implements OnInit {
       label: 'Task Management',
       icon: 'fa-solid fa-tasks',
       key: 'task',
-      roles: ['57', '63'],
+      roles: ['admin', 'employee'],
       children: [
         {
           label: 'Add Project Task',
           route: '/home/admin/add-task',
-          roles: ['57']
+          roles: ['admin']
         },
         {
           label: 'Project Task List',
           route: '/home/admin/view-task',
-          roles: ['57']
+          roles: ['admin']
         },
         {
           label: 'Assigned Tasks',
           route: '/home/employee/assigned-tasks',
-          roles: ['63']
+          roles: ['employee']
         }
       ]
     },
@@ -119,17 +119,17 @@ export class LayoutComponent implements OnInit {
       label: 'Project Management',
       icon: 'fa-solid fa-tasks',
       key: 'project',
-      roles: ['57'],
+      roles: ['admin'],
       children: [
         {
           label: 'Add Project',
           route: '/home/admin/add-project',
-          roles: ['57']
+          roles: ['admin']
         },
         {
           label: 'View Project',
           route: '/home/admin/view-project',
-          roles: ['57']
+          roles: ['admin']
         }
       ]
     }

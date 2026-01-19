@@ -12,6 +12,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { GenericTableComponent } from './generic-table/generic-table.component';
+import { CdkAutofill } from "@angular/cdk/text-field";
 
 
 
@@ -31,8 +32,9 @@ import { GenericTableComponent } from './generic-table/generic-table.component';
     MatFormFieldModule,
     MatChipsModule,
     MatAutocompleteModule,
-    MatSelectModule
-  ],
+    MatSelectModule,
+    CdkAutofill
+],
     exports: [
     GenericTableComponent
   ]
