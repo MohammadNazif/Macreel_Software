@@ -1479,34 +1479,24 @@ namespace Macreel_Software.DAL.Admin
         {
             List<Taskassign> list = new();
             int totalRecords = 0;
-
             try
             {
                 using (SqlCommand cmd = new SqlCommand("sp_assignTask", _conn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@action", "selectAll");
-                    cmd.Parameters.AddWithValue("@empId", empId);
-
+                    cmd.Parameters.AddWithValue("@empId", empId.HasValue ? empId.Value : DBNull.Value);
                     cmd.Parameters.AddWithValue("@searchTerm", string.IsNullOrWhiteSpace(searchTerm) ? DBNull.Value :searchTerm);
-
-                    cmd.Parameters.AddWithValue("@pageNumber",
-                        pageNumber.HasValue ? pageNumber.Value : DBNull.Value);
-
-                    cmd.Parameters.AddWithValue("@pageSize",
-                        pageSize.HasValue ? pageSize.Value : DBNull.Value);
-
+                    cmd.Parameters.AddWithValue("@pageNumber", pageNumber.HasValue ? pageNumber.Value : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@pageSize",pageSize.HasValue ? pageSize.Value : DBNull.Value);
                     if (_conn.State != ConnectionState.Open)
                         await _conn.OpenAsync();
-
                     using (SqlDataReader sdr = await cmd.ExecuteReaderAsync())
                     {
                         while (await sdr.ReadAsync())
                         {
-
                             if (totalRecords == 0)
                                 totalRecords = Convert.ToInt32(sdr["TotalRecords"]);
-
                             list.Add(new Taskassign
                             {
                                 id = Convert.ToInt32(sdr["id"]),
@@ -1519,13 +1509,10 @@ namespace Macreel_Software.DAL.Admin
                                 empName = sdr["empName"] != DBNull.Value ? sdr["empName"].ToString() : null,
                                 assignedDate= sdr["createdAt"] != DBNull.Value ? Convert.ToDateTime(sdr["CompletedDate"]) : null,
                                 taskStatus = sdr["taskStatus"] != DBNull.Value ? sdr["taskStatus"].ToString() : null,
-
                             });
                         }
                     }
                 }
-
-
                 if (pageNumber.HasValue && pageSize.HasValue)
                 {
                     return ApiResponse<List<Taskassign>>.PagedResponse(
@@ -1535,22 +1522,13 @@ namespace Macreel_Software.DAL.Admin
                         totalRecords,
                         "Assign Task list fetched successfully");
                 }
-
-
-                var response = ApiResponse<List<Taskassign>>.SuccessResponse(
-                    list,
-                    "Assign Task list fetched successfully");
-
+                var response = ApiResponse<List<Taskassign>>.SuccessResponse(list,"Assign Task list fetched successfully");
                 response.TotalRecords = totalRecords;
-
                 return response;
             }
             catch (Exception ex)
             {
-                return ApiResponse<List<Taskassign>>.FailureResponse(
-                    ex.Message,
-                    500,
-                    "ASSIGN_TASK_FETCH_ERROR");
+                return ApiResponse<List<Taskassign>>.FailureResponse( ex.Message, 500,"ASSIGN_TASK_FETCH_ERROR");
             }
             finally
             {
