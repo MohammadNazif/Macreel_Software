@@ -44,7 +44,8 @@ export class LayoutComponent implements OnInit {
         {
           label: 'Add Technology',
           route: '/home/admin/master/add-technology', roles: ['57']
-        }
+        },
+        { label: 'Add Leave', route: '/home/admin/master/add-leave', roles: ['57'] },
       ]
     },
     {
@@ -69,7 +70,6 @@ export class LayoutComponent implements OnInit {
       key: 'leave',
       roles: ['57', '63'],
       children: [
-        { label: 'Add Leave', route: '/home/admin/add-leave', roles: ['57'] },
         { label: 'Assign Leave', route: '/home/admin/assign-leave', roles: ['57'] },
         { label: 'Assigned Leaves', route: '/home/admin/assigned-employees-leaves', roles: ['57'] },
         { label: 'Apply Leave', route: '/home/employee/apply-leave', roles: ['63'] },
