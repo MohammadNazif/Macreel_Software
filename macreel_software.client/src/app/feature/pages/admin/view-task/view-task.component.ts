@@ -6,10 +6,9 @@ import { PaginatedList } from '../../../../core/utils/paginated-list';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { TableColumn, Task } from '../../../../core/models/interface';
-<<<<<<< HEAD
+
 import { Router } from '@angular/router';
-=======
->>>>>>> eabb35e (some chang)
+
 
 
 
