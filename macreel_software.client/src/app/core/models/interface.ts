@@ -75,7 +75,7 @@ export interface PaginatedResult<T> {
   data: T[];
   totalPages: number;
 }
-export type TableColumnType = 'text' | 'date' | 'custom';
+export type TableColumnType = 'text' | 'date' | 'custom' | 'time';
 export type TableColumnAlign = 'left' | 'center' | 'right';
 
 export interface TableColumn<T> {
@@ -91,4 +91,15 @@ export interface LeaveBalance {
   assignedLeave: number;
   usedLeave: number;
   remainingLeave: number;
+}
+export interface Attendance {
+   EmpCode : number;
+  EmpName : string;
+  attendanceDate :Date;
+  status : string;
+  InTime : Date;
+  OutTime :Date;
+  day :Date;
+  Month  :Date;
+  Year :Date;
 }

@@ -16,6 +16,6 @@ namespace Macreel_Software.DAL.Common
         Task<ApiResponse<List<ruleBook>>> GetRuleBookByIdAsync(int id);
         Task<bool> deleteRuleBookById(int id);
         Task<bool> sendMailForReg(sendMailForReg data);
-        Task<ApiResponse<List<sendEmailForRegistration>>> getEmailByAccessByIdForReg(string accessId);
+        Task<ApiResponse<List<SendEmailForRegistrationDto>>> getEmailByAccessByIdForReg(string accessId);
     }
 }

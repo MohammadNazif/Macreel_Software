@@ -226,12 +226,13 @@ namespace Macreel_Software.Models.Master
         public string? description { get; set; }
         public DateTime? CompletedDate { get; set; }
         public int? assignedBy { get; set; }
+        public string? assignedByName { get; set; }
 
         public IFormFile? document1 { get; set; }
         public IFormFile? document2 { get; set; }
 
-        public string document1Path { get; set; }
-        public string document2Path { get; set; }
+        public string? document1Path { get; set; }
+        public string? document2Path { get; set; }
         public string? taskStatus { get; set; }
         public DateTime? assignedDate { get; set; }
     }

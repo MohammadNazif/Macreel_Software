@@ -26,7 +26,7 @@ getTasks(search = '', page = 1, size = 20) {
 
 
   deleteTask(id: number): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/${id}`);
+    return this.http.delete(`${this.baseUrl}Admin/deleteTaskAssignById?id=${id}`);
   }
 
   addTask(formData: FormData): Observable<any> {
@@ -48,6 +48,6 @@ getTasks(search = '', page = 1, size = 20) {
       params = params.set('pageSize', pageSize.toString());
     }
 
-    return this.http.get<any>(`${this.baseUrl}Employee/AssignTask`, { params, withCredentials: true });
+    return this.http.get<any>(`${this.baseUrl}Employee/AssignedTasks`, { params, withCredentials: true });
   }
 }

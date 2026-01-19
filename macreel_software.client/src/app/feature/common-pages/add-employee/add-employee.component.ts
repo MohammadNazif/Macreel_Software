@@ -85,7 +85,7 @@ export class AddEmployeeComponent implements OnInit {
       emergencyContactPersonName: [''],
       emergencyContactNum: [''],
 
-      // 🔥 IMPORTANT - Multi select array
+      // IMPORTANT - Multi select array
       skillIds: [[]],
 
       companyName: [''],

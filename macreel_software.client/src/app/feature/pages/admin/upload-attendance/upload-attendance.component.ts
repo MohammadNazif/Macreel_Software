@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AttendanceService } from '../../../../core/services/upload-attendance.service';
-
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-upload-attendance',
   standalone: false,
@@ -63,8 +63,13 @@ export class UploadAttendanceComponent {
     this.attendanceForm.patchValue({ file });
   }
 
+
+
 async submit() {
-  if (this.attendanceForm.invalid || !this.selectedFile) return;
+  // Validate form & file
+  if (this.attendanceForm.invalid || !this.selectedFile) {
+    return;
+  }
 
   const formData = new FormData();
   formData.append('year', this.attendanceForm.value.year);
@@ -76,14 +81,33 @@ async submit() {
 
     const res = await this.attendanceService.uploadAttendance(formData);
 
-    console.log("res",res);
-    alert('Attendance uploaded successfully');
+    console.log("res", res);
+
+    // Success SweetAlert
+    await Swal.fire({
+      title: 'Success!',
+      text: 'Attendance uploaded successfully',
+      icon: 'success',
+      confirmButtonText: 'OK'
+    });
+
+    // Reset form & clear file
+    this.attendanceForm.reset();
+    this.selectedFile = null;
 
   } catch (error) {
     console.error(error);
-    alert('Upload failed');
+
+    // Error SweetAlert
+    Swal.fire({
+      title: 'Error!',
+      text: 'Upload failed',
+      icon: 'error',
+      confirmButtonText: 'OK'
+    });
   } finally {
     this.isSubmitting = false;
   }
 }
+
 }

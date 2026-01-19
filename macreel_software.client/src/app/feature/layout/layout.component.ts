@@ -72,6 +72,7 @@ export class LayoutComponent implements OnInit {
       children: [
         { label: 'Assign Leave', route: '/home/admin/assign-leave', roles: ['admin'] },
         { label: 'Assigned Leaves', route: '/home/admin/assigned-employees-leaves', roles: ['admin'] },
+        { label: 'Leave Request', route: '/home/admin/leave-requests', roles: ['admin'] },
         { label: 'Apply Leave', route: '/home/employee/apply-leave', roles: ['employee'] },
         { label: 'Assigned Leave', route: '/home/employee/assigned-leaves', roles: ['employee'] }
       ]
@@ -99,12 +100,12 @@ export class LayoutComponent implements OnInit {
       roles: ['admin', 'employee'],
       children: [
         {
-          label: 'Add Project Task',
+          label: 'Add Task',
           route: '/home/admin/add-task',
           roles: ['admin']
         },
         {
-          label: 'Project Task List',
+          label: 'Task List',
           route: '/home/admin/view-task',
           roles: ['admin']
         },
