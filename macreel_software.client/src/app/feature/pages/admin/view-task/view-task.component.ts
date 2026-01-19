@@ -23,6 +23,7 @@ export class ViewTaskComponent implements OnInit {
 
   taskColumns: TableColumn<Task>[] = [
     { key: 'title', label: 'Task' },
+    { key: 'empName', label: 'Assigned To' },
     { key: 'assignedBy', label: 'Assigned By' },
     { key: 'assignedDate', label: 'Assigned Date', type: 'date' },
     { key: 'completedDate', label: 'Completion Date', type: 'date' },
