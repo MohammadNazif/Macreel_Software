@@ -41,4 +41,6 @@ export class GenericTableComponent<T> {
     onScroll(event: Event) {
     this.tableScroll.emit(event);
   }
+
+
 }

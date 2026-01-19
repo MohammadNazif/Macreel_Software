@@ -5,7 +5,9 @@
 
     <thead class="sticky top-0 z-10 bg-[#dd3d4f]">
       <tr class="text-white border-b border-[#ccc]">
-        <th class="px-2 py-[8px] font-semibold border-r border-[#ccc]">S.N.</th>
+       <th class="w-[1.5px] px-1 py-0 overflow-hidden whitespace-nowrap border-r border-[#ccc]">
+  S.N.
+</th>
 
         <th *ngFor="let col of columns"
             class="px-2 py-1 font-semibold border-r border-[#ccc]"
@@ -34,7 +36,7 @@
             <span *ngIf="col.type === 'date'">
               {{ formatCell(item, col) }}
             </span>
-            <span *ngIf="!col.type || col.type === 'text'">
+            <span *ngIf="!col.type || col.type === 'text' && !col.template">
               {{ item[col.key] }}
             </span>
           </ng-template>
@@ -81,3 +83,10 @@
     </tbody>
   </table>
 </div>
+
+
+
+<!-- Files Preview Modal -->
+
+
+
