@@ -3,8 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import Swal from 'sweetalert2';
-import { ManageLeaveService } from '../../../../core/services/manage-leave.service';
-import { LeaveRow } from '../../../../core/models/interface';
+import { ManageLeaveService } from '../../../../../core/services/manage-leave.service';
+import { LeaveRow } from '../../../../../core/models/interface';
 
 @Component({
   selector: 'app-add-leave-type',

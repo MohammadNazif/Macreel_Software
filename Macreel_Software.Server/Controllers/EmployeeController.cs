@@ -5,7 +5,6 @@ using Macreel_Software.Contracts.DTOs;
 using Macreel_Software.Models.Employee;
 using Macreel_Software.Models.Master;
 using Microsoft.AspNetCore.Mvc;
-using Macreel_Software.DAL.Admin;
 namespace Macreel_Software.Server.Controllers
 {
     [Route("api/[controller]")]
