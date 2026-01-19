@@ -50,4 +50,10 @@ getTasks(search = '', page = 1, size = 20) {
 
     return this.http.get<any>(`${this.baseUrl}Employee/AssignedTasks`, { params, withCredentials: true });
   }
+
+  UpdateTaskStatus() {
+    return this.http.put<any>(
+      `${this.baseUrl}Admin/updateLeaveStatus`,{withCredential:true}
+    );
+  }
 }
