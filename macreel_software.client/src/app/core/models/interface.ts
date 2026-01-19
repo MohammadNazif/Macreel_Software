@@ -53,7 +53,10 @@ export interface EmpDashboardCount {
   completedTasks: number;
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> eabb35e (some chang)
 export interface ApiResponse<T> {
   success: boolean;
   statusCode: number;
@@ -88,9 +91,13 @@ export interface TableColumn<T> {
   width?: string;
   template?: TemplateRef<any>;
 }
+<<<<<<< HEAD
 export interface LeaveBalance {
   leaveType: string;
   assignedLeave: number;
   usedLeave: number;
   remainingLeave: number;
 }
+=======
+
+>>>>>>> eabb35e (some chang)
