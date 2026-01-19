@@ -50,7 +50,7 @@
 
       <!-- Emp Code -->
       <ng-container matColumnDef="empCode">
-        <th mat-header-cell *matHeaderCellDef class="min-w-[80px] md:min-w-[100px] text-[12px] md:text-[14px] px-1 py-1 !bg-[#dd3d4f] text-white">Emp Code</th>
+        <th mat-header-cell *matHeaderCellDef class=" whitespace-nowrap min-w-[80px] md:min-w-[100px] text-[12px] md:text-[14px] px-1 py-1 !bg-[#dd3d4f] text-white white ">Emp Code</th>
         <td mat-cell *matCellDef="let element" class="px-1 py-1 text-[12px] md:text-[14px] text-center">{{element.empCode}}</td>
       </ng-container>
 
@@ -71,16 +71,88 @@
       </ng-container>
 
       <!-- Email -->
-      <ng-container matColumnDef="email">
+      <!-- <ng-container matColumnDef="email">
         <th mat-header-cell *matHeaderCellDef class="min-w-[150px] md:min-w-[200px] text-[12px] md:text-[14px] px-1 py-1 !bg-[#dd3d4f] text-white">Email</th>
         <td mat-cell *matCellDef="let element" class="px-1 py-1 text-[12px] md:text-[14px] text-center">{{element.emailId}}</td>
       </ng-container>
 
-      <!-- Contact -->
+    
       <ng-container matColumnDef="contact">
         <th mat-header-cell *matHeaderCellDef class="min-w-[100px] md:min-w-[120px] text-[12px] md:text-[14px] px-1 py-1 !bg-[#dd3d4f] text-white">Contact</th>
         <td mat-cell *matCellDef="let element" class="px-1 py-1 text-[12px] md:text-[14px] text-center">{{element.mobile}}</td>
-      </ng-container>
+      </ng-container> -->
+
+   <ng-container matColumnDef="CL">
+  <th mat-header-cell *matHeaderCellDef 
+      class="min-w-[160px] !bg-[#dd3d4f] text-white px-1 py-1">
+
+    <div class="text-center text-[12px] md:text-[14px] font-semibold">
+      CL
+    </div>
+
+    <div class="grid grid-cols-2 text-[11px] md:text-[12px] mt-1 border-t border-white">
+      <div class="text-center border-r border-white px-4">Total</div>
+      <div class="text-center px-4">Type</div>
+    </div>
+  </th>
+
+  <td mat-cell *matCellDef="let element" class="px-1 py-1 text-center">
+    <div class="grid grid-cols-2 text-[12px] md:text-[14px]">
+      <div class="text-center px-3">{{ element.clTotal || 0 }}</div>
+      <div class="text-center px-3">CL</div>
+    </div>
+  </td>
+</ng-container>
+
+
+
+<ng-container matColumnDef="EL">
+  <th mat-header-cell *matHeaderCellDef 
+      class="min-w-[160px] !bg-[#dd3d4f] text-white px-1 py-1">
+
+    <div class="text-center text-[12px] md:text-[14px] font-semibold">
+      EL
+    </div>
+
+    <div class="grid grid-cols-2 text-[11px] md:text-[12px] mt-1 border-t border-white">
+      <div class="text-center border-r border-white px-4">Total</div>
+      <div class="text-center px-4">Type</div>
+    </div>
+  </th>
+
+  <td mat-cell *matCellDef="let element" class="px-1 py-1 text-center">
+    <div class="grid grid-cols-2 text-[12px] md:text-[14px]">
+      <div class="text-center px-3">{{ element.elTotal || 0 }}</div>
+      <div class="text-center px-3">EL</div>
+    </div>
+  </td>
+</ng-container>
+
+
+<ng-container matColumnDef="SL">
+  <th mat-header-cell *matHeaderCellDef 
+      class="min-w-[160px] !bg-[#dd3d4f] text-white px-1 py-1">
+
+    <div class="text-center text-[12px] md:text-[14px] font-semibold">
+      SL
+    </div>
+
+    <div class="grid grid-cols-2 text-[11px] md:text-[12px] mt-1 border-t border-white">
+      <div class="text-center border-r border-white px-4">Total</div>
+      <div class="text-center px-4">Type</div>
+    </div>
+  </th>
+
+  <td mat-cell *matCellDef="let element" class="px-1 py-1 text-center">
+    <div class="grid grid-cols-2 text-[12px] md:text-[14px]">
+      <div class="text-center">{{ element.slTotal || 0 }}</div>
+      <div class="text-center">SL</div>
+    </div>
+  </td>
+</ng-container>
+
+
+
 
       <!-- ROWS -->
       <tr mat-header-row *matHeaderRowDef="displayedColumns" class="!h-9"></tr>
@@ -90,7 +162,7 @@
   </div>
 
   <!-- ================= EMPLOYEE LEAVE MODAL ================= -->
-  <div 
+  <!-- <div 
     class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2"
     *ngIf="showLeaveDropdown">
     
@@ -123,6 +195,6 @@
       </div>
 
     </div>
-  </div>
+  </div> -->
 
 </div>

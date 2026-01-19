@@ -1,14 +1,4 @@
-// import { Component } from '@angular/core';
 
-// @Component({
-//   selector: 'app-all-employee-leave-list',
-//   standalone: false,
-//   templateUrl: './all-employee-leave-list.component.html',
-//   styleUrl: './all-employee-leave-list.component.css'
-// })
-// export class AllEmployeeLeaveListComponent {
-
-// }
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -23,7 +13,8 @@ import { ManageLeaveService } from '../../../../core/services/manage-leave.servi
 })
 export class AllEmployeeLeaveListComponent implements OnInit {
 
-  displayedColumns: string[] = ['srNo', 'empCode', 'empName', 'designation', 'email', 'contact'];
+  displayedColumns: string[] = ['srNo', 'empCode', 'empName', 'designation','CL','EL','SL'];
+
   dataSource = new MatTableDataSource<any>([]);
   totalRecords = 0;
   pageSize = 10;
@@ -45,14 +36,59 @@ export class AllEmployeeLeaveListComponent implements OnInit {
     this.loadEmployees();
   }
 
+  // loadEmployees(pageNumber: number = 1, pageSize: number = 10, search: string = '') {
+  //   this.empService.getAllEmployees(pageNumber, pageSize, search).subscribe(res => {
+  //     if (res.success) {
+  //       this.dataSource.data = res.data;
+  //       this.totalRecords = res.totalRecords;
+  //     }
+  //   });
+  // }
+
   loadEmployees(pageNumber: number = 1, pageSize: number = 10, search: string = '') {
-    this.empService.getAllEmployees(pageNumber, pageSize, search).subscribe(res => {
-      if (res.success) {
-        this.dataSource.data = res.data;
-        this.totalRecords = res.totalRecords;
-      }
-    });
-  }
+  this.empService.getAllEmployees(pageNumber, pageSize, search).subscribe(res => {
+    if (res.success) {
+
+      const employees = res.data;
+
+      // Har employee ke liye leave fetch karenge
+      employees.forEach((emp: any) => {
+        this.leaveService.getAssignedLeaveById(emp.id).subscribe(leaveRes => {
+
+          if (leaveRes.success) {
+            // Default values
+            emp.clTotal = 0;
+            emp.elTotal = 0;
+            emp.slTotal = 0;
+
+            leaveRes.data.forEach((leave: any) => {
+
+              if (leave.leaveType === 'CL') {
+                emp.clTotal = leave.noOfLeave;
+              }
+              if (leave.leaveType === 'EL') {
+               
+                emp.elTotal = leave.noOfLeave;
+                 console.log('EL Leave for', emp.empName, ':', emp.elTotal);
+              }
+              if (leave.leaveType === 'SL') {
+                emp.slTotal = leave.noOfLeave;
+              }
+
+            });
+
+            // Table update karne ke liye
+            this.dataSource.data = [...employees];
+          }
+        });
+      });
+
+      this.dataSource.data = employees;
+      this.totalRecords = res.totalRecords;
+    }
+  });
+}
+
 
   onPageChange(event: PageEvent) {
     this.pageNumber = event.pageIndex + 1;

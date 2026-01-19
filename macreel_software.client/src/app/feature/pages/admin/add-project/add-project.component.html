@@ -1,6 +1,5 @@
 <div class="max-w-7xl mx-auto bg-gray-100 p-4">
   <form [formGroup]="projectForm">
-
     <div class="bg-white p-6 rounded-lg shadow">
 
       <!-- HEADER -->
@@ -83,9 +82,9 @@
           </label>
         </div>
 
-        <!-- SOP DOCUMENT -->
+        <!-- SOW DOCUMENT -->
         <div class="relative">
-          <label class="block text-sm font-medium text-gray-500 mb-1">SOP Document</label>
+          <label class="block text-sm font-medium text-gray-500 mb-1">SOW Document</label>
           <input #sopFile type="file" accept=".pdf"
             class="w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-3 file:border-0 file:text-sm
                   file:font-semibold file:bg-[#C5192F] file:text-white hover:file:bg-[#a41526]
@@ -100,13 +99,11 @@
                   file:font-semibold file:bg-[#C5192F] file:text-white hover:file:bg-[#a41526]
                   cursor-pointer border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#C5192F]/30" />
         </div>
-
       </div> <!-- END GRID -->
 
       <!-- ================== Software SECTION ================== -->
       <div *ngIf="category === 'Software' || category === 'Website'" class="mt-6 border-t pt-4">
         <h3 class="text-lg font-semibold mb-3">Software Details</h3>
-
         <div class="mt-2 mb-4">
           <h4 class="font-semibold mb-2">Software Type</h4>
           <div class="flex gap-6">
@@ -144,10 +141,9 @@
             <span class="absolute right-3 top-2 text-gray-400 pointer-events-none">▼</span>
           </div>
 
-
           <div class="relative mt-3" *ngIf="filteredMobileEmployees.length">
-            <select formControlName="mobileEmpId" class="peer w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700
-                 focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
+            <select formControlName="mobileEmpId" (change)="onSelectMobileEmployee()" class="peer w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700
+        focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
               <option value="" disabled hidden></option>
               <option *ngFor="let emp of filteredMobileEmployees" [value]="emp.id">{{ emp.empName }}</option>
             </select>
@@ -157,13 +153,11 @@
             </label>
             <span class="absolute right-3 top-2 text-gray-400 pointer-events-none">▼</span>
           </div>
-
         </div>
 
         <!-- WEB SECTION -->
         <div *ngIf="isWebSoftware" class="mt-4">
           <h4 class="font-semibold mb-2">Web Details</h4>
-
           <div class="relative mt-3">
             <select formControlName="webSkill" class="peer w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700
                  focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
@@ -177,12 +171,11 @@
             <span class="absolute right-3 top-2 text-gray-400 pointer-events-none">▼</span>
           </div>
 
-
           <div class="relative mt-3" *ngIf="filteredWebEmployees.length">
-            <select formControlName="webEmpId" class="peer w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700
+            <select formControlName="webEmpId" (change)="onSelectWebEmployee()" class="peer w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700
                  focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
               <option value="" disabled hidden></option>
-              <option *ngFor="let emp of filteredWebEmployees" [value]="emp.id">{{ emp.empName }}</option>
+              <option *ngFor="let emp of filteredWebEmployees" [value]="emp.empId">{{ emp.empName }}</option>
             </select>
             <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
                 peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
@@ -190,12 +183,8 @@
             </label>
             <span class="absolute right-3 top-2 text-gray-400 pointer-events-none">▼</span>
           </div>
-
         </div>
-
       </div> <!-- END Software -->
-
-      <!-- ================== Digital Marketing MARKETING ================== -->
 
       <!-- ================== Digital Marketing SECTION ================== -->
       <div *ngIf="category === 'Digital Marketing'" class="mt-6 border-t pt-4 bg-white p-4 rounded-lg shadow">
@@ -242,24 +231,8 @@
               Paid Ads
             </label>
           </div>
-
         </div>
       </div>
-
-
-      <!-- <div *ngIf="category === 'Digital Marketing'" class="mt-6 border-t pt-4">
-        <h3 class="text-lg font-semibold mb-3">Digital Marketing Marketing Details</h3>
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <input type="text" formControlName="SEO" placeholder="SEO"
-                 class="peer w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700" />
-          <input type="text" formControlName="SMO" placeholder="SMO"
-                 class="peer w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700" />
-          <input type="text" formControlName="GMB" placeholder="GMB"
-                 class="peer w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700" />
-          <input type="text" formControlName="paidAds" placeholder="Paid Ads"
-                 class="peer w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700" />
-        </div>
-      </div> -->
 
       <!-- ================== SELECTED EMPLOYEE PROJECT CARDS ================== -->
       <div *ngIf="selectedEmployeeProjects.length" class="mt-6">
@@ -300,7 +273,6 @@
                 <span class="font-medium">Start Date:</span>
                 <span>{{ p.startDate | date:'dd MMM yyyy' }}</span>
               </div>
-
             </div>
 
             <!-- CARD FOOTER -->
@@ -308,12 +280,9 @@
               <span>Status</span>
               <span class="text-green-600 font-semibold">Active</span>
             </div>
-
           </div>
-
         </div>
       </div>
-
 
       <!-- SUBMIT BUTTON -->
       <div class="flex justify-end mt-6">
@@ -322,8 +291,6 @@
           Submit Project
         </button>
       </div>
-
-
     </div> <!-- END MAIN CARD -->
   </form>
 </div>
