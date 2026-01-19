@@ -60,7 +60,7 @@ export class AddEmployeeComponent implements OnInit {
   ngOnInit(): void {
     this.employeeForm = this.fb.group({
       empRoleId: ['', Validators.required],
-      empCode: [''],
+      empCode: ['',Validators.required],
       empName: ['', Validators.required],
       mobile: ['', Validators.required],
       departmentId: ['', Validators.required],
@@ -155,13 +155,22 @@ export class AddEmployeeComponent implements OnInit {
     });
   }
 
-  private loadReportingManagers(): void {
-    this.employeeService.getReportingManager().subscribe(res => {
+private loadReportingManagers(): void {
+  this.employeeService.getReportingManager().subscribe({
+    next: (res) => {
+      console.log("FULL API RESPONSE:", res);
+
       if (res?.success) {
+        console.log("ONLY DATA:", res.data);
         this.reportingManagers = res.data ?? [];
       }
-    });
-  }
+    },
+    error: (err) => {
+      console.error("API ERROR:", err);
+    }
+  });
+}
+
 
   // ================= TECHNOLOGY CHIP LOGIC =================
 
@@ -256,7 +265,7 @@ export class AddEmployeeComponent implements OnInit {
 
   nextStep(): void {
     const step1Controls = [
-      'empRoleId', 'empName', 'mobile', 'departmentId',
+      'empRoleId',"empCode", 'empName', 'mobile', 'departmentId',
       'designationId', 'emailId', 'dateOfJoining',
       'dob', 'password', 'stateId', 'cityId'
     ];
