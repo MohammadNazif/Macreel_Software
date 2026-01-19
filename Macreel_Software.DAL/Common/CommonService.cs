@@ -316,9 +316,9 @@ namespace Macreel_Software.DAL.Common
             }
         }
         #endregion
-        public async  Task<ApiResponse<List<sendEmailForRegistration>>> getEmailByAccessByIdForReg(string accessId)
+        public async  Task<ApiResponse<List<SendEmailForRegistrationDto>>> getEmailByAccessByIdForReg(string accessId)
         {
-            List<sendEmailForRegistration> data = new List<sendEmailForRegistration>();
+            List<SendEmailForRegistrationDto> data = new List<SendEmailForRegistrationDto>();
             try
             {
                 SqlCommand cmd = new SqlCommand("sp_sendEmailForEmpReg", _conn);
@@ -334,7 +334,7 @@ namespace Macreel_Software.DAL.Common
                     {
                         while(await sdr.ReadAsync())
                         {
-                            data.Add(new sendEmailForRegistration
+                            data.Add(new SendEmailForRegistrationDto
                             {
                                 id = sdr["id"] != DBNull.Value ? Convert.ToInt32(sdr["id"]):null,
                                 accessId = sdr["accessId"] != DBNull.Value ? sdr["accessId"].ToString():null,
@@ -344,13 +344,13 @@ namespace Macreel_Software.DAL.Common
                         }
                     }
                 }
-                return ApiResponse<List<sendEmailForRegistration>>.SuccessResponse(
+                return ApiResponse<List<SendEmailForRegistrationDto>>.SuccessResponse(
                          data,
                          "Email fetched successfull by accessId");
             }
             catch (Exception ex)
             {
-                return ApiResponse<List<sendEmailForRegistration>>.FailureResponse(
+                return ApiResponse<List<SendEmailForRegistrationDto>>.FailureResponse(
                     ex.Message,
                     500,
                     "EMAIL_FETCH_ERROR");
