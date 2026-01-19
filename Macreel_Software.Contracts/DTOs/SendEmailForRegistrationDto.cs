@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Macreel_Software.Contracts.DTOs
 {
-    public class sendEmailForRegistration
+    public class SendEmailForRegistrationDto
     {
         public int? id { get; set; }
         public string? accessId { get; set; }
