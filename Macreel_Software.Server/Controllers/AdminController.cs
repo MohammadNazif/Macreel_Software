@@ -138,36 +138,6 @@ namespace Macreel_Software.Server.Controllers
         }
 
 
-        [HttpGet("getReportingManager")]
-        public async Task<IActionResult> GetReportingManager()
-        {
-            try
-            {
-                var result = await _services.GetAllReportingManager();
-
-                if (result != null && result.Any())
-                {
-                    return Ok(ApiResponse<List<ReportingManger>>.SuccessResponse(
-                        result,
-                        "Reporting manager fetched successfully"
-                    ));
-                }
-
-                return Ok(ApiResponse<List<ReportingManger>>.FailureResponse(
-                    "No data found",
-                    404
-                ));
-            }
-            catch (Exception)
-            {
-                return StatusCode(500,
-                    ApiResponse<List<ReportingManger>>.FailureResponse(
-                        "An error occurred while fetching reporting managers",
-                        500,
-                        "SERVER_ERROR"
-                    ));
-            }
-        }
 
         [HttpGet("GetAllEmployees")]
         public async Task<IActionResult> GetAllEmployees(

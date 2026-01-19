@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Macreel_Software.Contracts.DTOs;
 using Macreel_Software.DAL;
 using Macreel_Software.DAL.Admin;
 using Macreel_Software.DAL.Auth;
@@ -17,6 +18,7 @@ namespace Macreel_Software.Server.Controllers
     [ApiController]
     public class CommonController : ControllerBase
     {
+        private readonly IAdminServices _services;
         private readonly ICommonServices _service;
         private readonly PasswordEncrypt _pass;
         private readonly FileUploadService _fileUploadService;
@@ -24,13 +26,14 @@ namespace Macreel_Software.Server.Controllers
         private readonly MailSender _mailservice;
 
 
-        public CommonController(ICommonServices service, PasswordEncrypt pass, FileUploadService fileUploadService,IAdminServices adminservice, MailSender mailservice)
+        public CommonController(ICommonServices service, PasswordEncrypt pass, FileUploadService fileUploadService,IAdminServices adminservice, MailSender mailservice, IAdminServices adminService)
         {
             _service = service;
             _pass = pass;
             _fileUploadService = fileUploadService;
             _adminservice = adminservice;
             _mailservice = mailservice;
+            _services = adminService;
         }
 
         [HttpGet("getAllStateList")]
@@ -111,6 +114,44 @@ namespace Macreel_Software.Server.Controllers
                 });
             }
         }
+
+        #region reporting manager
+
+        [HttpGet("getReportingManager")]
+        public async Task<IActionResult> GetReportingManager()
+        {
+            try
+            {
+                var result = await _services.GetAllReportingManager();
+
+                if (result != null && result.Any())
+                {
+                    return Ok(ApiResponse<List<ReportingManger>>.SuccessResponse(
+                        result,
+                        "Reporting manager fetched successfully"
+                    ));
+                }
+
+                return Ok(ApiResponse<List<ReportingManger>>.FailureResponse(
+                    "No data found",
+                    404
+                ));
+            }
+            catch (Exception)
+            {
+                return StatusCode(500,
+                    ApiResponse<List<ReportingManger>>.FailureResponse(
+                        "An error occurred while fetching reporting managers",
+                        500,
+                        "SERVER_ERROR"
+                    ));
+            }
+        }
+        #endregion
+
+        #region designation
+
+        #endregion
 
         #region Register Admin
         [HttpPost("register-admin")]
@@ -304,15 +345,15 @@ namespace Macreel_Software.Server.Controllers
             try
             {
                 string accessId = Guid.NewGuid().ToString();
+                data.accessId = accessId;
 
                 var mailRequest = new MailRequest
                 {
                     ToEmail = data.email,
                     Subject = "Register Yourself - Macreel Infosoft Pvt. Ltd.",
                     BodyType = MailBodyType.RegistrationLink,
-                    Value = data.email
+                    Value = data.accessId
                 };
-                data.accessId = accessId;
                 var mailResponse = await _mailservice.SendMailAsync(mailRequest);
 
                 if (!mailResponse.Status)
@@ -351,6 +392,31 @@ namespace Macreel_Software.Server.Controllers
             }
         }
 
+        [HttpGet("EmailIdByAccessId")]
+        public async Task<IActionResult> EmailIdByAccessId(string accessId)
+        {
+            try
+            {
+
+                var result = await _service.getEmailByAccessByIdForReg(accessId);
+
+
+                return StatusCode(result.StatusCode, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<sendEmailForRegistration>.FailureResponse(
+                    "An error occurred while fetching email.",
+                    500,
+                    "SERVER_ERROR"
+                ));
+            }
+        }
+
+
+
         #endregion
+
+
     }
 }
