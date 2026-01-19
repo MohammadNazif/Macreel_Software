@@ -1,4 +1,4 @@
-<div class="relative overflow-x-auto overflow-y-auto rounded-xl border border-gray-200"
+<div class="relative overflow-x-auto overflow-y-auto ms-1 rounded-xl border border-gray-200"
      style="max-height: 72vh;"
      (scroll)="onScroll($event)">
   <table class="w-full min-w-[950px] text-[12px] text-left">
@@ -14,7 +14,7 @@
           {{ col.label }}
         </th>
 
-        <th class="px-2 py-1 text-center font-semibold">Action</th>
+        <th *ngIf="showActions" class="px-2 py-1 text-center font-semibold">Action</th>
       </tr>
     </thead>
 
@@ -40,7 +40,7 @@
           </ng-template>
         </td>
 
-        <td class="px-2 py-1">
+        <td *ngIf="showActions" class="px-2 py-1">
           <div class="flex justify-center gap-2">
             <!-- Edit Icon Button -->
             <button class="w-7 h-7 flex items-center justify-center rounded-md border border-[#dd3d4f] text-[#dd3d4f] hover:bg-[#dd3d4f] hover:text-white transition"
@@ -65,17 +65,21 @@
         </td>
       </tr>
 
-      <tr *ngIf="loading">
-        <td [attr.colspan]="columns.length + 1" class="py-8 text-center">
-          Loading...
-        </td>
-      </tr>
+   
 
-      <tr *ngIf="!loading && data.length === 0">
-        <td [attr.colspan]="columns.length + 1" class="py-8 text-center text-gray-400">
-          No records found
-        </td>
-      </tr>
+ <tr *ngIf="!loading && data?.length === 0">
+  <td [attr.colspan]="columns.length + 2"
+      class="py-8 text-center text-gray-400">
+    No records found
+  </td>
+</tr>
+
+<tr *ngIf="loading">
+  <td [attr.colspan]="columns.length + 2"
+      class="py-8 text-center">
+    Loading...
+  </td>
+</tr>
     </tbody>
   </table>
 </div>

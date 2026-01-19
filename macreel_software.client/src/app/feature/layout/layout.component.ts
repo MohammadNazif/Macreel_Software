@@ -100,12 +100,12 @@ export class LayoutComponent implements OnInit {
       roles: ['admin', 'employee'],
       children: [
         {
-          label: 'Add Project Task',
+          label: 'Add Task',
           route: '/home/admin/add-task',
           roles: ['admin']
         },
         {
-          label: 'Project Task List',
+          label: 'Task List',
           route: '/home/admin/view-task',
           roles: ['admin']
         },

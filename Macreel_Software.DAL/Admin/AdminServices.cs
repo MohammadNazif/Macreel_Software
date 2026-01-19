@@ -9,8 +9,11 @@ using Microsoft.Extensions.Configuration;
 using System.Data;
 using System.Text.Json;
 
+
+
 namespace Macreel_Software.DAL.Admin
 {
+
     public  class AdminServices:IAdminServices
     {
 

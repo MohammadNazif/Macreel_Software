@@ -19,7 +19,7 @@ export class GenericTableComponent<T> {
   @Output() delete = new EventEmitter<T>();
 
   @Output() tableScroll = new EventEmitter<Event>();
-
+  @Input() showActions = true;
 
   constructor(private datePipe: DatePipe) {}
 
