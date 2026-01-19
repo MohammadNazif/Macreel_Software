@@ -1,4 +1,6 @@
-﻿using System.Data;
+﻿using System.Collections.Generic;
+using System.Data;
+using Macreel_Software.Contracts.DTOs;
 using Macreel_Software.Models;
 using Macreel_Software.Models.Common;
 using Microsoft.AspNetCore.Http;
@@ -313,8 +315,52 @@ namespace Macreel_Software.DAL.Common
                 return res > 0;
             }
         }
-
         #endregion
+        public async  Task<ApiResponse<List<sendEmailForRegistration>>> getEmailByAccessByIdForReg(string accessId)
+        {
+            List<sendEmailForRegistration> data = new List<sendEmailForRegistration>();
+            try
+            {
+                SqlCommand cmd = new SqlCommand("sp_sendEmailForEmpReg", _conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@action", "selectEmailByaccessId");
+                cmd.Parameters.AddWithValue("@accessId", accessId);
+                if (_conn.State == ConnectionState.Closed)
+                    await _conn.OpenAsync();
+
+                using(SqlDataReader sdr=await cmd.ExecuteReaderAsync())
+                {
+                    if(sdr.HasRows)
+                    {
+                        while(await sdr.ReadAsync())
+                        {
+                            data.Add(new sendEmailForRegistration
+                            {
+                                id = sdr["id"] != DBNull.Value ? Convert.ToInt32(sdr["id"]):null,
+                                accessId = sdr["accessId"] != DBNull.Value ? sdr["accessId"].ToString():null,
+                                email = sdr["email"] != DBNull.Value ? sdr["email"].ToString():null,
+                                reg_date = sdr["reg_date"] != DBNull.Value ? Convert.ToDateTime(sdr["reg_date"]):null,
+                            });
+                        }
+                    }
+                }
+                return ApiResponse<List<sendEmailForRegistration>>.SuccessResponse(
+                         data,
+                         "Email fetched successfull by accessId");
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<List<sendEmailForRegistration>>.FailureResponse(
+                    ex.Message,
+                    500,
+                    "EMAIL_FETCH_ERROR");
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    await _conn.CloseAsync();
+            }
+        }
 
     }
     #endregion

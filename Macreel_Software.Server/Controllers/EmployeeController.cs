@@ -5,8 +5,10 @@ using Macreel_Software.Contracts.DTOs;
 using Macreel_Software.Models.Employee;
 using Macreel_Software.Models.Master;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 namespace Macreel_Software.Server.Controllers
 {
+    [Authorize(Roles ="employee")]
     [Route("api/[controller]")]
     [ApiController]
     public class EmployeeController : ControllerBase

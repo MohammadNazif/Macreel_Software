@@ -52,8 +52,6 @@ export interface EmpDashboardCount {
   totalTasks: number;
   completedTasks: number;
 }
-
-
 export interface ApiResponse<T> {
   success: boolean;
   statusCode: number;

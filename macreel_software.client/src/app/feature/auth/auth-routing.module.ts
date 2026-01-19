@@ -11,6 +11,7 @@ import { roleGuard } from '../../core/guards/guards/role.guard';
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
+  { path: 'employee-registration', component: AddEmployeeComponent },
   {
     path: 'home', component: LayoutComponent,
     canActivate:[authGuard],

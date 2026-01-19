@@ -1,8 +1,6 @@
 import { Observable } from 'rxjs';
 import { PaginatedResult } from '../models/interface';
 
-
-
 export class PaginatedList<T> {
 
   readonly items: T[] = [];

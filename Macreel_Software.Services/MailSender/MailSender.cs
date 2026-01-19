@@ -164,7 +164,7 @@ public class MailSender
 
             <p style=""text-align: center;"">
                 <a class=""btn""
-                   href=""http://localhost:54266/home/add-employee?email={res}""
+                   href=""http://localhost:54266/home/add-employee?accessId={res}""
                    target=""_blank"">
                    Register Here
                 </a>

@@ -3,7 +3,10 @@ import { ManageMasterdataService } from '../../../../core/services/manage-master
 import Swal from 'sweetalert2';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AddProjectService } from '../../../../core/services/add-project.service';
+import { Project } from '../../../../core/models/interface';
 import { Router } from '@angular/router';
+
+
 
 @Component({
   selector: 'app-add-project',
@@ -20,6 +23,7 @@ export class AddProjectComponent implements OnInit {
   @ViewChild('technicalFile') technicalFile!: ElementRef<HTMLInputElement>;
 
   projectForm!: FormGroup;
+
 
   allTechnologies: any[] = [];
   mobileSkills: any[] = [];
@@ -65,6 +69,9 @@ export class AddProjectComponent implements OnInit {
     });
   }
 
+
+
+
   initForm() {
     this.projectForm = this.fb.group({
       category: ['', Validators.required],
@@ -95,7 +102,12 @@ export class AddProjectComponent implements OnInit {
       GMB: [''],
       paidAds: ['']
     });
+
   }
+
+  //   get category(): string {
+  //   return this.projectForm.get('category')?.value || '';
+  // }
 
   get category(): 'Software' | 'Website' | 'Digital Marketing' | '' {
     return this.projectForm.get('category')?.value || '';
@@ -165,7 +177,6 @@ export class AddProjectComponent implements OnInit {
   }
 
 
-
   // ================= WEB METHODS =================
   onWebSkillChange(skillId: any) {
     const id = skillId ? Number(skillId) : null;
@@ -177,6 +188,7 @@ export class AddProjectComponent implements OnInit {
       next: res => this.filteredWebEmployees = res?.data || [],
       error: err => this.filteredWebEmployees = []
     });
+
   }
 
   onSelectWebEmployee(): void {
@@ -244,7 +256,9 @@ export class AddProjectComponent implements OnInit {
     }
   }
   // ================= FORM SUBMISSION =================
+
   submitProject() {
+
     if (this.projectForm.invalid) {
       Swal.fire({
         icon: 'warning',
@@ -256,6 +270,7 @@ export class AddProjectComponent implements OnInit {
 
     const formData = new FormData();
     const f = this.projectForm.value;
+
     // ================= BASIC FIELDS =================
     formData.append('id', this.editProjectId.toString());
     formData.append('category', f.category);

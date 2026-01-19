@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Macreel_Software.Models\Macreel_Software.Models.csproj" />
+  </ItemGroup>
+
 </Project>

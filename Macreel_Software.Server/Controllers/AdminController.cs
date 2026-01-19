@@ -1,7 +1,7 @@
-﻿using Macreel_Software.DAL.Admin;
+﻿using Macreel_Software.Contracts.DTOs;
+using Macreel_Software.DAL.Admin;
 using Macreel_Software.Models;
 using Macreel_Software.Models.Common;
-using Macreel_Software.Models.Employee;
 using Macreel_Software.Models.Master;
 using Macreel_Software.Services.FileUpload.Services;
 using Macreel_Software.Services.MailSender;
@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Macreel_Software.Server.Controllers
 {
-    [Authorize(Roles = "57")]
+    [Authorize(Roles = "admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class AdminController : ControllerBase
@@ -20,6 +20,8 @@ namespace Macreel_Software.Server.Controllers
         private readonly IWebHostEnvironment _env;
         private readonly MailSender _mailservice;
         private readonly PasswordEncrypt _pass;
+        private readonly int _userId;
+        private readonly int _roleId;
 
         public AdminController(
             IAdminServices service,
@@ -33,7 +35,13 @@ namespace Macreel_Software.Server.Controllers
             _env = env;
             _mailservice = mailservice;
             _pass = pass;
-        
+            var user = http.HttpContext?.User;
+            if (user != null && user.Identity?.IsAuthenticated == true)
+            {
+                _userId = Convert.ToInt32(user.FindFirst("UserId")?.Value);
+                int.TryParse(user.FindFirst("Role")?.Value, out _roleId);
+            }
+
         }
 
         [HttpGet("checkauth")]
@@ -138,36 +146,6 @@ namespace Macreel_Software.Server.Controllers
         }
 
 
-        [HttpGet("getReportingManager")]
-        public async Task<IActionResult> GetReportingManager()
-        {
-            try
-            {
-                var result = await _services.GetAllReportingManager();
-
-                if (result != null && result.Any())
-                {
-                    return Ok(ApiResponse<List<ReportingManger>>.SuccessResponse(
-                        result,
-                        "Reporting manager fetched successfully"
-                    ));
-                }
-
-                return Ok(ApiResponse<List<ReportingManger>>.FailureResponse(
-                    "No data found",
-                    404
-                ));
-            }
-            catch (Exception)
-            {
-                return StatusCode(500,
-                    ApiResponse<List<ReportingManger>>.FailureResponse(
-                        "An error occurred while fetching reporting managers",
-                        500,
-                        "SERVER_ERROR"
-                    ));
-            }
-        }
 
         [HttpGet("GetAllEmployees")]
         public async Task<IActionResult> GetAllEmployees(
@@ -516,7 +494,7 @@ namespace Macreel_Software.Server.Controllers
         {
             try
             {
-                ApiResponse<List<AssignLeaveDetails>> result =
+                ApiResponse<List<allAssignedLeave>> result =
                     await _services.getAllAssignedLeave(searchTerm, pageNumber, pageSize);
 
 
@@ -794,6 +772,8 @@ namespace Macreel_Software.Server.Controllers
         [HttpPost("insert-update-Task")]
         public async Task<IActionResult> insertUpdateTask([FromForm] Taskassign data)
         {
+            data.assignedBy = _userId;
+            int roleId = _roleId;
             if (data == null)
             {
                 return BadRequest(new
