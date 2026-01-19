@@ -58,9 +58,9 @@ export class LoginComponent implements OnInit {
               return;
             }
             this.auth.setRole(userRole);
-            if(userRole == 57)
+            if(userRole == 'admin')
               this.router.navigate(['/home/admin']);
-            else if(userRole == 63)
+            else if(userRole == 'employee')
               this.router.navigate(['/home/employee'])
             else
               this.router.navigate(['/error'])
