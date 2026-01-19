@@ -236,12 +236,12 @@ namespace Macreel_Software.Server.Controllers
         #endregion
 
         #region Task Management            
-        [HttpGet("AssignTask")]
+        [HttpGet("AssignedTasks")]
         public async Task<IActionResult> AssignTask(string? searchTerm = null, int? pageNumber = null, int? pageSize = null)
         {
             try
             {
-                ApiResponse<List<Taskassign>> result =
+                ApiResponse<List<TaskAssignDto>> result =
                     await _adminService.getAllAssignTask(searchTerm, pageNumber, pageSize,_userId);
 
 

@@ -21,6 +21,7 @@ import { AddTaskComponent } from './add-task/add-task.component';
 import { ViewTaskComponent } from './view-task/view-task.component';
 import { ViewProjectComponent } from './view-project/view-project.component';
 import { CommonPagesModule } from '../../common-pages/common-pages.module';
+import { LeaveRequestsComponent } from './leave-requests/leave-requests.component';
 
 
 
@@ -37,7 +38,8 @@ import { CommonPagesModule } from '../../common-pages/common-pages.module';
     AddProjectComponent,
     AddTaskComponent,
     ViewTaskComponent,
-   ViewProjectComponent
+   ViewProjectComponent,
+   LeaveRequestsComponent
 
   ],
   imports: [

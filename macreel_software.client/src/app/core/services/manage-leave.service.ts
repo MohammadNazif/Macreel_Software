@@ -62,6 +62,29 @@ export class ManageLeaveService {
   getAssignedLeaveById(empId: number) {
     return this.http.get<any>(`${this.baseUrl}Admin/getAssignedLeaveById?empId=${empId}`);
   }
+  // Update Leave Requests
+  UpdateLeaveStatus(id:number,leaveCount:number,status:number) {
+    return this.http.put<any>(
+      `${this.baseUrl}Admin/updateLeaveStatus?id=${id}&leaveCount=${leaveCount}&status=${status}`,{withCredential:true}
+    );
+  }
+  //Leave Requests
+  getAllLeaveRequests(searchTerm?: string, pageNumber?: number, pageSize?: number): Observable<any> {
+    let params = new HttpParams();
+    if (searchTerm) {
+      params = params.set('searchTerm', searchTerm);
+    }
+
+    if (pageNumber !== null && pageNumber !== undefined) {
+      params = params.set('pageNumber', pageNumber.toString());
+    }
+
+    if (pageSize !== null && pageSize !== undefined) {
+      params = params.set('pageSize', pageSize.toString());
+    }
+
+    return this.http.get<any>(`${this.baseUrl}Admin/getAllLeaveRequests`, { params, withCredentials: true });
+  }
 
   //Employee Service Start Here
   getLeaveBalance(): Observable<any> {
