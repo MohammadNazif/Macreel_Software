@@ -1,10 +1,5 @@
 import { Observable } from 'rxjs';
 import { PaginatedResult } from '../models/interface';
-<<<<<<< HEAD
-
-=======
->>>>>>> eabb35e (some chang)
-
 
 export class PaginatedList<T> {
 

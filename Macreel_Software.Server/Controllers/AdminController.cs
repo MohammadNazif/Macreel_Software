@@ -1,4 +1,5 @@
-﻿using Macreel_Software.DAL.Admin;
+﻿using Macreel_Software.Contracts.DTOs;
+using Macreel_Software.DAL.Admin;
 using Macreel_Software.Models;
 using Macreel_Software.Models.Common;
 using Macreel_Software.Models.Master;
@@ -19,6 +20,8 @@ namespace Macreel_Software.Server.Controllers
         private readonly IWebHostEnvironment _env;
         private readonly MailSender _mailservice;
         private readonly PasswordEncrypt _pass;
+        private readonly int _userId;
+        private readonly int _roleId;
 
         public AdminController(
             IAdminServices service,
@@ -32,7 +35,13 @@ namespace Macreel_Software.Server.Controllers
             _env = env;
             _mailservice = mailservice;
             _pass = pass;
-        
+            var user = http.HttpContext?.User;
+            if (user != null && user.Identity?.IsAuthenticated == true)
+            {
+                _userId = Convert.ToInt32(user.FindFirst("UserId")?.Value);
+                int.TryParse(user.FindFirst("Role")?.Value, out _roleId);
+            }
+
         }
 
         [HttpGet("checkauth")]
@@ -485,7 +494,7 @@ namespace Macreel_Software.Server.Controllers
         {
             try
             {
-                ApiResponse<List<AssignLeaveDetails>> result =
+                ApiResponse<List<allAssignedLeave>> result =
                     await _services.getAllAssignedLeave(searchTerm, pageNumber, pageSize);
 
 
@@ -763,6 +772,8 @@ namespace Macreel_Software.Server.Controllers
         [HttpPost("insert-update-Task")]
         public async Task<IActionResult> insertUpdateTask([FromForm] Taskassign data)
         {
+            data.assignedBy = _userId;
+            int roleId = _roleId;
             if (data == null)
             {
                 return BadRequest(new

@@ -5,11 +5,8 @@ import { ProjectService } from '../../../../core/services/project-service.servic
 
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import Swal from 'sweetalert2';
-<<<<<<< HEAD
 import { Router } from '@angular/router';
 import { AddProjectService } from '../../../../core/services/add-project.service';
-=======
->>>>>>> eabb35e (some chang)
 import { Project, TableColumn } from '../../../../core/models/interface';
 
 import { PaginatedList } from '../../../../core/utils/paginated-list';

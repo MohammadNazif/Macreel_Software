@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using FirebaseAdmin.Messaging;
+using Macreel_Software.Contracts.DTOs;
 using Macreel_Software.Models;
 using Macreel_Software.Models.Common;
 using Macreel_Software.Models.Employee;
@@ -644,9 +645,9 @@ namespace Macreel_Software.DAL.Admin
         }
 
 
-        public async Task<ApiResponse<List<AssignLeaveDetails>>> getAllAssignedLeave(string? searchTerm, int? pageNumber, int? pageSize)
+        public async Task<ApiResponse<List<allAssignedLeave>>> getAllAssignedLeave(string? searchTerm, int? pageNumber, int? pageSize)
         {
-            List<AssignLeaveDetails> list = new();
+            List<allAssignedLeave> list = new();
             int totalRecords = 0;
 
             try
@@ -676,13 +677,23 @@ namespace Macreel_Software.DAL.Admin
                             if (totalRecords == 0)
                                 totalRecords = Convert.ToInt32(sdr["TotalRecords"]);
 
-                            list.Add(new AssignLeaveDetails
+                            list.Add(new allAssignedLeave
                             {
                                 id = Convert.ToInt32(sdr["id"]),
                                 EmpId = sdr["empId"] != DBNull.Value ? Convert.ToInt32(sdr["empId"]):null,
-                                NoOfLeave = sdr["noOfLeave"] != DBNull.Value ? Convert.ToInt32(sdr["noOfLeave"]):null,
-                                Leave = sdr["leaveType"] != DBNull.Value ? sdr["leaveType"].ToString() : null,
-                                description = sdr["description"] != DBNull.Value ? sdr["description"].ToString() : null,
+                                empName = sdr["empName"] != DBNull.Value ? sdr["empName"].ToString():null,
+                                empCode = sdr["empCode"] != DBNull.Value ? Convert.ToInt32(sdr["empCode"]) : null,
+                                designationId = sdr["designation"] != DBNull.Value ? Convert.ToInt32(sdr["designation"]) : null,
+                                designationName = sdr["designationName"] != DBNull.Value ? sdr["designationName"].ToString() : null,
+                                CLTotal = sdr["CLTotal"] != DBNull.Value ? Convert.ToInt32(sdr["CLTotal"]) : null,
+                                CLRemaining = sdr["CLRemaining"] != DBNull.Value ? Convert.ToInt32(sdr["CLRemaining"]) : null,
+                                CLUsed = sdr["CLUsed"] != DBNull.Value ? Convert.ToInt32(sdr["CLUsed"]) : null,
+                                SLRemaining = sdr["SLRemaining"] != DBNull.Value ? Convert.ToInt32(sdr["SLRemaining"]) : null,
+                                SLTotal = sdr["SLTotal"] != DBNull.Value ? Convert.ToInt32(sdr["SLTotal"]) : null,
+                                SLUsed = sdr["SLUsed"] != DBNull.Value ? Convert.ToInt32(sdr["SLUsed"]) : null,
+                                ELTotal = sdr["ELTotal"] != DBNull.Value ? Convert.ToInt32(sdr["ELTotal"]) : null,
+                                ELRemaining = sdr["ELRemaining"] != DBNull.Value ? Convert.ToInt32(sdr["ELRemaining"]) : null,
+                                ELUsed = sdr["ELUsed"] != DBNull.Value ? Convert.ToInt32(sdr["ELUsed"]) : null,
                             });
                         }
                     }
@@ -691,7 +702,7 @@ namespace Macreel_Software.DAL.Admin
 
                 if (pageNumber.HasValue && pageSize.HasValue)
                 {
-                    return ApiResponse<List<AssignLeaveDetails>>.PagedResponse(
+                    return ApiResponse<List<allAssignedLeave>>.PagedResponse(
                         list,
                         pageNumber.Value,
                         pageSize.Value,
@@ -700,7 +711,7 @@ namespace Macreel_Software.DAL.Admin
                 }
 
 
-                var response = ApiResponse<List<AssignLeaveDetails>>.SuccessResponse(
+                var response = ApiResponse<List<allAssignedLeave>>.SuccessResponse(
                     list,
                     "Assigned Leave list fetched successfully");
 
@@ -710,7 +721,7 @@ namespace Macreel_Software.DAL.Admin
             }
             catch (Exception ex)
             {
-                return ApiResponse<List<AssignLeaveDetails>>.FailureResponse(
+                return ApiResponse<List<allAssignedLeave>>.FailureResponse(
                     ex.Message,
                     500,
                     "Assigned_Leave_FETCH_ERROR");
@@ -1509,6 +1520,7 @@ namespace Macreel_Software.DAL.Admin
                                 empName = sdr["empName"] != DBNull.Value ? sdr["empName"].ToString() : null,
                                 assignedDate= sdr["createdAt"] != DBNull.Value ? Convert.ToDateTime(sdr["CompletedDate"]) : null,
                                 taskStatus = sdr["taskStatus"] != DBNull.Value ? sdr["taskStatus"].ToString() : null,
+
                             });
                         }
                     }
