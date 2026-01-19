@@ -34,7 +34,7 @@ namespace Macreel_Software.DAL.Admin
         Task<ApiResponse<List<project>>> GetAllProjectById(int id);
         Task<bool> deleteProjectById(int id);
 
-        Task<ApiResponse<List<AssignLeaveDetails>>> getAllAssignedLeave(string? searchTerm, int? pageNumber, int? pageSize);
+        Task<ApiResponse<List<allAssignedLeave>>> getAllAssignedLeave(string? searchTerm, int? pageNumber, int? pageSize);
         Task<ApiResponse<List<project>>> GetEmpProjectDetailByEmpId(int empId);
 
         Task<bool> insertTask(Taskassign data);

@@ -490,7 +490,7 @@ namespace Macreel_Software.Server.Controllers
         {
             try
             {
-                ApiResponse<List<AssignLeaveDetails>> result =
+                ApiResponse<List<allAssignedLeave>> result =
                     await _services.getAllAssignedLeave(searchTerm, pageNumber, pageSize);
 
 

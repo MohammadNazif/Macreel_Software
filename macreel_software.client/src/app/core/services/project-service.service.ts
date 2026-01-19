@@ -3,6 +3,11 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { PaginatedResult, Project } from '../models/interface';
+=======
+
+>>>>>>> eabb35e (some chang)
+
+
 
 @Injectable({ providedIn: 'root' })
 export class ProjectService {
