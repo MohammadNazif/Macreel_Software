@@ -1,25 +1,23 @@
 <div class="max-w-7xl mx-auto bg-gray-100 p-4">
-   
+
   <form [formGroup]="employeeForm">
     <!-- STEP 1 -->
     <div *ngIf="step === 1" class="bg-white p-6 rounded-lg shadow">
-    <div class="bg-[#C5192F] px-6 py-2 text-white text-lg font-semibold shadow-md rounded-t-md 
+      <div class="bg-[#C5192F] px-6 py-2 text-white text-lg font-semibold shadow-md rounded-t-md 
                 flex items-center justify-between">
-      <span>Employee Register</span>
+        <span>Employee Register</span>
 
-      <!--Send Link Button-->
-         <button type="button"
-    (click)="openModal()"
-    class="bg-white text-[#C5192F] px-4 py-1.5 rounded-md
+        <!--Send Link Button-->
+        <button type="button" (click)="openModal()" class="bg-white text-[#C5192F] px-4 py-1.5 rounded-md
            border border-[#C5192F]
            hover:bg-white hover:text-[#C5192F]
            transition text-[14px]">
-    Send Link
-  </button>
+          Send Link
+        </button>
 
-        </div>
+      </div>
 
-       
+
 
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-5">
         <!-- Employee Role -->
@@ -32,7 +30,7 @@
           </select>
           <label
             class="absolute left-3 top-3 text-sm text-gray-500 bg-white px-1 transition-all peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#C5192F] peer-valid:-top-2 peer-valid:text-xs">
-            Employee Role
+            Employee Role <span class="text-red-500 text-[16px] font-medium">*</span>
           </label>
           <span class="absolute right-3 top-3 text-gray-400"><i class="fa-solid fa-angle-down"></i></span>
         </div>
@@ -44,7 +42,7 @@
           <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
            peer-focus:-top-2 peer-focus:text-xs
            peer-valid:-top-2 peer-valid:text-xs ">
-            Employee Code
+            Employee Code <span class="text-red-500 text-[16px] font-medium">*</span>
           </label>
         </div>
 
@@ -56,7 +54,7 @@
           <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
            peer-focus:-top-2 peer-focus:text-xs
            peer-valid:-top-2 peer-valid:text-xs">
-            Employee Name
+            Employee Name <span class="text-red-500 text-[16px] font-medium">*</span>
           </label>
         </div>
 
@@ -68,7 +66,7 @@
           <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
            peer-focus:-top-2 peer-focus:text-xs
            peer-valid:-top-2 peer-valid:text-xs">
-            Mobile Number
+            Mobile Number <span class="text-red-500 text-[16px] font-medium">*</span>
           </label>
         </div>
 
@@ -88,7 +86,7 @@
           <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
            peer-focus:-top-2 peer-focus:text-xs
            peer-valid:-top-2 peer-valid:text-xs">
-            Department
+            Department <span class="text-red-500 text-[16px] font-medium">*</span>
           </label>
 
           <span class="absolute right-3 top-2 text-gray-400 pointer-events-none"><i
@@ -113,7 +111,7 @@
           <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
            peer-focus:-top-2 peer-focus:text-xs
            peer-valid:-top-2 peer-valid:text-xs">
-            Designation
+            Designation <span class="text-red-500 text-[16px] font-medium">*</span>
           </label>
 
           <span class="absolute right-3 top-2 text-gray-400 pointer-events-none"><i
@@ -123,7 +121,6 @@
 
         <!-- Reporting Manager -->
 
-        <!-- Reporting Manager (OPTIONAL) -->
         <div class="relative">
           <select formControlName="reportingManagerId" name="reportingManagerId" class="peer w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700 bg-white
            focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
@@ -150,7 +147,7 @@
           <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
            peer-focus:-top-2 peer-focus:text-xs
            peer-valid:-top-2 peer-valid:text-xs">
-            Email ID
+            Email ID <span class="text-red-500 text-[16px] font-medium">*</span>
           </label>
         </div>
 
@@ -175,7 +172,7 @@
           <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
            peer-focus:-top-2 peer-focus:text-xs
            peer-valid:-top-2 peer-valid:text-xs">
-            Date of Joining
+            Date of Joining <span class="text-red-500 text-[16px] font-medium">*</span>
           </label>
         </div>
 
@@ -188,7 +185,7 @@
           <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
            peer-focus:-top-2 peer-focus:text-xs
            peer-valid:-top-2 peer-valid:text-xs">
-            DOB
+            DOB <span class="text-red-500 text-[16px] font-medium">*</span>
           </label>
         </div>
 
@@ -202,7 +199,7 @@
           <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
            peer-focus:-top-2 peer-focus:text-xs
            peer-valid:-top-2 peer-valid:text-xs">
-            Password
+            Password <span class="text-red-500 text-[16px] font-medium">*</span>
           </label>
 
           <!-- Eye Button -->
@@ -232,7 +229,7 @@
             </svg>
           </button>
         </div>
-        
+
         <!-- Gender -->
         <div class="relative">
           <select formControlName="gender" name="gender" class="peer w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700 bg-white
@@ -278,7 +275,6 @@
             <!-- placeholder -->
             <option value="" disabled hidden></option>
 
-            <option value="Single">Single</option>
             <option value="Married">Married</option>
             <option value="Divorced">Divorced</option>
             <option value="Widowed">Widowed</option>
@@ -319,7 +315,7 @@
           </select>
           <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
        peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
-            State
+            State <span class="text-red-500 text-[16px] font-medium">*</span>
           </label>
           <span class="absolute right-3 top-2 text-gray-400 pointer-events-none"><i
               class="fa-solid fa-angle-down"></i></span>
@@ -334,7 +330,7 @@
           </select>
           <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
        peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
-            City
+            City <span class="text-red-500 text-[16px] font-medium">*</span>
           </label>
           <span class="absolute right-3 top-2 text-gray-400 pointer-events-none"><i
               class="fa-solid fa-angle-down"></i></span>
@@ -617,8 +613,7 @@
 </div>
 <!--Modal for send link for registration-->
 
-<div *ngIf="isModalOpen"
-     class="fixed inset-0 bg-black/50 flex justify-center items-start
+<div *ngIf="isModalOpen" class="fixed inset-0 bg-black/50 flex justify-center items-start
             z-50 px-3 pt-24">
 
   <!-- Modal Box -->
@@ -631,8 +626,7 @@
         Send Link for Registration
       </h2>
 
-      <button (click)="closeModal()"
-              class="text-white text-xl leading-none hover:opacity-80">
+      <button (click)="closeModal()" class="text-white text-xl leading-none hover:opacity-80">
         &times;
       </button>
     </div>
@@ -645,25 +639,22 @@
           Email Address
         </label>
 
-        <input type="email"
-               class="w-full border rounded-md px-3 py-2.5 text-sm
+        <input type="email" class="w-full border rounded-md px-3 py-2.5 text-sm
                       focus:outline-none focus:ring-2
-                      focus:ring-[#C5192F]"
-               placeholder="Enter email" />
+                      focus:ring-[#C5192F]" placeholder="Enter email" />
       </div>
 
       <!-- Submit Button -->
-     <div class="flex justify-center">
- <div class="flex justify-end">
-  <button
-    class="bg-[#C5192F] text-white
+      <div class="flex justify-center">
+        <div class="flex justify-end">
+          <button class="bg-[#C5192F] text-white
            px-5 py-1.5 text-sm font-medium
            rounded-md hover:bg-red-700 transition">
-    Send
-  </button>
-</div>
+            Send
+          </button>
+        </div>
 
-</div>
+      </div>
 
 
     </div>

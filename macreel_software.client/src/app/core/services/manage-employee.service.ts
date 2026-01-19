@@ -30,7 +30,7 @@ export class ManageEmployeeService {
   }
 
   getReportingManager(): Observable<any> {
-    return this.http.get(`${this.baseUrl}Admin/getReportingManager`);
+    return this.http.get(`${this.baseUrl}Common/getReportingManager`);
   }
 
   getAllEmployees(pageNumber: number | null = null, pageSize: number | null = null, searchText: string = '') {
