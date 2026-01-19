@@ -32,6 +32,7 @@ interface Leave {
 
 export class AssignLeaveComponent implements OnInit {
 
+  assignedLeaves: any[] = [];
   employees: Employee[] = [];
   selectedEmployeeId: number | null = null;
   selectedEmployee: Employee | null = null;
@@ -78,43 +79,64 @@ export class AssignLeaveComponent implements OnInit {
     }
 
     this.isLoading = true;
+
     this.empService.getEmployeeById(this.selectedEmployeeId).subscribe({
       next: (res: any) => {
         this.selectedEmployee = res.data[0];
-        this.isLoading = false;
-        this.loadLeaveList();
+
+        this.leaveService.getAssignedLeaveById(this.selectedEmployeeId!).subscribe({
+          next: (leaveRes: any) => {
+            this.assignedLeaves = leaveRes.data || [];
+            console.log("Assigned Leave:", this.assignedLeaves);
+
+            this.loadLeaveListWithAssigned();
+          },
+          error: () => {
+            this.assignedLeaves = [];
+            this.loadLeaveListWithAssigned();
+          }
+        });
       },
       error: () => this.isLoading = false
     });
   }
 
-  // Load leaves dynamically from API
-  loadLeaveList() {
+  loadLeaveListWithAssigned() {
     this.leaveService.getAllLeave(this.searchTerm, this.pageIndex + 1, this.pageSize)
       .subscribe((res: any) => {
-        this.dataSource.data = res.data.map((l: Leave) => ({
-          ...l,
-          noOfLeave: 0,
-          isSelected: false
-        }));
+
+        this.dataSource.data = res.data.map((l: Leave) => {
+
+          const found = this.assignedLeaves.find(
+            (a: any) => a.leaveType?.trim() === l.leaveName?.trim()
+          );
+
+          return {
+            ...l,
+            noOfLeave: found ? found.noOfLeave : 0,
+            isSelected: !!found 
+          };
+        });
+
         this.totalRecords = res.totalRecords;
         this.dataSource._updateChangeSubscription();
+        this.isLoading = false;
       });
   }
 
- resetForm() {
-  this.selectedEmployeeId = null;
-  this.selectedEmployee = null;
-  this.dataSource.data = [];
-  this.pageIndex = 0;
-}
+  resetForm() {
+    this.selectedEmployeeId = null;
+    this.selectedEmployee = null;
+    this.dataSource.data = [];
+    this.pageIndex = 0;
+  }
 
 
   // Pagination
   onPageChange(event: PageEvent) {
     this.pageSize = event.pageSize;
     this.pageIndex = event.pageIndex;
-    this.loadLeaveList();
+    this.loadLeaveListWithAssigned();
   }
 
   // Checkbox toggle
@@ -125,21 +147,21 @@ export class AssignLeaveComponent implements OnInit {
   // Submit assigned leaves
   submitAssignedLeave() {
     if (!this.selectedEmployeeId) {
-     Swal.fire({
-  icon: 'warning',
-  title: 'Oops...',
-  text: 'Please select an employee first!'
-});
+      Swal.fire({
+        icon: 'warning',
+        title: 'Oops...',
+        text: 'Please select an employee first!'
+      });
       return;
     }
 
     const selectedLeaves = this.dataSource.data.filter(l => l.isSelected);
     if (selectedLeaves.length === 0) {
       Swal.fire({
-  icon: 'warning',
-  title: 'No Leave Selected',
-  text: 'Please select at least one leave!'
-});
+        icon: 'warning',
+        title: 'No Leave Selected',
+        text: 'Please select at least one leave!'
+      });
 
       return;
     }
@@ -156,28 +178,28 @@ export class AssignLeaveComponent implements OnInit {
     this.leaveService.assignLeaveToEmployee(payload).subscribe({
       next: (res: any) => {
         if (res.status) {
-         Swal.fire({
-  icon: 'success',
-  title: 'Success',
-  text: res.message || 'Leave assigned successfully!'
-});
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: res.message || 'Leave assigned successfully!'
+          });
 
-       this.resetForm();   // reset table
+          this.resetForm();   // reset table
         } else {
           Swal.fire({
-  icon: 'error',
-  title: 'Failed',
-  text: 'Failed to assign leave.'
-});
+            icon: 'error',
+            title: 'Failed',
+            text: 'Failed to assign leave.'
+          });
         }
       },
       error: (err) => {
         console.error(err);
-       Swal.fire({
-  icon: 'error',
-  title: 'Error',
-  text: 'Leave assignment already exists for this employee.'
-});
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Leave assignment already exists for this employee.'
+        });
 
       }
     });
@@ -188,6 +210,6 @@ export class AssignLeaveComponent implements OnInit {
     const value = (event.target as HTMLInputElement).value;
     this.searchTerm = value;
     this.pageIndex = 0;
-    this.loadLeaveList();
+    this.loadLeaveListWithAssigned();
   }
 }
