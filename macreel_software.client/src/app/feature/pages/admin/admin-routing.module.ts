@@ -4,7 +4,6 @@ import { EmployeeTaskSheetComponent } from './employee-task-sheet/employee-task-
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { EmployeeListComponent } from './employee-list/employee-list.component';
 import { AddEmployeeComponent } from '../../common-pages/add-employee/add-employee.component';
-import { AddLeaveTypeComponent } from './add-leave-type/add-leave-type.component';
 import { AssignLeaveComponent } from './assign-leave/assign-leave.component';
 import { UploadAttendanceComponent } from './upload-attendance/upload-attendance.component';
 import { ViewAttendanceComponent } from './view-attendance/view-attendance.component';
@@ -22,8 +21,7 @@ const routes: Routes = [
   { path: 'employee-task-sheet', component: EmployeeTaskSheetComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path:'employee-list',component:EmployeeListComponent} ,
-  { path: 'edit-employee/:id',component: AddEmployeeComponent},
-  { path:'add-leave',component:AddLeaveTypeComponent},
+  { path: 'edit-employee/:id',component: AddEmployeeComponent},  
   { path:'assign-leave',component:AssignLeaveComponent},
   { path: 'upload-attendance', component: UploadAttendanceComponent },
   { path: 'view-attendance', component: ViewAttendanceComponent },

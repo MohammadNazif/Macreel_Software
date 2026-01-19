@@ -7,11 +7,9 @@ const PROXY_CONFIG = [
   {
     context: [
       "/weatherforecast",
-      "/api"
     ],
     target,
     secure: false,
-    changeOrigin:true
   }
 ]
 
