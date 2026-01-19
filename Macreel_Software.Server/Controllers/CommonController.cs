@@ -304,15 +304,15 @@ namespace Macreel_Software.Server.Controllers
             try
             {
                 string accessId = Guid.NewGuid().ToString();
+                data.accessId = accessId;
 
                 var mailRequest = new MailRequest
                 {
                     ToEmail = data.email,
                     Subject = "Register Yourself - Macreel Infosoft Pvt. Ltd.",
                     BodyType = MailBodyType.RegistrationLink,
-                    Value = data.email
+                    Value = data.accessId
                 };
-                data.accessId = accessId;
                 var mailResponse = await _mailservice.SendMailAsync(mailRequest);
 
                 if (!mailResponse.Status)
