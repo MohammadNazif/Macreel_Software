@@ -15,7 +15,7 @@ import { TemplateRef } from "@angular/core";
 export interface Task {
   id: number;
   title: string;
-  assignedBy: string;
+  assignedByName: string;
   assignedDate: string;
   completionDate: string;
   taskStatus: string;
@@ -97,8 +97,8 @@ export interface Attendance {
   EmpName : string;
   attendanceDate :Date;
   status : string;
-  InTime : Date;
-  OutTime :Date;
+  inTime : string;
+  outTime :string;
   day :Date;
   Month  :Date;
   Year :Date;

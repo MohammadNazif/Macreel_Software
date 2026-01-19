@@ -186,7 +186,7 @@ bindEditData() {
       ? this.editTask.completedDate.substring(0, 10)  
       : '',
     employee: this.employees.find(
-      (e: any) => e.id === this.editTask.empId
+      (e: any) => e.id == this.editTask.empId
     )
   });
 
