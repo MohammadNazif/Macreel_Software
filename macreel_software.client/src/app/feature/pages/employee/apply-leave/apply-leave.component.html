@@ -1,4 +1,4 @@
-<div class="bg-gray-50 min-h-screen p-2 md:p-2">
+<div class="bg-gray-50 p-2 md:p-2">
     <!-- Form Section -->
     <div class="mb-2">
         <div class="bg-white shadow rounded-lg p-2">
@@ -14,7 +14,10 @@
                         </label>
                         <input type="date" id="fromDate" formControlName="fromDate"
                             class="w-full px-3 py-2 border border-gray-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-[#dd3d4f]" />
-                        <div *ngIf="isFieldInvalid('fromDate')" class="text-red-500 text-xs mt-1">Required</div>
+                        <div *ngIf="isFieldInvalid('fromDate')" class="text-red-500 text-xs mt-1">
+                            From date is required
+                        </div>
+
                     </div>
 
                     <!-- To Date -->
@@ -22,9 +25,14 @@
                         <label for="toDate" class="block text-xs font-semibold text-gray-700 mb-1">
                             To Date
                         </label>
-                        <input type="date" id="toDate" formControlName="toDate"
-                            class="w-full px-3 py-2 border border-gray-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-[#dd3d4f]" />
-                        <div *ngIf="isFieldInvalid('toDate')" class="text-red-500 text-xs mt-1">Required</div>
+                        <input type="date" id="toDate" formControlName="toDate" [min]="leaveForm.get('fromDate')?.value"
+                            class="w-full px-3 py-2 border rounded text-xs" />
+                        <div *ngIf="isFieldInvalid('toDate')" class="text-red-500 text-xs mt-1">
+                            To date is required
+                        </div>
+                        <div *ngIf="leaveForm.errors?.['invalidDateRange']" class="text-red-500 text-xs mt-1">
+                            To date must be greater than or equal to From date
+                        </div>
                     </div>
 
                     <!-- Leave Type -->
@@ -39,7 +47,9 @@
                                 {{ type.leaveName }}
                             </option>
                         </select>
-                        <div *ngIf="isFieldInvalid('leaveType')" class="text-red-500 text-xs mt-1">Required</div>
+                        <div *ngIf="isFieldInvalid('leaveType')" class="text-red-500 text-xs mt-1">
+                            Leave type is required
+                        </div>
                     </div>
 
                     <!-- Description -->
@@ -70,21 +80,11 @@
         <div class="bg-white shadow rounded-lg p-3">
             <h3 class="text-xs font-bold text-gray-700 mb-2">Total Leave</h3>
             <div class="space-y-1 text-xs">
-                <div class="flex justify-between">
-                    <span class="text-gray-600">SL:</span>
-                    <span class="font-bold text-[#dd3d4f]">10</span>
-                </div>
-                <div class="flex justify-between">
-                    <span class="text-gray-600">CL:</span>
-                    <span class="font-bold text-[#dd3d4f]">8</span>
-                </div>
-                <div class="flex justify-between">
-                    <span class="text-gray-600">EL:</span>
-                    <span class="font-bold text-[#dd3d4f]">0</span>
-                </div>
-                <div class="flex justify-between">
-                    <span class="text-gray-600">GL:</span>
-                    <span class="font-bold text-[#dd3d4f]">0</span>
+                <div *ngFor="let lb of leaveBalanceList" class="flex justify-between">
+                    <span class="text-gray-600">{{ lb.leaveType }}:</span>
+                    <span class="font-bold text-[#dd3d4f]">
+                        {{ totalLeave[lb.leaveType] || 0 }}
+                    </span>
                 </div>
             </div>
         </div>
@@ -93,21 +93,11 @@
         <div class="bg-white shadow rounded-lg p-3">
             <h3 class="text-xs font-bold text-gray-700 mb-2">Remaining Leave</h3>
             <div class="space-y-1 text-xs">
-                <div class="flex justify-between">
-                    <span class="text-gray-600">SL:</span>
-                    <span class="font-bold text-[#dd3d4f]">10</span>
-                </div>
-                <div class="flex justify-between">
-                    <span class="text-gray-600">CL:</span>
-                    <span class="font-bold text-[#dd3d4f]">8</span>
-                </div>
-                <div class="flex justify-between">
-                    <span class="text-gray-600">EL:</span>
-                    <span class="font-bold text-[#dd3d4f]">0</span>
-                </div>
-                <div class="flex justify-between">
-                    <span class="text-gray-600">GL:</span>
-                    <span class="font-bold text-[#dd3d4f]">0</span>
+                <div *ngFor="let lb of leaveBalanceList" class="flex justify-between">
+                    <span class="text-gray-600">{{ lb.leaveType }}:</span>
+                    <span class="font-bold text-[#dd3d4f]">
+                        {{ remainingLeave[lb.leaveType] || 0 }}
+                    </span>
                 </div>
             </div>
         </div>
@@ -116,32 +106,22 @@
         <div class="bg-white shadow rounded-lg p-3">
             <h3 class="text-xs font-bold text-gray-700 mb-2">Unapproved Leave</h3>
             <div class="space-y-1 text-xs">
-                <div class="flex justify-between">
-                    <span class="text-gray-600">SL:</span>
-                    <span class="font-bold text-[#dd3d4f]">10</span>
-                </div>
-                <div class="flex justify-between">
-                    <span class="text-gray-600">CL:</span>
-                    <span class="font-bold text-[#dd3d4f]">8</span>
-                </div>
-                <div class="flex justify-between">
-                    <span class="text-gray-600">EL:</span>
-                    <span class="font-bold text-[#dd3d4f]">0</span>
-                </div>
-                <div class="flex justify-between">
-                    <span class="text-gray-600">GL:</span>
-                    <span class="font-bold text-[#dd3d4f]">0</span>
+                <div *ngFor="let lb of leaveBalanceList" class="flex justify-between">
+                    <span class="text-gray-600">{{ lb.leaveType }}:</span>
+                    <span class="font-bold text-[#dd3d4f]">
+                        {{ unapprovedLeave[lb.leaveType] || 0 }}
+                    </span>
                 </div>
             </div>
         </div>
 
         <!-- Total LWP Taken -->
-        <div class="bg-white shadow rounded-lg p-3">
+        <!-- <div class="bg-white shadow rounded-lg p-3">
             <h3 class="text-xs font-bold text-gray-700 mb-2">Total LWP</h3>
             <div class="flex items-center justify-center h-20">
                 <span class="font-bold text-2xl text-[#dd3d4f]">0</span>
             </div>
-        </div>
+        </div> -->
     </div>
 
     <!-- Leave History Table Section -->
@@ -160,7 +140,7 @@
 
                 <!-- SEARCH -->
                 <div class="relative">
-                    <input type="text" placeholder="Search Leave" (keyup)="applyFilter($event)" class="w-full pl-10 pr-3 py-[6px] text-[12px] rounded-lg bg-[#F6F7FB]
+                    <input type="text" placeholder="Search Leave" [formControl]="searchControl" class="w-full pl-10 pr-3 py-[6px] text-[12px] rounded-lg bg-[#F6F7FB]
         border border-gray-300
         focus:outline-none focus:ring-2 focus:ring-[#C5192F] table-search" />
                     <i class="fa-solid fa-magnifying-glass
@@ -204,7 +184,7 @@
                     <th mat-header-cell *matHeaderCellDef class="w-[70px] text-center !bg-[#dd3d4f] text-white">Applied
                         Date</th>
                     <td mat-cell *matCellDef="let row">
-                        {{ row.appliedDate | date:'dd-MM-yyyy' }}
+                        {{ row.applieddate | date:'dd-MM-yyyy' }}
                     </td>
                 </ng-container>
 
@@ -226,11 +206,11 @@
                     </td>
                 </ng-container>
 
-                <!-- Leave Type -->
-                <ng-container matColumnDef="leaveType">
+                <!-- Leave Name -->
+                <ng-container matColumnDef="leaveName">
                     <th mat-header-cell *matHeaderCellDef class="w-[70px] text-center !bg-[#dd3d4f] text-white">Leave
                         Type</th>
-                    <td mat-cell *matCellDef="let row">{{ row.leaveType }}</td>
+                    <td mat-cell *matCellDef="let row">{{ row.leaveName }}</td>
                 </ng-container>
 
                 <!-- Description -->
@@ -248,7 +228,7 @@
                         <span [ngClass]="{
         'text-yellow-600': row.status === 'Pending',
         'text-green-600': row.status === 'Approved',
-        'text-red-600': row.status === 'Rejected'
+        'text-red-600': row.status === 'Unapproved'
       }">
                             {{ row.status }}
                         </span>

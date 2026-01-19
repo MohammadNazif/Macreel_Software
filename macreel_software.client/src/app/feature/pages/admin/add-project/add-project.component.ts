@@ -3,7 +3,8 @@ import { ManageMasterdataService } from '../../../../core/services/manage-master
 import Swal from 'sweetalert2';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AddProjectService } from '../../../../core/services/add-project.service';
-import { Project } from '../../../../core/models/employee.interface';
+import { Project } from '../../../../core/models/interface';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-project',
@@ -14,6 +15,8 @@ import { Project } from '../../../../core/models/employee.interface';
 
 
 export class AddProjectComponent implements OnInit {
+  isEditMode : boolean = false;
+ editProjectId :number = 0;
 
   @ViewChild('sopFile') sopFile!: ElementRef<HTMLInputElement>;
   @ViewChild('technicalFile') technicalFile!: ElementRef<HTMLInputElement>;
@@ -33,35 +36,38 @@ export class AddProjectComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private masterService: ManageMasterdataService,
-    private addProjectService: AddProjectService
+    private addProjectService: AddProjectService,
+      private router: Router
   ) { }
 
-  ngOnInit() {
-    this.initForm();
-    this.loadTechnologies();
+ngOnInit() {
+  this.initForm();
+  this.loadTechnologies();
 
-
-
-    // Mobile Skill change
-    this.projectForm.get('mobileSkill')?.valueChanges.subscribe(val => {
-      this.onMobileSkillChange(val);
-    });
-
-    // Mobile Employee change
-    this.projectForm.get('mobileEmpId')?.valueChanges.subscribe(val => {
-      this.onSelectMobileEmployee(val);
-    });
-
-    // Web Skill change
-    this.projectForm.get('webSkill')?.valueChanges.subscribe(val => {
-      this.onWebSkillChange(val);
-    });
-
-    // Web Employee change
-    this.projectForm.get('webEmpId')?.valueChanges.subscribe(val => {
-      this.onSelectWebEmployee(val);
-    });
+  const nav = this.router.getCurrentNavigation();
+   const project = history.state?.project;
+ console.log('Received project data:', project);
+  if (project) {
+    this.bindEditData(project);
   }
+
+  this.projectForm.get('mobileSkill')?.valueChanges.subscribe(val => {
+    this.onMobileSkillChange(val);
+  });
+
+  this.projectForm.get('mobileEmpId')?.valueChanges.subscribe(val => {
+    this.onSelectMobileEmployee(val);
+  });
+
+  this.projectForm.get('webSkill')?.valueChanges.subscribe(val => {
+    this.onWebSkillChange(val);
+  });
+
+  this.projectForm.get('webEmpId')?.valueChanges.subscribe(val => {
+    this.onSelectWebEmployee(val);
+  });
+}
+
 
 
 
@@ -160,13 +166,6 @@ export class AddProjectComponent implements OnInit {
   }
 
 
-  // onSelectMobileEmployee(empId: any) {
-  //   this.projectForm.patchValue({ mobileEmpId: empId });
-  //   this.addProjectService.getProjectDetailsByEmpId(empId).subscribe({
-  //     next: res => this.selectedEmployeeProjects = res?.data || [],
-  //     error: err => this.selectedEmployeeProjects = []
-  //   });
-  // }
 
   onSelectMobileEmployee(empId: any) {
     if (!empId) return;
@@ -190,6 +189,7 @@ export class AddProjectComponent implements OnInit {
       next: res => this.filteredWebEmployees = res?.data || [],
       error: err => this.filteredWebEmployees = []
     });
+
   }
 
   // onSelectWebEmployee(empId: any) {
@@ -211,47 +211,60 @@ export class AddProjectComponent implements OnInit {
     });
   }
 
-  edit(p: Project) {
-  this.addProjectService.getProjectById(p.id).subscribe({
-    next: (res) => {
-      if (res && res.data && res.data.length) {
-        const projectData = res.data[0];
 
-        // Patch form values
-        this.projectForm.patchValue({
-          category: projectData.category,
-          projectTitle: projectData.projectTitle,
-          description: projectData.description,
-          startDate: projectData.startDate ? projectData.startDate.split('T')[0] : '',
-          assignDate: projectData.assignDate ? projectData.assignDate.split('T')[0] : '',
-          endDate: projectData.endDate ? projectData.endDate.split('T')[0] : '',
-          completionDate: projectData.completionDate ? projectData.completionDate.split('T')[0] : '',
-          SEO: projectData.seo,
-          SMO: projectData.smo,
-          GMB: projectData.gmb,
-          paidAds: projectData.paidAds,
-          isMobileSoftware: projectData.app === 'App',
-          isWebSoftware: projectData.web === 'Web',
-          isAndroid: projectData.androidApp === 'Android',
-          isIOS: projectData.iosApp === 'IOS',
-          mobileSkill: projectData.appTechnology,
-          mobileEmpId: projectData.appEmpId,
-          webSkill: projectData.webTechnology,
-          webEmpId: projectData.webEmpId
-        });
+  bindEditData(emp: any) {
+  this.isEditMode = true;
+  this.editProjectId = emp.id;
 
-        // If you want, you can navigate to same page without reloading:
-        // this.router.navigate(['/home/admin/add-project'], { state: { project: projectData } });
-      } else {
-        Swal.fire('Error', 'Project not found', 'error');
-      }
-    },
-    error: () => {
-      Swal.fire('Error', 'Failed to fetch project', 'error');
-    }
+  // BASIC DATA
+  this.projectForm.patchValue({
+    id : emp.id,
+    category: emp.category,
+    projectTitle: emp.projectTitle,
+    description: emp.description,
+
+    startDate: emp.startDate?.split('T')[0],
+    assignDate: emp.assignDate?.split('T')[0],
+    endDate: emp.endDate?.split('T')[0],
+    completionDate: emp.completionDate?.split('T')[0],
+
+    isMobileSoftware: emp.app === 'App',
+    isWebSoftware: emp.web === 'Web',
+    isAndroid: emp.androidApp === 'Android',
+    isIOS: emp.iosApp === 'IOS',
+
+    SEO: emp.seo,
+    SMO: emp.smo,
+    GMB: emp.gmb,
+    paidAds: emp.paidAds
   });
-}
 
+  // MOBILE
+  if (emp.appTechnology) {
+    this.projectForm.patchValue({ mobileSkill: emp.appTechnology });
+
+    this.addProjectService
+      .getEmpListForAppByTechId(emp.appTechnology)
+      .subscribe(res => {
+        this.filteredMobileEmployees = res?.data || [];
+        this.projectForm.patchValue({ mobileEmpId: emp.appEmpId });
+      });
+  }
+
+  // WEB
+  if (emp.webTechnology) {
+    this.projectForm.patchValue({ webSkill: emp.webTechnology });
+
+    this.addProjectService
+      .getEmpListForWebByTechId(emp.webTechnology)
+      .subscribe(res => {
+        this.filteredWebEmployees = res?.data || [];
+        this.projectForm.patchValue({ webEmpId: emp.webEmpId });
+      });
+  }
+
+  
+}
 
 
   // ================= FORM SUBMISSION =================
@@ -271,6 +284,7 @@ export class AddProjectComponent implements OnInit {
     const f = this.projectForm.value;
 
     // ================= BASIC FIELDS =================
+    formData.append('id', this.editProjectId.toString());
     formData.append('category', f.category);
     formData.append('projectTitle', f.projectTitle);
     formData.append('description', f.description || '');
@@ -301,7 +315,7 @@ export class AddProjectComponent implements OnInit {
     }
 
     if (f.isWebSoftware) {
-      formData.append('web', 'Web');   // ✅ BACKEND KEY
+      formData.append('web', 'Web');  
 
       if (f.webSkill) {
         formData.append('webTechnology', f.webSkill);

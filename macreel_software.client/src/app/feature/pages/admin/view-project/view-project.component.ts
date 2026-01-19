@@ -73,27 +73,16 @@ export class ViewProjectComponent implements OnInit {
 //   this.router.navigate(['/home/admin/add-project'], { queryParams: { id: p.id } });
 // }
 
-edit(p: Project) {
-  console.log('Clicked project ID:', p.id);
+edit(emp: any) {
+  this.router.navigate(
+    ['/home/admin/add-project'],
+    { state: { project: emp }
 
-  this.addProjectService.getProjectById(p.id).subscribe({
-    next: (res) => {
-      if (res && res.data && res.data.length) {
-        const projectData = res.data[0];
-        
-        // ✅ Yeh important hai: Directly navigate karein aur data pass karein
-        this.router.navigate(['/home/admin/add-project'], {
-          state: { project: projectData }
-        });
-      } else {
-        Swal.fire('Error', 'Project not found', 'error');
-      }
-    },
-    error: () => {
-      Swal.fire('Error', 'Failed to fetch project', 'error');
-    }
-  });
+  }
+    
+  );
 }
+
 
 
 

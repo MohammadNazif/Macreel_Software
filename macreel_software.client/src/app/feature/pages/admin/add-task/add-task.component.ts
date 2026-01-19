@@ -13,8 +13,10 @@ export class AddTaskComponent implements OnInit {
 
   taskForm!: FormGroup;
   employees:any = [];
+   editTask: any = null;
 
-  attachment1: File | null = null;
+
+   attachment1: File | null = null;
   attachment2: File | null = null;
   attachment1Name: string = '';
 attachment2Name: string = '';
@@ -26,17 +28,25 @@ attachment2Name: string = '';
     private taskService : TaskService
   ) {}
 
-  ngOnInit(): void {
-    this.taskForm = this.fb.group({
-      srNo: ['',Validators.required],
-      title: ['', Validators.required],
-      employee: ['', Validators.required],
-      completionDate: ['', Validators.required],
-      description: ['', Validators.required]
-    });
-    this.loadEmployees();
-  }
+ ngOnInit(): void {
+  this.taskForm = this.fb.group({
+    srNo: ['', Validators.required],
+    title: ['', Validators.required],
+    employee: ['', Validators.required],
+    completionDate: ['', Validators.required],
+    description: ['', Validators.required]
+  });
 
+  this.loadEmployees();
+
+  const state = history.state;
+
+  console.log("state",state)
+  if (state && state.task) {
+    this.editTask = state.task;
+    this.bindEditData();
+  }
+}
   onDragOver(event: DragEvent) {
   event.preventDefault();
   event.stopPropagation();
@@ -84,7 +94,6 @@ submit() {
 
   const formValue = this.taskForm.getRawValue();
   
-  console.log(formValue)
   const payload: any = {
     title: formValue.title,
     description: formValue.description,
@@ -127,8 +136,30 @@ loadEmployees(pageNumber: number = 1, pageSize: number = 10, search: string = ''
       this.employees = res.data;   
       console.log("RES",this.employees)// correct way for dropdown
     }
+    if (this.editTask) {
+        this.bindEditData();
+      }
     
   });
 }
   
+
+bindEditData() {
+  this.taskForm.patchValue({
+    srNo: this.editTask.srNo,
+    title: this.editTask.title,
+    description: this.editTask.description,
+     completionDate: this.editTask.completedDate
+      ? this.editTask.completedDate.substring(0, 10)  
+      : '',
+    employee: this.employees.find(
+      (e: any) => e.id === this.editTask.empId
+    )
+  });
+
+  // If you want to show existing attachments
+  this.attachment1Name = this.editTask.document1Path || '';
+  this.attachment2Name = this.editTask.document2Path || '';
+}
+
 }

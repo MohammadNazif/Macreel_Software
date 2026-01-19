@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data;
 using Macreel_Software.Models;
+using Macreel_Software.Contracts.DTOs;
 using Macreel_Software.Models.Employee;
-using Macreel_Software.Models.Master;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
-using QuestPDF.Helpers;
 
 namespace Macreel_Software.DAL.Employee
 {
@@ -63,26 +57,20 @@ namespace Macreel_Software.DAL.Employee
             {
                 using SqlCommand cmd = new SqlCommand("sp_assignLeave", _conn);
                 cmd.CommandType = CommandType.StoredProcedure;
-
                 cmd.Parameters.AddWithValue("@action", "getAssignedLeaveListByEmpId");
-
                 cmd.Parameters.AddWithValue("@empId", empId);
-
                 cmd.Parameters.AddWithValue(
                     "@searchTerm",
                     string.IsNullOrWhiteSpace(searchTerm) ? (object)DBNull.Value : searchTerm
                 );
-
                 cmd.Parameters.AddWithValue(
                     "@pageNumber",
                     pageNumber.HasValue ? (object)pageNumber.Value : DBNull.Value
                 );
-
                 cmd.Parameters.AddWithValue(
                     "@pageSize",
                     pageSize.HasValue ? (object)pageSize.Value : DBNull.Value
                 );
-
 
                 if (_conn.State == ConnectionState.Closed)
                     await _conn.OpenAsync();
@@ -141,8 +129,53 @@ namespace Macreel_Software.DAL.Employee
             }
         }
 
-
         #region apply leave
+        public async Task<ApiResponse<List<AssignedLeaveDto>>> GetAllAssignedLeaveByEmpCode(int empcode)
+        {
+            List<AssignedLeaveDto> list = new();
+
+            try
+            {
+                using SqlCommand cmd = new SqlCommand("sp_leave", _conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@action", "getAllAssignedLeaves");
+                cmd.Parameters.AddWithValue("@empcode", empcode);
+
+                if (_conn.State == ConnectionState.Closed)
+                    await _conn.OpenAsync();
+
+                using SqlDataReader sdr = await cmd.ExecuteReaderAsync();
+
+                while (await sdr.ReadAsync())
+                {
+                    list.Add(new AssignedLeaveDto
+                    {
+                        LeaveType = sdr["leaveType"].ToString(),
+                        AssignedLeave = Convert.ToInt32(sdr["assignedLeave"]),
+                        UsedLeave = Convert.ToInt32(sdr["usedLeave"]),
+                        RemainingLeave = Convert.ToInt32(sdr["remainingLeave"])
+                    });
+                }
+
+                return ApiResponse<List<AssignedLeaveDto>>.SuccessResponse(
+                    list,
+                    "Leave balance fetched successfully"
+                );
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<List<AssignedLeaveDto>>.FailureResponse(
+                    ex.Message,
+                    500,
+                    "LEAVE_BALANCE_ERROR"
+                );
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    await _conn.CloseAsync();
+            }
+        }
 
         public async Task<bool> insertApplyLeaveByEmpId(applyLeave data)
         {
@@ -189,8 +222,6 @@ namespace Macreel_Software.DAL.Employee
                     await _conn.CloseAsync();
             }
         }
-
-
 
         public async Task<ApiResponse<List<applyLeave>>> applyLeaveListByEmpId(int empId, string? searchTerm,
      int? pageNumber, int? pageSize)
@@ -244,6 +275,7 @@ namespace Macreel_Software.DAL.Employee
                         leaveName = sdr["leaveName"]?.ToString(),
                         description = sdr["description"]?.ToString(),
                         applieddate = sdr["appliedDate"] != DBNull.Value ? Convert.ToDateTime(sdr["appliedDate"]):null,
+                        status = Convert.ToInt32(sdr["adminStatus"]) == 0?"Pending": Convert.ToInt32(sdr["adminStatus"]) ==1?"Approved": Convert.ToInt32(sdr["adminStatus"]) == 2 ?"Unapproved":""
                     });
                 }
 
@@ -282,7 +314,6 @@ namespace Macreel_Software.DAL.Employee
                     await _conn.CloseAsync();
             }
         }
-
 
         public async Task<ApiResponse<List<applyLeave>>> getAllApplyLeaveById(int id , int empId)
         {
@@ -350,7 +381,6 @@ namespace Macreel_Software.DAL.Employee
             }
         }
 
-
         public async Task<bool> deleteApplyLeaveById(int id,int empId)
         {
             try
@@ -381,9 +411,7 @@ namespace Macreel_Software.DAL.Employee
             }
         }
 
-
         #endregion
-
 
         #region dashboard
         public async Task<ApiResponse<Dashboard>> DashboardCount(int empId)

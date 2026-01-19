@@ -30,7 +30,7 @@ export class ManageLeaveService {
       params = params.set('pageSize', pageSize.toString());
     }
     return this.http.get<any>(
-      `${this.baseUrl}Common/getAllLeave`,{params:params, withCredentials: true}
+      `${this.baseUrl}Common/getAllLeave`, { params: params, withCredentials: true }
     );
   }
   // GET BY ID
@@ -64,12 +64,46 @@ export class ManageLeaveService {
   }
 
   //Employee Service Start Here
+  getLeaveBalance(): Observable<any> {
+    return this.http.get<any>(
+      `${this.baseUrl}Employee/allAssignedLeavesByEmpCode`
+    );
+  }
   applyLeave(data: any): Observable<any> {
     return this.http.post<any>(
       `${this.baseUrl}Employee/insertApplyLeaveByEmpId`, data, { withCredentials: true });
   }
-  getAppliedLeaveByEmpId(empId: number): Observable<any> {
-    return this.http.get<any>(`${this.baseUrl}Employee/ApplyLeaveListByEmpId`, { withCredentials: true });
+  getAppliedLeaves(searchTerm?: string, pageNumber?: number, pageSize?: number): Observable<any> {
+    let params = new HttpParams();
+    if (searchTerm) {
+      params = params.set('searchTerm', searchTerm);
+    }
+
+    if (pageNumber !== null && pageNumber !== undefined) {
+      params = params.set('pageNumber', pageNumber.toString());
+    }
+
+    if (pageSize !== null && pageSize !== undefined) {
+      params = params.set('pageSize', pageSize.toString());
+    }
+
+    return this.http.get<any>(`${this.baseUrl}Employee/ApplyLeaveListByEmpId`, { params, withCredentials: true });
+  }
+  getAssignedLeaves(searchTerm?: string, pageNumber?: number, pageSize?: number): Observable<any> {
+    let params = new HttpParams();
+    if (searchTerm) {
+      params = params.set('searchTerm', searchTerm);
+    }
+
+    if (pageNumber !== null && pageNumber !== undefined) {
+      params = params.set('pageNumber', pageNumber.toString());
+    }
+
+    if (pageSize !== null && pageSize !== undefined) {
+      params = params.set('pageSize', pageSize.toString());
+    }
+
+    return this.http.get<any>(`${this.baseUrl}Employee/AssignedLeaveListByEmpId`, { params, withCredentials: true });
   }
   getApplyLeaveDetailsById(id: number): Observable<any> {
     return this.http.get<any>(`${this.baseUrl}Employee/getApplyLeaveById?id=${id}`, { withCredentials: true });

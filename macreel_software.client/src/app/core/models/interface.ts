@@ -1,12 +1,12 @@
 
 export interface LeaveRequest {
   id: number
-  appliedDate: Date
+  applieddate: Date
   fromDate: Date
   toDate: Date
-  leaveType: string
+  leaveName: string
   description: string
-  status: string 
+  // status: string
 }
 
 import { TemplateRef } from "@angular/core";
@@ -18,7 +18,7 @@ export interface Task {
   assignedBy: string;
   assignedDate: string;
   completionDate: string;
-  status: 'Pending' | 'In Progress' | 'Completed';
+  taskStatus: string;
 }
 
 export interface Project {
@@ -66,7 +66,7 @@ export interface Task {
   empName: string;
   title: string;
   description: string;
-  completedDate: string; // or Date
+  completedDate: Date; // or Date
   assignedBy: string;
   document1: string | null;
   document2: string | null;
@@ -88,4 +88,9 @@ export interface TableColumn<T> {
   width?: string;
   template?: TemplateRef<any>;
 }
-
+export interface LeaveBalance {
+  leaveType: string;
+  assignedLeave: number;
+  usedLeave: number;
+  remainingLeave: number;
+}

@@ -1,112 +1,112 @@
-<div class="bg-gray-50 min-h-screen p-2 md:p-2">
-    <!-- Assigned Leaves Table -->
-    <div class="bg-white shadow rounded-lg p-1">
+<div class="bg-gray-50 p-2 md:p-2">
+  <!-- Assigned Leaves Table -->
+  <div class="bg-white shadow rounded-lg p-1">
 
-        <!-- HEADER -->
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-1 mb-1">
+    <!-- HEADER -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-1 mb-1">
 
-            <!-- LEFT SIDE: TITLE -->
-            <h1 class="ml-2 text-lg md:text-[16px] font-semibold text-[#444] text-center md:text-left">
-                Assigned Leaves
-            </h1>
+      <!-- LEFT SIDE: TITLE -->
+      <h1 class="ml-2 text-lg md:text-[16px] font-semibold text-[#444] text-center md:text-left">
+        Assigned Tasks
+      </h1>
 
-            <!-- RIGHT SIDE: SEARCH + PAGINATOR (together) -->
-            <div class="flex items-center gap-2">
+      <!-- RIGHT SIDE: SEARCH + PAGINATOR (together) -->
+      <div class="flex items-center gap-2">
 
-                <!-- SEARCH -->
-                <div class="relative">
-                    <input type="text" placeholder="Search Leave" (keyup)="applyFilter($event)" class="w-full pl-10 pr-3 py-[6px] text-[12px] rounded-lg bg-[#F6F7FB]
+        <!-- SEARCH -->
+        <div class="relative">
+          <input type="text" placeholder="Search Leave" [formControl]="searchControl" class="w-full pl-10 pr-3 py-[6px] text-[12px] rounded-lg bg-[#F6F7FB]
         border border-gray-300
         focus:outline-none focus:ring-2 focus:ring-[#C5192F] table-search" />
-                    <i class="fa-solid fa-magnifying-glass
+          <i class="fa-solid fa-magnifying-glass
         absolute left-3 top-1/2 -translate-y-1/2
         text-gray-400 text-sm">
-                    </i>
-                </div>
-
-                <!-- PAGINATOR -->
-                <mat-paginator [length]="totalRecords" [pageSize]="pageSize" [pageIndex]="pageNumber - 1"
-                    [pageSizeOptions]="[5, 10, 20, 30]" showFirstLastButtons (page)="onPageChange($event)">
-                </mat-paginator>
-
-            </div>
-
+          </i>
         </div>
 
-        <!-- ================= TABLE WRAPPER ================= -->
-        <div class="relative overflow-x-auto w-full">
+        <!-- PAGINATOR -->
+        <mat-paginator [length]="totalRecords" [pageSize]="pageSize" [pageIndex]="pageNumber - 1"
+          [pageSizeOptions]="[5,10,20,30]" showFirstLastButtons (page)="onPageChange($event)">
+        </mat-paginator>
 
-            <table mat-table [dataSource]="dataSource" class="min-w-[700px] w-full
+      </div>
+
+    </div>
+
+    <!-- ================= TABLE WRAPPER ================= -->
+    <div class="relative overflow-x-auto w-full">
+
+      <table mat-table [dataSource]="dataSource" class="min-w-[700px] w-full
                border border-gray-300
                divide-y divide-gray-300
                table-fixed
-               text-sm md:text-base">
+               text-sm md:text-base table">
 
-                <!-- SR NO -->
-                <ng-container matColumnDef="srNo">
-                    <th mat-header-cell *matHeaderCellDef class="w-[70px] text-center !bg-[#dd3d4f] text-white">
-                        Sr No.
-                    </th>
+        <!-- SR NO -->
+        <ng-container matColumnDef="srNo">
+          <th mat-header-cell *matHeaderCellDef class="w-[70px] text-center !bg-[#dd3d4f] text-white">
+            Sr No.
+          </th>
 
-                    <td mat-cell *matCellDef="let row; let i = index" class="text-center text-[12px]">
-                        {{ (pageNumber - 1) * pageSize + i + 1 }}
-                    </td>
-                </ng-container>
+          <td mat-cell *matCellDef="let row; let i = index" class="text-center text-[12px]">
+            {{ (pageNumber - 1) * pageSize + i + 1 }}
+          </td>
+        </ng-container>
 
-                <!-- Title -->
-                <ng-container matColumnDef="title">
-                    <th mat-header-cell *matHeaderCellDef class="w-[70px] text-center !bg-[#dd3d4f] text-white">
-                        Title</th>
-                    <td mat-cell *matCellDef="let row">{{ row.title }}</td>
-                </ng-container>
+        <!-- Title -->
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef class="w-[70px] text-center !bg-[#dd3d4f] text-white">
+            Title</th>
+          <td mat-cell *matCellDef="let row">{{ row.title }}</td>
+        </ng-container>
 
-                <!-- Assigned By -->
-                <ng-container matColumnDef="assignedBy">
-                    <th mat-header-cell *matHeaderCellDef class="w-[70px] text-center !bg-[#dd3d4f] text-white">
-                        Assigned By</th>
-                    <td mat-cell *matCellDef="let row">{{ row.assignedBy }}</td>
-                </ng-container>
-                <!-- Assigned Date -->
-                <ng-container matColumnDef="assignedDate">
-                    <th mat-header-cell *matHeaderCellDef class="w-[70px] text-center !bg-[#dd3d4f] text-white">
-                        Assigned Date</th>
-                    <td mat-cell *matCellDef="let row">{{ row.assignedDate }}</td>
-                </ng-container>
-                <!-- Completion Date -->
-                <ng-container matColumnDef="completionDate">
-                    <th mat-header-cell *matHeaderCellDef class="w-[70px] text-center !bg-[#dd3d4f] text-white">
-                        Completion Date</th>
-                    <td mat-cell *matCellDef="let row">{{ row.completionDate }}</td>
-                </ng-container>
-                <!-- Task Status -->
-                <ng-container matColumnDef="taskStatus">
-                    <th mat-header-cell *matHeaderCellDef class="w-[70px] text-center !bg-[#dd3d4f] text-white">
-                        Task Status</th>
-                    <td mat-cell *matCellDef="let row">{{ row.taskStatus }}</td>
-                </ng-container>
-                <!-- Action -->
-                <ng-container matColumnDef="action">
-                    <th mat-header-cell *matHeaderCellDef class="w-[70px] text-center !bg-[#dd3d4f] text-white">
-                        Action</th>
-                    <td mat-cell *matCellDef="let element" class="px-1 py-1 text-center">
-                        <button class="text-green-700 p-2 rounded-full hover:bg-green-100 mr-1 text-[12px]">
-                            <i class="fa fa-pencil"></i>
-                        </button>
-
-
-                    </td>
-                </ng-container>
+        <!-- Assigned By -->
+        <ng-container matColumnDef="assignedBy">
+          <th mat-header-cell *matHeaderCellDef class="w-[70px] text-center !bg-[#dd3d4f] text-white">
+            Assigned By</th>
+          <td mat-cell *matCellDef="let row">{{ row.assignedBy }}</td>
+        </ng-container>
+        <!-- Assigned Date -->
+        <ng-container matColumnDef="assignedDate">
+          <th mat-header-cell *matHeaderCellDef class="w-[70px] text-center !bg-[#dd3d4f] text-white">
+            Assigned Date</th>
+          <td mat-cell *matCellDef="let row">{{ row.assignedDate }}</td>
+        </ng-container>
+        <!-- Completion Date -->
+        <ng-container matColumnDef="completionDate">
+          <th mat-header-cell *matHeaderCellDef class="w-[70px] text-center !bg-[#dd3d4f] text-white">
+            Completion Date</th>
+          <td mat-cell *matCellDef="let row">{{ row.completionDate }}</td>
+        </ng-container>
+        <!-- Task Status -->
+        <ng-container matColumnDef="taskStatus">
+          <th mat-header-cell *matHeaderCellDef class="w-[70px] text-center !bg-[#dd3d4f] text-white">
+            Task Status</th>
+          <td mat-cell *matCellDef="let row">{{ row.taskStatus }}</td>
+        </ng-container>
+        <!-- Action -->
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef class="w-[70px] text-center !bg-[#dd3d4f] text-white">
+            Action</th>
+          <td mat-cell *matCellDef="let element" class="px-1 py-1 text-center">
+            <button class="text-green-700 p-2 rounded-full hover:bg-green-100 mr-1 text-[12px]">
+              <i class="fa fa-pencil"></i>
+            </button>
 
 
-                <!-- ROWS -->
-                <tr mat-header-row *matHeaderRowDef="displayedColumns" class="!h-9">
-                </tr>
+          </td>
+        </ng-container>
 
-                <tr mat-row *matRowDef="let row; columns: displayedColumns" class="hover:bg-gray-100 !h-9">
-                </tr>
 
-            </table>
+        <!-- ROWS -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns" class="!h-9">
+        </tr>
 
-        </div>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns" class="hover:bg-gray-100 !h-9">
+        </tr>
+
+      </table>
+
     </div>
+  </div>
 </div>
