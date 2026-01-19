@@ -366,4 +366,12 @@ export class AddEmployeeComponent implements OnInit {
       this.graduationCertificate =
       this.mastersCertificate = undefined;
   }
+ isModalOpen = false;
+    openModal() {
+    this.isModalOpen = true;
+  }
+
+  closeModal() {
+    this.isModalOpen = false;
+  }
 }
