@@ -44,45 +44,45 @@
 
         <!-- SR NO -->
         <ng-container matColumnDef="srNo">
-          <th mat-header-cell *matHeaderCellDef class="w-[70px] text-center !bg-[#dd3d4f] text-white">
+          <th mat-header-cell *matHeaderCellDef class="w-[40px] text-center !bg-[#dd3d4f] border-r text-white">
             Sr No.
           </th>
 
-          <td mat-cell *matCellDef="let row; let i = index" class="text-center text-[12px]">
+          <td mat-cell *matCellDef="let row; let i = index" class="text-center text-[12px] border-r">
             {{ (pageNumber - 1) * pageSize + i + 1 }}
           </td>
         </ng-container>
 
         <!-- Title -->
         <ng-container matColumnDef="title">
-          <th mat-header-cell *matHeaderCellDef class="w-[70px] text-center !bg-[#dd3d4f] text-white">
+          <th mat-header-cell *matHeaderCellDef class="w-[100px] text-center !bg-[#dd3d4f] border-r text-white">
             Title</th>
-          <td mat-cell *matCellDef="let row">{{ row.title }}</td>
+          <td mat-cell *matCellDef="let row" class="border-r ">{{ row.title }}</td>
         </ng-container>
 
         <!-- Assigned By -->
         <ng-container matColumnDef="assignedBy">
-          <th mat-header-cell *matHeaderCellDef class="w-[70px] text-center !bg-[#dd3d4f] text-white">
+          <th mat-header-cell *matHeaderCellDef class="w-[70px] text-center !bg-[#dd3d4f] border-r text-white">
             Assigned By</th>
-          <td mat-cell *matCellDef="let row">{{ row.assignedBy }}</td>
+          <td mat-cell *matCellDef="let row" class="border-r ">{{ row.TaskAssignDto }}</td>
         </ng-container>
         <!-- Assigned Date -->
         <ng-container matColumnDef="assignedDate">
-          <th mat-header-cell *matHeaderCellDef class="w-[70px] text-center !bg-[#dd3d4f] text-white">
+          <th mat-header-cell *matHeaderCellDef class="w-[60px] text-center !bg-[#dd3d4f] border-r text-white">
             Assigned Date</th>
-          <td mat-cell *matCellDef="let row">{{ row.assignedDate }}</td>
+          <td mat-cell *matCellDef="let row" class="border-r ">{{ row.assignedDate | date:'dd-MM-yyyy'}}</td>
         </ng-container>
         <!-- Completion Date -->
         <ng-container matColumnDef="completionDate">
-          <th mat-header-cell *matHeaderCellDef class="w-[70px] text-center !bg-[#dd3d4f] text-white">
+          <th mat-header-cell *matHeaderCellDef class="w-[60px] text-center !bg-[#dd3d4f] border-r text-white">
             Completion Date</th>
-          <td mat-cell *matCellDef="let row">{{ row.completionDate }}</td>
+          <td mat-cell *matCellDef="let row" class="border-r">{{ row.completedDate | date:'dd-MM-yyyy'  }}</td>
         </ng-container>
         <!-- Task Status -->
         <ng-container matColumnDef="taskStatus">
-          <th mat-header-cell *matHeaderCellDef class="w-[70px] text-center !bg-[#dd3d4f] text-white">
+          <th mat-header-cell *matHeaderCellDef class="w-[60px] text-center !bg-[#dd3d4f] border-r text-white">
             Task Status</th>
-          <td mat-cell *matCellDef="let row">{{ row.taskStatus }}</td>
+          <td mat-cell *matCellDef="let row" class="border-r ">{{ row.taskStatus }}</td>
         </ng-container>
         <!-- Action -->
         <ng-container matColumnDef="action">

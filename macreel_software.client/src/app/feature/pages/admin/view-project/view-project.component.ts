@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-
 import { ProjectService } from '../../../../core/services/project-service.service';
-
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
@@ -32,10 +30,10 @@ export class ViewProjectComponent implements OnInit {
   ];
 
   constructor(
-    private fb: FormBuilder,
-    private projectService: ProjectService,
-    private router: Router,
-    private addProjectService: AddProjectService 
+    private readonly fb: FormBuilder,
+    private readonly projectService: ProjectService,
+    private readonly router: Router,
+    private readonly addProjectService: AddProjectService 
 
   ) {}
 

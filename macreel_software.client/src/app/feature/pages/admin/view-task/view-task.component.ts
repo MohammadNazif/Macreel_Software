@@ -6,9 +6,7 @@ import { PaginatedList } from '../../../../core/utils/paginated-list';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { TableColumn, Task } from '../../../../core/models/interface';
-
 import { Router } from '@angular/router';
-
 
 
 
@@ -32,9 +30,9 @@ export class ViewTaskComponent implements OnInit {
   ];
 
   constructor(
-    private fb: FormBuilder,
-    private taskService : TaskService,
-    private router: Router
+    private readonly fb: FormBuilder,
+    private readonly taskService : TaskService,
+    private readonly router: Router
   ) {}
 
   ngOnInit(): void {

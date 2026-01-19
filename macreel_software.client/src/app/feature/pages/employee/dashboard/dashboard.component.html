@@ -202,40 +202,5 @@
       </div>
     </div>
 
-    <!-- Right Quick Actions -->
-    <div class="lg:col-span-4 space-y-4">
-      <div
-        class="bg-white rounded-2xl p-5 h-full flex flex-col justify-start hover:shadow-xl transition-all duration-300"
-        style="box-shadow: rgba(0, 0, 0, 0.04) 0px 4px 20px 0px, rgba(0, 0, 0, 0.03) 0px 0px 0px 1px;">
-        <h5 class="font-semibold text-gray-700 mb-4 text-lg">Quick Actions</h5>
-        <div class="space-y-3">
-          <a href="/Employee/AddEmployee"
-            class="block bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white text-center py-3 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg transform hover:translate-y-[-2px]">
-            Add New Employee
-          </a>
-          <a href="/admin/AddProject"
-            class="block bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white text-center py-3 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg transform hover:translate-y-[-2px]">
-            Create Project
-          </a>
-
-          <!-- Dropdown Task Report -->
-          <div class="relative">
-            <button
-              class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white py-3 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg transform hover:translate-y-[-2px]"
-              id="taskReportDropdown">
-              Task Report
-            </button>
-            <ul class="absolute left-0 mt-2 w-full bg-white border rounded-xl shadow-xl hidden z-10 overflow-hidden"
-              id="taskReportMenu">
-              <li><a href="/admin/Task_reports?status=Pending"
-                  class="block px-4 py-3 hover:bg-gray-50 transition-colors duration-200 border-b">Pending Tasks (0)</a>
-              </li>
-              <li><a href="/admin/Task_reports?status=Completed"
-                  class="block px-4 py-3 hover:bg-gray-50 transition-colors duration-200">Completed Tasks (0)</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </section>

@@ -72,6 +72,7 @@ export class LayoutComponent implements OnInit {
       children: [
         { label: 'Assign Leave', route: '/home/admin/assign-leave', roles: ['admin'] },
         { label: 'Assigned Leaves', route: '/home/admin/assigned-employees-leaves', roles: ['admin'] },
+        { label: 'Leave Request', route: '/home/admin/leave-requests', roles: ['admin'] },
         { label: 'Apply Leave', route: '/home/employee/apply-leave', roles: ['employee'] },
         { label: 'Assigned Leave', route: '/home/employee/assigned-leaves', roles: ['employee'] }
       ]

@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { PaginatedResult, Project } from '../models/interface';
 
-
 @Injectable({ providedIn: 'root' })
 export class ProjectService {
 
