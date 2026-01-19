@@ -22,12 +22,39 @@ export class AttendanceService {
     );
   }
 
-  getAttendance(search = '', page = 1, size = 20) {
-    return this.http.get<PaginatedResult<Task>>(
-      `${this.baseUrl}Admin/getAllAssignTask`,
-      { params: { search, page, size } }
-    );
-  }
+getAttendance(payload: {
+  empCode: string;
+  month: string;
+  year: number;
+}) {
+  return this.http.get<any>(
+    `${this.baseUrl}Admin/EmpAttendancebyEmpCode`,
+    {
+      params: {
+        empCode: payload.empCode,
+        month: payload.month,
+        year: payload.year
+      }
+    }
+  );
+}
+getAttendanceSummary(payload: {
+  empCode: string;
+  month: string;
+  year: number;
+}) {
+  return this.http.get<any>(
+    `${this.baseUrl}Admin/EmpMonthlyWorkingDetailByEmpCode`,
+    {
+      params: {
+        empCode: payload.empCode,
+        month: payload.month,
+        year: payload.year
+      }
+    }
+  );
+}
+
   
   }
 

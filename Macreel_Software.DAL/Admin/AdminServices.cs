@@ -9,8 +9,11 @@ using Microsoft.Extensions.Configuration;
 using System.Data;
 using System.Text.Json;
 
+
+
 namespace Macreel_Software.DAL.Admin
 {
+
     public  class AdminServices:IAdminServices
     {
 
@@ -667,7 +670,7 @@ namespace Macreel_Software.DAL.Admin
 
                             list.Add(new allAssignedLeave
                             {
-                                id = Convert.ToInt32(sdr["id"]),
+                                //id = Convert.ToInt32(sdr["id"]),
                                 EmpId = sdr["empId"] != DBNull.Value ? Convert.ToInt32(sdr["empId"]):null,
                                 empName = sdr["empName"] != DBNull.Value ? sdr["empName"].ToString():null,
                                 empCode = sdr["empCode"] != DBNull.Value ? Convert.ToInt32(sdr["empCode"]) : null,

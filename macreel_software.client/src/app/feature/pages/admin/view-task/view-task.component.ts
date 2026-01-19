@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 import { TaskService } from '../../../../core/services/add-task.service';
-
 import { PaginatedList } from '../../../../core/utils/paginated-list';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { TableColumn, Task } from '../../../../core/models/interface';
 import { Router } from '@angular/router';
+
 
 
 
@@ -23,16 +23,17 @@ export class ViewTaskComponent implements OnInit {
 
   taskColumns: TableColumn<Task>[] = [
     { key: 'title', label: 'Task' },
-    { key: 'assignedBy', label: 'Assigned By' },
+    { key: 'empName', label: 'Assigned To' },
+    { key: 'assignedByName', label: 'Assigned By' },
     { key: 'assignedDate', label: 'Assigned Date', type: 'date' },
     { key: 'completedDate', label: 'Completion Date', type: 'date' },
     { key: 'taskStatus', label: 'Status' }
   ];
 
   constructor(
-    private readonly fb: FormBuilder,
-    private readonly taskService : TaskService,
-    private readonly router: Router
+    private fb: FormBuilder,
+    private taskService : TaskService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {

@@ -1,19 +1,15 @@
-<div class="max-w-5xl mx-auto bg-white shadow-xl rounded-xl p-6 mt-6">
+<div class="max-w-5xl mx-auto bg-white shadow-xl rounded-xl pt-3 py-10 p-6 mt-2">
 
   <!-- Header -->
-  <h2 class="text-2xl font-semibold text-gray-700 mb-5 border-b border-gray-200 pb-2">
+  <h2 class="text-sm font-semibold text-gray-700 mb-1 border-b border-gray-200 pb-2">
     Add Task
   </h2>
 
   <form [formGroup]="taskForm" (ngSubmit)="submit()" class="space-y-4">
 
     <!-- Row 1: SR No + Task Title -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div class="flex flex-col w-full">
-        <label class="text-gray-500 text-sm mb-1">Employee id</label>
-        <input type="text" formControlName="srNo" placeholder="Enter Employee id"
-          class="w-full px-3 py-2 rounded-lg border border-gray-300 bg-gray-50 text-gray-700 focus:ring-1 focus:ring-[#dd3d4f] focus:outline-none">
-      </div>
+    <div class="grid grid-cols-1 md:grid-cols-1 ">
+     
 
       <div class="flex flex-col w-full">
         <label class="text-gray-500 text-sm mb-1">Task Title</label>
@@ -23,7 +19,7 @@
     </div>
 
     <!-- Row 2: Assign Employee + Completion Date -->
-   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+   <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-1">
   <div class="flex flex-col w-full">
     <label class="text-gray-500 text-sm mb-1">Assign Employee</label>
     <select
@@ -82,7 +78,7 @@
     <div class="flex justify-end">
       <button type="submit"
         class="bg-[#dd3d4f] hover:bg-red-600 text-white font-medium px-6 py-2 rounded-lg shadow-md transition-all">
-        Create Task
+        Submit Task
       </button>
     </div>
 

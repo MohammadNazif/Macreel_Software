@@ -405,7 +405,7 @@ namespace Macreel_Software.Server.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ApiResponse<sendEmailForRegistration>.FailureResponse(
+                return StatusCode(500, ApiResponse<SendEmailForRegistrationDto>.FailureResponse(
                     "An error occurred while fetching email.",
                     500,
                     "SERVER_ERROR"
