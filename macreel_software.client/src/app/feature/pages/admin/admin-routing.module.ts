@@ -12,6 +12,7 @@ import { AddProjectComponent } from './add-project/add-project.component';
 import { AddTaskComponent } from './add-task/add-task.component';
 import { ViewTaskComponent } from './view-task/view-task.component';
 import { ViewProjectComponent } from './view-project/view-project.component';
+import { LeaveRequestsComponent } from './leave-requests/leave-requests.component';
 
 
 
@@ -31,6 +32,7 @@ const routes: Routes = [
   {path: 'view-task',component:ViewTaskComponent},
   {path: 'view-project',component:ViewProjectComponent},
   { path:'add-project',component:AddProjectComponent},
+  {path:'leave-requests',component:LeaveRequestsComponent},
   {path:'master',loadChildren:()=>import('./masters/masters.module').then(n=>n.MastersModule)}
 ];
 

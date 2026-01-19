@@ -1,15 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-
 import { ProjectService } from '../../../../core/services/project-service.service';
-
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import Swal from 'sweetalert2';
-<<<<<<< HEAD
 import { Router } from '@angular/router';
 import { AddProjectService } from '../../../../core/services/add-project.service';
-=======
->>>>>>> eabb35e (some chang)
 import { Project, TableColumn } from '../../../../core/models/interface';
 
 import { PaginatedList } from '../../../../core/utils/paginated-list';
@@ -35,10 +30,10 @@ export class ViewProjectComponent implements OnInit {
   ];
 
   constructor(
-    private fb: FormBuilder,
-    private projectService: ProjectService,
-    private router: Router,
-    private addProjectService: AddProjectService 
+    private readonly fb: FormBuilder,
+    private readonly projectService: ProjectService,
+    private readonly router: Router,
+    private readonly addProjectService: AddProjectService 
 
   ) {}
 

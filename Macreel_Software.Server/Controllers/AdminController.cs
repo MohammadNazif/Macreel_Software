@@ -1,6 +1,8 @@
-﻿using Macreel_Software.DAL.Admin;
+﻿using Macreel_Software.Contracts.DTOs;
+using Macreel_Software.DAL.Admin;
 using Macreel_Software.Models;
 using Macreel_Software.Models.Common;
+using Macreel_Software.Models.Employee;
 using Macreel_Software.Models.Master;
 using Macreel_Software.Services.FileUpload.Services;
 using Macreel_Software.Services.MailSender;
@@ -19,6 +21,7 @@ namespace Macreel_Software.Server.Controllers
         private readonly IWebHostEnvironment _env;
         private readonly MailSender _mailservice;
         private readonly PasswordEncrypt _pass;
+        private readonly int _userId;
 
         public AdminController(
             IAdminServices service,
@@ -32,7 +35,12 @@ namespace Macreel_Software.Server.Controllers
             _env = env;
             _mailservice = mailservice;
             _pass = pass;
-        
+            var user = http.HttpContext?.User;
+            if (user != null && user.Identity?.IsAuthenticated == true)
+            {
+                _userId = Convert.ToInt32(user.FindFirst("UserId")?.Value);
+            }
+
         }
 
         [HttpGet("checkauth")]
@@ -350,7 +358,6 @@ namespace Macreel_Software.Server.Controllers
             }
         }
 
-
         [HttpDelete("DeleteLeaveById")]
         public async Task<IActionResult> deleteLeaveById(int id)
         {
@@ -457,7 +464,6 @@ namespace Macreel_Software.Server.Controllers
             }
         }
 
-
         [HttpGet("getAssignedLeaveById")]
         public async Task<IActionResult> getAssignedLeaveById(int empId)
         {
@@ -478,7 +484,6 @@ namespace Macreel_Software.Server.Controllers
                 ));
             }
         }
-
 
         [HttpGet("getAllAssignLeave")]
         public async Task<IActionResult> getAllAssignLeave(string? searchTerm = null, int? pageNumber = null, int? pageSize = null)
@@ -501,8 +506,57 @@ namespace Macreel_Software.Server.Controllers
             }
         }
 
+        [HttpGet("getAllLeaveRequests")]
+        public async Task<IActionResult> GetLeave(string? searchTerm = null, int? pageNumber = null, int? pageSize = null)
+        {
+            try
+            {
+                ApiResponse<List<applyLeave>> result =
+                    await _services.GetAllLeaveRequests(searchTerm, pageNumber, pageSize);
+                return StatusCode(result.StatusCode, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<List<applyLeave>>.FailureResponse(
+                    "An error occurred while fetching leave",
+                    500,
+                    "SERVER_ERROR"
+                ));
+            }
+        }
+        [HttpPut("updateLeaveStatus")]
+        public async Task<IActionResult> UpdateLeaveStatus(int id,int leaveCount,int status)
+        {
+            try
+            {
+                bool result = await _services.UpdateLeaveRequest(id,leaveCount,status);
 
-
+                if (result)
+                {
+                    return Ok(new
+                    {
+                        status = true,
+                        statusCode = 200,
+                        message = "Updated Sucessfully"
+                    });
+                }
+                return Ok(new
+                {
+                    status = false,
+                    statusCode = 400,
+                    message = "Some error occured during updating!!"
+                });
+            }
+            catch (Exception)
+            {
+                return Ok(new
+                {
+                    status = false,
+                    statusCode = 500,
+                    message = "Internal Server error!!"
+                });
+            }
+        }
         #endregion
 
         #region attendance 
@@ -799,7 +853,7 @@ namespace Macreel_Software.Server.Controllers
                         allowedExtensions: null
                     );
                 }
-
+                data.assignedBy = _userId;
                 bool res = await _services.insertTask(data);
 
                 if (res)
@@ -832,7 +886,7 @@ namespace Macreel_Software.Server.Controllers
         {
             try
             {
-                ApiResponse<List<Taskassign>> result =
+                ApiResponse<List<TaskAssignDto>> result =
                     await _services.getAllAssignTask(searchTerm, pageNumber, pageSize);
 
 

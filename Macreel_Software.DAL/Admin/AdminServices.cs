@@ -1,23 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Linq;
-using System.Security.Cryptography.Pkcs;
-using System.Security.Cryptography.Pkcs;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-using FirebaseAdmin.Messaging;
+﻿using Macreel_Software.Contracts.DTOs;
 using Macreel_Software.Models;
-using Macreel_Software.Models.Common;
 using Macreel_Software.Models.Employee;
 using Macreel_Software.Models.Master;
 using Macreel_Software.Services.AttendanceUpload;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
-using static System.Collections.Specialized.BitVector32;
+using System.Data;
+using System.Text.Json;
 
 namespace Macreel_Software.DAL.Admin
 {
@@ -566,8 +556,7 @@ namespace Macreel_Software.DAL.Admin
             }
         }
 
-
-            public async Task<ApiResponse<List<Leave>>> getAllLeave(string? searchTerm,int? pageNumber,int? pageSize)
+        public async Task<ApiResponse<List<Leave>>> getAllLeave(string? searchTerm,int? pageNumber,int? pageSize)
             {
             List<Leave> list = new();
             int totalRecords = 0;
@@ -642,7 +631,6 @@ namespace Macreel_Software.DAL.Admin
                     await _conn.CloseAsync();
             }
         }
-
 
         public async Task<ApiResponse<List<AssignLeaveDetails>>> getAllAssignedLeave(string? searchTerm, int? pageNumber, int? pageSize)
         {
@@ -722,7 +710,114 @@ namespace Macreel_Software.DAL.Admin
             }
         }
 
+        public async Task<ApiResponse<List<applyLeave>>> GetAllLeaveRequests(string? searchTerm, int? pageNumber, int? pageSize)
+        {
+            List<applyLeave> list = new();
+            int totalRecords = 0;
 
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("sp_leave", _conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@action", "getallleaverequests");
+
+                    cmd.Parameters.AddWithValue("@searchTerm",
+                        string.IsNullOrWhiteSpace(searchTerm) ? DBNull.Value : searchTerm);
+
+                    cmd.Parameters.AddWithValue("@pageNumber",
+                        pageNumber.HasValue ? pageNumber.Value : DBNull.Value);
+
+                    cmd.Parameters.AddWithValue("@pageSize",
+                        pageSize.HasValue ? pageSize.Value : DBNull.Value);
+
+                    if (_conn.State != ConnectionState.Open)
+                        await _conn.OpenAsync();
+
+                    using (SqlDataReader sdr = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await sdr.ReadAsync())
+                        {
+
+                            if (totalRecords == 0)
+                                totalRecords = Convert.ToInt32(sdr["TotalRecords"]);
+
+                            list.Add(new applyLeave
+                            {
+                                id = Convert.ToInt32(sdr["id"]),
+                                leaveCount = sdr["leaveCount"] != DBNull.Value ? Convert.ToInt32(sdr["leaveCount"]) : null,
+                                leaveName = sdr["leaveName"] != DBNull.Value ? sdr["leaveName"].ToString() : null,
+                                description = sdr["description"] != DBNull.Value ? sdr["description"].ToString() : null,
+                                empName = sdr["empName"].ToString(),
+                                fromDate = Convert.ToDateTime(sdr["fromDate"]),
+                                toDate = Convert.ToDateTime(sdr["toDate"]),
+                                applieddate = Convert.ToDateTime(sdr["appliedDate"]),
+                                status = Convert.ToInt32(sdr["adminStatus"]) == 0 ? "Pending" : Convert.ToInt32(sdr["adminStatus"]) == 1 ? "Approved" : Convert.ToInt32(sdr["adminStatus"]) == 2 ? "Unapproved" : ""
+                            });
+                        }
+                    }
+                }
+
+
+                if (pageNumber.HasValue && pageSize.HasValue)
+                {
+                    return ApiResponse<List<applyLeave>>.PagedResponse(
+                        list,
+                        pageNumber.Value,
+                        pageSize.Value,
+                        totalRecords,
+                        "Assigned Leave list fetched successfully");
+                }
+
+
+                var response = ApiResponse<List<applyLeave>>.SuccessResponse(
+                    list,
+                    "Assigned Leave list fetched successfully");
+
+                response.TotalRecords = totalRecords;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<List<applyLeave>>.FailureResponse(
+                    ex.Message,
+                    500,
+                    "Assigned_Leave_FETCH_ERROR");
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    await _conn.CloseAsync();
+            }
+        }
+
+        public async Task<bool> UpdateLeaveRequest(int id,int leaveCount,int status)
+        {
+            try
+            {
+                await _conn.OpenAsync();
+                using(SqlCommand cmd = new SqlCommand("sp_leave", _conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.Parameters.AddWithValue("@status", status);
+                    cmd.Parameters.AddWithValue("@leaveCount", leaveCount);
+                    cmd.Parameters.AddWithValue("@action", "updateLeaveRequest");
+                    int res = await cmd.ExecuteNonQueryAsync();
+                    return res > 0;
+                }
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    await _conn.CloseAsync();
+            }
+        }
 
         public async Task<ApiResponse<List<Leave>>> getAllLeaveById(int id)
         {
@@ -838,7 +933,6 @@ namespace Macreel_Software.DAL.Admin
             }
             catch (Exception ex)
             {
-             
                 throw; 
             }
             finally
@@ -847,7 +941,6 @@ namespace Macreel_Software.DAL.Admin
                     await _conn.CloseAsync();
             }
         }
-
 
         public async Task<ApiResponse<List<showLeave>>> getAllAssignedLeaveById(int empId)
         {
@@ -909,7 +1002,6 @@ namespace Macreel_Software.DAL.Admin
                     await _conn.CloseAsync();
             }
         }
-
 
         #endregion
 
@@ -1475,9 +1567,9 @@ namespace Macreel_Software.DAL.Admin
         }
 
 
-        public async Task<ApiResponse<List<Taskassign>>> getAllAssignTask(string? searchTerm, int? pageNumber, int? pageSize, int? empId = null)
+        public async Task<ApiResponse<List<TaskAssignDto>>> getAllAssignTask(string? searchTerm, int? pageNumber, int? pageSize, int? empId = null)
         {
-            List<Taskassign> list = new();
+            List<TaskAssignDto> list = new();
             int totalRecords = 0;
             try
             {
@@ -1497,7 +1589,7 @@ namespace Macreel_Software.DAL.Admin
                         {
                             if (totalRecords == 0)
                                 totalRecords = Convert.ToInt32(sdr["TotalRecords"]);
-                            list.Add(new Taskassign
+                            list.Add(new TaskAssignDto
                             {
                                 id = Convert.ToInt32(sdr["id"]),
                                 empId = sdr["empId"] != DBNull.Value ? Convert.ToInt32(sdr["empId"]):null,
@@ -1509,26 +1601,27 @@ namespace Macreel_Software.DAL.Admin
                                 empName = sdr["empName"] != DBNull.Value ? sdr["empName"].ToString() : null,
                                 assignedDate= sdr["createdAt"] != DBNull.Value ? Convert.ToDateTime(sdr["CompletedDate"]) : null,
                                 taskStatus = sdr["taskStatus"] != DBNull.Value ? sdr["taskStatus"].ToString() : null,
+                                assignedByName = sdr["roleName"] != DBNull.Value ? sdr["roleName"].ToString()! : "",
                             });
                         }
                     }
                 }
                 if (pageNumber.HasValue && pageSize.HasValue)
                 {
-                    return ApiResponse<List<Taskassign>>.PagedResponse(
+                    return ApiResponse<List<TaskAssignDto>>.PagedResponse(
                         list,
                         pageNumber.Value,
                         pageSize.Value,
                         totalRecords,
                         "Assign Task list fetched successfully");
                 }
-                var response = ApiResponse<List<Taskassign>>.SuccessResponse(list,"Assign Task list fetched successfully");
+                var response = ApiResponse<List<TaskAssignDto>>.SuccessResponse(list,"Assign Task list fetched successfully");
                 response.TotalRecords = totalRecords;
                 return response;
             }
             catch (Exception ex)
             {
-                return ApiResponse<List<Taskassign>>.FailureResponse( ex.Message, 500,"ASSIGN_TASK_FETCH_ERROR");
+                return ApiResponse<List<TaskAssignDto>>.FailureResponse( ex.Message, 500,"ASSIGN_TASK_FETCH_ERROR");
             }
             finally
             {
