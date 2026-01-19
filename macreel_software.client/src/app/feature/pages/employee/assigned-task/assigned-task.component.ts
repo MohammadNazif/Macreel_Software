@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { TaskService } from '../../../../core/services/add-task.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-assigned-task',
@@ -13,6 +14,8 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
 })
 export class AssignedTaskComponent {
   dataSource = new MatTableDataSource<any>();
+  statusForm!:FormGroup;
+  isModalOpen = false;
   displayedColumns: string[] = [
     'srNo',
     'title',
@@ -31,8 +34,47 @@ export class AssignedTaskComponent {
   searchControl = new FormControl<string>("")
 
   constructor(
-    private readonly taskservice: TaskService
-  ) { }
+    private readonly taskservice: TaskService,
+    private readonly fb:FormBuilder
+  ) {this.statusForm = this.fb.group({
+      id:null,
+      status: ['', Validators.required],
+      leaveCount: [null, [Validators.required, Validators.min(1)]]
+    }); }
+
+    openModal(id:number) {
+        // const leave = this.allLeaves.find(x => x.id === id);
+        // if (!leave) return;
+        // this.statusForm.get('leaveCount')?.setValue(leave.leaveCount);
+        // this.statusForm.get('id')?.setValue(leave.id);
+        this.isModalOpen = true;
+      }
+      closeModal() {
+        this.isModalOpen = false;
+        this.statusForm.reset();
+      }
+    
+      onSubmitStatus() {
+        debugger
+        if (!this.statusForm.valid) {
+          return;
+        }
+        const formValue = this.statusForm.value;
+        //Call Api
+        this.taskservice.UpdateTaskStatus().subscribe({
+              next: (res) => {
+                if (res.statusCode === 200) {
+                  Swal.fire('Success', res.message, 'success');
+                  location.reload();
+                } else {
+                  Swal.fire('Error', res.message, 'error');
+                }
+              },
+              error: (err) => {
+                Swal.fire('Error', err.error.errorMessage, 'error');
+              }
+            });
+      }
 
   ngOnInit(): void {
     this.loadAssignedTasks();

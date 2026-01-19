@@ -110,3 +110,128 @@
     </div>
   </div>
 </div>
+
+
+<!-- MODAL BACKDROP -->
+<div
+  *ngIf="isModalOpen"
+  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+>
+  <!-- MODAL CARD -->
+  <div class="bg-white w-full max-w-md rounded-lg shadow-lg relative">
+
+    <!-- CLOSE BUTTON -->
+    <button
+      type="button"
+      (click)="closeModal()"
+      class="absolute top-3 right-3 text-gray-500 hover:text-red-600 text-lg"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+
+    <!-- MODAL HEADER -->
+    <div class="border-b px-5 py-3">
+      <h2 class="text-lg font-semibold text-gray-700">
+        Update Task Status
+      </h2>
+    </div>
+
+    <!-- MODAL BODY -->
+    <form
+      [formGroup]="statusForm"
+      (ngSubmit)="onSubmitStatus()"
+      class="px-5 py-4 space-y-4"
+    >
+
+      <!-- STATUS -->
+      <div>
+        <label class="block text-sm font-medium text-gray-600 mb-1">
+          Status
+        </label>
+        <input type="text" readonly class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md
+                 focus:outline-none focus:ring-2 focus:ring-[#C5192F]">
+      </div>
+
+      <!-- Task Title -->
+      <div>
+        <label class="block text-sm font-medium text-gray-600 mb-1">
+          Task Title
+        </label>
+        <input type="text" readonly class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md
+                 focus:outline-none focus:ring-2 focus:ring-[#C5192F]">
+      </div>
+
+      <!-- Assigned Date -->
+      <div>
+        <label class="block text-sm font-medium text-gray-600 mb-1">
+          Assigned Date
+        </label>
+        <input
+          type="date"
+          class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md
+                 focus:outline-none focus:ring-2 focus:ring-[#C5192F]"
+        />
+      </div>
+
+      <!-- Completion Date -->
+      <div>
+        <label class="block text-sm font-medium text-gray-600 mb-1">
+          Completion Date
+        </label>
+        <input
+          type="date"
+          class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md
+                 focus:outline-none focus:ring-2 focus:ring-[#C5192F]"
+        />
+      </div>
+
+      <!-- Description -->
+      <div>
+        <label class="block text-sm font-medium text-gray-600 mb-1">
+          Description
+        </label>
+        <textarea
+          class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md
+                 focus:outline-none focus:ring-2 focus:ring-[#C5192F]"
+        ></textarea>
+      </div>
+
+      <!-- Comment -->
+      <div>
+        <label class="block text-sm font-medium text-gray-600 mb-1">
+          Comment Regarding this task (If Any)
+        </label>
+        <textarea
+          class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md
+                 focus:outline-none focus:ring-2 focus:ring-[#C5192F]"
+        ></textarea>
+      </div>
+
+      <!-- Mark -->
+      <div>
+        <label class="block text-sm font-medium text-gray-600 mb-1">
+          Mark To Complete This Task:-
+        </label>
+        <input
+          type="checkbox"
+          class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md
+                 focus:outline-none focus:ring-2 focus:ring-[#C5192F]"
+        />
+      </div>
+
+      <!-- ACTION BUTTONS -->
+      <div class="flex justify-center gap-2 pt-3 border-t">
+
+        <button
+          type="submit"
+          [disabled]="statusForm.invalid"
+          class="px-4 py-2 text-sm rounded-md text-white
+                 bg-[#C5192F] hover:bg-[#b3162a] disabled:opacity-50"
+        >
+          Submit
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

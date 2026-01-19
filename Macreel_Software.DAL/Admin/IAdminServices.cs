@@ -22,7 +22,7 @@ namespace Macreel_Software.DAL.Admin
         Task<ApiResponse<List<Leave>>> getAllLeave(string? searchTerm, int? pageNumber, int? pageSize);
         Task<ApiResponse<List<Leave>>> getAllLeaveById(int id);
         Task<bool> deleteLeaveById(int id);
-        public  Task<int> InsertAssignLeaveAsync(int empId,string noOfLeave,string leaveType);
+        Task<bool> InsertAssignLeaveAsync(AssignLeave model);
         Task<ApiResponse<List<showLeave>>> getAllAssignedLeaveById(int empId);
         Task<int> UploadAttendance(IFormFile file, int selectedMonth, int currentYear);
         Task<ApiResponse<List<Attendance>>> EmpAttendanceDataByEmpCode(string empCode, int month, int year);

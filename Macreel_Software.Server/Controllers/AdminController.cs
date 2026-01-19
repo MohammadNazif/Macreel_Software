@@ -396,61 +396,33 @@ namespace Macreel_Software.Server.Controllers
         }
 
         [HttpPost("AssignLeave")]
-        public async Task<IActionResult> AssignLeave([FromBody] AssignLeave obj)
+        public async Task<IActionResult> AssignLeave([FromBody] AssignLeave model)
         {
             try
             {
+                var result = await _services.InsertAssignLeaveAsync(model);
 
-
-                if (obj.EmployeeId <= 0 ||
-                    string.IsNullOrWhiteSpace(obj.Leave) ||
-                    string.IsNullOrWhiteSpace(obj.LeaveNo))
+                if (!result)
                 {
                     return BadRequest(new
                     {
                         status = false,
-                        message = "EmployeeId, Leave and LeaveNo are required"
+                        message = "Leave not assigned!!"
                     });
                 }
 
-                var leaveTypes = obj.Leave.Split(',', StringSplitOptions.RemoveEmptyEntries);
-                var leaveNos = obj.LeaveNo.Split(',', StringSplitOptions.RemoveEmptyEntries);
-
-                if (leaveTypes.Length != leaveNos.Length)
+                return Ok(new
                 {
-                    return BadRequest(new
-                    {
-                        status = false,
-                        message = "Leave count and Leave type mismatch"
-                    });
-                }
-
-                int row = 0;
-
-                for (int i = 0; i < leaveTypes.Length; i++)
-                {
-                    row = await _services.InsertAssignLeaveAsync(
-                        obj.EmployeeId,
-                        leaveNos[i].Trim(),
-                        leaveTypes[i].Trim()
-                    );
-                }
-
-                if (row > 0)
-                {
-                    return Ok(new
-                    {
-                        status = true,
-                        StatusCode = 200,
-                        message = "Leave assigned successfully!!"
-                    });
-                }
-
+                    status = true,
+                    message = "Leave assigned successfully!!"
+                });
+            }
+            catch (ArgumentException ex)
+            {
                 return BadRequest(new
                 {
                     status = false,
-                    StatusCode = 400,
-                    message = "Leave not assigned!!"
+                    message = ex.Message
                 });
             }
             catch (Exception ex)

@@ -532,7 +532,7 @@ namespace Macreel_Software.DAL.Admin
                     cmd.CommandType = CommandType.StoredProcedure;
 
 
-                    cmd.Parameters.AddWithValue("@leaveType", data.leaveName);
+                    cmd.Parameters.AddWithValue("@leaveType", data.leaveName.Trim());
                     cmd.Parameters.AddWithValue("@description", data.description);
                     cmd.Parameters.AddWithValue("@id", data.Id);
                     cmd.Parameters.AddWithValue("@action", data.Id > 0 ? "updateLeave" : "insertLeave");
@@ -916,44 +916,58 @@ namespace Macreel_Software.DAL.Admin
             }
         }
 
-        public async Task<int> InsertAssignLeaveAsync(int empId, string noOfLeave, string leaveType)
+        public async Task<bool> InsertAssignLeaveAsync(AssignLeave model)
         {
+            // 🔹 Business validation
+            if (model.EmployeeId <= 0 ||
+                string.IsNullOrWhiteSpace(model.Leave) ||
+                string.IsNullOrWhiteSpace(model.LeaveNo))
+            {
+                throw new ArgumentException(
+                    "EmployeeId, Leave and LeaveNo are required");
+            }
+
+            var leaveTypes = model.Leave
+                .Split(',', StringSplitOptions.RemoveEmptyEntries);
+
+            var leaveNos = model.LeaveNo
+                .Split(',', StringSplitOptions.RemoveEmptyEntries);
+
+            if (leaveTypes.Length != leaveNos.Length)
+            {
+                throw new ArgumentException(
+                    "Leave count and Leave type mismatch");
+            }
+
+            int rowsAffected = 0;
+
             try
             {
-                using (SqlCommand cmd = new SqlCommand("sp_assignLeave", _conn))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
+                if (_conn.State != ConnectionState.Open)
+                    await _conn.OpenAsync();
 
-                    cmd.Parameters.AddWithValue("@empId", empId);
-                    cmd.Parameters.AddWithValue("@leaveType", leaveType);
-                    cmd.Parameters.AddWithValue("@noOfLeave", noOfLeave);
+                // 🔹 DB logic
+                for (int i = 0; i < leaveTypes.Length; i++)
+                {
+                    using SqlCommand cmd =
+                        new SqlCommand("sp_assignLeave", _conn);
+
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@empId", model.EmployeeId);
+                    cmd.Parameters.AddWithValue("@leaveType", leaveTypes[i].Trim());
+                    cmd.Parameters.AddWithValue("@noOfLeave", leaveNos[i].Trim());
                     cmd.Parameters.AddWithValue("@action", "assignLeaveToEmp");
 
-                    SqlParameter result = new SqlParameter("@result", SqlDbType.Int)
-                    {
-                        Direction = ParameterDirection.Output
-                    };
-                    cmd.Parameters.Add(result);
-
-                    if (_conn.State != ConnectionState.Open)
-                        await _conn.OpenAsync();
-
-                    await cmd.ExecuteNonQueryAsync();
-
-                    return result.Value != DBNull.Value
-                        ? Convert.ToInt32(result.Value)
-                        : 0;
+                    rowsAffected += await cmd.ExecuteNonQueryAsync();
                 }
-            }
-            catch (Exception ex)
-            {
-                throw; 
             }
             finally
             {
                 if (_conn.State == ConnectionState.Open)
                     await _conn.CloseAsync();
             }
+
+            return rowsAffected > 0;
         }
 
 
