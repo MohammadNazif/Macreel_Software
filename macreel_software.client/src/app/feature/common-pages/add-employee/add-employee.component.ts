@@ -363,4 +363,12 @@ private loadTechnologies(): Promise<void> {
       this.graduationCertificate =
       this.mastersCertificate = undefined;
   }
+ isModalOpen = false;
+    openModal() {
+    this.isModalOpen = true;
+  }
+
+  closeModal() {
+    this.isModalOpen = false;
+  }
 }
