@@ -87,9 +87,10 @@ export class AddLeaveTypeComponent implements OnInit {
     // ✅ JSON payload
     const payload = {
       id: this.isEditMode ? this.editId : 0,
-      leaveName: this.leaveForm.value.leaveName,
+      leaveName: this.leaveForm.value.leaveName.trim(),
       description: this.leaveForm.value.description
     };
+    debugger
 
     this.isSubmitting = true;
 

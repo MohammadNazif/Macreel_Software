@@ -189,7 +189,7 @@ export class AssignLeaveComponent implements OnInit {
           Swal.fire({
             icon: 'error',
             title: 'Failed',
-            text: 'Failed to assign leave.'
+            text: res.message
           });
         }
       },
@@ -198,7 +198,7 @@ export class AssignLeaveComponent implements OnInit {
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: 'Leave assignment already exists for this employee.'
+          text: err.error.message
         });
 
       }

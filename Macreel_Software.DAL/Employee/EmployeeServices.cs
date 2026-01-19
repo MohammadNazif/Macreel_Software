@@ -203,7 +203,8 @@ namespace Macreel_Software.DAL.Employee
                     cmd.Parameters.AddWithValue("@leaveType", data.leaveTypeId);
                     cmd.Parameters.AddWithValue("@description", data.description);
                     cmd.Parameters.AddWithValue("@leaveCount", leaveCount);
-                    cmd.Parameters.AddWithValue("@action", data.id>0? "updateApplyLeave" : "insertLeave");
+                    cmd.Parameters.AddWithValue("@filename", data.fileName);
+                    cmd.Parameters.AddWithValue("@action", "insertLeave");
 
                     if (_conn.State == ConnectionState.Closed)
                         await _conn.OpenAsync();

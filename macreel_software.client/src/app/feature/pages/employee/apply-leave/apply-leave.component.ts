@@ -33,7 +33,8 @@ export class ApplyLeaveComponent {
   searchTerm: string = ''
   leaveForm!: FormGroup
   leaveTypeList: LeaveRow[] = [];
-
+  selectedFile: File | null = null
+  fileError: string | null = null
   leaveBalanceList: LeaveBalance[] = [];
   // for cards
   totalLeave: Record<string, number> = {};
@@ -75,6 +76,24 @@ export class ApplyLeaveComponent {
     const to = new Date(toDate);
 
     return to >= from ? null : { invalidDateRange: true };
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement
+
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0]
+
+      // Optional validation (size: 2MB)
+      if (file.size > 2 * 1024 * 1024) {
+        this.fileError = 'File size must be less than 2MB'
+        this.selectedFile = null
+        return
+      }
+
+      this.fileError = null
+      this.selectedFile = file
+    }
   }
 
 
