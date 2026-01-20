@@ -202,8 +202,6 @@ private loadReportingManagers(): void {
 
   // ================= EDIT MODE =================
 
-  imageBaseUrl = 'https://localhost:7253/api/';
-
   getEmployeeById(id: number) {
     this.employeeService.getEmployeeById(id).subscribe((res: any) => {
       if (res.success && res.data?.length) {
