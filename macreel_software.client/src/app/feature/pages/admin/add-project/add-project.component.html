@@ -22,7 +22,7 @@
                         peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
             Project Category <span class="text-red-500 text-[16px] font-medium">*</span>
           </label>
-          <span class="absolute right-3 top-2 text-gray-400 pointer-events-none">▼</span>
+          <span class="absolute right-3 top-2 text-gray-400 pointer-events-none"><i class="fa-solid fa-angle-down"></i></span>
         </div>
 
         <!-- PROJECT TITLE -->
@@ -56,7 +56,7 @@
         </div>
 
         <div class="relative">
-          <input type="date" formControlName="assignDate" placeholder=" " class="peer w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
+          <input type="date" formControlName="assignDate" [min]="minAssignDate" placeholder=" " class="peer w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
                   focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none" />
           <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
                         peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
@@ -65,7 +65,7 @@
         </div>
 
         <div class="relative">
-          <input type="date" formControlName="endDate" placeholder=" " class="peer w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
+          <input type="date" formControlName="endDate" [min]="minEndDate" placeholder=" " class="peer w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
                   focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none" />
           <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
                         peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
@@ -74,7 +74,7 @@
         </div>
 
         <div class="relative">
-          <input type="date" formControlName="completionDate" placeholder=" " class="peer w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
+          <input type="date" formControlName="completionDate" [min]="minCompletionDate" placeholder=" " class="peer w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
                   focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none" />
           <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
                         peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
@@ -85,16 +85,16 @@
         <!-- SOW DOCUMENT -->
         <div class="relative">
           <label class="block text-sm font-medium text-gray-500 mb-1">SOW Document</label>
-          <input #sopFile type="file" accept=".pdf"
+          <input #sopFile type="file" accept=".pdf"  (change)="onSopFileChange($event)"
             class="w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-3 file:border-0 file:text-sm
                   file:font-semibold file:bg-[#C5192F] file:text-white hover:file:bg-[#a41526]
                   cursor-pointer border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#C5192F]/30" />
         </div>
 
         <!-- TECHNICAL DOCUMENT -->
-        <div class="relative" *ngIf="category !== 'Digital Marketing'">
+        <div class="relative" *ngIf="category !== 'Digital Marketing'" >
           <label class="block text-sm font-medium text-gray-500 mb-1">Technical Document</label>
-          <input #technicalFile type="file" accept=".pdf"
+          <input #technicalFile type="file" accept=".pdf"  (change)="onTechnicalFileChange($event)"
             class="w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-3 file:border-0 file:text-sm
                   file:font-semibold file:bg-[#C5192F] file:text-white hover:file:bg-[#a41526]
                   cursor-pointer border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#C5192F]/30" />
@@ -102,15 +102,18 @@
       </div> <!-- END GRID -->
 
       <!-- ================== Software SECTION ================== -->
-      <div *ngIf="category === 'Software' || category === 'Website'" class="mt-6 border-t pt-4">
-        <h3 class="text-lg font-semibold mb-3">Software Details</h3>
+      <div class="mt-6 border-t pt-4">
         <div class="mt-2 mb-4">
-          <h4 class="font-semibold mb-2">Software Type</h4>
+          <h4 class="font-semibold mb-2" *ngIf="category === 'Software' || category === 'Website'">
+            Software Type
+          </h4>
           <div class="flex gap-6">
-            <label class="flex items-center gap-2">
+            <label class="flex items-center gap-2" *ngIf="category === 'Software'">
+
               <input type="checkbox" formControlName="isMobileSoftware" /> App
             </label>
-            <label class="flex items-center gap-2">
+            <label class="flex items-center gap-2" *ngIf="category === 'Software' || category === 'Website'">
+
               <input type="checkbox" formControlName="isWebSoftware" /> Web
             </label>
           </div>
@@ -138,20 +141,20 @@
                 peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
               Select Mobile Skill
             </label>
-            <span class="absolute right-3 top-2 text-gray-400 pointer-events-none">▼</span>
+            <span class="absolute right-3 top-2 text-gray-400 pointer-events-none"><i class="fa-solid fa-angle-down"></i></span>
           </div>
 
           <div class="relative mt-3" *ngIf="filteredMobileEmployees.length">
             <select formControlName="mobileEmpId" (change)="onSelectMobileEmployee()" class="peer w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700
         focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
               <option value="" disabled hidden></option>
-              <option *ngFor="let emp of filteredMobileEmployees" [value]="emp.id">{{ emp.empName }}</option>
+              <option *ngFor="let emp of filteredMobileEmployees" [value]="emp.empId">{{ emp.empName }}</option>
             </select>
             <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
                 peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
               Select Employee
             </label>
-            <span class="absolute right-3 top-2 text-gray-400 pointer-events-none">▼</span>
+            <span class="absolute right-3 top-2 text-gray-400 pointer-events-none"><i class="fa-solid fa-angle-down"></i></span>
           </div>
         </div>
 
@@ -168,7 +171,7 @@
                 peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
               Select Web Skill
             </label>
-            <span class="absolute right-3 top-2 text-gray-400 pointer-events-none">▼</span>
+            <span class="absolute right-3 top-2 text-gray-400 pointer-events-none"><i class="fa-solid fa-angle-down"></i></span>
           </div>
 
           <div class="relative mt-3" *ngIf="filteredWebEmployees.length">
@@ -179,9 +182,9 @@
             </select>
             <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
                 peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
-              
+
             </label>
-            <span class="absolute right-3 top-2 text-gray-400 pointer-events-none">▼</span>
+            <span class="absolute right-3 top-2 text-gray-400 pointer-events-none"><i class="fa-solid fa-angle-down"></i></span>
           </div>
         </div>
       </div> <!-- END Software -->
@@ -260,18 +263,35 @@
               </div>
 
               <div class="flex justify-between">
+                <span class="font-medium">App Technology Name:</span>
+                <span>{{ p.appTechnologyName || '—' }}</span>
+              </div>
+
+              
+
+              <div class="flex justify-between">
                 <span class="font-medium">Web Employee:</span>
                 <span>{{ p.webEmpName || '—' }}</span>
               </div>
 
-              <div class="flex justify-between">
+               <div class="flex justify-between">
+                <span class="font-medium">Web Technology Name:</span>
+                <span>{{ p.webTechnologyName || '—' }}</span>
+              </div>
+
+              <!-- <div class="flex justify-between">
                 <span class="font-medium">Technology:</span>
                 <span>{{ p.appTechnologyName || p.webTechnologyName }}</span>
+              </div> -->
+
+              <div class="flex justify-between">
+                <span class="font-medium">Assign Date:</span>
+                <span>{{ p.assignDate | date:'dd MMM yyyy' }}</span>
               </div>
 
               <div class="flex justify-between">
-                <span class="font-medium">Start Date:</span>
-                <span>{{ p.startDate | date:'dd MMM yyyy' }}</span>
+                <span class="font-medium">completion Date:</span>
+                <span>{{ p.completionDate | date:'dd MMM yyyy' }}</span>
               </div>
             </div>
 
