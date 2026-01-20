@@ -15,7 +15,6 @@ export class AddTaskComponent implements OnInit {
   employees:any = [];
    editTask: any = null;
 
-
    attachment1: File | null = null;
   attachment2: File | null = null;
   attachment1Name: string = '';
@@ -114,17 +113,22 @@ submit() {
   formData.append('description', payload.description);
   formData.append('CompletedDate', payload.CompletedDate);
 
-  if (this.attachment1) {
-    formData.append('document1', this.attachment1);
-    formData.append('document1Path', this.attachment1Name);
-  }
 
-  if (this.attachment2) {
-    formData.append('document2', this.attachment2);
-    formData.append('document2Path', this.attachment2Name);
-  }
+if (this.attachment1) {
+  formData.append('document1', this.attachment1);
+  formData.append('document1Path', this.attachment1Name);
+} else if (this.attachment1Name) {
+  formData.append('document1Path', this.attachment1Name);
+}
 
-  // Debug: log all FormData entries
+if (this.attachment2) {
+  formData.append('document2', this.attachment2);
+  formData.append('document2Path', this.attachment2Name);
+} else if (this.attachment2Name) {
+  formData.append('document2Path', this.attachment2Name);
+}
+
+
   for (let pair of formData.entries()) {
     console.log(pair[0] + ':', pair[1]);
   }
@@ -178,6 +182,8 @@ loadEmployees(pageNumber: number = 1, pageSize: number = 10, search: string = ''
   
 
 bindEditData() {
+    this.attachment1Name = this.editTask.document1Path;
+  this.attachment2Name = this.editTask.document2Path;
   this.taskForm.patchValue({
     id: this.editTask?.id ?? 0,
     title: this.editTask.title,
