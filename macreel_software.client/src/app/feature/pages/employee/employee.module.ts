@@ -9,6 +9,7 @@ import { ApplyLeaveComponent } from './apply-leave/apply-leave.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
+import { AssignProjectComponent } from './assign-project/assign-project.component';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { MatTableModule } from '@angular/material/table';
     AssignedTaskComponent,
     DashboardComponent,
     AssignedLeavesComponent,
-    ApplyLeaveComponent
+    ApplyLeaveComponent,
+    AssignProjectComponent
   ],
   imports: [
     CommonModule,

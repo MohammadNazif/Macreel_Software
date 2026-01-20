@@ -15,7 +15,7 @@ export class AllEmployeeLeaveListComponent implements OnInit {
 
   dataSource = new MatTableDataSource<any>([]);
   totalRecords = 0;
-  pageSize = 10;
+  pageSize = 20;
   pageNumber = 1;
   searchTerm = '';
 
