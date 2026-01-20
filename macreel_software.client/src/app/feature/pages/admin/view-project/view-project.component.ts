@@ -22,13 +22,14 @@ export class ViewProjectComponent implements OnInit {
   paginator!: PaginatedList<Project>;
 
   projectColumns: TableColumn<Project>[] = [
-    { key: 'projectTitle', label: 'Project' },
+    { key: 'projectTitle', label: 'Project',clickable: true,route : '/home/admin/project-details' },
     { key: 'category', label: 'Category' },
     { key: 'startDate', label: 'Start Date', type: 'date',align:'center' },
     { key: 'completionDate', label: 'Completion Date', type: 'date',align:'center' },
     { key: 'endDate', label: 'Delivery Date', type: 'date',align:'center' },
     { key: 'appEmpName', label: 'App Employee' },
-    { key: 'webEmpName', label: 'Web Employee' }
+    { key: 'webEmpName', label: 'Web Employee' },
+    { key: 'delayedDays', label: 'Delay', align:'center' }
   ];
 
   constructor(

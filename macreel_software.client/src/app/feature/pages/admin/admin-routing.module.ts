@@ -13,6 +13,8 @@ import { AddTaskComponent } from './add-task/add-task.component';
 import { ViewTaskComponent } from './view-task/view-task.component';
 import { ViewProjectComponent } from './view-project/view-project.component';
 import { LeaveRequestsComponent } from './leave-requests/leave-requests.component';
+import { ProjectDetailsComponent } from '../../common-pages/project-details/project-details.component';
+import { EmployeeDetailsComponent } from '../../common-pages/employee-details/employee-details.component';
 
 
 
@@ -33,7 +35,9 @@ const routes: Routes = [
   {path: 'view-project',component:ViewProjectComponent},
   { path:'add-project',component:AddProjectComponent},
   {path:'leave-requests',component:LeaveRequestsComponent},
-  {path:'master',loadChildren:()=>import('./masters/masters.module').then(n=>n.MastersModule)}
+  {path:'master',loadChildren:()=>import('./masters/masters.module').then(n=>n.MastersModule)},
+  {path:'project-details',component:ProjectDetailsComponent},
+   {path:'employee-details',component:EmployeeDetailsComponent}
 ];
 
 @NgModule({

@@ -1,0 +1,115 @@
+<div class="p-5 mt-3 bg-gray-50 rounded-xl shadow-sm text-sm">
+
+  <!-- HEADER -->
+  <div class="flex flex-wrap justify-between items-center mb-3">
+    <div class="flex items-center gap-3 border-l-4 border-red-600 pl-4">
+      <i class="fa-solid fa-diagram-project text-red-600 text-xl"></i>
+      <div>
+        <h2 class="text-lg font-semibold text-black">LCMIS</h2>
+        <p class="text-xs text-gray-400">
+          Project Code: <span class="font-medium text-gray-700">MacLCM202015</span>
+        </p>
+      </div>
+    </div>
+
+    <span
+      class="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-full
+             bg-yellow-100 text-yellow-800 border border-yellow-200">
+      <i class="fa-solid fa-circle-notch"></i>
+      {{ project.status }}
+    </span>
+  </div>
+
+  <!-- PROJECT DETAILS WITH LIGHT COLOR ICONS AND BLACK HEADING -->
+  <div class="bg-white border border-gray-200 rounded-lg p-4 mb-2">
+    <h3 class="font-semibold text-black mb-4 flex items-center gap-2">
+      <i class="fa-solid fa-circle-info text-red-600"></i>
+      Project Details
+    </h3>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-sm">
+      
+      <!-- Company -->
+      <div class="flex items-center gap-3">
+        <i class="fa-solid fa-building text-blue-400 text-lg"></i>
+        <div>
+          <p class="text-gray-400 text-xs">Company</p>
+          <p class="font-medium text-gray-700">{{ project.company }}</p>
+        </div>
+      </div>
+
+      <!-- Client -->
+      <div class="flex items-center gap-3">
+        <i class="fa-solid fa-user-tie text-purple-400 text-lg"></i>
+        <div>
+          <p class="text-gray-400 text-xs">Client</p>
+          <p class="font-medium text-gray-700">{{ project.client }}</p>
+        </div>
+      </div>
+
+      <!-- Total Amount -->
+      <div class="flex items-center gap-3">
+        <i class="fa-solid fa-indian-rupee-sign text-green-400 text-lg"></i>
+        <div>
+          <p class="text-gray-400 text-xs">Total Amount</p>
+          <p class="font-medium text-gray-700">{{ project.totalAmount }}</p>
+        </div>
+      </div>
+
+      <!-- Start Date -->
+      <div class="flex items-center gap-3">
+        <i class="fa-solid fa-calendar-days text-yellow-400 text-lg"></i>
+        <div>
+          <p class="text-gray-400 text-xs">Start Date</p>
+          <p class="font-medium text-gray-700">{{ project.startDate }}</p>
+        </div>
+      </div>
+
+      <!-- Completion Date -->
+      <div class="flex items-center gap-3">
+        <i class="fa-solid fa-calendar-check text-indigo-400 text-lg"></i>
+        <div>
+          <p class="text-gray-400 text-xs">Completion Date</p>
+          <p class="font-medium text-gray-700">{{ project.completionDate }}</p>
+        </div>
+      </div>
+
+      <!-- Delivery Date -->
+      <div class="flex items-center gap-3">
+        <i class="fa-solid fa-truck-fast text-pink-400 text-lg"></i>
+        <div>
+          <p class="text-gray-400 text-xs">Delivery Date</p>
+          <p class="font-medium text-gray-700">{{ project.deliveryDate }}</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ASSIGNED EMPLOYEES -->
+  <div class="bg-white border border-gray-200 rounded-lg p-4 mb-2">
+    <h3 class="font-semibold text-black mb-3 flex items-center gap-2">
+      <i class="fa-solid fa-users text-red-600"></i>
+      Assigned Employees
+    </h3>
+
+    <div class="flex flex-wrap gap-2">
+      <span *ngFor="let emp of project.employees"
+            class="inline-flex items-center gap-2 px-3 py-1 text-xs rounded-full
+                   bg-red-50 text-gray-700 border border-red-200">
+        <i class="fa-solid fa-user text-red-700"></i>
+        {{ emp }}
+      </span>
+    </div>
+  </div>
+
+  <!-- GENERIC TABLES -->
+  <app-generic-table
+    [columns]="taskColumns">
+  </app-generic-table>
+
+  <app-generic-table
+    [columns]="taskColumns">
+  </app-generic-table>
+
+</div>
