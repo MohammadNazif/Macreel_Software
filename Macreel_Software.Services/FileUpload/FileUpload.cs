@@ -11,46 +11,61 @@ namespace Macreel_Software.Services.FileUpload.Services
 
     public class FileUploadService
     {
-        public async Task<string> UploadFileAsync(IFormFile file, string folderPath, string[] allowedExtensions = null, long maxFileSize = 10485760)
+        private readonly string _rootPath;
+
+        public FileUploadService()
+        {
+            _rootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+        }
+
+        /// <summary>
+        /// Step 1: Sirf validate karega + unique relative path generate karega
+        /// Disk pe kuch bhi write nahi karega
+        /// </summary>
+        public string ValidateAndGeneratePath(
+            IFormFile file,
+            string folderName,
+            string[] allowedExtensions,
+            long maxFileSize = 10485760)
         {
             if (file == null || file.Length == 0)
-                throw new Exception("File is empty.");
-
+                throw new Exception("File is empty");
 
             if (file.Length > maxFileSize)
-                throw new Exception($"File size exceeds the allowed limit of {maxFileSize / (1024 * 1024)} MB.");
-
+                throw new Exception("File size exceeded");
 
             var extension = Path.GetExtension(file.FileName);
-            if (allowedExtensions != null && allowedExtensions.Length > 0)
+
+            if (allowedExtensions != null &&
+                !allowedExtensions.Any(x =>
+                    x.Equals(extension, StringComparison.OrdinalIgnoreCase)))
             {
-                bool isValidExt = false;
-                foreach (var ext in allowedExtensions)
-                {
-                    if (string.Equals(ext, extension, StringComparison.OrdinalIgnoreCase))
-                    {
-                        isValidExt = true;
-                        break;
-                    }
-                }
-                if (!isValidExt)
-                    throw new Exception($"File type {extension} is not allowed.");
+                throw new Exception($"File type {extension} is not allowed");
             }
+
             var uniqueFileName = $"{Guid.NewGuid()}{extension}";
-            var filePath = Path.Combine(folderPath, uniqueFileName);
 
+            return Path.Combine("uploads", folderName, uniqueFileName)
+                       .Replace("\\", "/");
+        }
 
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                await file.CopyToAsync(stream);
-            }
+        /// <summary>
+        /// Step 2: Actual file upload
+        /// Only if db insertion success
+        /// </summary>
+        public async Task UploadAsync(IFormFile file, string relativePath)
+        {
+            if (file == null)
+                throw new Exception("File is null");
 
-            return uniqueFileName;
+            var fullPath = Path.Combine(_rootPath, relativePath);
+
+            var directory = Path.GetDirectoryName(fullPath);
+            if (!Directory.Exists(directory))
+                Directory.CreateDirectory(directory!);
+
+            using var stream = new FileStream(fullPath, FileMode.Create);
+            await file.CopyToAsync(stream);
         }
     }
-   
-
-
-
-
-    }
+}
