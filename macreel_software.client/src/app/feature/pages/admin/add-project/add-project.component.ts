@@ -34,6 +34,17 @@ export class AddProjectComponent implements OnInit {
   selectedEmployeeProjects: any[] = [];
   selectedEmployeeDetails: any = null;
 
+  existingSopPath: string | null = null;
+  existingTechnicalPath: string | null = null;
+
+  newSopFile: File | null = null;
+  newTechnicalFile: File | null = null;
+
+    // ========== DATE MIN VALUES ==========
+  minAssignDate: string = '';
+  minEndDate: string = '';
+  minCompletionDate: string = '';
+
   constructor(
     private fb: FormBuilder,
     private masterService: ManageMasterdataService,
@@ -52,6 +63,25 @@ export class AddProjectComponent implements OnInit {
       this.bindEditData(project);
     }
 
+     // ================== DATE RESTRICTIONS ==================
+    this.projectForm.get('startDate')?.valueChanges.subscribe(startDate => {
+      if (startDate) {
+        const minDate = this.formatDate(new Date(startDate));
+        this.minAssignDate = minDate;
+        this.minEndDate = minDate;
+        this.minCompletionDate = minDate;
+
+        // Reset dates if before startDate
+        this.resetIfBefore('assignDate', new Date(startDate));
+        this.resetIfBefore('endDate', new Date(startDate));
+        this.resetIfBefore('completionDate', new Date(startDate));
+      } else {
+        this.minAssignDate = '';
+        this.minEndDate = '';
+        this.minCompletionDate = '';
+      }
+    });
+
     this.projectForm.get('mobileSkill')?.valueChanges.subscribe(val => {
       this.onMobileSkillChange(val);
     });
@@ -68,9 +98,6 @@ export class AddProjectComponent implements OnInit {
       this.onSelectWebEmployee();
     });
   }
-
-
-
 
   initForm() {
     this.projectForm = this.fb.group({
@@ -153,17 +180,51 @@ export class AddProjectComponent implements OnInit {
   }
 
   // ================= MOBILE METHODS =================
+  // onMobileSkillChange(skillId: any) {
+  //   const id = skillId ? Number(skillId) : null;
+  //   if (!id) {
+  //     this.filteredMobileEmployees = [];
+  //     return;
+  //   }
+  //   this.addProjectService.getEmpListForAppByTechId(id).subscribe({
+  //     next: res => this.filteredMobileEmployees = res?.data || [],
+      
+  //     error: err => this.filteredMobileEmployees = []
+  //   });
+  // }
+
   onMobileSkillChange(skillId: any) {
-    const id = skillId ? Number(skillId) : null;
-    if (!id) {
-      this.filteredMobileEmployees = [];
-      return;
-    }
-    this.addProjectService.getEmpListForAppByTechId(id).subscribe({
-      next: res => this.filteredMobileEmployees = res?.data || [],
-      error: err => this.filteredMobileEmployees = []
-    });
+  const id = skillId ? Number(skillId) : null;
+
+  if (!id) {
+    this.filteredMobileEmployees = [];
+    return;
   }
+
+  this.addProjectService.getEmpListForAppByTechId(id).subscribe({
+    next: res => {
+      this.filteredMobileEmployees = res?.data || [];
+
+      if (this.filteredMobileEmployees.length === 0) {
+        Swal.fire({
+          icon: 'info',
+          title: 'No Employee Found',
+          text: 'No employee is available for this selected skill.',
+        });
+      }
+    },
+    error: err => {
+      this.filteredMobileEmployees = [];
+
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Unable to fetch employee list. Please try again.',
+      });
+    }
+  });
+}
+
 
   onSelectMobileEmployee() {
     const empId = this.projectForm.get('mobileEmpId')?.value;
@@ -178,18 +239,51 @@ export class AddProjectComponent implements OnInit {
 
 
   // ================= WEB METHODS =================
-  onWebSkillChange(skillId: any) {
-    const id = skillId ? Number(skillId) : null;
-    if (!id) {
-      this.filteredWebEmployees = [];
-      return;
-    }
-    this.addProjectService.getEmpListForWebByTechId(id).subscribe({
-      next: res => this.filteredWebEmployees = res?.data || [],
-      error: err => this.filteredWebEmployees = []
-    });
+  // onWebSkillChange(skillId: any) {
+  //   const id = skillId ? Number(skillId) : null;
+  //   if (!id) {
+  //     this.filteredWebEmployees = [];
+  //     return;
+  //   }
+  //   this.addProjectService.getEmpListForWebByTechId(id).subscribe({
+  //     next: res => this.filteredWebEmployees = res?.data || [],
+  //     error: err => this.filteredWebEmployees = []
+  //   });
 
+  // }
+
+  onWebSkillChange(skillId: any) {
+  const id = skillId ? Number(skillId) : null;
+
+  if (!id) {
+    this.filteredWebEmployees = [];
+    return;
   }
+
+  this.addProjectService.getEmpListForWebByTechId(id).subscribe({
+    next: res => {
+      this.filteredWebEmployees = res?.data || [];
+
+      if (this.filteredWebEmployees.length === 0) {
+        Swal.fire({
+          icon: 'info',
+          title: 'No Employee Found',
+          text: 'No employee is available for this selected skill.',
+        });
+      }
+    },
+    error: err => {
+      this.filteredWebEmployees = [];
+
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Unable to fetch employee list. Please try again.',
+      });
+    }
+  });
+}
+
 
   onSelectWebEmployee(): void {
     const empId = this.projectForm.get('webEmpId')?.value;
@@ -204,9 +298,27 @@ export class AddProjectComponent implements OnInit {
     });
   }
 
+  onSopFileChange(event: any) {
+  const file = event.target.files[0];
+  if (file) {
+    this.newSopFile = file;
+  }
+}
+
+onTechnicalFileChange(event: any) {  
+  const file = event.target.files[0];
+  if (file) {
+    this.newTechnicalFile = file;
+  }
+}
+  
+
  bindEditData(emp: any) {
     this.isEditMode = true;
     this.editProjectId = emp.id;
+
+  this.existingSopPath = emp.sopDocumentPath;
+  this.existingTechnicalPath = emp.technicalDocumentPath;
 
     // BASIC DATA
     this.projectForm.patchValue({
@@ -221,7 +333,8 @@ export class AddProjectComponent implements OnInit {
       completionDate: emp.completionDate?.split('T')[0],
 
       isMobileSoftware: emp.app === 'App',
-      isWebSoftware: emp.web === 'Web',
+      // isWebSoftware: emp.web === 'Web',
+      isWebSoftware: emp.web === 'Web' || emp.category === 'Website',
       isAndroid: emp.androidApp === 'Android',
       isIOS: emp.iosApp === 'IOS',
 
@@ -230,6 +343,10 @@ export class AddProjectComponent implements OnInit {
       GMB: emp.gmb,
       paidAds: emp.paidAds
     });
+   this.existingSopPath = emp.sopDocumentPath;
+   this.existingTechnicalPath = emp.technicalDocumentPath;
+
+
 
     // MOBILE
     if (emp.appTechnology) {
@@ -242,6 +359,7 @@ export class AddProjectComponent implements OnInit {
           this.projectForm.patchValue({ mobileEmpId: emp.appEmpId });
         });
     }
+    
 
     // WEB
     if (emp.webTechnology) {
@@ -255,18 +373,27 @@ export class AddProjectComponent implements OnInit {
         });
     }
   }
+  
   // ================= FORM SUBMISSION =================
 
   submitProject() {
 
-    if (this.projectForm.invalid) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Required Fields Missing',
-        text: 'Please fill required fields',
-      });
-      return;
-    }
+   if (this.projectForm.invalid) {
+
+  // ✅ EDIT MODE FIX — SOP validation bypass
+  if (this.isEditMode && this.existingSopPath) {
+    console.log('Edit mode: allowing submit with existing SOP');
+  } 
+  else {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Required Fields Missing',
+      text: 'Please fill required fields',
+    });
+    return;
+  }
+}
+
 
     const formData = new FormData();
     const f = this.projectForm.value;
@@ -323,11 +450,28 @@ export class AddProjectComponent implements OnInit {
     }
 
     // ================= FILES =================
-    const sop = this.sopFile?.nativeElement.files?.[0];
-    if (sop) formData.append('sopDocument', sop);
+    // const sop = this.sopFile?.nativeElement.files?.[0];
+    // if (sop) formData.append('sopDocument', sop);
 
-    const techDoc = this.technicalFile?.nativeElement.files?.[0];
-    if (techDoc) formData.append('technicalDocument', techDoc);
+    // const techDoc = this.technicalFile?.nativeElement.files?.[0];
+    // if (techDoc) formData.append('technicalDocument', techDoc);
+
+   if (this.newSopFile) {
+  
+  formData.append("sopDocument", this.newSopFile);
+}
+else if (this.isEditMode && this.existingSopPath) {
+  
+  formData.append("sopDocument", this.existingSopPath);
+}
+
+// -------- TECHNICAL DOCUMENT --------
+if (this.newTechnicalFile) {
+  formData.append("technicalDocument", this.newTechnicalFile);
+}
+else if (this.isEditMode && this.existingTechnicalPath) {
+  formData.append("technicalDocument", this.existingTechnicalPath);
+}
 
     // ================= API CALL =================
     this.addProjectService.addProject(formData).subscribe({
@@ -358,6 +502,19 @@ export class AddProjectComponent implements OnInit {
           text: 'Something went wrong while adding project!',
         });
       }
+      
     });
+  }
+   formatDate(date: Date): string {
+    const yyyy = date.getFullYear();
+    const mm = ('0' + (date.getMonth() + 1)).slice(-2);
+    const dd = ('0' + date.getDate()).slice(-2);
+    return `${yyyy}-${mm}-${dd}`;
+  }
+   resetIfBefore(field: string, minDate: Date) {
+    const current = this.projectForm.get(field)?.value;
+    if (current && new Date(current) < minDate) {
+      this.projectForm.patchValue({ [field]: '' });
+    }
   }
 }
