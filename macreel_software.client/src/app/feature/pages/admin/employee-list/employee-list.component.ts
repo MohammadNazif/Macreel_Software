@@ -1,14 +1,4 @@
-// import { Component } from '@angular/core';
 
-// @Component({
-//   selector: 'app-employee-list',
-//   standalone: false,
-//   templateUrl: './employee-list.component.html',
-//   styleUrl: './employee-list.component.css'
-// })
-// export class EmployeeListComponent {
-
-// }
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
@@ -30,7 +20,7 @@ export class EmployeeListComponent implements OnInit {
   dataSource = new MatTableDataSource<any>([]);
 
   totalRecords = 0;
-  pageSize = 10;
+  pageSize = 20;
   pageIndex = 0; // for paginator
   searchText = '';
 

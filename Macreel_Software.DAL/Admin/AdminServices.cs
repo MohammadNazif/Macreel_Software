@@ -1336,6 +1336,7 @@ namespace Macreel_Software.DAL.Admin
                                 GMB = sdr["GMB"] != DBNull.Value ? sdr["GMB"].ToString():null,
                                 sopDocumentPath = sdr["sopDocument"] != DBNull.Value ? sdr["sopDocument"].ToString():null,
                                 technicalDocumentPath = sdr["technicalDocument"] != DBNull.Value ? sdr["technicalDocument"].ToString():null,
+                                delayedDays = sdr["DelayedDays"] != DBNull.Value ? Convert.ToInt32(sdr["DelayedDays"]) : null,
                             });
                         }
                     }
@@ -1484,7 +1485,7 @@ namespace Macreel_Software.DAL.Admin
                                 appTechnology = sdr["appTechnology"] != DBNull.Value ? Convert.ToInt32(sdr["appTechnology"]) : null,
                                 appTechnologyName = sdr["AppTechnology"] != DBNull.Value ? sdr["AppTechnology"].ToString() : null,
                                 webTechnology = sdr["webTechnology"] != DBNull.Value ? Convert.ToInt32(sdr["webTechnology"]) : null,
-                                webTechnologyName = sdr["webTechnology"] != DBNull.Value ? sdr["webTechnology"].ToString() : null,
+                                webTechnologyName = sdr["WebTechnologyName"] != DBNull.Value ? sdr["WebTechnologyName"].ToString() : null,
                                 appEmpId = sdr["appEmpId"] != DBNull.Value ? Convert.ToInt32(sdr["appEmpId"]) : null,
                                 appEmpName = sdr["appEmp"] != DBNull.Value ? sdr["appEmp"].ToString() : null,
                                 webEmpId = sdr["webEmpId"] != DBNull.Value ? Convert.ToInt32(sdr["webEmpId"]) : null,
@@ -1750,6 +1751,61 @@ namespace Macreel_Software.DAL.Admin
                     await _conn.CloseAsync();
             }
         }
+        #endregion
+
+
+        #region admin dashboard
+        public async Task<ApiResponse<List<AdminDashboardCountDto>>> adminDashboardCount()
+        {
+            List<AdminDashboardCountDto> list = new List<AdminDashboardCountDto>();
+            try
+            {
+                SqlCommand cmd = new SqlCommand("sp_empDashboard", _conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@action", "adminDashboardCount");
+                if (_conn.State == ConnectionState.Closed)
+                    await _conn.OpenAsync();
+
+                using(SqlDataReader sdr=await cmd.ExecuteReaderAsync())
+                {
+                    if(sdr.HasRows)
+                    {
+                        while(await sdr.ReadAsync())
+                        {
+                            list.Add(new AdminDashboardCountDto
+                            {
+                                TotalEmployees = sdr["TotalEmployees"] != DBNull.Value ? Convert.ToInt32(sdr["TotalEmployees"]):null,
+                                AbsentEmployee = sdr["AbsentEmployee"] != DBNull.Value ? Convert.ToInt32(sdr["AbsentEmployee"]):null,
+                                TotalProjects = sdr["TotalProjects"] != DBNull.Value ? Convert.ToInt32(sdr["TotalProjects"]):null,
+                                OngoingProjects = sdr["OngoingProjects"] != DBNull.Value ? Convert.ToInt32(sdr["OngoingProjects"]):null,
+                                TotalTasks = sdr["TotalTasks"] != DBNull.Value ? Convert.ToInt32(sdr["TotalTasks"]):null,
+                                CompletedTask = sdr["CompletedTask"] != DBNull.Value ? Convert.ToInt32(sdr["CompletedTask"]):null,
+                                LeaveRequest = sdr["LeaveRequest"] != DBNull.Value ? Convert.ToInt32(sdr["LeaveRequest"]):null,
+                                UpcomingLeaves = sdr["UpcomingLeaves"] != DBNull.Value ? Convert.ToInt32(sdr["UpcomingLeaves"]):null,
+                            });
+                        }
+                    }
+                }
+                return ApiResponse<List<AdminDashboardCountDto>>.SuccessResponse(
+                  list,
+                  "Admin dashboard count fetched successfully"
+              );
+            }
+            catch(Exception ex)
+            {
+                return ApiResponse<List<AdminDashboardCountDto>>.FailureResponse(
+                  ex.Message,
+                  500,
+                  "ASSIGN_TASK_FETCH_ERROR"
+              );
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    await _conn.CloseAsync();
+            }
+        }
+
         #endregion
     }
 }

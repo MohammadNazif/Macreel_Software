@@ -56,4 +56,17 @@ export class ManageEmployeeService {
     return this.http.delete<any>(`${this.baseUrl}Admin/deleteEmployeeById?id=${id}`);
   }
 
+sendLinkForReg(payload: { email: string }): Observable<any> {
+  return this.http.post(
+    `${this.baseUrl}Common/sendEmailForReg`,
+    payload
+  );
+}
+
+  getEmailByAccessId(accessId: string): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}Common/EmailIdByAccessId`, {
+      params: { accessId}
+    });
+  }
+
 }

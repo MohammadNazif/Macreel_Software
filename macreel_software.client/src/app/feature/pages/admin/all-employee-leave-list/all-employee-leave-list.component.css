@@ -10,7 +10,7 @@
 
 /* Reduce dropdown (5,10,20) size */
 ::ng-deep .mat-mdc-paginator-page-size-select {
-  width: 60px !important;
+  width: 65px !important;
   min-width: 55px !important;
 }
 

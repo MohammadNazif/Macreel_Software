@@ -37,10 +37,17 @@
 
         <!-- Clickable text only -->
         <p class="text-sm text-gray-600 hover:text-orange-500 cursor-pointer transition-colors duration-300">
+               <a class="hover:text-indigo-600 cursor-pointer" href="/home/employee/assigned-leaves">
+
           Assigned : <span class="font-medium">{{ dashboardCount.assignedLeave || 0 }}</span>
+               </a>
         </p>
         <p class="text-sm text-gray-600 hover:text-orange-500 cursor-pointer transition-colors duration-300">
+            <a class="hover:text-indigo-600 cursor-pointer" href="/home/employee/apply-leave">
+
           Request :   {{ dashboardCount.requestedLeave || 0 }}
+          </a>
+
         </p>
       </div>
 
@@ -62,10 +69,15 @@
         <h3 class="font-semibold text-gray-700 mb-1.5">Task</h3>
 
         <p class="text-sm text-gray-600 hover:text-purple-500 cursor-pointer transition-colors duration-300">
-          Assign Task : <span class="font-medium">   {{ dashboardCount.totalTasks || 0 }}</span>
+          <a href="/home/employee/assigned-tasks"  class="hover:text-indigo-600 cursor-pointer"> 
+            Assign Task : <span class="font-medium">   {{ dashboardCount.totalTasks || 0 }}</span>
+
+          </a>
         </p>
         <p class="text-sm text-gray-600 hover:text-purple-500 cursor-pointer transition-colors duration-300">
+           <a href="/home/employee/assigned-tasks"  class="hover:text-indigo-600 cursor-pointer"> 
           Complete Task :  {{ dashboardCount.completedTasks || 0 }}
+          </a>
         </p>
       </div>
 
@@ -78,7 +90,7 @@
     </div>
 
 
-    <!-- <div class="bg-white rounded-lg shadow-md p-3 flex justify-between items-start
+     <div class="bg-white rounded-lg shadow-md p-3 flex justify-between items-start
             relative group overflow-hidden
             transition-all duration-300
             hover:-translate-y-1 hover:shadow-xl">
@@ -99,10 +111,10 @@
       </div>
 
       <span class="absolute bottom-0 left-0 h-1 bg-green-500 w-0 group-hover:w-full transition-all duration-500"></span>
-    </div> -->
+    </div> 
 
 
-    <!-- <div class="bg-white rounded-lg shadow-md p-3 flex justify-between items-start
+     <div class="bg-white rounded-lg shadow-md p-3 flex justify-between items-start
             relative group overflow-hidden
             transition-all duration-300
             hover:-translate-y-1 hover:shadow-xl">
@@ -124,37 +136,37 @@
 
       <span class="absolute bottom-0 left-0 h-1 bg-teal-500 w-0 
                group-hover:w-full transition-all duration-500"></span>
-    </div> -->
+    </div> 
 
 
-    <!-- <div class="bg-white rounded-lg shadow-md p-3 flex justify-between items-start
+     <div class="bg-white rounded-lg shadow-md p-3 flex justify-between items-start
             relative group overflow-hidden
             transition-all duration-300
             hover:-translate-y-1 hover:shadow-xl">
 
       <div>
-        <h3 class="font-semibold text-gray-700 mb-1.5">Reports</h3> -->
+        <h3 class="font-semibold text-gray-700 mb-1.5">Reports</h3> 
 
         <!-- Clickable text only -->
-        <!-- <p class="text-sm text-gray-600 hover:text-indigo-500 cursor-pointer transition-colors duration-300">
+        <p class="text-sm text-gray-600 hover:text-indigo-500 cursor-pointer transition-colors duration-300">
           Mid Year Report : <span class="font-medium">0</span>
         </p>
         <p class="text-sm text-gray-600 hover:text-indigo-500 cursor-pointer transition-colors duration-300">
           One-On-One Report : 0
         </p>
-      </div> -->
+      </div> 
 
-      <!-- <div class="text-indigo-500 text-3xl p-3">
+       <div class="text-indigo-500 text-3xl p-3">
         <i class="fa-solid fa-user-gear"></i>
-      </div> -->
+      </div> 
 
       <!-- Bottom underline -->
-      <!-- <span class="absolute bottom-0 left-0 h-1 bg-indigo-500 w-0 
+       <span class="absolute bottom-0 left-0 h-1 bg-indigo-500 w-0 
                group-hover:w-full transition-all duration-500"></span>
-    </div> -->
+    </div> 
 
 
-    <!-- <div class="bg-white rounded-lg shadow-md p-3 flex justify-between items-start
+     <div class="bg-white rounded-lg shadow-md p-3 flex justify-between items-start
             relative group overflow-hidden
             transition-all duration-300
             hover:-translate-y-1 hover:shadow-xl">
@@ -173,7 +185,7 @@
 
       <span class="absolute bottom-0 left-0 h-1 bg-red-500 w-0 
                group-hover:w-full transition-all duration-500"></span>
-    </div> -->
+    </div> 
 
 
 

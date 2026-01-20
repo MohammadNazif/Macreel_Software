@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  FormControl,
+} from '@angular/forms';
 import Swal from 'sweetalert2';
 import { finalize } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -13,10 +18,9 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
   selector: 'app-add-employee',
   templateUrl: './add-employee.component.html',
   standalone: false,
-  styleUrls: ['./add-employee.component.css']
+  styleUrls: ['./add-employee.component.css'],
 })
 export class AddEmployeeComponent implements OnInit {
-
   step = 1;
   isLoading = false;
   roles: any[] = [];
@@ -37,6 +41,10 @@ export class AddEmployeeComponent implements OnInit {
   mastersCertificate?: File;
   showPassword = false;
 
+  sendLinkForm!: FormGroup;
+  isSendingLink = false;
+  showSendLinkButton:any;
+
   togglePassword(): void {
     this.showPassword = !this.showPassword;
   }
@@ -51,8 +59,8 @@ export class AddEmployeeComponent implements OnInit {
     private readonly masterService: ManageMasterdataService,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly announcer: LiveAnnouncer
-  ) { }
+    private readonly announcer: LiveAnnouncer,
+  ) {}
 
   employeeId!: number;
   isEditMode = false;
@@ -60,7 +68,7 @@ export class AddEmployeeComponent implements OnInit {
   ngOnInit(): void {
     this.employeeForm = this.fb.group({
       empRoleId: ['', Validators.required],
-      empCode: ['',Validators.required],
+      empCode: ['', Validators.required],
       empName: ['', Validators.required],
       mobile: ['', Validators.required],
       departmentId: ['', Validators.required],
@@ -93,7 +101,12 @@ export class AddEmployeeComponent implements OnInit {
       technology: [''],
       companyContactNo: [''],
 
-      addedBy: [1]
+      addedBy: [1],
+    });
+
+    //for send reg link
+    this.sendLinkForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
     });
 
     this.loadMasters();
@@ -101,7 +114,6 @@ export class AddEmployeeComponent implements OnInit {
     this.loadReportingManagers();
 
     this.loadTechnologies();
-
 
     this.employeeId = Number(this.route.snapshot.paramMap.get('id'));
 
@@ -111,26 +123,59 @@ export class AddEmployeeComponent implements OnInit {
       this.employeeForm.get('emailId')?.disable();
       this.getEmployeeById(this.employeeId);
     }
+
+    this.checkAccessId();
   }
 
   private loadTechnologies(): Promise<void> {
     return new Promise((resolve) => {
-      this.masterService.getAllTechnology(1, 100).subscribe(res => {
+      this.masterService.getAllTechnology(1, 100).subscribe((res) => {
         this.technologies = res?.data ?? [];
         resolve();
       });
     });
   }
 
+  // get email by accessId
+  private checkAccessId(): void {
+    const accessId = this.route.snapshot.queryParamMap.get('accessId');
+    if (accessId) {
+      this.getEmailByAccessId(accessId);
+    }
+  }
+  // get email by accessId
+  private getEmailByAccessId(accessId: string): void {
+    this.employeeService.getEmailByAccessId(accessId).subscribe({
+      next: (res: any) => {
+        if (res.success && res.data) {
+          this.employeeForm.get('emailId')?.patchValue(res.data[0].email);
+          this.showSendLinkButton = res.data[0].email;
+          console.log("button",this.showSendLinkButton);
+          
+        } else {
+          Swal.fire('Error', 'Invalid registration link', 'error');
+        }
+      },
+      error: () => {
+        Swal.fire('Error', 'Failed to fetch email', 'error');
+      },
+    });
+  }
 
   private loadMasters(): void {
-    this.masterService.getRoles(1, 100).subscribe(res => this.roles = res?.data ?? []);
-    this.masterService.getDepartment().subscribe(res => this.departments = res?.data ?? []);
-    this.masterService.getDesignation().subscribe(res => this.designations = res?.data ?? []);
+    this.masterService
+      .getRoles(1, 100)
+      .subscribe((res) => (this.roles = res?.data ?? []));
+    this.masterService
+      .getDepartment()
+      .subscribe((res) => (this.departments = res?.data ?? []));
+    this.masterService
+      .getDesignation()
+      .subscribe((res) => (this.designations = res?.data ?? []));
   }
 
   private loadStates(): void {
-    this.employeeService.getAllStateList().subscribe(res => {
+    this.employeeService.getAllStateList().subscribe((res) => {
       if (res?.status) {
         this.states = res.stateList ?? [];
       }
@@ -147,7 +192,7 @@ export class AddEmployeeComponent implements OnInit {
       return;
     }
 
-    this.employeeService.getCityByStateId(+stateId).subscribe(res => {
+    this.employeeService.getCityByStateId(+stateId).subscribe((res) => {
       if (res?.status) {
         this.cities = res.cityList ?? [];
         this.employeeForm.get('cityId')?.setValue('');
@@ -155,35 +200,33 @@ export class AddEmployeeComponent implements OnInit {
     });
   }
 
-private loadReportingManagers(): void {
-  this.employeeService.getReportingManager().subscribe({
-    next: (res) => {
-      console.log("FULL API RESPONSE:", res);
+  private loadReportingManagers(): void {
+    this.employeeService.getReportingManager().subscribe({
+      next: (res) => {
+        console.log('FULL API RESPONSE:', res);
 
-      if (res?.success) {
-        console.log("ONLY DATA:", res.data);
-        this.reportingManagers = res.data ?? [];
-      }
-    },
-    error: (err) => {
-      console.error("API ERROR:", err);
-    }
-  });
-}
-
+        if (res?.success) {
+          console.log('ONLY DATA:', res.data);
+          this.reportingManagers = res.data ?? [];
+        }
+      },
+      error: (err) => {
+        console.error('API ERROR:', err);
+      },
+    });
+  }
 
   // ================= TECHNOLOGY CHIP LOGIC =================
 
   onTechnologySelected(event: MatAutocompleteSelectedEvent): void {
     const techId = event.option.value;
-    const tech = this.technologies.find(t => t.id === techId);
+    const tech = this.technologies.find((t) => t.id === techId);
 
-    if (tech && !this.selectedTechnologies.some(t => t.id === techId)) {
+    if (tech && !this.selectedTechnologies.some((t) => t.id === techId)) {
       this.selectedTechnologies.push(tech);
 
-      const ids = this.selectedTechnologies.map(t => t.id);
+      const ids = this.selectedTechnologies.map((t) => t.id);
       this.employeeForm.get('skillIds')?.setValue(ids);
-
     }
 
     this.technologyCtrl.setValue('');
@@ -191,14 +234,15 @@ private loadReportingManagers(): void {
   }
 
   removeTechnology(tech: any): void {
-    this.selectedTechnologies = this.selectedTechnologies.filter(t => t.id !== tech.id);
+    this.selectedTechnologies = this.selectedTechnologies.filter(
+      (t) => t.id !== tech.id,
+    );
 
-    const ids = this.selectedTechnologies.map(t => t.id);
+    const ids = this.selectedTechnologies.map((t) => t.id);
     this.employeeForm.get('skillIds')?.setValue(ids);
 
     this.announcer.announce(`Removed ${tech.technologyName}`);
   }
-
 
   // ================= EDIT MODE =================
 
@@ -236,26 +280,30 @@ private loadReportingManagers(): void {
           companyContactNo: emp.companyContactNo,
         });
 
-        if (emp.skill! && emp.skill.length!) {
+     if (emp.skill && emp.skill.length) {
 
-          // Wait for technologies to load first
-          this.loadTechnologies().then(() => {
+  this.loadTechnologies().then(() => {
 
-            const skillIds = emp.skill.map((s: any) => s.id);
+    const skillIds = emp.skill.map((s: any) => s.id);
 
-            this.selectedTechnologies = this.technologies.filter(t =>
-              skillIds.includes(t.id)
-            );
+    // 🔥 FIX: Match by ID + Name (safe binding)
+    this.selectedTechnologies = this.technologies.filter(t =>
+      skillIds.includes(t.id) ||
+      emp.skill.some((s: any) => s.skillName === t.technologyName)
+    );
 
-            this.employeeForm.get('skillIds')?.setValue(skillIds);
-          });
-        }
+    this.employeeForm.get('skillIds')?.setValue(skillIds);
+  });
+}
+
 
         if (emp.stateId) {
-          this.employeeService.getCityByStateId(emp.stateId).subscribe((res: any) => {
-            this.cities = res.cityList ?? [];
-            this.employeeForm.get('cityId')?.setValue(emp.cityId);
-          });
+          this.employeeService
+            .getCityByStateId(emp.stateId)
+            .subscribe((res: any) => {
+              this.cities = res.cityList ?? [];
+              this.employeeForm.get('cityId')?.setValue(emp.cityId);
+            });
         }
       }
     });
@@ -263,21 +311,34 @@ private loadReportingManagers(): void {
 
   nextStep(): void {
     const step1Controls = [
-      'empRoleId',"empCode", 'empName', 'mobile', 'departmentId',
-      'designationId', 'emailId', 'dateOfJoining',
-      'dob', 'password', 'stateId', 'cityId'
+      'empRoleId',
+      'empCode',
+      'empName',
+      'mobile',
+      'departmentId',
+      'designationId',
+      'emailId',
+      'dateOfJoining',
+      'dob',
+      'password',
+      'stateId',
+      'cityId',
     ];
 
-    step1Controls.forEach(control => {
+    step1Controls.forEach((control) => {
       this.employeeForm.get(control)?.markAsTouched();
     });
 
     const step1Invalid = step1Controls.some(
-      control => this.employeeForm.get(control)?.invalid
+      (control) => this.employeeForm.get(control)?.invalid,
     );
 
     if (step1Invalid) {
-      Swal.fire('Required Fields Missing', 'Please fill all mandatory fields', 'warning');
+      Swal.fire(
+        'Required Fields Missing',
+        'Please fill all mandatory fields',
+        'warning',
+      );
       return;
     }
 
@@ -294,14 +355,30 @@ private loadReportingManagers(): void {
     if (!file) return;
 
     switch (type) {
-      case 'profile': this.profilePic = file; break;
-      case 'aadhar': this.aadharImg = file; break;
-      case 'pan': this.panImg = file; break;
-      case 'experience': this.experienceCertificate = file; break;
-      case 'tenth': this.tenthCertificate = file; break;
-      case 'twelth': this.twelthCertificate = file; break;
-      case 'graduation': this.graduationCertificate = file; break;
-      case 'masters': this.mastersCertificate = file; break;
+      case 'profile':
+        this.profilePic = file;
+        break;
+      case 'aadhar':
+        this.aadharImg = file;
+        break;
+      case 'pan':
+        this.panImg = file;
+        break;
+      case 'experience':
+        this.experienceCertificate = file;
+        break;
+      case 'tenth':
+        this.tenthCertificate = file;
+        break;
+      case 'twelth':
+        this.twelthCertificate = file;
+        break;
+      case 'graduation':
+        this.graduationCertificate = file;
+        break;
+      case 'masters':
+        this.mastersCertificate = file;
+        break;
     }
   }
 
@@ -327,40 +404,45 @@ private loadReportingManagers(): void {
     if (this.profilePic) formData.append('ProfilePic', this.profilePic);
     if (this.aadharImg) formData.append('AadharImg', this.aadharImg);
     if (this.panImg) formData.append('PanImg', this.panImg);
-    if (this.experienceCertificate) formData.append('ExperienceCertificate', this.experienceCertificate);
-    if (this.tenthCertificate) formData.append('TenthCertificate', this.tenthCertificate);
-    if (this.twelthCertificate) formData.append('TwelthCertificate', this.twelthCertificate);
-    if (this.graduationCertificate) formData.append('GraduationCertificate', this.graduationCertificate);
-    if (this.mastersCertificate) formData.append('MastersCertificate', this.mastersCertificate);
+    if (this.experienceCertificate)
+      formData.append('ExperienceCertificate', this.experienceCertificate);
+    if (this.tenthCertificate)
+      formData.append('TenthCertificate', this.tenthCertificate);
+    if (this.twelthCertificate)
+      formData.append('TwelthCertificate', this.twelthCertificate);
+    if (this.graduationCertificate)
+      formData.append('GraduationCertificate', this.graduationCertificate);
+    if (this.mastersCertificate)
+      formData.append('MastersCertificate', this.mastersCertificate);
 
     this.isLoading = true;
 
     // 🔥 ADD vs UPDATE decision
     const apiCall = this.isEditMode
       ? this.employeeService.updateEmployee(
-        (() => {
-          formData.append('Id', this.employeeId.toString());
-          return formData;
-        })()
-      )
+          (() => {
+            formData.append('Id', this.employeeId.toString());
+            return formData;
+          })(),
+        )
       : this.employeeService.addEmployee(formData);
 
-    apiCall
-      .pipe(finalize(() => this.isLoading = false))
-      .subscribe({
-        next: () => {
-          Swal.fire(
-            'Success',
-            this.isEditMode ? 'Employee updated successfully' : 'Employee added successfully',
-            'success'
-          ).then(() => {
-            this.router.navigate(['/home/employee-list']);
-          });
-        },
-        error: () => {
-          Swal.fire('Error', 'API Error occurred', 'error');
-        }
-      });
+    apiCall.pipe(finalize(() => (this.isLoading = false))).subscribe({
+      next: () => {
+        Swal.fire(
+          'Success',
+          this.isEditMode
+            ? 'Employee updated successfully'
+            : 'Employee added successfully',
+          'success',
+        ).then(() => {
+          this.router.navigate(['/home/employee-list']);
+        });
+      },
+      error: () => {
+        Swal.fire('Error', 'API Error occurred', 'error');
+      },
+    });
   }
 
   private resetFiles(): void {
@@ -371,14 +453,47 @@ private loadReportingManagers(): void {
       this.tenthCertificate =
       this.twelthCertificate =
       this.graduationCertificate =
-      this.mastersCertificate = undefined;
+      this.mastersCertificate =
+        undefined;
   }
- isModalOpen = false;
-    openModal() {
+  isModalOpen = false;
+  openModal() {
     this.isModalOpen = true;
   }
 
   closeModal() {
     this.isModalOpen = false;
+  }
+
+  //for send registration link
+  sendRegistrationLink(): void {
+    if (this.sendLinkForm.invalid || this.isSendingLink) {
+      this.sendLinkForm.markAllAsTouched();
+      return;
+    }
+
+    const payload = {
+      email: this.sendLinkForm.value.email,
+    };
+
+    this.isSendingLink = true;
+
+    this.employeeService
+      .sendLinkForReg(payload)
+      .pipe(finalize(() => (this.isSendingLink = false)))
+      .subscribe({
+        next: () => {
+          Swal.fire(
+            'Success',
+            'Registration link sent successfully',
+            'success',
+          );
+          this.sendLinkForm.reset();
+          this.closeModal();
+        },
+        error: () => {
+          Swal.fire('Error', 'Failed to send registration link', 'error');
+        },
+      });
   }
 }

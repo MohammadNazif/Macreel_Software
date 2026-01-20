@@ -18,7 +18,7 @@ export class AddDesignationComponent implements OnInit {
 
   displayedColumns: string[] = ['srNo', 'name', 'action'];
 
-  pageSize = 5;
+  pageSize = 20;
   pageNumber = 1;
   totalRecords = 0;
   searchText = '';

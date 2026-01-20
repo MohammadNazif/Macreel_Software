@@ -10,7 +10,7 @@
           <div class="flex flex-col md:flex-row md:items-center gap-2 p-2">
 
             <!-- LABEL -->
-            <div class="w-full md:w-[15%]">
+            <div class="w-full md:w-[17%]">
               <label for="DepartmentName" class="block text-[#7E7E7E] font-bold text-[15px] md:text-[17px] ml-1">
                 Add Department :
               </label>
@@ -65,7 +65,7 @@
         </div>
 
         <!-- PAGINATOR -->
-        <mat-paginator [pageSizeOptions]="[5, 10, 20, 30]" [pageSize]="pageSize" [length]="totalRecords"
+        <mat-paginator [pageSizeOptions]="[20,50,100]" [pageSize]="pageSize" [length]="totalRecords"
           showFirstLastButtons (page)="onPageChange($event)">
         </mat-paginator>
 

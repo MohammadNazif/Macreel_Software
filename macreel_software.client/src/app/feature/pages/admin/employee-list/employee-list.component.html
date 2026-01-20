@@ -3,30 +3,6 @@
   <!-- ================= TABLE ================= -->
   <div class="bg-white shadow rounded-lg p-1">
 
-    <!-- HEADER -->
-    <!-- <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-1 mb-1">
-
-    
-      <h1 class="ml-2 text-lg md:text-[16px] font-semibold text-[#444] text-center md:text-left">
-        Employee List
-      </h1>
-
-
-      <div class="relative w-full md:w-64">
-        <input type="text" placeholder="Search Employee" (keyup)="applyFilter($event)" class="w-full pl-10 pr-3 py-1.5 rounded-lg bg-[#F6F7FB] border border-gray-300
-               focus:outline-none focus:ring-2 focus:ring-[#C5192F] table-search" />
-        <i class="fa-solid fa-magnifying-glass
-               absolute left-3 top-1/2 -translate-y-1/2
-               text-gray-400 text-sm"></i>
-      </div>
-
-      
-      <mat-paginator [pageSizeOptions]="[5, 10, 20, 30]" [pageSize]="pageSize" [length]="totalRecords"
-        showFirstLastButtons (page)="onPageChange($event)">
-      </mat-paginator>
-
-    </div> -->
-
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-1">
 
       <h1 class="ml-2 text-lg md:text-[16px] font-semibold text-[#444] text-center md:text-left">
@@ -45,7 +21,7 @@
         </div>
 
         <!-- PAGINATOR -->
-        <mat-paginator [pageSizeOptions]="[5, 10, 20, 30]" [pageSize]="pageSize" [length]="totalRecords"
+        <mat-paginator [pageSizeOptions]="[20,50,100]" [pageSize]="pageSize" [length]="totalRecords"
           showFirstLastButtons (page)="onPageChange($event)">
         </mat-paginator>
 

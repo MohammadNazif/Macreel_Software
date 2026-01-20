@@ -114,6 +114,11 @@ export class LayoutComponent implements OnInit {
           label: 'Assigned Tasks',
           route: '/home/employee/assigned-tasks',
           roles: ['employee']
+        },
+        {
+          label: 'Assigned Projects',
+          route: '/home/employee/assign-project',
+          roles: ['employee']
         }
       ]
     },
