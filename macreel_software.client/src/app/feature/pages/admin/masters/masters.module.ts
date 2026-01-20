@@ -13,6 +13,7 @@ import { AddDesignationComponent } from './add-designation/add-designation.compo
 import { AddRoleComponent } from './add-role/add-role.component';
 import { AddTechnologyComponent } from './add-technology/add-technology.component';
 import { AddLeaveTypeComponent } from './add-leave-type/add-leave-type.component';
+import { CommonPagesModule } from "../../../common-pages/common-pages.module";
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import { AddLeaveTypeComponent } from './add-leave-type/add-leave-type.component
     MatPaginatorModule,
     MatSortModule,
     MatInputModule,
-    ReactiveFormsModule
-  ]
+    ReactiveFormsModule,
+    CommonPagesModule
+]
 })
 export class MastersModule { }

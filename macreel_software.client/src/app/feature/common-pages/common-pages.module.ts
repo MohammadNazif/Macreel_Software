@@ -14,6 +14,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { GenericTableComponent } from './generic-table/generic-table.component';
 import { CdkAutofill } from "@angular/cdk/text-field";
 import { SafeUrlPipe } from "../../core/pipes/capitalize.pipe";
+import { ProjectDetailsComponent } from './project-details/project-details.component';
+import { EmployeeDetailsComponent } from './employee-details/employee-details.component';
 
 
 
@@ -21,7 +23,9 @@ import { SafeUrlPipe } from "../../core/pipes/capitalize.pipe";
   declarations: [
     AddEmployeeComponent,
     EmployeeProfileComponent,
-     GenericTableComponent
+     GenericTableComponent,
+     ProjectDetailsComponent,
+     EmployeeDetailsComponent
 
   ],
   imports: [
