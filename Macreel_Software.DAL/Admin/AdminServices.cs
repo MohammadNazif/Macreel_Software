@@ -1481,7 +1481,7 @@ namespace Macreel_Software.DAL.Admin
                                 appTechnology = sdr["appTechnology"] != DBNull.Value ? Convert.ToInt32(sdr["appTechnology"]) : null,
                                 appTechnologyName = sdr["AppTechnology"] != DBNull.Value ? sdr["AppTechnology"].ToString() : null,
                                 webTechnology = sdr["webTechnology"] != DBNull.Value ? Convert.ToInt32(sdr["webTechnology"]) : null,
-                                webTechnologyName = sdr["webTechnology"] != DBNull.Value ? sdr["webTechnology"].ToString() : null,
+                                webTechnologyName = sdr["WebTechnologyName"] != DBNull.Value ? sdr["WebTechnologyName"].ToString() : null,
                                 appEmpId = sdr["appEmpId"] != DBNull.Value ? Convert.ToInt32(sdr["appEmpId"]) : null,
                                 appEmpName = sdr["appEmp"] != DBNull.Value ? sdr["appEmp"].ToString() : null,
                                 webEmpId = sdr["webEmpId"] != DBNull.Value ? Convert.ToInt32(sdr["webEmpId"]) : null,

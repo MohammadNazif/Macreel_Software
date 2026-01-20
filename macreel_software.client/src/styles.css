@@ -84,3 +84,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .multiple-select-div .mat-mdc-text-field-wrapper:hover .mat-mdc-form-field-focus-overlay {
   background-color: #fff!important;
 }
+
+select {
+  appearance: none;
+  -webkit-appearance: none;
+}
