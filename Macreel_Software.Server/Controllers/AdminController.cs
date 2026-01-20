@@ -599,7 +599,7 @@ namespace Macreel_Software.Server.Controllers
             if (string.IsNullOrWhiteSpace(data.projectTitle))
                 return BadRequest("Project title is required.");
 
-            if (data.sopDocument == null && data.id<0)
+            if (data.sopDocument == null && data.id<=0)
                 return BadRequest("SOP document is required.");
 
             if (data.startDate == null)
