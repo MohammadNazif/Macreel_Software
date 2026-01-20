@@ -46,6 +46,7 @@ export class LayoutComponent implements OnInit {
           route: '/home/admin/master/add-technology', roles: ['admin']
         },
         { label: 'Add Leave', route: '/home/admin/master/add-leave', roles: ['admin'] },
+        { label: 'Add Page', route: '/home/admin/master/add-pages', roles: ['admin'] },
       ]
     },
     {

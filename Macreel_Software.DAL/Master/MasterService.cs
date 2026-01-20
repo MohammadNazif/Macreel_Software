@@ -58,13 +58,7 @@ namespace Macreel_Software.DAL.Master
                     await _conn.CloseAsync();
             }
         }
-
-
-
-        public async Task<ApiResponse<List<role>>> getAllRole(
-          string? searchTerm,
-          int? pageNumber,
-          int? pageSize)
+        public async Task<ApiResponse<List<role>>> getAllRole(string? searchTerm,int? pageNumber,int? pageSize)
         {
             List<role> list = new();
             int totalRecords = 0;
@@ -138,8 +132,34 @@ namespace Macreel_Software.DAL.Master
                     await _conn.CloseAsync();
             }
         }
+        public async Task<bool> deleteRoleById(int id)
+        {
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("sp_role", _conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@action", "deleteRole");
+                    cmd.Parameters.AddWithValue("@id", id);
 
+                    if (_conn.State != ConnectionState.Open)
+                        await _conn.OpenAsync();
 
+                    int rowsAffected = await cmd.ExecuteNonQueryAsync();
+                    return rowsAffected > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    _conn.CloseAsync();
+            }
+        }
         public async Task<ApiResponse<List<role>>> getAllRoleById(int id)
         {
             List<role> list = new();
@@ -197,36 +217,6 @@ namespace Macreel_Software.DAL.Master
             {
                 if (_conn.State == ConnectionState.Open)
                     await _conn.CloseAsync();
-            }
-        }
-
-
-        public async Task<bool> deleteRoleById(int id)
-        {
-            try
-            {
-                using (SqlCommand cmd = new SqlCommand("sp_role", _conn))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@action", "deleteRole");
-                    cmd.Parameters.AddWithValue("@id", id);
-
-                    if (_conn.State != ConnectionState.Open)
-                        await _conn.OpenAsync();
-
-                    int rowsAffected = await cmd.ExecuteNonQueryAsync();
-                    return rowsAffected > 0;
-                }
-            }
-            catch (Exception ex)
-            {
-
-                throw;
-            }
-            finally
-            {
-                if (_conn.State == ConnectionState.Open)
-                    _conn.CloseAsync();
             }
         }
 
@@ -966,6 +956,127 @@ namespace Macreel_Software.DAL.Master
 
         #endregion
 
-      
+        #region Mange Page   
+        public async Task<bool> InsertUpdatePage(Page data)
+        {
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("sp_managePages", _conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@id", data.id > 0 ? data.id : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@pageName", data.pageName);
+                    cmd.Parameters.AddWithValue("@pageUrl", data.pageUrl);
+                    cmd.Parameters.AddWithValue("@action", data.id > 0 ? "updatePage" : "insertPage");
+
+                    if (_conn.State != ConnectionState.Open)
+                        await _conn.OpenAsync();
+
+                    return await cmd.ExecuteNonQueryAsync() > 0;
+                }
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    await _conn.CloseAsync();
+            }
+        }
+        public async Task<ApiResponse<List<Page>>> GetAllPages(int? id,int? pageNumber,int? pageSize)
+        {
+            List<Page> list = new();
+            int totalRecords = 0;
+
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("sp_managePages", _conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@action", "getPages");
+                    cmd.Parameters.AddWithValue("@id", id.HasValue ? id.Value : DBNull.Value);
+
+                    cmd.Parameters.AddWithValue("@pageNumber",
+                        pageNumber.HasValue ? pageNumber.Value : DBNull.Value);
+
+                    cmd.Parameters.AddWithValue("@pageSize",
+                        pageSize.HasValue ? pageSize.Value : DBNull.Value);
+
+                    if (_conn.State != ConnectionState.Open)
+                        await _conn.OpenAsync();
+
+                    using (SqlDataReader sdr = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await sdr.ReadAsync())
+                        {
+                            if (totalRecords == 0)
+                                totalRecords = Convert.ToInt32(sdr["TotalRecords"]);
+
+                            list.Add(new Page
+                            {
+                                id = Convert.ToInt32(sdr["id"]),
+                                pageName = sdr["pageName"].ToString(),
+                                pageUrl = sdr["pageUrl"].ToString()
+                            });
+                        }
+                    }
+                }
+
+                // Pagination response
+                if (pageNumber.HasValue && pageSize.HasValue)
+                {
+                    return ApiResponse<List<Page>>.PagedResponse(
+                        list,
+                        pageNumber.Value,
+                        pageSize.Value,
+                        totalRecords,
+                        "Page list fetched successfully");
+                }
+
+                // Normal response
+                var response = ApiResponse<List<Page>>.SuccessResponse(
+                    list,
+                    "Page list fetched successfully");
+
+                response.TotalRecords = totalRecords;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<List<Page>>.FailureResponse(
+                    ex.Message,
+                    500,
+                    "PAGE_FETCH_ERROR");
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    await _conn.CloseAsync();
+            }
+        }
+        public async Task<bool> DeletePageById(int id)
+        {
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("sp_managePages", _conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@action", "deletePage");
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    if (_conn.State != ConnectionState.Open)
+                        await _conn.OpenAsync();
+
+                    int rowsAffected = await cmd.ExecuteNonQueryAsync();
+                    return rowsAffected > 0;
+                }
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    await _conn.CloseAsync();
+            }
+        }
+        #endregion
     }
 }

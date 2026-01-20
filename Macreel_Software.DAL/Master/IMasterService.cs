@@ -33,13 +33,13 @@ namespace Macreel_Software.DAL.Master
       Task<ApiResponse<List<technology>>> getAllTechnology(string? searchTerm,
           int? pageNumber,
           int? pageSize);
-
         Task<ApiResponse<List<technology>>> getAllTechnologyById(int id);
-
         Task<bool> deleteTechnologyById(int id);
         Task<ApiResponse<List<technologyDetails>>> EmpListForWebByTechId(int id);
         Task<ApiResponse<List<technologyDetails>>> empListForAppByTechId(int id);
-      
+        Task<bool> DeletePageById(int id);
+        Task<ApiResponse<List<Page>>> GetAllPages(int? id, int? pageNumber, int? pageSize);
+        Task<bool> InsertUpdatePage(Page data);
 
     }
 }

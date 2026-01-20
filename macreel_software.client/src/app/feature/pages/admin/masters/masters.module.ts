@@ -13,6 +13,8 @@ import { AddDesignationComponent } from './add-designation/add-designation.compo
 import { AddRoleComponent } from './add-role/add-role.component';
 import { AddTechnologyComponent } from './add-technology/add-technology.component';
 import { AddLeaveTypeComponent } from './add-leave-type/add-leave-type.component';
+import { AddPageComponent } from './add-page/add-page.component';
+import { PageAccessComponent } from './page-access/page-access.component';
 import { CommonPagesModule } from "../../../common-pages/common-pages.module";
 
 
@@ -22,7 +24,9 @@ import { CommonPagesModule } from "../../../common-pages/common-pages.module";
     AddDesignationComponent,
     AddRoleComponent,
     AddTechnologyComponent,
-    AddLeaveTypeComponent
+    AddLeaveTypeComponent,
+    AddPageComponent,
+    PageAccessComponent
   ],
   imports: [
     CommonModule,

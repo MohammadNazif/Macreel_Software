@@ -18,7 +18,8 @@
             <!-- INPUT -->
             <div class="w-full md:w-[25%]">
               <input id="DesignationName" name="designationName" [(ngModel)]="designationName" required type="text"
-                placeholder="Enter Designation Name" class="w-[full] border rounded-md px-3 text-[12px] w-[230px] py-2 focus:outline-none focus:ring-2 focus:ring-[#C5192F]"/>
+                placeholder="Enter Designation Name"
+                class="w-[full] border rounded-md px-3 text-[12px] w-[230px] py-2 focus:outline-none focus:ring-2 focus:ring-[#C5192F]" />
 
             </div>
 
@@ -41,37 +42,36 @@
   <div class="bg-white shadow rounded-lg p-1">
 
     <!-- HEADER -->
-  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-1 mb-1">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-1 mb-1">
 
-  <!-- LEFT SIDE: TITLE -->
-  <h1 class="ml-2 text-lg md:text-[16px] font-semibold text-[#444] text-center md:text-left">
-    Designation List
-  </h1>
+      <!-- LEFT SIDE: TITLE -->
+      <h1 class="ml-2 text-lg md:text-[16px] font-semibold text-[#444] text-center md:text-left">
+        Designation List
+      </h1>
 
-  <!-- RIGHT SIDE: SEARCH + PAGINATOR (together) -->
-  <div class="flex items-center gap-2">
-    
-    <!-- SEARCH -->
-    <div class="relative">
-      <input type="text" placeholder="Search Designation" (keyup)="applyFilter($event)"
-        class="w-full pl-10 pr-3 py-[6px] text-[12px] rounded-lg bg-[#F6F7FB]
+      <!-- RIGHT SIDE: SEARCH + PAGINATOR (together) -->
+      <div class="flex items-center gap-2">
+
+        <!-- SEARCH -->
+        <div class="relative">
+          <input type="text" placeholder="Search Designation" (keyup)="applyFilter($event)" class="w-full pl-10 pr-3 py-[6px] text-[12px] rounded-lg bg-[#F6F7FB]
         border border-gray-300
         focus:outline-none focus:ring-2 focus:ring-[#C5192F] table-search" />
-      <i class="fa-solid fa-magnifying-glass
+          <i class="fa-solid fa-magnifying-glass
         absolute left-3 top-1/2 -translate-y-1/2
         text-gray-400 text-sm">
-      </i>
-    </div>
+          </i>
+        </div>
 
     <!-- PAGINATOR -->
     <mat-paginator [length]="totalRecords" [pageSize]="pageSize" [pageIndex]="pageNumber - 1"
       [pageSizeOptions]="[20,50,100]" showFirstLastButtons (page)="onPageChange($event)">
     </mat-paginator>
 
-  </div>
+      </div>
 
-</div>
- 
+    </div>
+
     <!-- ================= TABLE WRAPPER ================= -->
     <div class="relative overflow-x-auto w-full">
 
@@ -108,16 +108,18 @@
         <!-- ACTION -->
         <ng-container matColumnDef="action">
           <th mat-header-cell *matHeaderCellDef class="w-[120px] px-1 py-1 text-center
-                   !bg-[#dd3d4f] text-white text-[14px]" >
+                   !bg-[#dd3d4f] text-white text-[14px]">
             Action
           </th>
 
           <td mat-cell *matCellDef="let element" class="px-1 py-1 text-center">
-            <button class="text-green-700 p-2 rounded-full hover:bg-green-100 mr-1 text-[12px]" (click)="editDesignation(element)">
+            <button class="text-green-700 p-2 rounded-full hover:bg-green-100 mr-1 text-[12px]"
+              (click)="editDesignation(element)">
               <i class="fa fa-pencil"></i>
             </button>
 
-            <button class="text-red-500 p-2 rounded-full hover:bg-red-100 text-[12px]" (click)="deleteDesignation(element)">
+            <button class="text-red-500 p-2 rounded-full hover:bg-red-100 text-[12px]"
+              (click)="deleteDesignation(element)">
               <i class="fa fa-trash"></i>
             </button>
 

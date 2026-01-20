@@ -5,6 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { ManageLeaveService } from '../../../../core/services/manage-leave.service';
 import Swal from 'sweetalert2';
+import { CommonService } from '../../../../core/services/common.service';
 
 @Component({
   selector: 'app-leave-requests',
@@ -19,17 +20,18 @@ export class LeaveRequestsComponent {
     'leaveName',
     'fromDate',
     'toDate',
-    'appliedDate',
+    'document',
     'description',
-    'status',
     'action'
   ];
   dataSource = new MatTableDataSource<any>([]);
   pageNumber = 1;
-  pageSize = 5;
+  pageSize = 10;
   totalRecords = 0;
   searchTerm: string = '';
   allLeaves: any[] = [];
+  reason : string = '';
+  isReasonModal = false;
   pageSizeControl = new FormControl<string>("10")
   searchControl = new FormControl<string>("");
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -39,50 +41,88 @@ export class LeaveRequestsComponent {
 
   constructor(
     private readonly leaveService: ManageLeaveService,
-    private readonly fb:FormBuilder
+    private readonly fb: FormBuilder,
+    private readonly commonservice: CommonService
   ) {
     this.statusForm = this.fb.group({
-      id:null,
-      status: ['', Validators.required],
-      leaveCount: [null, [Validators.required, Validators.min(1)]]
+      id: null,
+      reason: ['', [Validators.required]]
     });
   }
-  openModal(id:number) {
+  openModal(id: number) {
     const leave = this.allLeaves.find(x => x.id === id);
     if (!leave) return;
     this.statusForm.get('leaveCount')?.setValue(leave.leaveCount);
     this.statusForm.get('id')?.setValue(leave.id);
     this.isModalOpen = true;
   }
+  openReasonModal(id:number){
+    const leave = this.allLeaves.find(x => x.id === id);
+    if (!leave) return;
+    this.reason = leave.reason;
+    this.isReasonModal = true;
+  }
   closeModal() {
     this.isModalOpen = false;
+    this.isReasonModal = false;
     this.statusForm.reset();
   }
 
+  ApproveLeave(id: number) {
+    debugger;
+    if (id > 0) {
+      this.leaveService.UpdateLeaveStatus(id, 1, null).subscribe({
+        next: (res) => {
+          if (res.status) {
+            Swal.fire({
+              title: 'Success',
+              text: res.message,
+              icon: 'success',
+              didClose: () => {
+                location.reload();
+              }
+            });
+          } else {
+            Swal.fire('Error', res.message, 'error');
+          }
+        },
+        error: (err) => {
+          Swal.fire('Error', err.error.errorMessage, 'error');
+        }
+      })
+    }
+  }
+
   onSubmitStatus() {
-    debugger
     if (!this.statusForm.valid) {
       return;
     }
     const formValue = this.statusForm.value;
     //Call Api
-    this.leaveService.UpdateLeaveStatus(formValue.id,formValue.leaveCount,formValue.status).subscribe({
-          next: (res) => {
-            if (res.statusCode === 200) {
-              Swal.fire('Success', res.message, 'success');
+    this.leaveService.UpdateLeaveStatus(formValue.id, 2, formValue.reason).subscribe({
+      next: (res) => {
+        if (res.status) {
+          Swal.fire({
+            title: 'Success',
+            text: res.message,
+            icon: 'success',
+            didClose: () => {
+              this.closeModal();
               location.reload();
-            } else {
-              Swal.fire('Error', res.message, 'error');
             }
-          },
-          error: (err) => {
-            Swal.fire('Error', err.error.errorMessage, 'error');
-          }
-        });
+          });
+        } else {
+          Swal.fire('Error', res.message, 'error');
+        }
+      },
+      error: (err) => {
+        Swal.fire('Error', err.error.errorMessage, 'error');
+      }
+    });
   }
 
   ngOnInit(): void {
-    
+
     this.loadAssignedLeaves();
     // Server-side search subscription
     this.searchControl.valueChanges
@@ -117,5 +157,23 @@ export class LeaveRequestsComponent {
           }
         }
       });
+  }
+
+  downloadFile(filename: string) {
+    this.commonservice.downloadFile(filename).subscribe({
+      next: (blob) => {
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename.split('/').pop()!;
+        a.click();
+
+        URL.revokeObjectURL(url);
+      },
+      error: () => {
+        alert('File download failed');
+      }
+    });
   }
 }
