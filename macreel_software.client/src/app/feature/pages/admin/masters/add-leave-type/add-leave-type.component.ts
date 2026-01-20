@@ -22,7 +22,7 @@ export class AddLeaveTypeComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   pageNumber = 1;
-  pageSize = 5;
+  pageSize = 20;
   totalRecords = 0;
   searchTerm = '';
 

@@ -95,7 +95,7 @@
         <!-- TECHNICAL DOCUMENT -->
         <div class="relative" *ngIf="category !== 'Digital Marketing'">
           <label class="block text-sm font-medium text-gray-500 mb-1">Technical Document</label>
-          <input #technicalFile type="file"  (change)="onTechnicalFileChange($event)"
+          <input #technicalFile type="file" (change)="onTechnicalFileChange($event)"
             class="w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-3 file:border-0 file:text-sm
                   file:font-semibold file:bg-[#C5192F] file:text-white hover:file:bg-[#a41526]
                   cursor-pointer border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#C5192F]/30" />
@@ -121,7 +121,7 @@
         </div>
 
         <!-- MOBILE SECTION -->
-        <div *ngIf="isMobileSoftware" class="mt-4">
+        <div *ngIf="isMobileSoftware  && category === 'Software'" class="mt-4">
           <h4 class="font-semibold mb-2">Mobile App Type</h4>
           <div class="flex gap-4">
             <label class="flex items-center gap-2">
@@ -246,7 +246,7 @@
       <div *ngIf="selectedEmployeeProjects.length" class="mt-6">
 
         <h3 class="text-lg font-semibold mb-4 text-gray-700">
-          Assigned Employee Projects
+          Ongoing Employee Projects
         </h3>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -283,12 +283,7 @@
                 <span class="font-medium">Web Technology Name:</span>
                 <span>{{ p.webTechnologyName || '—' }}</span>
               </div>
-
-              <!-- <div class="flex justify-between">
-                <span class="font-medium">Technology:</span>
-                <span>{{ p.appTechnologyName || p.webTechnologyName }}</span>
-              </div> -->
-
+              
               <div class="flex justify-between">
                 <span class="font-medium">Assign Date:</span>
                 <span>{{ p.assignDate | date:'dd MMM yyyy' }}</span>
@@ -301,10 +296,10 @@
             </div>
 
             <!-- CARD FOOTER -->
-            <div class="bg-gray-50 px-4 py-2 rounded-b-xl text-xs text-gray-500 flex justify-between">
+            <!-- <div class="bg-gray-50 px-4 py-2 rounded-b-xl text-xs text-gray-500 flex justify-between">
               <span>Status</span>
               <span class="text-green-600 font-semibold">Active</span>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>

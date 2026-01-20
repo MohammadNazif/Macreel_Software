@@ -20,7 +20,7 @@ export class AddDepartmentComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  pageSize: number = 5;
+  pageSize: number = 20;
   pageNumber: number = 1;
   totalRecords: number = 0;
   searchText: string = '';

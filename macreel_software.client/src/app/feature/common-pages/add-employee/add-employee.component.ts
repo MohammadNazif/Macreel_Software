@@ -236,20 +236,22 @@ private loadReportingManagers(): void {
           companyContactNo: emp.companyContactNo,
         });
 
-        if (emp.skill! && emp.skill.length!) {
+     if (emp.skill && emp.skill.length) {
 
-          // Wait for technologies to load first
-          this.loadTechnologies().then(() => {
+  this.loadTechnologies().then(() => {
 
-            const skillIds = emp.skill.map((s: any) => s.id);
+    const skillIds = emp.skill.map((s: any) => s.id);
 
-            this.selectedTechnologies = this.technologies.filter(t =>
-              skillIds.includes(t.id)
-            );
+    // 🔥 FIX: Match by ID + Name (safe binding)
+    this.selectedTechnologies = this.technologies.filter(t =>
+      skillIds.includes(t.id) ||
+      emp.skill.some((s: any) => s.skillName === t.technologyName)
+    );
 
-            this.employeeForm.get('skillIds')?.setValue(skillIds);
-          });
-        }
+    this.employeeForm.get('skillIds')?.setValue(skillIds);
+  });
+}
+
 
         if (emp.stateId) {
           this.employeeService.getCityByStateId(emp.stateId).subscribe((res: any) => {
