@@ -29,7 +29,7 @@ namespace Macreel_Software.Contracts.DTOs
         public  int? AbsentEmployee { get; set; }
         public  int? TotalTasks { get; set; }
         public  int? CompletedTask { get; set; }
-        public  int? AssignedLeaves { get; set; }
+        public  int? LeaveRequest { get; set; }
         public  int? UpcomingLeaves { get; set; }
     }
 }

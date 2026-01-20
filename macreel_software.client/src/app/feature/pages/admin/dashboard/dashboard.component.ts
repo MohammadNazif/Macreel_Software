@@ -25,7 +25,7 @@ dashboardCount: AdminDashboard = {
   absentEmployee: 0,
   totalTasks: 0,
   completedTask: 0,
-  assignedLeaves: 0,
+  leaveRequest: 0,
   upcomingLeaves: 0
 };
 

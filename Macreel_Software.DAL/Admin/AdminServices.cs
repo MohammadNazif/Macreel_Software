@@ -1777,7 +1777,7 @@ namespace Macreel_Software.DAL.Admin
                                 OngoingProjects = sdr["OngoingProjects"] != DBNull.Value ? Convert.ToInt32(sdr["OngoingProjects"]):null,
                                 TotalTasks = sdr["TotalTasks"] != DBNull.Value ? Convert.ToInt32(sdr["TotalTasks"]):null,
                                 CompletedTask = sdr["CompletedTask"] != DBNull.Value ? Convert.ToInt32(sdr["CompletedTask"]):null,
-                                AssignedLeaves = sdr["AssignedLeaves"] != DBNull.Value ? Convert.ToInt32(sdr["AssignedLeaves"]):null,
+                                LeaveRequest = sdr["LeaveRequest"] != DBNull.Value ? Convert.ToInt32(sdr["LeaveRequest"]):null,
                                 UpcomingLeaves = sdr["UpcomingLeaves"] != DBNull.Value ? Convert.ToInt32(sdr["UpcomingLeaves"]):null,
                             });
                         }

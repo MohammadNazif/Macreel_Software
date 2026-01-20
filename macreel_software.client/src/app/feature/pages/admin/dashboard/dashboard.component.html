@@ -11,11 +11,17 @@
         <h3 class="font-semibold text-gray-700 mb-1.5">Project</h3>
         <!-- Clickable lines -->
         <p class="text-sm text-gray-600 hover:text-blue-500 cursor-pointer transition-colors duration-300">
-          Total Project : <span class="font-medium">{{dashboardCount.totalProjects }}
-</span>
+           <a class="hover:text-indigo-600 cursor-pointer" href="/home/admin/view-project">
+
+             Total Project : <span class="font-medium">{{dashboardCount.totalProjects }}
+            </span>
+           </a>
         </p>
         <p class="text-sm text-gray-600 hover:text-blue-500 cursor-pointer transition-colors duration-300">
+           <a class="hover:text-indigo-600 cursor-pointer" href="/home/admin/view-project">
+
           Ongoing :{{dashboardCount.ongoingProjects||0}}
+          </a>
         </p>
       </div>
       <div class="text-blue-500 text-3xl p-3">
@@ -42,7 +48,9 @@
 </p>
 
         <p class="text-sm text-gray-600 hover:text-indigo-600 cursor-pointer transition-colors duration-300">
+          <a class="hover:text-indigo-600 cursor-pointer" href="/home/admin/employee-list">
           Absent : {{dashboardCount.absentEmployee||0}}
+        </a>
         </p>
       </div>
 
@@ -65,10 +73,16 @@
 
         <!-- Clickable text only -->
         <p class="text-sm text-gray-600 hover:text-orange-500 cursor-pointer transition-colors duration-300">
+             <a class="hover:text-indigo-600 cursor-pointer" href="/home/admin/leave-requests">
+
           Upcoming : <span class="font-medium">{{dashboardCount.upcomingLeaves||0}}</span>
+          </a>
         </p>
         <p class="text-sm text-gray-600 hover:text-orange-500 cursor-pointer transition-colors duration-300">
-          Assigned : {{dashboardCount.assignedLeaves||0}}
+             <a class="hover:text-indigo-600 cursor-pointer" href="/home/admin/leave-requests">
+
+          Request : {{dashboardCount.leaveRequest||0}}
+          </a>
         </p>
       </div>
 
@@ -90,10 +104,16 @@
         <h3 class="font-semibold text-gray-700 mb-1.5">Task</h3>
 
         <p class="text-sm text-gray-600 hover:text-purple-500 cursor-pointer transition-colors duration-300">
+            <a class="hover:text-indigo-600 cursor-pointer" href="/home/admin/view-task">
+
           Total Task : <span class="font-medium">{{dashboardCount.totalTasks ||0}}</span>
+          </a>
         </p>
         <p class="text-sm text-gray-600 hover:text-purple-500 cursor-pointer transition-colors duration-300">
+            <a class="hover:text-indigo-600 cursor-pointer" href="/home/admin/view-task">
+
           Complete Task : {{dashboardCount.completedTask||0}}
+          </a>
         </p>
       </div>
 
