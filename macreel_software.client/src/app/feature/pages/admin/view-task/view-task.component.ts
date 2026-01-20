@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-view-task',
-  standalone:false,
+  standalone: false,
   templateUrl: './view-task.component.html',
   styleUrls: ['./view-task.component.css']
 })
@@ -26,12 +26,13 @@ export class ViewTaskComponent implements OnInit {
   selectedDocuments: string[] = [];
 
   taskColumns!: TableColumn<Task>[]; // ⚠️ Initialize later
+  pdfUrl: string = 'https://localhost:7253/';
 
   constructor(
     private fb: FormBuilder,
     private taskService: TaskService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.searchForm = this.fb.group({ search: [''] });
@@ -48,8 +49,8 @@ export class ViewTaskComponent implements OnInit {
         key: 'uploadedDocuments',
         label: 'Files',
         align: 'right',
-         type: 'custom',
-        template: this.filesTemplate 
+        type: 'custom',
+        template: this.filesTemplate
       }
     ];
 
@@ -59,9 +60,9 @@ export class ViewTaskComponent implements OnInit {
     );
 
     this.paginator.load();
-   setTimeout(() => {
-    console.log("data",this.tasks)
-   }, (1000));
+    setTimeout(() => {
+      console.log("data", this.tasks)
+    }, (1000));
     this.searchForm.get('search')!.valueChanges.pipe(
       debounceTime(400),
       distinctUntilChanged()
@@ -70,24 +71,24 @@ export class ViewTaskComponent implements OnInit {
       this.paginator.load(search);
     });
   }
-ngAfterViewInit(): void {
-  this.taskColumns = [
-    { key: 'title', label: 'Task' },
-    { key: 'empName', label: 'Assigned To' },
-    { key: 'assignedByName', label: 'Assigned By' },
-    { key: 'assignedDate', label: 'Assigned Date', type: 'date', align: 'center' },
-    { key: 'completedDate', label: 'Completion Date', type: 'date', align: 'center' },
-    { key: 'taskStatus', label: 'Status' },
-    {
-      key: 'uploadedDocuments',
-      label: 'Files',
-      align: 'center',
-      template: this.filesTemplate 
-    }
-  ];
-}
+  ngAfterViewInit(): void {
+    this.taskColumns = [
+      { key: 'title', label: 'Task' },
+      { key: 'empName', label: 'Assigned To' },
+      { key: 'assignedByName', label: 'Assigned By' },
+      { key: 'assignedDate', label: 'Assigned Date', type: 'date', align: 'center' },
+      { key: 'completedDate', label: 'Completion Date', type: 'date', align: 'center' },
+      { key: 'taskStatus', label: 'Status' },
+      {
+        key: 'uploadedDocuments',
+        label: 'Files',
+        align: 'center',
+        template: this.filesTemplate
+      }
+    ];
+  }
 
-  // Getter
+  
   get tasks(): Task[] {
     return this.paginator.items.map(task => ({
       ...task,
@@ -96,11 +97,22 @@ ngAfterViewInit(): void {
   }
 
   // Open modal
-  openFiles(docs: string[] = []) {
-    if (!docs.length) return;
-    this.selectedDocuments = docs;
-    this.showFilesModal = true;
-  }
+openFiles(docs: string[] = []) {
+  if (!docs.length) return;
+
+  this.selectedDocuments = docs.map(doc => {
+    return `${this.pdfUrl}${doc}`;
+  });
+
+  this.showFilesModal = true;
+}
+  // openFiles(docs: any) {
+  //   // alert(this.pdfUrl+docs)
+  //   window.open(this.pdfUrl+docs[0])
+  //   // if (!docs.length) return;
+  //   // this.selectedDocuments = docs;
+  //   // this.showFilesModal = true;
+  // }
 
   closeFiles() {
     this.selectedDocuments = [];
