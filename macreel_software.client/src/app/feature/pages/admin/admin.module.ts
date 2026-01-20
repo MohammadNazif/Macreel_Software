@@ -22,6 +22,7 @@ import { ViewTaskComponent } from './view-task/view-task.component';
 import { ViewProjectComponent } from './view-project/view-project.component';
 import { CommonPagesModule } from '../../common-pages/common-pages.module';
 import { LeaveRequestsComponent } from './leave-requests/leave-requests.component';
+import { SafeUrlPipe } from "../../../core/pipes/capitalize.pipe";
 
 
 
@@ -53,8 +54,8 @@ import { LeaveRequestsComponent } from './leave-requests/leave-requests.componen
     MatSortModule,
     MatInputModule,
     ReactiveFormsModule,
-    CommonPagesModule
-   
+    CommonPagesModule,
+    SafeUrlPipe
 ],
 
 providers:[

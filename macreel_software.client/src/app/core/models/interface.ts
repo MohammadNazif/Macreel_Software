@@ -19,6 +19,7 @@ export interface Task {
   assignedDate: string;
   completionDate: string;
   taskStatus: string;
+  documents :[];
 }
 
 export interface Project {
@@ -70,6 +71,7 @@ export interface Task {
   document2: string | null;
   document1Path: string | null;
   document2Path: string | null;
+  uploadedDocuments?: string[] | null; 
 }
 export interface PaginatedResult<T> {
   data: T[];
