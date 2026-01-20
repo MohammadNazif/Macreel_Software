@@ -25,7 +25,7 @@ export class AssignedTaskComponent {
     'taskStatus',
     'action'
   ];
-  pageSize = 5;
+  pageSize = 10;
   pageNumber = 1;
   totalRecords = 0;
   searchTerm = '';

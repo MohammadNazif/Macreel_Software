@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 
 namespace Macreel_Software.Models.Master
 {
@@ -44,7 +45,15 @@ namespace Macreel_Software.Models.Master
         public string? empName { get; set; }
     }
 
- 
+    public class Page
+    {
+        public int id { get; set; }
+        [Required(ErrorMessage = "Page name is required")]
+        public string pageName { get; set; }
+        [Required(ErrorMessage = "Page URL is required")]
+        public string pageUrl { get; set; }
+    }
 
-   
+
+
 }

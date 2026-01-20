@@ -11,7 +11,6 @@ export interface LeaveRequest {
 
 import { TemplateRef } from "@angular/core";
 
-
 export interface Task {
   id: number;
   title: string;
@@ -104,4 +103,10 @@ export interface Attendance {
   day :Date;
   Month  :Date;
   Year :Date;
+}
+
+export interface Page {
+  id: number;
+  pageName: string;
+  pageUrl: string;
 }

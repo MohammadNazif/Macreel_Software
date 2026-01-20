@@ -766,7 +766,10 @@ namespace Macreel_Software.DAL.Admin
                                 fromDate = Convert.ToDateTime(sdr["fromDate"]),
                                 toDate = Convert.ToDateTime(sdr["toDate"]),
                                 applieddate = Convert.ToDateTime(sdr["appliedDate"]),
-                                status = Convert.ToInt32(sdr["adminStatus"]) == 0 ? "Pending" : Convert.ToInt32(sdr["adminStatus"]) == 1 ? "Approved" : Convert.ToInt32(sdr["adminStatus"]) == 2 ? "Unapproved" : ""
+                                status = Convert.ToInt32(sdr["adminStatus"]) == 0 ? "Pending" : Convert.ToInt32(sdr["adminStatus"]) == 1 ? "Approved" : Convert.ToInt32(sdr["adminStatus"]) == 2 ? "Unapproved" : "",
+                                fileName = sdr["uploadedDocument"] != DBNull.Value ? sdr["uploadedDocument"].ToString() : "",
+                                statuscode = Convert.ToInt32(sdr["adminStatus"]),
+                                reason = sdr["adminDescription"] != DBNull.Value ? sdr["adminDescription"].ToString():""
                             });
                         }
                     }
@@ -806,7 +809,7 @@ namespace Macreel_Software.DAL.Admin
             }
         }
 
-        public async Task<bool> UpdateLeaveRequest(int id,int leaveCount,int status)
+        public async Task<bool> UpdateLeaveRequest(int id,int status,string reason = null)
         {
             try
             {
@@ -815,8 +818,8 @@ namespace Macreel_Software.DAL.Admin
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@id", id);
-                    cmd.Parameters.AddWithValue("@status", status);
-                    cmd.Parameters.AddWithValue("@leaveCount", leaveCount);
+                    cmd.Parameters.AddWithValue("@adminStatus", status);
+                    cmd.Parameters.AddWithValue("@description", reason);
                     cmd.Parameters.AddWithValue("@action", "updateLeaveRequest");
                     int res = await cmd.ExecuteNonQueryAsync();
                     return res > 0;

@@ -488,11 +488,11 @@ namespace Macreel_Software.Server.Controllers
             }
         }
         [HttpPut("updateLeaveStatus")]
-        public async Task<IActionResult> UpdateLeaveStatus(int id, int leaveCount, int status)
+        public async Task<IActionResult> UpdateLeaveStatus(int id, int status,string reason = null)
         {
             try
             {
-                bool result = await _services.UpdateLeaveRequest(id, leaveCount, status);
+                bool result = await _services.UpdateLeaveRequest(id, status,reason);
 
                 if (result)
                 {
@@ -500,7 +500,7 @@ namespace Macreel_Software.Server.Controllers
                     {
                         status = true,
                         statusCode = 200,
-                        message = "Updated Sucessfully"
+                        message =status==1? "Approved Sucessfully":"Rejected Successfully"
                     });
                 }
                 return Ok(new
