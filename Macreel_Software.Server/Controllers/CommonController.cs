@@ -357,14 +357,14 @@ namespace Macreel_Software.Server.Controllers
             try
             {
                 string accessId = Guid.NewGuid().ToString();
-                data.accessId = accessId;
+               
 
                 var mailRequest = new MailRequest
                 {
                     ToEmail = data.email,
                     Subject = "Register Yourself - Macreel Infosoft Pvt. Ltd.",
                     BodyType = MailBodyType.RegistrationLink,
-                    Value = data.accessId
+                    Value = accessId
                 };
                 var mailResponse = await _mailservice.SendMailAsync(mailRequest);
 
@@ -377,7 +377,7 @@ namespace Macreel_Software.Server.Controllers
                     });
                 }
 
-                bool isSaved = await _service.sendMailForReg(data);
+                bool isSaved = await _service.sendMailForReg(data , accessId);
 
                 if (!isSaved)
                 {
