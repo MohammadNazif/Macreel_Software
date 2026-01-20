@@ -113,6 +113,6 @@ export interface AdminDashboard{
   absentEmployee:number;
   totalTasks:number;
   completedTask:number;
-  assignedLeaves:number;
+  leaveRequest:number;
   upcomingLeaves:number;
 }
