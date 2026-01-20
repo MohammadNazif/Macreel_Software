@@ -20,4 +20,16 @@ namespace Macreel_Software.Contracts.DTOs
         public string? taskStatus { get; set; }
         public string assignedByName { get; set; } = string.Empty;
     }
+
+   public class AdminDashboardCountDto
+    {
+        public  int? TotalProjects { get; set; }
+        public  int? OngoingProjects { get; set; }
+        public  int? TotalEmployees { get; set; }
+        public  int? AbsentEmployee { get; set; }
+        public  int? TotalTasks { get; set; }
+        public  int? CompletedTask { get; set; }
+        public  int? AssignedLeaves { get; set; }
+        public  int? UpcomingLeaves { get; set; }
+    }
 }

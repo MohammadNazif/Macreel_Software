@@ -60,7 +60,21 @@ namespace Macreel_Software.Server.Controllers
         {
             try
             {
+                //string uploadRoot = Path.Combine(_env.WebRootPath, "uploads");
+                //if (!Directory.Exists(uploadRoot))
+                //    Directory.CreateDirectory(uploadRoot);
+
+                //string[] imgExt = { ".jpg", ".jpeg", ".png" };
+                //string[] docExt = { ".pdf", ".jpg", ".jpeg", ".png" };
+
+                //async Task<string> UploadFile(IFormFile file, string[] allowedExt)
+                //{
+                //    if (file == null) return "";
+                //    return "/uploads/" + await _fileUploadService.UploadFileAsync(file, uploadRoot, allowedExt);
+                //}
+                // 👇 STORE THIS IN DATABASE
                 string uploadRoot = Path.Combine(_env.WebRootPath, "uploads");
+
                 if (!Directory.Exists(uploadRoot))
                     Directory.CreateDirectory(uploadRoot);
 
@@ -70,7 +84,14 @@ namespace Macreel_Software.Server.Controllers
                 async Task<string> UploadFile(IFormFile file, string[] allowedExt)
                 {
                     if (file == null) return "";
-                    return "/uploads/" + await _fileUploadService.UploadFileAsync(file, uploadRoot, allowedExt);
+
+                    var fileName = await _fileUploadService.UploadFileAsync(
+                        file,
+                        uploadRoot,
+                        allowedExt
+                    );
+
+                    return $"/wwwroot/uploads/{fileName}";
                 }
 
                 // ✅ Upload files
@@ -639,7 +660,6 @@ namespace Macreel_Software.Server.Controllers
                 }
             }
 
-            // 🔹 File Upload
             var uploadService = new FileUploadService();
             string uploadRoot = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
 
@@ -810,21 +830,26 @@ namespace Macreel_Software.Server.Controllers
 
                 if (data.document1 != null)
                 {
-                    data.document1Path = await fileService.UploadFileAsync(
+                    var fileName = await fileService.UploadFileAsync(
                         data.document1,
                         folderPath,
-                        allowedExtensions: null 
+                        allowedExtensions: null
                     );
+
+                    data.document1Path = $"/wwwroot/uploads/{fileName}";
                 }
 
                 if (data.document2 != null)
                 {
-                    data.document2Path = await fileService.UploadFileAsync(
+                    var fileName = await fileService.UploadFileAsync(
                         data.document2,
                         folderPath,
                         allowedExtensions: null
                     );
+
+                    data.document2Path = $"/wwwroot/uploads/{fileName}";
                 }
+
                 data.assignedBy = _userId;
                 bool res = await _services.insertTask(data);
 
@@ -937,5 +962,31 @@ namespace Macreel_Software.Server.Controllers
         }
 
         #endregion
+
+        #region Admin dashboard
+
+        [HttpGet("AdminDashboardCount")]
+        public async Task<IActionResult> AdminDashboardCount()
+        {
+            try
+            {
+                ApiResponse<List<AdminDashboardCountDto>> result =
+                    await _services.adminDashboardCount();
+
+
+                return StatusCode(result.StatusCode, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<List<AdminDashboardCountDto>>.FailureResponse(
+                    "An error occurred while fetching admin dashboard count",
+                    500,
+                    "SERVER_ERROR"
+                ));
+            }
+        }
+        #endregion
+
+
     }
 }
