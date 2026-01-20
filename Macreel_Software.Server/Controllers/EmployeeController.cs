@@ -6,6 +6,7 @@ using Macreel_Software.Models.Employee;
 using Macreel_Software.Models.Master;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Macreel_Software.Services.FileUpload.Services;
 namespace Macreel_Software.Server.Controllers
 {
     [Authorize(Roles ="employee")]
@@ -16,9 +17,11 @@ namespace Macreel_Software.Server.Controllers
         private readonly IEmployeeService _service;
         private readonly int _userId;
         private readonly IAdminServices _adminService;
+        private readonly FileUploadService _uploadFileService;
         public EmployeeController(IEmployeeService service, IHttpContextAccessor http,IAdminServices adminservices)
         {
             _service = service;
+            _uploadFileService = new FileUploadService();
             _adminService = adminservices;
             var user = http.HttpContext?.User;
             if (user != null && user.Identity?.IsAuthenticated == true)
@@ -145,12 +148,17 @@ namespace Macreel_Software.Server.Controllers
 
             try
             {
+                if(data.uploadFile != null)
+                {
+                    data.fileName = _uploadFileService.ValidateAndGeneratePath(data.uploadFile, "LeaveDocuments", new[] {".pdf",".jpg",".jpeg",".png"});
+                }
                 data.empId = _userId;
                 bool res = await _service.insertApplyLeaveByEmpId(data);
                 if (res)
                 {
+                    if (data.uploadFile != null) await _uploadFileService.UploadAsync(data.uploadFile, data.fileName!);
                     return Ok(ApiResponse<object>.SuccessResponse(
-                     null,
+                     null!,
                        data.id > 0 ? "Applied leave updated successfully" : "Leave applied successfully"
                     ));
                 }
