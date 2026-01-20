@@ -1333,6 +1333,7 @@ namespace Macreel_Software.DAL.Admin
                                 GMB = sdr["GMB"] != DBNull.Value ? sdr["GMB"].ToString():null,
                                 sopDocumentPath = sdr["sopDocument"] != DBNull.Value ? sdr["sopDocument"].ToString():null,
                                 technicalDocumentPath = sdr["technicalDocument"] != DBNull.Value ? sdr["technicalDocument"].ToString():null,
+                                delayedDays = sdr["DelayedDays"] != DBNull.Value ? Convert.ToInt32(sdr["DelayedDays"]) : null,
                             });
                         }
                     }
