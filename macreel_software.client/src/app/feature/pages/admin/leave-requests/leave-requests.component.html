@@ -26,7 +26,7 @@
 
                 <!-- PAGINATOR -->
                 <mat-paginator [length]="totalRecords" [pageSize]="pageSize" [pageIndex]="pageNumber - 1"
-                    [pageSizeOptions]="[5,10,20,30]" showFirstLastButtons (page)="onPageChange($event)">
+                    [pageSizeOptions]="[10,25,50,100]" showFirstLastButtons (page)="onPageChange($event)">
                 </mat-paginator>
 
             </div>
@@ -44,7 +44,8 @@
 
                 <!-- SR NO -->
                 <ng-container matColumnDef="srNo">
-                    <th mat-header-cell *matHeaderCellDef class="w-[70px] text-center !bg-[#dd3d4f] border-r text-white">
+                    <th mat-header-cell *matHeaderCellDef
+                        class="w-[70px] text-center !bg-[#dd3d4f] border-r text-white">
                         Sr No.
                     </th>
 
@@ -55,21 +56,24 @@
 
                 <!-- Employee Name -->
                 <ng-container matColumnDef="name">
-                    <th mat-header-cell *matHeaderCellDef class="w-[70px] text-center !bg-[#dd3d4f] border-r text-white">Name
+                    <th mat-header-cell *matHeaderCellDef
+                        class="w-[70px] text-center !bg-[#dd3d4f] border-r text-white">Name
                     </th>
                     <td mat-cell *matCellDef="let row">{{ row.empName }}</td>
                 </ng-container>
 
                 <!-- Leave Type -->
                 <ng-container matColumnDef="leaveName">
-                    <th mat-header-cell *matHeaderCellDef class="w-[80px] text-center !bg-[#dd3d4f] border-r text-white">Leave
+                    <th mat-header-cell *matHeaderCellDef
+                        class="w-[80px] text-center !bg-[#dd3d4f] border-r whitespace-nowrap text-white">Leave
                         Type</th>
                     <td mat-cell *matCellDef="let row">{{ row.leaveName }}</td>
                 </ng-container>
 
                 <!-- From Date -->
                 <ng-container matColumnDef="fromDate">
-                    <th mat-header-cell *matHeaderCellDef class="w-[100px] text-center !bg-[#dd3d4f] border-r text-white">From
+                    <th mat-header-cell *matHeaderCellDef
+                        class="w-[100px] text-center !bg-[#dd3d4f] border-r text-white">From
                         Date</th>
                     <td mat-cell *matCellDef="let row">
                         {{ row.fromDate | date:'dd-MM-yyyy' }}
@@ -78,7 +82,8 @@
 
                 <!-- To Date -->
                 <ng-container matColumnDef="toDate">
-                    <th mat-header-cell *matHeaderCellDef class="w-[100px] text-center !bg-[#dd3d4f] border-r text-white">To Date
+                    <th mat-header-cell *matHeaderCellDef
+                        class="w-[100px] text-center !bg-[#dd3d4f] border-r text-white">To Date
                     </th>
                     <td mat-cell *matCellDef="let row">
                         {{ row.toDate | date:'dd-MM-yyyy' }}
@@ -87,8 +92,8 @@
 
                 <!-- Applied Date -->
                 <ng-container matColumnDef="appliedDate">
-                    <th mat-header-cell *matHeaderCellDef class="w-[70px] text-center !bg-[#dd3d4f] border-r text-white">Applied
-                        Date</th>
+                    <th mat-header-cell *matHeaderCellDef
+                        class="w-[70px] text-center !bg-[#dd3d4f] border-r whitespace-nowrap text-white">Applied Date</th>
                     <td mat-cell *matCellDef="let row">
                         {{ row.applieddate | date:'dd-MM-yyyy' }}
                     </td>
@@ -96,14 +101,16 @@
 
                 <!-- Description -->
                 <ng-container matColumnDef="description">
-                    <th mat-header-cell *matHeaderCellDef class="w-[70px] text-center !bg-[#dd3d4f] border-r text-white">
+                    <th mat-header-cell *matHeaderCellDef
+                        class="w-[70px] text-center !bg-[#dd3d4f] border-r text-white">
                         Description</th>
                     <td mat-cell *matCellDef="let row">{{ row.description }}</td>
                 </ng-container>
 
                 <!-- Status -->
                 <ng-container matColumnDef="status">
-                    <th mat-header-cell *matHeaderCellDef class="w-[70px] text-center !bg-[#dd3d4f] border-r text-white">Status
+                    <th mat-header-cell *matHeaderCellDef
+                        class="w-[70px] text-center !bg-[#dd3d4f] border-r text-white">Status
                     </th>
                     <td mat-cell *matCellDef="let row">
                         <span [ngClass]="{
@@ -118,10 +125,12 @@
 
                 <!-- Action -->
                 <ng-container matColumnDef="action">
-                    <th mat-header-cell *matHeaderCellDef class="w-[70px] text-center !bg-[#dd3d4f] border-r text-white">
+                    <th mat-header-cell *matHeaderCellDef
+                        class="w-[70px] text-center !bg-[#dd3d4f] border-r text-white">
                         Action</th>
                     <td mat-cell *matCellDef="let row" class="px-1 py-1 text-center">
-                        <button (click)="openModal(row.id)" class="text-green-700 p-2 rounded-full hover:bg-green-100 mr-1 text-[12px]">
+                        <button (click)="openModal(row.id)"
+                            class="text-green-700 p-2 rounded-full hover:bg-green-100 mr-1 text-[12px]">
                             <i class="fa fa-pencil"></i>
                         </button>
 
@@ -143,79 +152,57 @@
 </div>
 
 <!-- MODAL BACKDROP -->
-<div
-  *ngIf="isModalOpen"
-  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
->
-  <!-- MODAL CARD -->
-  <div class="bg-white w-full max-w-md rounded-lg shadow-lg relative">
+<div *ngIf="isModalOpen" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <!-- MODAL CARD -->
+    <div class="bg-white w-full max-w-md rounded-lg shadow-lg relative">
 
-    <!-- CLOSE BUTTON -->
-    <button
-      type="button"
-      (click)="closeModal()"
-      class="absolute top-3 right-3 text-gray-500 hover:text-red-600 text-lg"
-    >
-      <i class="fa-solid fa-xmark"></i>
-    </button>
-
-    <!-- MODAL HEADER -->
-    <div class="border-b px-5 py-3">
-      <h2 class="text-lg font-semibold text-gray-700">
-        Update Leave Status
-      </h2>
-    </div>
-
-    <!-- MODAL BODY -->
-    <form
-      [formGroup]="statusForm"
-      (ngSubmit)="onSubmitStatus()"
-      class="px-5 py-4 space-y-4"
-    >
-
-      <!-- STATUS DROPDOWN -->
-      <div>
-        <label class="block text-sm font-medium text-gray-600 mb-1">
-          Status
-        </label>
-        <select
-          formControlName="status"
-          class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md
-                 focus:outline-none focus:ring-2 focus:ring-[#C5192F]"
-        >
-          <option selected value="">Select Status</option>
-          <option value="1">Approved</option>
-          <option value="2">Reject</option>
-        </select>
-      </div>
-
-      <!-- NUMBER INPUT -->
-      <div>
-        <label class="block text-sm font-medium text-gray-600 mb-1">
-          Number of Days
-        </label>
-        <input
-          type="number"
-          formControlName="leaveCount"
-          min="1"
-          class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md
-                 focus:outline-none focus:ring-2 focus:ring-[#C5192F]"
-        />
-      </div>
-
-      <!-- ACTION BUTTONS -->
-      <div class="flex justify-center gap-2 pt-3 border-t">
-
-        <button
-          type="submit"
-          [disabled]="statusForm.invalid"
-          class="px-4 py-2 text-sm rounded-md text-white
-                 bg-[#C5192F] hover:bg-[#b3162a] disabled:opacity-50"
-        >
-          Submit
+        <!-- CLOSE BUTTON -->
+        <button type="button" (click)="closeModal()"
+            class="absolute top-3 right-3 text-gray-500 hover:text-red-600 text-lg">
+            <i class="fa-solid fa-xmark"></i>
         </button>
-      </div>
 
-    </form>
-  </div>
+        <!-- MODAL HEADER -->
+        <div class="border-b px-5 py-3">
+            <h2 class="text-lg font-semibold text-gray-700">
+                Update Leave Status
+            </h2>
+        </div>
+
+        <!-- MODAL BODY -->
+        <form [formGroup]="statusForm" (ngSubmit)="onSubmitStatus()" class="px-5 py-4 space-y-4">
+
+            <!-- STATUS DROPDOWN -->
+            <div>
+                <label class="block text-sm font-medium text-gray-600 mb-1">
+                    Status
+                </label>
+                <select formControlName="status" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md
+                 focus:outline-none focus:ring-2 focus:ring-[#C5192F]">
+                    <option selected value="">Select Status</option>
+                    <option value="1">Approved</option>
+                    <option value="2">Reject</option>
+                </select>
+            </div>
+
+            <!-- NUMBER INPUT -->
+            <div>
+                <label class="block text-sm font-medium text-gray-600 mb-1">
+                    Number of Days
+                </label>
+                <input type="number" formControlName="leaveCount" min="1" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md
+                 focus:outline-none focus:ring-2 focus:ring-[#C5192F]" />
+            </div>
+
+            <!-- ACTION BUTTONS -->
+            <div class="flex justify-center gap-2 pt-3 border-t">
+
+                <button type="submit" [disabled]="statusForm.invalid" class="px-4 py-2 text-sm rounded-md text-white
+                 bg-[#C5192F] hover:bg-[#b3162a] disabled:opacity-50">
+                    Submit
+                </button>
+            </div>
+
+        </form>
+    </div>
 </div>

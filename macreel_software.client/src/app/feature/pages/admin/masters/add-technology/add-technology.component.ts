@@ -23,7 +23,7 @@ export class AddTechnologyComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
   }
 
-  pageSize: number = 5;
+  pageSize: number = 20;
   pageNumber: number = 1;
   totalRecords: number = 0;
   searchText: string = '';

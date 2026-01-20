@@ -1,0 +1,16 @@
+/* Hide "Items per page" label */
+::ng-deep .mat-mdc-paginator-page-size-label {
+  display: none !important;
+}
+
+/* Hide "x – y of z" range text */
+::ng-deep .mat-mdc-paginator-range-label {
+  display: none !important;
+}
+
+/* Reduce dropdown (5,10,20) size */
+::ng-deep .mat-mdc-paginator-page-size-select {
+  width: 65px !important;
+  min-width: 55px !important;
+}
+
