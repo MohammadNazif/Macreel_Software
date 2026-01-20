@@ -280,18 +280,22 @@ export class AddEmployeeComponent implements OnInit {
           companyContactNo: emp.companyContactNo,
         });
 
-        if (emp.skill! && emp.skill.length!) {
-          // Wait for technologies to load first
-          this.loadTechnologies().then(() => {
-            const skillIds = emp.skill.map((s: any) => s.id);
+     if (emp.skill && emp.skill.length) {
 
-            this.selectedTechnologies = this.technologies.filter((t) =>
-              skillIds.includes(t.id),
-            );
+  this.loadTechnologies().then(() => {
 
-            this.employeeForm.get('skillIds')?.setValue(skillIds);
-          });
-        }
+    const skillIds = emp.skill.map((s: any) => s.id);
+
+    // 🔥 FIX: Match by ID + Name (safe binding)
+    this.selectedTechnologies = this.technologies.filter(t =>
+      skillIds.includes(t.id) ||
+      emp.skill.some((s: any) => s.skillName === t.technologyName)
+    );
+
+    this.employeeForm.get('skillIds')?.setValue(skillIds);
+  });
+}
+
 
         if (emp.stateId) {
           this.employeeService
