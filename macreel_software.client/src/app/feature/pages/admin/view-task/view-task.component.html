@@ -16,6 +16,8 @@
   (edit)="onEdit($event)"
   (delete)="onDelete($event)">
 </app-generic-table>
+
+</div>
 <ng-template #filesTemplate let-row>
   <button
     *ngIf="row.uploadedDocuments?.length"

@@ -54,39 +54,44 @@ namespace Macreel_Software.Server.Controllers
         }
 
 
-        #region employee api
+        #region Manage Employee        
         [HttpPost("insertEmployeeRegistration")]
         public async Task<IActionResult> InsertEmployee([FromForm] employeeRegistration model)
         {
             try
             {
-                string uploadRoot = Path.Combine(_env.WebRootPath, "uploads");
-                if (!Directory.Exists(uploadRoot))
-                    Directory.CreateDirectory(uploadRoot);
-
                 string[] imgExt = { ".jpg", ".jpeg", ".png" };
                 string[] docExt = { ".pdf", ".jpg", ".jpeg", ".png" };
 
-                async Task<string> UploadFile(IFormFile file, string[] allowedExt)
+                // ---------- FILE CONFIG (INLINE) ----------
+                var files = new[]
                 {
-                    if (file == null) return "";
-                    return "/uploads/" + await _fileUploadService.UploadFileAsync(file, uploadRoot, allowedExt);
+            new { File = model.ProfilePic, Folder = "EmployeeFiles", Ext = imgExt, Set = (Action<string>)(p => model.ProfilePicPath = p) },
+            new { File = model.AadharImg, Folder = "EmployeeFiles", Ext = imgExt, Set = (Action<string>)(p => model.AadharImgPath = p) },
+            new { File = model.PanImg, Folder = "EmployeeFiles", Ext = imgExt, Set = (Action<string>)(p => model.PanImgPath = p) },
+            new { File = model.ExperienceCertificate, Folder = "EmployeeFiles", Ext = docExt, Set = (Action<string>)(p => model.ExperienceCertificatePath = p) },
+            new { File = model.TenthCertificate, Folder = "EmployeeFiles", Ext = docExt, Set = (Action<string>)(p => model.TenthCertificatePath = p) },
+            new { File = model.TwelthCertificate, Folder = "EmployeeFiles", Ext = docExt, Set = (Action<string>)(p => model.TwelthCertificatePath = p) },
+            new { File = model.GraduationCertificate, Folder = "EmployeeFiles", Ext = docExt, Set = (Action<string>)(p => model.GraduationCertificatePath = p) },
+            new { File = model.MastersCertificate, Folder = "EmployeeFiles", Ext = docExt, Set = (Action<string>)(p => model.MastersCertificatePath = p) },
+        };
+
+                // ---------- STEP 1: VALIDATE ONLY ----------
+                foreach (var f in files)
+                {
+                    if (f.File == null) continue;
+
+                    f.Set(_fileUploadService.ValidateAndGeneratePath(
+                        f.File,
+                        f.Folder,
+                        f.Ext
+                    ));
                 }
 
-                // ✅ Upload files
-                model.ProfilePicPath = await UploadFile(model.ProfilePic, imgExt);
-                model.AadharImgPath = await UploadFile(model.AadharImg, imgExt);
-                model.PanImgPath = await UploadFile(model.PanImg, imgExt);
-                model.ExperienceCertificatePath = await UploadFile(model.ExperienceCertificate, docExt);
-                model.TenthCertificatePath = await UploadFile(model.TenthCertificate, docExt);
-                model.TwelthCertificatePath = await UploadFile(model.TwelthCertificate, docExt);
-                model.GraduationCertificatePath = await UploadFile(model.GraduationCertificate, docExt);
-                model.MastersCertificatePath = await UploadFile(model.MastersCertificate, docExt);
+                // ---------- STEP 2: DB INSERT ----------
+                string plainPassword = model.Password!;
+                model.Password = _pass.EncryptPassword(model.Password!);
 
-                string plainPassword = model.Password;
-                model.Password = _pass.EncryptPassword(model.Password);
-
-                // ✅ Call Service
                 string dbMessage = await _services.InsertEmployeeRegistrationData(model);
 
                 if (dbMessage.Contains("Email already exists"))
@@ -95,40 +100,28 @@ namespace Macreel_Software.Server.Controllers
                 if (!dbMessage.ToLower().Contains("success"))
                     return BadRequest(new { status = false, statusCode = 400, message = dbMessage });
 
-                // ✅ Send email
-                bool emailStatus = false;
-                string emailMessage = "Email not sent";
-
-                try
+                // ---------- STEP 3: ACTUAL UPLOAD ----------
+                foreach (var f in files)
                 {
-                    var mailRequest = new MailRequest
-                    {
-                        ToEmail = model.EmailId,
-                        Subject = "Your Account Credentials - Macreel Infosoft Pvt. Ltd.",
-                        BodyType = MailBodyType.UserCredential,
-                        UserName = model.EmailId,
-                        Password = plainPassword
-                    };
-
-                    var mailResponse = await _mailservice.SendMailAsync(mailRequest);
-                    emailStatus = mailResponse.Status;
-                    emailMessage = mailResponse.Message;
+                    if (f.File != null)
+                        await _fileUploadService.UploadAsync(f.File,
+                            f.Folder == "profile"
+                                ? model.ProfilePicPath!
+                                : f.File == model.AadharImg ? model.AadharImgPath!
+                                : f.File == model.PanImg ? model.PanImgPath!
+                                : f.File == model.ExperienceCertificate ? model.ExperienceCertificatePath!
+                                : f.File == model.TenthCertificate ? model.TenthCertificatePath!
+                                : f.File == model.TwelthCertificate ? model.TwelthCertificatePath!
+                                : f.File == model.GraduationCertificate ? model.GraduationCertificatePath!
+                                : model.MastersCertificatePath!
+                        );
                 }
-                catch (Exception mailEx)
-                {
-                    emailMessage = "Email sending failed: " + mailEx.Message;
-                }
-
-                string combinedMessage = dbMessage + (emailStatus ? " | Credentials sent to email successfully."
-                                                                   : " | " + emailMessage);
 
                 return Ok(new
                 {
                     status = true,
                     statusCode = 201,
-                    message = combinedMessage,
-                    emailStatus,
-                    emailMessage
+                    message = dbMessage
                 });
             }
             catch (Exception ex)
@@ -137,20 +130,13 @@ namespace Macreel_Software.Server.Controllers
                 {
                     status = false,
                     statusCode = 500,
-                    message = "Registration failed: " + ex.Message,
-                    emailStatus = false,
-                    emailMessage = "Email not sent"
+                    message = ex.Message
                 });
             }
         }
 
-
-
         [HttpGet("GetAllEmployees")]
-        public async Task<IActionResult> GetAllEmployees(
-       string? searchTerm,
-       int? pageNumber,
-       int? pageSize)
+        public async Task<IActionResult> GetAllEmployees(string? searchTerm,int? pageNumber,int? pageSize)
         {
             try
             {
@@ -168,8 +154,6 @@ namespace Macreel_Software.Server.Controllers
                         "SERVER_ERROR"));
             }
         }
-
-
 
         [HttpDelete("deleteEmployeeById")]
         public async Task<IActionResult> deleteEmployeeById(int id)
@@ -215,39 +199,40 @@ namespace Macreel_Software.Server.Controllers
             }
         }
 
-
-
         [HttpPost("updateEmployeeRegistration")]
         public async Task<IActionResult> UpdateEmployee([FromForm] employeeRegistration model)
         {
             try
             {
-                string uploadRoot = Path.Combine(_env.WebRootPath, "uploads");
-                if (!Directory.Exists(uploadRoot))
-                    Directory.CreateDirectory(uploadRoot);
-
                 string[] imgExt = { ".jpg", ".jpeg", ".png" };
                 string[] docExt = { ".pdf", ".jpg", ".jpeg", ".png" };
 
-                async Task<string?> UploadFile(IFormFile file, string[] allowedExt)
+                // ---------- FILE CONFIG (INLINE, NO EXTRA METHOD) ----------
+                var files = new[]
                 {
-                    if (file == null || file.Length == 0)
-                        return null;
+            new { File = model.ProfilePic, Folder = "EmployeeFiles", Ext = imgExt, Set = (Action<string>)(p => model.ProfilePicPath = p), Get = (Func<string?>)(() => model.ProfilePicPath) },
+            new { File = model.AadharImg, Folder = "EmployeeFiles", Ext = imgExt, Set = (Action<string>)(p => model.AadharImgPath = p), Get = (Func<string?>)(() => model.AadharImgPath) },
+            new { File = model.PanImg, Folder = "EmployeeFiles", Ext = imgExt, Set = (Action<string>)(p => model.PanImgPath = p), Get = (Func<string?>)(() => model.PanImgPath) },
+            new { File = model.ExperienceCertificate, Folder = "EmployeeFiles", Ext = docExt, Set = (Action<string>)(p => model.ExperienceCertificatePath = p), Get = (Func<string?>)(() => model.ExperienceCertificatePath) },
+            new { File = model.TenthCertificate, Folder = "EmployeeFiles", Ext = docExt, Set = (Action<string>)(p => model.TenthCertificatePath = p), Get = (Func<string?>)(() => model.TenthCertificatePath) },
+            new { File = model.TwelthCertificate, Folder = "EmployeeFiles", Ext = docExt, Set = (Action<string>)(p => model.TwelthCertificatePath = p), Get = (Func<string?>)(() => model.TwelthCertificatePath) },
+            new { File = model.GraduationCertificate, Folder = "EmployeeFiles", Ext = docExt, Set = (Action<string>)(p => model.GraduationCertificatePath = p), Get = (Func<string?>)(() => model.GraduationCertificatePath) },
+            new { File = model.MastersCertificate, Folder = "EmployeeFiles", Ext = docExt, Set = (Action<string>)(p => model.MastersCertificatePath = p), Get = (Func<string?>)(() => model.MastersCertificatePath) },
+        };
 
-                    return "/uploads/" + await _fileUploadService
-                        .UploadFileAsync(file, uploadRoot, allowedExt);
+                // ---------- STEP 1: VALIDATE + GENERATE PATH (ONLY IF FILE PROVIDED) ----------
+                foreach (var f in files)
+                {
+                    if (f.File == null) continue;
+
+                    f.Set(_fileUploadService.ValidateAndGeneratePath(
+                        f.File,
+                        f.Folder,
+                        f.Ext
+                    ));
                 }
 
-                model.ProfilePicPath = await UploadFile(model.ProfilePic, imgExt);
-                model.AadharImgPath = await UploadFile(model.AadharImg, imgExt);
-                model.PanImgPath = await UploadFile(model.PanImg, imgExt);
-
-                model.ExperienceCertificatePath = await UploadFile(model.ExperienceCertificate, docExt);
-                model.TenthCertificatePath = await UploadFile(model.TenthCertificate, docExt);
-                model.TwelthCertificatePath = await UploadFile(model.TwelthCertificate, docExt);
-                model.GraduationCertificatePath = await UploadFile(model.GraduationCertificate, docExt);
-                model.MastersCertificatePath = await UploadFile(model.MastersCertificate, docExt);
-
+                // ---------- STEP 2: DB UPDATE ----------
                 bool isUpdated = await _services.UpdateEmployeeRegistrationData(model);
 
                 if (!isUpdated)
@@ -258,6 +243,13 @@ namespace Macreel_Software.Server.Controllers
                         statusCode = 400,
                         message = "Employee update failed"
                     });
+                }
+
+                // ---------- STEP 3: ACTUAL FILE UPLOAD ----------
+                foreach (var f in files)
+                {
+                    if (f.File != null)
+                        await _fileUploadService.UploadAsync(f.File, f.Get()!);
                 }
 
                 return Ok(new
@@ -277,7 +269,6 @@ namespace Macreel_Software.Server.Controllers
                 });
             }
         }
-
         #endregion
 
         #region leave api
@@ -497,11 +488,11 @@ namespace Macreel_Software.Server.Controllers
             }
         }
         [HttpPut("updateLeaveStatus")]
-        public async Task<IActionResult> UpdateLeaveStatus(int id,int leaveCount,int status)
+        public async Task<IActionResult> UpdateLeaveStatus(int id, int leaveCount, int status)
         {
             try
             {
-                bool result = await _services.UpdateLeaveRequest(id,leaveCount,status);
+                bool result = await _services.UpdateLeaveRequest(id, leaveCount, status);
 
                 if (result)
                 {
@@ -608,7 +599,7 @@ namespace Macreel_Software.Server.Controllers
             if (string.IsNullOrWhiteSpace(data.projectTitle))
                 return BadRequest("Project title is required.");
 
-            if (data.sopDocument == null)
+            if (data.sopDocument == null && data.id<0)
                 return BadRequest("SOP document is required.");
 
             if (data.startDate == null)
@@ -639,26 +630,21 @@ namespace Macreel_Software.Server.Controllers
                 }
             }
 
-            // 🔹 File Upload
-            var uploadService = new FileUploadService();
-            string uploadRoot = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
-
-            Directory.CreateDirectory(uploadRoot);
-
+            // File Uploading
             if (data.sopDocument != null)
             {
-                data.sopDocumentPath = await uploadService.UploadFileAsync(
+                data.sopDocumentPath = _fileUploadService.ValidateAndGeneratePath(
                     data.sopDocument,
-                    uploadRoot,
+                    "ProjectDocuments",
                     new[] { ".pdf", ".doc", ".docx" }
                 );
             }
 
             if (data.technicalDocument != null)
             {
-                data.technicalDocumentPath = await uploadService.UploadFileAsync(
+                data.technicalDocumentPath = _fileUploadService.ValidateAndGeneratePath(
                     data.technicalDocument,
-                    uploadRoot,
+                    "ProjectDocumenst",
                     new[] { ".pdf", ".doc", ".docx" }
                 );
             }
@@ -666,11 +652,17 @@ namespace Macreel_Software.Server.Controllers
             bool result = await _services.AddProject(data);
 
             if (!result)
-                return Ok(new
-                {
-                    status = false,
-                    message = "Project no saved"
-                });
+            return Ok(new
+            {
+                status = false,
+                message = "Project not saved"
+            });
+
+            if (!result)
+            {
+                if (data.technicalDocument != null) await _fileUploadService.UploadAsync(data.technicalDocument,data.technicalDocumentPath!);
+                if (data.sopDocument != null) await _fileUploadService.UploadAsync(data.sopDocument,data.sopDocumentPath!);
+            }
 
             return Ok(new
             {
@@ -801,54 +793,62 @@ namespace Macreel_Software.Server.Controllers
 
             try
             {
-                string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+                string[] docExt = { ".pdf", ".jpg", ".jpeg", ".png" };
 
-                if (!Directory.Exists(folderPath))
-                    Directory.CreateDirectory(folderPath);
-
-                var fileService = new FileUploadService();
-
-                if (data.document1 != null)
+                // ---------- FILE CONFIG (INLINE) ----------
+                var files = new[]
                 {
-                    data.document1Path = await fileService.UploadFileAsync(
-                        data.document1,
-                        folderPath,
-                        allowedExtensions: null 
-                    );
+            new { File = data.document1, Folder = "TaskDocuments", Ext = docExt, Set = (Action<string>)(p => data.document1Path = p), Get = (Func<string?>)(() => data.document1Path) },
+            new { File = data.document2, Folder = "TaskDocuments", Ext = docExt, Set = (Action<string>)(p => data.document2Path = p), Get = (Func<string?>)(() => data.document2Path) },
+        };
+
+                // ---------- STEP 1: VALIDATE + GENERATE PATH ----------
+                foreach (var f in files)
+                {
+                    if (f.File == null) continue;
+
+                    f.Set(_fileUploadService.ValidateAndGeneratePath(
+                        f.File,
+                        f.Folder,
+                        f.Ext
+                    ));
                 }
 
-                if (data.document2 != null)
-                {
-                    data.document2Path = await fileService.UploadFileAsync(
-                        data.document2,
-                        folderPath,
-                        allowedExtensions: null
-                    );
-                }
+                // ---------- STEP 2: DB INSERT / UPDATE ----------
                 data.assignedBy = _userId;
+
                 bool res = await _services.insertTask(data);
 
-                if (res)
-                {
-                    return Ok(ApiResponse<object>.SuccessResponse(
-                         null,
-                       data.id>0?"Task update & assign successfully":  "Task Create & Assign inserted successfully"
-                     ));
-                }
-                else
+                if (!res)
                 {
                     return BadRequest(ApiResponse<object>.FailureResponse(
-                      data.id>0?"Some error occured while updating Task and assign":  "Some error occurred while saving Task Create & Assign response",
+                        data.id > 0
+                            ? "Some error occurred while updating Task and assign"
+                            : "Some error occurred while saving Task Create & Assign response",
                         400
                     ));
                 }
+
+                // ---------- STEP 3: ACTUAL FILE UPLOAD ----------
+                foreach (var f in files)
+                {
+                    if (f.File != null)
+                        await _fileUploadService.UploadAsync(f.File, f.Get()!);
+                }
+
+                return Ok(ApiResponse<object>.SuccessResponse(
+                    null,
+                    data.id > 0
+                        ? "Task update & assign successfully"
+                        : "Task Create & Assign inserted successfully"
+                ));
             }
             catch (Exception ex)
             {
                 return StatusCode(500, ApiResponse<object>.FailureResponse(
-                   $"Internal server error: {ex.Message}",
-                   500
-               ));
+                    $"Internal server error: {ex.Message}",
+                    500
+                ));
             }
         }
 
@@ -937,5 +937,31 @@ namespace Macreel_Software.Server.Controllers
         }
 
         #endregion
+
+        #region Admin dashboard
+
+        [HttpGet("AdminDashboardCount")]
+        public async Task<IActionResult> AdminDashboardCount()
+        {
+            try
+            {
+                ApiResponse<List<AdminDashboardCountDto>> result =
+                    await _services.adminDashboardCount();
+
+
+                return StatusCode(result.StatusCode, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<List<AdminDashboardCountDto>>.FailureResponse(
+                    "An error occurred while fetching admin dashboard count",
+                    500,
+                    "SERVER_ERROR"
+                ));
+            }
+        }
+        #endregion
+
+
     }
 }

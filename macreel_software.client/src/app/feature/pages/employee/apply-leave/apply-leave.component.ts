@@ -33,7 +33,7 @@ export class ApplyLeaveComponent {
   searchTerm: string = ''
   leaveForm!: FormGroup
   leaveTypeList: LeaveRow[] = [];
-  selectedFile: File | null = null
+  uploadedFile: File | null = null
   fileError: string | null = null
   leaveBalanceList: LeaveBalance[] = [];
   // for cards
@@ -87,12 +87,12 @@ export class ApplyLeaveComponent {
       // Optional validation (size: 2MB)
       if (file.size > 2 * 1024 * 1024) {
         this.fileError = 'File size must be less than 2MB'
-        this.selectedFile = null
+        this.uploadedFile = null
         return
       }
 
       this.fileError = null
-      this.selectedFile = file
+      this.uploadedFile = file
     }
   }
 
@@ -189,13 +189,14 @@ export class ApplyLeaveComponent {
     formData.append('toDate', formValue.toDate);
     formData.append('leaveTypeId', formValue.leaveType);
     formData.append('description', formValue.description);
+    if(this.uploadedFile) formData.append('uploadFile',this.uploadedFile);
 
     // call API
     this.leaveService.applyLeave(formData).subscribe({
       next: (res) => {
         if (res.statusCode === 200) {
           Swal.fire('Success', res.message, 'success');
-          this.resetForm();
+          location.reload();
         } else {
           Swal.fire('Error', res.message, 'error');
         }

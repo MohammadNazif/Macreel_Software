@@ -191,25 +191,38 @@ namespace Macreel_Software.Server.Controllers
 
             try
             {
-                string uploadRoot = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+                string[] docExt = { ".pdf", ".doc", ".docx" };
 
+                // ---------- STEP 1: VALIDATE + GENERATE PATH (ONLY IF FILE PROVIDED) ----------
                 if (data.rule_Book != null)
                 {
-                    data.rule_Book_Path = await _fileUploadService.UploadFileAsync(
+                    data.rule_Book_Path = _fileUploadService.ValidateAndGeneratePath(
                         data.rule_Book,
-                        uploadRoot,
-                        new[] { ".pdf", ".doc", ".docx" }
+                        "ImportantFiles",
+                        docExt
                     );
                 }
 
+                // ---------- STEP 2: DB INSERT / UPDATE ----------
                 bool result = await _service.AddUpdateRuleBook(data);
 
                 if (!result)
+                {
                     return StatusCode(500, new
                     {
                         status = false,
                         message = "Failed to save RuleBook."
                     });
+                }
+
+                // ---------- STEP 3: ACTUAL FILE UPLOAD ----------
+                if (data.rule_Book != null)
+                {
+                    await _fileUploadService.UploadAsync(
+                        data.rule_Book,
+                        data.rule_Book_Path!
+                    );
+                }
 
                 return Ok(new
                 {
@@ -336,7 +349,6 @@ namespace Macreel_Software.Server.Controllers
         }
         #endregion
 
-
         #region send mail for reg
 
         [HttpPost("sendEmailForReg")]
@@ -417,6 +429,68 @@ namespace Macreel_Software.Server.Controllers
 
         #endregion
 
+        #region Download File
+        [HttpGet("download-file")]
+        public IActionResult DownloadFile([FromQuery] string filePath)
+        {
+            if (string.IsNullOrWhiteSpace(filePath))
+            {
+                return BadRequest(new
+                {
+                    status = false,
+                    message = "File path is required."
+                });
+            }
 
+            try
+            {
+                // wwwroot base path
+                var rootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+
+                // Normalize & combine (prevents ../ attack)
+                var fullPath = Path.GetFullPath(Path.Combine(rootPath, filePath));
+
+                // Security check: ensure file is inside wwwroot
+                if (!fullPath.StartsWith(rootPath))
+                {
+                    return BadRequest(new
+                    {
+                        status = false,
+                        message = "Invalid file path."
+                    });
+                }
+
+                if (!System.IO.File.Exists(fullPath))
+                {
+                    return NotFound(new
+                    {
+                        status = false,
+                        message = "File not found."
+                    });
+                }
+
+                var fileName = Path.GetFileName(fullPath);
+
+                // Detect content type
+                var provider = new Microsoft.AspNetCore.StaticFiles.FileExtensionContentTypeProvider();
+                if (!provider.TryGetContentType(fullPath, out var contentType))
+                {
+                    contentType = "application/octet-stream";
+                }
+
+                var fileBytes = System.IO.File.ReadAllBytes(fullPath);
+
+                return File(fileBytes, contentType, fileName);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    status = false,
+                    message = "File download failed."
+                });
+            }
+        }
+        #endregion
     }
 }
