@@ -44,5 +44,7 @@ namespace Macreel_Software.DAL.Admin
         Task<bool> deleteTaskById(int id);
         Task<ApiResponse<List<applyLeave>>> GetAllLeaveRequests(string? searchTerm, int? pageNumber, int? pageSize);
         Task<bool> UpdateLeaveRequest(int id, int leaveCount, int status);
+
+        Task<ApiResponse<List<AdminDashboardCountDto>>> adminDashboardCount();
     }
 }

@@ -105,3 +105,14 @@ export interface Attendance {
   Month  :Date;
   Year :Date;
 }
+
+export interface AdminDashboard{
+  totalProjects:number;
+  ongoingProjects:number;
+  totalEmployees:number;
+  absentEmployee:number;
+  totalTasks:number;
+  completedTask:number;
+  assignedLeaves:number;
+  upcomingLeaves:number;
+}

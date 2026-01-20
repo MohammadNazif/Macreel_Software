@@ -937,5 +937,31 @@ namespace Macreel_Software.Server.Controllers
         }
 
         #endregion
+
+        #region Admin dashboard
+
+        [HttpGet("AdminDashboardCount")]
+        public async Task<IActionResult> AdminDashboardCount()
+        {
+            try
+            {
+                ApiResponse<List<AdminDashboardCountDto>> result =
+                    await _services.adminDashboardCount();
+
+
+                return StatusCode(result.StatusCode, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<List<AdminDashboardCountDto>>.FailureResponse(
+                    "An error occurred while fetching admin dashboard count",
+                    500,
+                    "SERVER_ERROR"
+                ));
+            }
+        }
+        #endregion
+
+
     }
 }

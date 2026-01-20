@@ -1748,5 +1748,60 @@ namespace Macreel_Software.DAL.Admin
             }
         }
         #endregion
+
+
+        #region admin dashboard
+        public async Task<ApiResponse<List<AdminDashboardCountDto>>> adminDashboardCount()
+        {
+            List<AdminDashboardCountDto> list = new List<AdminDashboardCountDto>();
+            try
+            {
+                SqlCommand cmd = new SqlCommand("sp_empDashboard", _conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@action", "adminDashboardCount");
+                if (_conn.State == ConnectionState.Closed)
+                    await _conn.OpenAsync();
+
+                using(SqlDataReader sdr=await cmd.ExecuteReaderAsync())
+                {
+                    if(sdr.HasRows)
+                    {
+                        while(await sdr.ReadAsync())
+                        {
+                            list.Add(new AdminDashboardCountDto
+                            {
+                                TotalEmployees = sdr["TotalEmployees"] != DBNull.Value ? Convert.ToInt32(sdr["TotalEmployees"]):null,
+                                AbsentEmployee = sdr["AbsentEmployee"] != DBNull.Value ? Convert.ToInt32(sdr["AbsentEmployee"]):null,
+                                TotalProjects = sdr["TotalProjects"] != DBNull.Value ? Convert.ToInt32(sdr["TotalProjects"]):null,
+                                OngoingProjects = sdr["OngoingProjects"] != DBNull.Value ? Convert.ToInt32(sdr["OngoingProjects"]):null,
+                                TotalTasks = sdr["TotalTasks"] != DBNull.Value ? Convert.ToInt32(sdr["TotalTasks"]):null,
+                                CompletedTask = sdr["CompletedTask"] != DBNull.Value ? Convert.ToInt32(sdr["CompletedTask"]):null,
+                                AssignedLeaves = sdr["AssignedLeaves"] != DBNull.Value ? Convert.ToInt32(sdr["AssignedLeaves"]):null,
+                                UpcomingLeaves = sdr["UpcomingLeaves"] != DBNull.Value ? Convert.ToInt32(sdr["UpcomingLeaves"]):null,
+                            });
+                        }
+                    }
+                }
+                return ApiResponse<List<AdminDashboardCountDto>>.SuccessResponse(
+                  list,
+                  "Admin dashboard count fetched successfully"
+              );
+            }
+            catch(Exception ex)
+            {
+                return ApiResponse<List<AdminDashboardCountDto>>.FailureResponse(
+                  ex.Message,
+                  500,
+                  "ASSIGN_TASK_FETCH_ERROR"
+              );
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    await _conn.CloseAsync();
+            }
+        }
+
+        #endregion
     }
 }
