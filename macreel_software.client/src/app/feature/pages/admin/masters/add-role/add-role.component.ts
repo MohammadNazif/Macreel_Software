@@ -3,6 +3,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ManageMasterdataService } from '../../../../../core/services/manage-masterdata.service';
 import Swal from 'sweetalert2';
+import { TableColumn } from '../../../../../core/models/interface';
 
 @Component({
   selector: 'app-add-role',
@@ -18,7 +19,11 @@ export class AddRoleComponent implements OnInit {
   dataSource = new MatTableDataSource<PeriodicElement>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
+
   pageSize: number = 20;
+
+  data: any[] = [];
+
   pageNumber: number = 1;
   totalRecords: number = 0;
   searchText: string = '';
@@ -31,6 +36,11 @@ export class AddRoleComponent implements OnInit {
     this.loadRoles();
   }
 
+     Roles: TableColumn<PeriodicElement>[] = [
+      { key: 'name', label: 'Name' },
+     
+    ];
+
   loadRoles() {
     this.master.getRoles(this.pageNumber, this.pageSize, this.searchText)
       .subscribe(res => {
@@ -41,7 +51,7 @@ export class AddRoleComponent implements OnInit {
         const roles = res.data || [];
 
         this.totalRecords = res.totalRecords; // IMPORTANT
-        this.dataSource.data = roles.map((item: any, index: number) => ({
+        this.data = roles.map((item: any, index: number) => ({
           srNo: (this.pageNumber - 1) * this.pageSize + index + 1,
           id: item.id,
           name: item.rolename

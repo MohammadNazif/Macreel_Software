@@ -21,6 +21,7 @@ export interface Task {
   documents :[];
 }
 
+
 export interface Project {
   id: number;
   category: string;
@@ -36,6 +37,7 @@ export interface Project {
   smo?: string;
   paidAds?: string;
   gmb?: string;
+  delayedDays? : number;
 }
 
 export interface LeaveRow {
@@ -84,7 +86,10 @@ export interface TableColumn<T> {
   label: string;
   type?: TableColumnType;
   align?: TableColumnAlign;
-  width?: string;
+  width?: string;           
+  clickable?: boolean;
+  route?: string;           
+  apiActions?: string[];    
   template?: TemplateRef<any>;
 }
 export interface LeaveBalance {

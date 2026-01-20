@@ -9,7 +9,6 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { CommonModule, DatePipe } from '@angular/common';
 import { NgxUiLoaderModule, NgxUiLoaderHttpModule } from 'ngx-ui-loader';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
-import { GenericTableComponent } from './feature/common-pages/generic-table/generic-table.component';
 
 @NgModule({
   declarations: [
