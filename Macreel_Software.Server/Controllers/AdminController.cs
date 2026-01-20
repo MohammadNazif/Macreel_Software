@@ -596,10 +596,12 @@ namespace Macreel_Software.Server.Controllers
         [HttpPost("add-update-Project")]
         public async Task<IActionResult> AddOrUpdateProject([FromForm] project data)
         {
+            string[] allowedExtensions = { ".pdf", ".doc", ".docx" };
+
             if (string.IsNullOrWhiteSpace(data.projectTitle))
                 return BadRequest("Project title is required.");
 
-            if (data.sopDocument == null && data.id<0)
+            if (data.sopDocument == null && data.id <= 0)
                 return BadRequest("SOP document is required.");
 
             if (data.startDate == null)
@@ -619,61 +621,76 @@ namespace Macreel_Software.Server.Controllers
                 (data.completionDate <= data.startDate || data.completionDate <= data.assignDate))
                 return BadRequest("Completion date must be greater than start date and assign date.");
 
-            if (data.category != null && data.category.Equals("Software", StringComparison.OrdinalIgnoreCase))
+            if (data.category != null &&
+                data.category.Equals("Software", StringComparison.OrdinalIgnoreCase))
             {
-                bool isAnySoftwareSelected = !string.IsNullOrWhiteSpace(data.web) || !string.IsNullOrWhiteSpace(data.app) ||
-                    !string.IsNullOrWhiteSpace(data.androidApp) || !string.IsNullOrWhiteSpace(data.IOSApp);
+                bool isAnySoftwareSelected =
+                    !string.IsNullOrWhiteSpace(data.web) ||
+                    !string.IsNullOrWhiteSpace(data.app) ||
+                    !string.IsNullOrWhiteSpace(data.androidApp) ||
+                    !string.IsNullOrWhiteSpace(data.IOSApp);
 
                 if (!isAnySoftwareSelected)
-                {
                     return BadRequest("Please select at least one software type.");
+            }
+
+            try
+            {
+                if (data.sopDocument != null)
+                {
+                    data.sopDocumentPath = _fileUploadService.ValidateAndGeneratePath(
+                        data.sopDocument,
+                        "ProjectDocuments",
+                        allowedExtensions
+                    );
+                }
+
+                if (data.technicalDocument != null)
+                {
+                    data.technicalDocumentPath = _fileUploadService.ValidateAndGeneratePath(
+                        data.technicalDocument,
+                        "ProjectDocuments",
+                        allowedExtensions
+                    );
                 }
             }
-
-            // File Uploading
-            if (data.sopDocument != null)
+            catch (Exception ex)
             {
-                data.sopDocumentPath = _fileUploadService.ValidateAndGeneratePath(
-                    data.sopDocument,
-                    "ProjectDocuments",
-                    new[] { ".pdf", ".doc", ".docx" }
-                );
-            }
-
-            if (data.technicalDocument != null)
-            {
-                data.technicalDocumentPath = _fileUploadService.ValidateAndGeneratePath(
-                    data.technicalDocument,
-                    "ProjectDocumenst",
-                    new[] { ".pdf", ".doc", ".docx" }
-                );
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Invalid file type . Upload only .pdf, .doc, .docx type file!!"
+                });
             }
 
             bool result = await _services.AddProject(data);
 
             if (!result)
-            return Ok(new
             {
-                status = false,
-                message = "Project not saved"
-            });
-
-            if (!result)
-            {
-                if (data.technicalDocument != null) await _fileUploadService.UploadAsync(data.technicalDocument,data.technicalDocumentPath!);
-                if (data.sopDocument != null) await _fileUploadService.UploadAsync(data.sopDocument,data.sopDocumentPath!);
+                return Ok(new
+                {
+                    success = false,
+                    message = "Project not saved."
+                });
             }
+
+            if (data.sopDocument != null)
+                await _fileUploadService.UploadAsync(data.sopDocument, data.sopDocumentPath!);
+
+            if (data.technicalDocument != null)
+                await _fileUploadService.UploadAsync(
+                    data.technicalDocument,
+                    data.technicalDocumentPath!
+                );
 
             return Ok(new
             {
                 success = true,
-                StatusCode = 200,
                 message = data.id > 0
                     ? "Project updated successfully."
                     : "Project added successfully."
             });
         }
-
 
 
         [HttpGet("getAllProject")]
