@@ -4,6 +4,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { ManageMasterdataService } from '../../../../../core/services/manage-masterdata.service';
 import Swal from 'sweetalert2';
+import { TableColumn } from '../../../../../core/models/interface';
+import { PeriodicElement } from '../add-role/add-role.component';
 
 @Component({
   selector: 'app-add-designation',
@@ -17,15 +19,19 @@ export class AddDesignationComponent implements OnInit {
   editingDesignationId: number | null = null;
 
   displayedColumns: string[] = ['srNo', 'name', 'action'];
-
+  data: any[] = [];
   pageSize = 20;
   pageNumber = 1;
   totalRecords = 0;
   searchText = '';
 
-  // @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(private master: ManageMasterdataService) { }
+
+   Roles: TableColumn<PeriodicElement>[] = [
+        { key: 'name', label: 'Name' },
+       
+      ];
 
   ngOnInit(): void {
     this.loadDesignations();
@@ -42,7 +48,7 @@ export class AddDesignationComponent implements OnInit {
 
           this.totalRecords = res.totalRecords ?? 0;
 
-          this.dataSource = data.map((item: any, index: number) => ({
+          this.data = data.map((item: any, index: number) => ({
             srNo: (this.pageNumber - 1) * this.pageSize + index + 1,
             id: item.id,
             name: item.designationName
