@@ -11,7 +11,7 @@
         <button type="button" (click)="openModal()" class="bg-white text-[#C5192F] px-4 py-1.5 rounded-md
            border border-[#C5192F]
            hover:bg-white hover:text-[#C5192F]
-           transition text-[14px]">
+           transition text-[14px]" *ngIf="!showSendLinkButton">
           Send Link
         </button>
 
@@ -142,12 +142,12 @@
         <!-- Email ID -->
         <div class="relative">
           <input type="email" formControlName="emailId" name="emailId" autocomplete="off" placeholder=" " class="peer w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700
-           focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none" />
+           focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none"  [readonly]="showSendLinkButton" />
 
-          <label class="absolute left-3 top-2 text-sm text-gray-500 bg-white px-1 transition-all
+          <label class="absolute left-3 top-[-10px] text-sm text-gray-500 bg-white px-1 transition-all
            peer-focus:-top-2 peer-focus:text-xs
            peer-valid:-top-2 peer-valid:text-xs">
-            Email ID <span class="text-red-500 text-[16px] font-medium">*</span>
+            Email ID <span class="text-red-500 text-[14px] font-medium">*</span>
           </label>
         </div>
 
@@ -614,51 +614,69 @@
 
 <!--Modal for send link for registration-->
 
-<div *ngIf="isModalOpen" class="fixed inset-0 bg-black/50 flex justify-center items-start
+<div *ngIf="isModalOpen"
+     class="fixed inset-0 bg-black/50 flex justify-center items-start
             z-50 px-3 pt-24">
 
-  <!-- Modal Box -->
   <div class="bg-white w-full max-w-md rounded-xl shadow-xl">
 
-    <!-- Modal Header -->
+    <!-- Header -->
     <div class="bg-[#C5192F] text-white px-5 py-3
                 rounded-t-xl flex justify-between items-center">
       <h2 class="text-[15px] font-semibold">
         Send Link for Registration
       </h2>
 
-      <button (click)="closeModal()" class="text-white text-xl leading-none hover:opacity-80">
+      <button (click)="closeModal()"
+              class="text-white text-xl leading-none hover:opacity-80">
         &times;
       </button>
     </div>
 
-    <!-- Modal Body -->
-    <div class="p-6 space-y-4">
+    <!-- Body -->
+    <form [formGroup]="sendLinkForm"
+          (ngSubmit)="sendRegistrationLink()"
+          class="p-6 space-y-4">
 
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">
           Email Address
         </label>
 
-        <input type="email" class="w-full border rounded-md px-3 py-2.5 text-sm
-                      focus:outline-none focus:ring-2
-                      focus:ring-[#C5192F]" placeholder="Enter email" />
+        <input
+          type="email"
+          formControlName="email"
+          placeholder="Enter email"
+          class="w-full border rounded-md px-3 py-2.5 text-sm
+                 focus:outline-none focus:ring-2 focus:ring-[#C5192F]" />
+
+        <!-- Validation -->
+        <p *ngIf="sendLinkForm.get('email')?.touched &&
+                  sendLinkForm.get('email')?.invalid"
+           class="text-xs text-red-600 mt-1">
+
+          <span *ngIf="sendLinkForm.get('email')?.errors?.['required']">
+            Email is required
+          </span>
+
+          <span *ngIf="sendLinkForm.get('email')?.errors?.['email']">
+            Enter a valid email
+          </span>
+        </p>
       </div>
 
-      <!-- Submit Button -->
+      <!-- Button -->
       <div class="flex justify-center">
-        <div class="flex justify-end">
-          <button class="bg-[#C5192F] text-white
-           px-5 py-1.5 text-sm font-medium
-           rounded-md hover:bg-red-700 transition">
-            Send
-          </button>
-        </div>
-
+        <button
+          type="submit"
+          [disabled]="isSendingLink"
+          class="bg-[#C5192F] text-white px-5 py-1.5 text-sm font-medium
+                 rounded-md hover:bg-red-700 transition
+                 disabled:opacity-60">
+          {{ isSendingLink ? 'Sending...' : 'Send' }}
+        </button>
       </div>
 
-
-    </div>
-
+    </form>
   </div>
 </div>

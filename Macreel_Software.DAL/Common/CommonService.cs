@@ -301,13 +301,13 @@ namespace Macreel_Software.DAL.Common
         }
 
         #region send mail for register
-        public async Task<bool> sendMailForReg(sendMailForReg data)
+        public async Task<bool> sendMailForReg(sendMailForReg data,string accessId)
         {
             using (SqlCommand cmd = new SqlCommand("sp_sendEmailForEmpReg", _conn))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@email", data.email);
-                cmd.Parameters.AddWithValue("@accessId", data.accessId);
+                cmd.Parameters.AddWithValue("@accessId", accessId);
                 cmd.Parameters.AddWithValue("@action", "sendMailForReg");
                 if (_conn.State != ConnectionState.Open)
                     await _conn.OpenAsync();
