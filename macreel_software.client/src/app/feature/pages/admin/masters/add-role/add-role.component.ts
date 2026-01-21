@@ -60,7 +60,6 @@ export class AddRoleComponent implements OnInit {
   }
 
 
-  // Pagination change
   onPageChange(event: PageEvent) {
     this.pageSize = event.pageSize;
     this.pageNumber = event.pageIndex + 1;
@@ -70,7 +69,7 @@ export class AddRoleComponent implements OnInit {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value.trim();
     this.searchText = filterValue;
-    this.pageNumber = 1; // Reset to first page
+    this.pageNumber = 1; 
     this.loadRoles();
   }
 
@@ -101,12 +100,11 @@ export class AddRoleComponent implements OnInit {
     this.master.getRoleById(role.id).subscribe({
       next: (res) => {
 
-        // API ke hisaab se
         if (res.success && res.data && res.data.length > 0) {
 
           const roleData = res.data[0];
 
-          this.roleName = roleData.rolename;   // 👈 bind yahin ho raha
+          this.roleName = roleData.rolename;   
           this.editingRoleId = roleData.id;
 
         } else {
@@ -141,7 +139,7 @@ export class AddRoleComponent implements OnInit {
         this.master.deleteRoleById(role.id).subscribe({
           next: () => {
             Swal.fire({ icon: 'success', title: 'Deleted!', text: `${role.name} has been deleted.`, showConfirmButton: false, timer: 1500 });
-            this.loadRoles(); // Reload after deletion to reflect server-side pagination
+            this.loadRoles(); 
           },
           error: () => Swal.fire({ icon: 'error', title: 'Error!', text: 'Failed to delete role' })
         });
@@ -149,7 +147,6 @@ export class AddRoleComponent implements OnInit {
     });
   }
 }
-
 export interface PeriodicElement {
   srNo: number;
   id: number,
