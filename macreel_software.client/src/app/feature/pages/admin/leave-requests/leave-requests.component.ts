@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -6,6 +6,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { ManageLeaveService } from '../../../../core/services/manage-leave.service';
 import Swal from 'sweetalert2';
 import { CommonService } from '../../../../core/services/common.service';
+import { TableColumn } from '../../../../core/models/interface';
 
 @Component({
   selector: 'app-leave-requests',
@@ -35,10 +36,19 @@ export class LeaveRequestsComponent {
   pageSizeControl = new FormControl<string>("10")
   searchControl = new FormControl<string>("");
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-
+  leavereq!: TableColumn<any>[];
   isModalOpen = false;
   statusForm!: FormGroup;
+   // For document modal
+showFilesModal = false;
+selectedDocuments: any = [];
+// For status modal
+showStatusModal = false;
+selectedReason: string = '';
 
+  data: any= [];
+  @ViewChild('filesTemplate', { static: true }) filesTemplate!: TemplateRef<any>;
+    @ViewChild('statustemplate', { static: true }) statustemplate!: TemplateRef<any>;
   constructor(
     private readonly leaveService: ManageLeaveService,
     private readonly fb: FormBuilder,
@@ -49,6 +59,8 @@ export class LeaveRequestsComponent {
       reason: ['', [Validators.required]]
     });
   }
+
+
   openModal(id: number) {
     const leave = this.allLeaves.find(x => x.id === id);
     if (!leave) return;
@@ -122,7 +134,24 @@ export class LeaveRequestsComponent {
   }
 
   ngOnInit(): void {
-
+       // ✅ Initialize columns here AFTER filesTemplate is available
+      this.leavereq = [
+        { key: 'empName', label: 'Name'  },
+        { key: 'leaveName', label: 'Leave Name'},
+        { key: 'fromDate', label: 'From',type :'date' },
+        { key: 'toDate', label: 'To', type: 'date', align: 'center' },
+        {key: 'fileName',
+          label: 'Document',
+          type :'custom',
+          template: this.filesTemplate },
+          
+        { key: 'description', label: 'Description' },
+        {
+          key: 'action',
+          label: 'Action',
+          template: this.statustemplate
+        }
+      ];
     this.loadAssignedLeaves();
     // Server-side search subscription
     this.searchControl.valueChanges
@@ -152,28 +181,40 @@ export class LeaveRequestsComponent {
         next: res => {
           if (res.success) {
             this.allLeaves = res.data;
-            this.dataSource.data = res.data;
+            this.data = res.data;
             this.totalRecords = res.totalRecords;
           }
         }
       });
   }
 
-  downloadFile(filename: string) {
-    this.commonservice.downloadFile(filename).subscribe({
-      next: (blob) => {
-        const url = URL.createObjectURL(blob);
+  pdfUrl: string =  'https://localhost:7253/'
 
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = filename.split('/').pop()!;
-        a.click();
 
-        URL.revokeObjectURL(url);
-      },
-      error: () => {
-        alert('File download failed');
-      }
-    });
-  }
+openFile(filePath: string) {
+  console.log("File path:", filePath);
+    this.selectedDocuments = Array.isArray(filePath)
+    ? filePath.map(doc => `${this.pdfUrl}${doc}`)
+    : [`${this.pdfUrl}${filePath}`];
+
+  this.showFilesModal = true;
+}
+
+closeFiles() {
+  this.showFilesModal = false;
+  this.selectedDocuments = [];
+}
+
+
+openReason(reason: string) {
+  this.selectedReason = reason;
+  this.showStatusModal = true;
+}
+
+closeStatusModal() {
+  this.showStatusModal = false;
+  this.selectedReason = '';
+}
+
+
 }
