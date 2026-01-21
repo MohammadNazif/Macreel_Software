@@ -1,94 +1,177 @@
-<div class="bg-gray-50 p-2 md:p-2">
+<div class="bg-gray-50 p-2">
   <div class="bg-white shadow rounded-lg p-1">
 
-    <!-- HEADER -->
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-1 mb-1">
-      <h1 class="ml-2 text-lg md:text-[16px] font-semibold text-[#444] text-center md:text-left">
-        Assigned Project List
-      </h1>
-    </div>
+    <h1 class="ml-2 text-lg font-semibold text-[#444]">
+      Assigned Project List
+    </h1>
 
-    <!-- GENERIC TABLE -->
     <app-generic-table
       [columns]="projectsColumns"
       [data]="projectsData"
       [loading]="loading"
-      [showActions]="false"
-    >
+      [showActions]="false">
     </app-generic-table>
-   
+
   </div>
 </div>
 
+<!-- ACTION TEMPLATE -->
 <ng-template #filesTemplate let-row>
-  <div class="flex justify-center gap-2">
+  <div class="flex gap-2 justify-center">
 
-    <!-- View Project -->
+    <!-- Assign Employee -->
     <button
-      class="w-7 h-7 flex items-center justify-center rounded
-             text-blue-600 hover:bg-blue-100"
-      title="View Project"
-      (click)="viewEmployee(row)"
-    >
-      👁
+      class="w-7 h-7 text-green-600 hover:bg-green-100 rounded"
+      title="Assign Employee"
+      (click)="viewEmployee(row)">
+       <i class="fa-solid fa-user-plus"></i>
     </button>
 
-    <!-- View Employee -->
+    <!-- Show Assigned Employees -->
     <button
-      class="w-7 h-7 flex items-center justify-center rounded
-             text-green-600 hover:bg-green-100"
-      title="View Employee"
-      (click)="viewEmployee(row)"
-    >
-      👤
+      class="px-2 py-1 text-blue-600 hover:underline"
+      (click)="showAssignedEmployees(row)">
+      <i class="fa-solid fa-users mr-1"></i>
     </button>
 
   </div>
 </ng-template>
 
 
+<!-- <ng-template #filesTemplate let-row>
+  <div class="flex justify-center">
+    <button
+      class="w-7 h-7 text-green-600 hover:bg-green-100 rounded"
+      title="Assign Employee"
+      (click)="viewEmployee(row)">
+      👤
+    </button>
+  </div>
+</ng-template> -->
+
+<ng-template #filesTemplate let-row>
+  <div class="flex justify-center">
+    <button
+      class="px-2 py-1 text-blue-600 hover:underline"
+      (click)="showAssignedEmployees(row)">
+      Show Employees
+    </button>
+  </div>
+</ng-template>
+
+
+<!-- MODAL -->
 <div *ngIf="showEmployeeModal"
      class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
 
-  <div class="bg-white w-[400px] max-h-[80vh] rounded-xl shadow-xl flex flex-col">
+  <div class="bg-white w-[420px] rounded-xl shadow-xl flex flex-col">
 
     <!-- Header -->
     <div class="flex justify-between items-center px-4 py-2 border-b">
-      <h3 class="font-semibold">Select Employee</h3>
-      <button
-        (click)="showEmployeeModal = false"
-        class="text-gray-500 hover:text-red-500">✕</button>
+      <h3 class="font-semibold">Select Employees</h3>
+      <button (click)="closeModal()">✕</button>
     </div>
 
     <!-- Body -->
-    <div class="overflow-auto">
+    <div class="p-4">
 
-      <!-- Loading -->
-      <p *ngIf="employeeLoading"
-         class="text-center py-4 text-gray-500">
-        Loading employees...
-      </p>
+      <mat-form-field class="w-full">
+        <mat-label>Select Employees</mat-label>
 
-      <!-- Employee Name List -->
-  <select
-  [(ngModel)]="selectedEmployeeId"
-  class="w-full border rounded px-3 py-2 text-sm">
+        <mat-chip-grid #chipGrid>
+          <mat-chip-row
+            *ngFor="let emp of selectedEmployees"
+            (removed)="removeEmployee(emp)">
+            {{ emp.empName }}
+            <button matChipRemove>✕</button>
+          </mat-chip-row>
 
-  <option value="">Select Employee</option>
+          <input
+            placeholder="Search employee..."
+            [formControl]="employeeCtrl"
+            [matAutocomplete]="autoEmp"
+            [matChipInputFor]="chipGrid" />
+        </mat-chip-grid>
 
-  <option *ngFor="let emp of employees" [value]="emp.id">
-    {{ emp.empName }}
-  </option>
+        <mat-autocomplete
+          #autoEmp="matAutocomplete"
+          (optionSelected)="onEmployeeSelected($event)">
+          <mat-option *ngFor="let emp of employees" [value]="emp.id">
+            {{ emp.empName }}
+          </mat-option>
+        </mat-autocomplete>
 
-</select>
+      </mat-form-field>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="flex justify-end gap-2 px-4 py-2 border-t">
+      <button (click)="closeModal()" class="border px-4 py-1 rounded">
+        Cancel
+      </button>
+
+      <button
+        (click)="submit()"
+        [disabled]="!selectedEmployees.length"
+        class="bg-[#dd3d4f] text-white px-4 py-1 rounded disabled:opacity-50">
+        Submit
+      </button>
+    </div>
+
+  </div>
+</div>
 
 
-      <p *ngIf="!employeeLoading && !employees.length"
-         class="text-center py-4 text-gray-400">
+<!-- EMPLOYEE LIST MODAL -->
+<div *ngIf="showEmployeeListModal"
+     class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+
+  <div class="bg-white w-[650px] rounded-xl shadow-xl">
+
+    <!-- Header -->
+    <div class="flex justify-between items-center px-4 py-2 border-b">
+      <h3 class="font-semibold">Assigned Employees</h3>
+      <button (click)="showEmployeeListModal = false">✕</button>
+    </div>
+
+    <!-- Body -->
+    <div class="p-4 max-h-[400px] overflow-auto">
+
+      <table class="w-full border text-sm">
+        <thead class="bg-gray-100">
+          <tr>
+            <th class="border px-2 py-1">Name</th>
+            <th class="border px-2 py-1">Mobile</th>
+            <th class="border px-2 py-1">Designation</th>
+            <th class="border px-2 py-1">Category</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let emp of assignedEmployees">
+            <td class="border px-2 py-1">{{ emp.empName }}</td>
+            <td class="border px-2 py-1">{{ emp.mobile }}</td>
+            <td class="border px-2 py-1">{{ emp.designation }}</td>
+            <td class="border px-2 py-1">{{ emp.category }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p *ngIf="!assignedEmployees.length" class="text-center text-gray-500">
         No employees found
       </p>
 
     </div>
+
+    <!-- Footer -->
+    <div class="flex justify-end px-4 py-2 border-t">
+      <button
+        (click)="showEmployeeListModal = false"
+        class="border px-4 py-1 rounded">
+        Close
+      </button>
+    </div>
+
   </div>
 </div>
-

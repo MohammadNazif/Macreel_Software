@@ -31,9 +31,26 @@ export class ProjectService {
   }
 
   // Get assigned projects for logged-in employee
-getAssignedProjectsByEmp(): Observable<Project[]> {
-  return this.http.get<Project[]>(`${this.baseUrl}Employee/AssignedProjectByEmpId`);
+  getAssignedProjectsByEmp(): Observable<Project[]> {
+    return this.http.get<Project[]>(`${this.baseUrl}Employee/AssignedProjectByEmpId`);
+  }
+  assignProjectToEmp(payload: {
+    projectId: number;
+    empIds: string;
+  }) {
+    return this.http.post<any>(
+      `${this.baseUrl}Common/AssignProjectToEmp`,
+      payload
+    );
+  }
+
+  getAssignedProjectEmpList(projectId: number) {
+  return this.http.get<any>(
+    `${this.baseUrl}Common/AssignedProjectEmpList`,
+    { params: { projectId } }
+  );
 }
+
 
 
 }
