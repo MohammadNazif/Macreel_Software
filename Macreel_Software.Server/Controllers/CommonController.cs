@@ -563,5 +563,29 @@ namespace Macreel_Software.Server.Controllers
             }
         }
         #endregion
+
+        #region get al emp
+
+        [HttpGet("GetAllEmployees")]
+        public async Task<IActionResult> GetAllEmployees(string? searchTerm, int? pageNumber, int? pageSize)
+        {
+            try
+            {
+                ApiResponse<List<employeeRegistration>> result =
+                    await _services.GetAllEmpData(searchTerm, pageNumber, pageSize);
+
+                return StatusCode(result.StatusCode, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500,
+                    ApiResponse<List<employeeRegistration>>.FailureResponse(
+                        "An error occurred while fetching employee data",
+                        500,
+                        "SERVER_ERROR"));
+            }
+        }
+
+        #endregion
     }
 }
