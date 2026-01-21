@@ -1,9 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import Swal from 'sweetalert2';
+
 import { ManageEmployeeService } from '../../../../core/services/manage-employee.service';
 import { ManageLeaveService } from '../../../../core/services/manage-leave.service';
-import Swal from 'sweetalert2';
+import { TableColumn } from '../../../../core/models/interface';
 
 interface Employee {
   id: number;
@@ -29,52 +31,56 @@ interface Leave {
   templateUrl: './assign-leave.component.html',
   styleUrl: './assign-leave.component.css'
 })
-
 export class AssignLeaveComponent implements OnInit {
 
-  assignedLeaves: any[] = [];
   employees: Employee[] = [];
   selectedEmployeeId: number | null = null;
   selectedEmployee: Employee | null = null;
-  isLoading: boolean = false;
 
-  displayedColumns: string[] = ['select', 'noOfLeave', 'leaveName', 'description'];
-  dataSource = new MatTableDataSource<Leave>();
+  assignedLeaves: any[] = [];
 
+  dataSource = new MatTableDataSource<Leave>([]);
   totalRecords = 0;
   pageSize = 10;
   pageIndex = 0;
   searchTerm = '';
+  isLoading = false;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  // ✅ TABLE COLUMNS
+  leaves: TableColumn<Leave>[] = [
+    { key: 'isSelected', label: 'Select', type: 'checkbox', align: 'center' },
+    { key: 'noOfLeave', label: 'No of Leaves', type: 'number', align: 'center' },
+    { key: 'leaveName', label: 'Type' },
+    { key: 'description', label: 'Description' }
+  ];
 
   constructor(
     private readonly empService: ManageEmployeeService,
     private readonly leaveService: ManageLeaveService
-  ) { }
+  ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadEmployees();
   }
 
-  // Load all employees for dropdown
+
   loadEmployees() {
     this.isLoading = true;
     this.empService.getAllEmployees(null, null, '').subscribe({
       next: (res: any) => {
-        this.employees = res.data;
-        console.log("Employees loaded:", this.employees);
+        this.employees = res.data || [];
         this.isLoading = false;
       },
-      error: () => this.isLoading = false
+      error: () => (this.isLoading = false)
     });
   }
 
-  // Employee selection change
+
   onEmployeeChange() {
     if (!this.selectedEmployeeId) {
-      this.selectedEmployee = null;
-      this.dataSource.data = [];
+      this.resetForm();
       return;
     }
 
@@ -82,13 +88,11 @@ export class AssignLeaveComponent implements OnInit {
 
     this.empService.getEmployeeById(this.selectedEmployeeId).subscribe({
       next: (res: any) => {
-        this.selectedEmployee = res.data[0];
+        this.selectedEmployee = res.data?.[0] || null;
 
         this.leaveService.getAssignedLeaveById(this.selectedEmployeeId!).subscribe({
           next: (leaveRes: any) => {
             this.assignedLeaves = leaveRes.data || [];
-            console.log("Assigned Leave:", this.assignedLeaves);
-
             this.loadLeaveListWithAssigned();
           },
           error: () => {
@@ -97,119 +101,103 @@ export class AssignLeaveComponent implements OnInit {
           }
         });
       },
-      error: () => this.isLoading = false
+      error: () => (this.isLoading = false)
     });
   }
 
+
   loadLeaveListWithAssigned() {
-    this.leaveService.getAllLeave(this.searchTerm, this.pageIndex + 1, this.pageSize)
+    this.leaveService
+      .getAllLeave(this.searchTerm, this.pageIndex + 1, this.pageSize)
       .subscribe((res: any) => {
 
-        this.dataSource.data = res.data.map((l: Leave) => {
-
-          const found = this.assignedLeaves.find(
-            (a: any) => a.leaveType?.trim() === l.leaveName?.trim()
+        this.dataSource.data = (res.data || []).map((leave: Leave) => {
+          const assigned = this.assignedLeaves.find(
+            (a: any) => a.leaveType?.trim() === leave.leaveName?.trim()
           );
 
           return {
-            ...l,
-            noOfLeave: found ? found.noOfLeave : 0,
-            isSelected: !!found 
+            ...leave,
+            isSelected: !!assigned,
+            noOfLeave: assigned ? assigned.noOfLeave : 0
           };
         });
 
-        this.totalRecords = res.totalRecords;
-        this.dataSource._updateChangeSubscription();
+        this.totalRecords = res.totalRecords || 0;
         this.isLoading = false;
       });
   }
 
-  resetForm() {
-    this.selectedEmployeeId = null;
-    this.selectedEmployee = null;
-    this.dataSource.data = [];
-    this.pageIndex = 0;
+  onTableCheckboxChange(event: { row: Leave; key: string; value: boolean }) {
+    event.row.isSelected = event.value;
+
+
+    if (!event.value) {
+      event.row.noOfLeave = 0;
+    }
+  }
+
+  onTableNumberChange(event: { row: Leave; key: string; value: number }) {
+    event.row.noOfLeave = event.value;
+
+    if (event.value > 0) {
+      event.row.isSelected = true;
+    }
   }
 
 
-  // Pagination
+  submitAssignedLeave() {
+    if (!this.selectedEmployeeId) {
+      Swal.fire('Warning', 'Please select an employee first!', 'warning');
+      return;
+    }
+
+    const selectedLeaves = this.dataSource.data.filter(l => l.isSelected);
+
+    if (selectedLeaves.length === 0) {
+      Swal.fire('Warning', 'Please select at least one leave!', 'warning');
+      return;
+    }
+
+    const payload = {
+      employeeId: this.selectedEmployeeId,
+      leave: selectedLeaves.map(l => l.id).join(','),
+      leaveNo: selectedLeaves.map(l => l.noOfLeave || 0).join(',')
+    };
+
+    this.leaveService.assignLeaveToEmployee(payload).subscribe({
+      next: (res: any) => {
+        if (res.status) {
+          Swal.fire('Success', res.message || 'Leave assigned successfully!', 'success');
+          this.resetForm();
+        } else {
+          Swal.fire('Error', res.message, 'error');
+        }
+      },
+      error: (err) => {
+        Swal.fire('Error', err.error?.message || 'Something went wrong', 'error');
+      }
+    });
+  }
+
   onPageChange(event: PageEvent) {
     this.pageSize = event.pageSize;
     this.pageIndex = event.pageIndex;
     this.loadLeaveListWithAssigned();
   }
 
-  // Checkbox toggle
-  toggleSelection(row: Leave) {
-    row.isSelected = !row.isSelected;
-  }
 
-  // Submit assigned leaves
-  submitAssignedLeave() {
-    if (!this.selectedEmployeeId) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Oops...',
-        text: 'Please select an employee first!'
-      });
-      return;
-    }
-
-    const selectedLeaves = this.dataSource.data.filter(l => l.isSelected);
-    if (selectedLeaves.length === 0) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'No Leave Selected',
-        text: 'Please select at least one leave!'
-      });
-
-      return;
-    }
-
-    // ✅ Payload as required by API
-    const payload = {
-      employeeId: this.selectedEmployeeId,
-      leave: selectedLeaves.map(l => l.id).join(","),
-      leaveNo: selectedLeaves.map(l => l.noOfLeave || 0).join(",")
-    };
-
-    console.log("Payload to API:", payload);
-
-    this.leaveService.assignLeaveToEmployee(payload).subscribe({
-      next: (res: any) => {
-        if (res.status) {
-          Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: res.message || 'Leave assigned successfully!'
-          });
-
-          this.resetForm();   // reset table
-        } else {
-          Swal.fire({
-            icon: 'error',
-            title: 'Failed',
-            text: res.message
-          });
-        }
-      },
-      error: (err) => {
-        console.error(err);
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: err.error.message
-        });
-
-      }
-    });
-  }
-
-  // Search/filter
   applyFilter(event: Event) {
-    const value = (event.target as HTMLInputElement).value;
-    this.searchTerm = value;
+    this.searchTerm = (event.target as HTMLInputElement).value;
     this.pageIndex = 0;
     this.loadLeaveListWithAssigned();
+  }
+
+
+  resetForm() {
+    this.selectedEmployeeId = null;
+    this.selectedEmployee = null;
+    this.dataSource.data = [];
+    this.pageIndex = 0;
   }
 }

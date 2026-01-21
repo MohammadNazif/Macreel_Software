@@ -16,6 +16,8 @@ import { AddLeaveTypeComponent } from './add-leave-type/add-leave-type.component
 import { AddPageComponent } from './add-page/add-page.component';
 import { PageAccessComponent } from './page-access/page-access.component';
 import { CommonPagesModule } from "../../../common-pages/common-pages.module";
+import { MatChipGrid, MatChipRow, MatChipsModule } from '@angular/material/chips';
+import { MatAutocompleteModule, MatOption } from '@angular/material/autocomplete';
 
 
 @NgModule({
@@ -39,7 +41,12 @@ import { CommonPagesModule } from "../../../common-pages/common-pages.module";
     MatSortModule,
     MatInputModule,
     ReactiveFormsModule,
-    CommonPagesModule
+    CommonPagesModule,
+    MatChipsModule,
+    MatChipRow,
+    MatChipGrid,
+    MatOption,
+    MatAutocompleteModule
 ]
 })
 export class MastersModule { }

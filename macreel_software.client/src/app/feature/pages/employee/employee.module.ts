@@ -10,6 +10,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { AssignedLeavesComponent } from './assigned-leaves/assigned-leaves.component';
 import { ApplyLeaveComponent } from './apply-leave/apply-leave.component';
 import { AssignProjectComponent } from './assign-project/assign-project.component';
+import { CommonPagesModule } from "../../common-pages/common-pages.module";
 
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -35,6 +36,7 @@ import { SafeUrlPipe } from '../../../core/pipes/capitalize.pipe';
     ReactiveFormsModule,
 
     MatTableModule,
+<<<<<<< HEAD
     MatPaginatorModule,
     MatFormFieldModule,
     MatInputModule,
@@ -44,5 +46,11 @@ import { SafeUrlPipe } from '../../../core/pipes/capitalize.pipe';
     CommonPagesModule,
     SafeUrlPipe
   ]
+=======
+    MatPaginator,
+    MatPaginatorModule,
+    CommonPagesModule
+]
+>>>>>>> d46015d300249b638049e73f6b113cb8012c417a
 })
 export class EmployeeModule {}

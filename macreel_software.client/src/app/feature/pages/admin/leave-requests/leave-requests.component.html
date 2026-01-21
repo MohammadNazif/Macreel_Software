@@ -24,127 +24,18 @@
                     </i>
                 </div>
 
-                <!-- PAGINATOR -->
-                <mat-paginator [length]="totalRecords" [pageSize]="pageSize" [pageIndex]="pageNumber - 1"
-                    [pageSizeOptions]="[10,20,30]" showFirstLastButtons (page)="onPageChange($event)">
-                </mat-paginator>
-
+              
             </div>
 
         </div>
 
-        <!-- ================= TABLE WRAPPER ================= -->
-        <div class="relative overflow-x-auto w-full">
+       <app-generic-table
+       [columns]="leavereq"
+       [data]="data"
+       [showActions]="false"
+       >
 
-            <table mat-table [dataSource]="dataSource" class="min-w-[700px] w-full
-               border border-gray-300
-               divide-y divide-gray-300
-               table-fixed
-               text-sm md:text-base">
-
-                <!-- SR NO -->
-                <ng-container matColumnDef="srNo">
-                    <th mat-header-cell *matHeaderCellDef
-                        class="!w-[50px] text-center !bg-[#dd3d4f] border-r text-white">
-                        Sr No.
-                    </th>
-
-                    <td mat-cell *matCellDef="let row; let i = index" class="text-center text-[12px]">
-                        {{ (pageNumber - 1) * pageSize + i + 1 }}
-                    </td>
-                </ng-container>
-
-                <!-- Employee Name -->
-                <ng-container matColumnDef="name">
-                    <th mat-header-cell *matHeaderCellDef
-                        class="w-[100px] text-center !bg-[#dd3d4f] border-r text-white">Name
-                    </th>
-                    <td mat-cell *matCellDef="let row">{{ row.empName }}</td>
-                </ng-container>
-
-                <!-- Leave Type -->
-                <ng-container matColumnDef="leaveName">
-                    <th mat-header-cell *matHeaderCellDef
-                        class="w-[50px] text-center !bg-[#dd3d4f] border-r text-white">Leave</th>
-                    <td mat-cell *matCellDef="let row">{{ row.leaveName }}</td>
-                </ng-container>
-
-                <!-- From Date -->
-                <ng-container matColumnDef="fromDate">
-                    <th mat-header-cell *matHeaderCellDef
-                        class="w-[100px] text-center !bg-[#dd3d4f] border-r text-white">From
-                        Date</th>
-                    <td mat-cell *matCellDef="let row">
-                        {{ row.fromDate | date:'dd-MM-yyyy' }}
-                    </td>
-                </ng-container>
-
-                <!-- To Date -->
-                <ng-container matColumnDef="toDate">
-                    <th mat-header-cell *matHeaderCellDef
-                        class="w-[100px] text-center !bg-[#dd3d4f] border-r text-white">To Date
-                    </th>
-                    <td mat-cell *matCellDef="let row">
-                        {{ row.toDate | date:'dd-MM-yyyy' }}
-                    </td>
-                </ng-container>
-
-                <!-- Document -->
-                <ng-container matColumnDef="document">
-                    <th mat-header-cell *matHeaderCellDef
-                        class="w-[60px] text-center !bg-[#dd3d4f] border-r text-white">Document</th>
-                    <td mat-cell *matCellDef="let row">
-                        <button mat-icon-button color="primary" (click)="downloadFile(row.fileName)">
-                            <i class="fa-solid fa-download text-[#dd3d4f]"></i>
-                        </button>
-
-                    </td>
-                </ng-container>
-
-                <!-- Description -->
-                <ng-container matColumnDef="description">
-                    <th mat-header-cell *matHeaderCellDef
-                        class="w-[70px] text-center !bg-[#dd3d4f] border-r text-white">
-                        Description</th>
-                    <td mat-cell *matCellDef="let row">{{ row.description }}</td>
-                </ng-container>
-
-                <!-- Action -->
-                <ng-container matColumnDef="action">
-                    <th mat-header-cell *matHeaderCellDef
-                        class="w-[110px] text-center !bg-[#dd3d4f] border-r text-white">
-                        Action</th>
-                    <td mat-cell *matCellDef="let row" class="px-1 py-1 text-center">
-                        <div *ngIf="row.statuscode == 0">
-                            <button title="Approve" (click)="ApproveLeave(row.id)"
-                                class="text-green-700 p-2 rounded-full hover:bg-green-100 mr-1 text-[12px]">
-                                <i class="fa-solid fa-check"></i>
-                            </button>
-                            |
-                            <button title="Reject" (click)="openModal(row.id)"
-                                class="text-red-700 p-2 rounded-full hover:bg-green-100 mr-1 text-[12px]">
-                                <i class="fa-solid fa-remove"></i>
-                            </button>
-                        </div>
-                            <span class=" text-green-600" *ngIf="row.statuscode==1">
-                                {{row.status}}
-                            </span>
-                            <a (click)="openReasonModal(row.id)" class="!cursor-pointer text-red-600" *ngIf="row.statuscode==2">
-                                {{ row.status }}
-                            </a>
-                    </td>
-                </ng-container>
-
-                <!-- ROWS -->
-                <tr mat-header-row *matHeaderRowDef="displayedColumns" class="!h-9">
-                </tr>
-
-                <tr mat-row *matRowDef="let row; columns: displayedColumns" class="hover:bg-gray-100 !h-9">
-                </tr>
-
-            </table>
-
-        </div>
+       </app-generic-table>
     </div>
 </div>
 
@@ -214,4 +105,105 @@
             {{reason}}
          </div>
     </div>
+</div>
+
+<ng-template #filesTemplate let-row>
+  <button
+    *ngIf="row.fileName"
+    class="w-7 ms-6 h-7 flex items-center justify-center rounded
+           text-gray-600 hover:text-blue-600  hover:bg-gray-100 "
+    title="View Documents" 
+    
+   >
+
+    <!-- Eye icon -->
+    <svg class="w-4 h-4 ms-3"  fill="none" stroke="currentColor" stroke-width="2"
+         viewBox="0 0 24 24"  (click)="openFile(row.fileName)">
+      <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+      <path d="M2.458 12C3.732 7.943 7.523 5 12 5
+               c4.478 0 8.268 2.943 9.542 7
+               -1.274 4.057-5.064 7-9.542 7
+               -4.477 0-8.268-2.943-9.542-7z"/>
+    </svg>
+  </button>
+</ng-template>
+
+    <ng-template #statustemplate let-row>
+    <button class="px-2 py-1 text-xs rounded"
+            [ngClass]="{
+                'text-green-600': row.status === 'Approved',
+                'text-red-600': row.status === 'Unapproved',
+                'text-gray-600': row.status === 'Pending'
+            }"
+            (click)="openReason(row.reason)">
+        {{ row.status }}
+    </button>
+    </ng-template>
+
+<!-- DOCUMENT MODAL -->
+<div *ngIf="showFilesModal"
+     class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+  <div class="bg-white w-full max-w-4xl max-h-full rounded-xl shadow-xl flex flex-col overflow-hidden">
+    
+    <!-- Modal Header -->
+    <div class="flex justify-between items-center px-4 py-2 border-b">
+      <h3 class="font-semibold">Documents</h3>
+      <button (click)="closeFiles()" class="text-gray-500 hover:text-red-500 text-lg">✕</button>
+    </div>
+
+
+<div *ngIf="showFilesModal"
+     class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+  <div class="bg-white w-[600px] max-w-full h-[500px] rounded-xl shadow-xl flex flex-col overflow-hidden">
+
+    <!-- Header -->
+    <div class="flex justify-between items-center px-4 py-2 border-b">
+      <h3 class="font-semibold text-gray-700">Document Preview</h3>
+
+      <div class="flex gap-2">
+        <!-- Download Button -->
+        <a 
+          *ngIf="selectedDocuments"
+          [href]="selectedDocuments" 
+          download
+          class="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700">
+          Download
+        </a>
+
+        <!-- Close Button -->
+        <button (click)="closeFiles()" class="text-gray-500 hover:text-red-500 font-bold text-lg">✕</button>
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="flex-1 overflow-auto p-2">
+      <ng-container *ngIf="selectedDocuments">
+        <iframe 
+          [src]="selectedDocuments | safeUrl" 
+          class="w-full h-full border rounded" 
+          frameborder="0">
+        </iframe>
+      </ng-container>
+
+      <p *ngIf="!selectedDocuments" class="text-center text-gray-400 mt-10">
+        No document available
+      </p>
+    </div>
+  </div>
+</div>
+  </div>
+</div>
+
+<div *ngIf="showStatusModal"
+     class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+  <div class="bg-white w-full max-w-md rounded-lg shadow-lg">
+    <div class="flex justify-between items-center px-4 py-2 border-b">
+      <h3 class="font-semibold">Status Reason</h3>
+      <button (click)="closeStatusModal()" class="text-gray-500 hover:text-red-500">✕</button>
+    </div>
+
+    <div class="p-4 text-gray-700">
+      {{ selectedReason || 'No reason provided' }}
+    </div>
+  </div>
 </div>

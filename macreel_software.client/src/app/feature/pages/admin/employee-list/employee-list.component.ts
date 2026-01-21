@@ -30,6 +30,7 @@ export class EmployeeListComponent implements OnInit {
   constructor(private employeeService: ManageEmployeeService, private router: Router) { }
 
   editEmployee(emp: any) {
+<<<<<<< HEAD
     this.router.navigate(['/home/edit-employee', emp.id]);
   }
   employee: TableColumn<employee>[] = [
@@ -39,6 +40,17 @@ export class EmployeeListComponent implements OnInit {
     { key: 'designationName', label: 'Name' },
     { key: 'empEmail', label: 'Name' },
     { key: 'Contact', label: 'Name' },
+=======
+  this.router.navigate(['/home/edit-employee', emp.id]);
+}
+     employee: TableColumn<employee>[] = [
+      { key: 'empCode', label: 'Code' },
+      { key: 'empName', label: 'Name' },
+      { key: 'designationName', label: 'Designation' },
+      { key: 'emailId', label: 'Email' },
+      { key: 'mobile', label: 'Mobile' },
+
+>>>>>>> d46015d300249b638049e73f6b113cb8012c417a
 
 
   ];
@@ -128,10 +140,18 @@ export interface employee {
   srNo: number;
   id: number,
   name: string;
+<<<<<<< HEAD
   empCode: number
   empName: string
   designationName: string
   empEmail: string
   Contact: number
 
+=======
+empCode :number
+ empName :string
+ designationName:string
+ emailId :string
+ mobile :number
+>>>>>>> d46015d300249b638049e73f6b113cb8012c417a
 }
