@@ -59,7 +59,6 @@
         <!-- Checkbox -->
         <ng-container *ngIf="col.type === 'checkbox'">
           <input type="checkbox" 
-               
                  [checked]="item[col.key]"
                  (change)="onCheckboxChange(item,col.key, $event)"
                  class="mx-auto" />

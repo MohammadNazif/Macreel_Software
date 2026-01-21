@@ -136,7 +136,7 @@ selectedReason: string = '';
   ngOnInit(): void {
        // ✅ Initialize columns here AFTER filesTemplate is available
       this.leavereq = [
-        { key: 'empName', label: 'Name'  },
+        { key: 'empName', label: 'Name' ,clickable:true ,route: '/home/admin/employee-details'},
         { key: 'leaveName', label: 'Leave Name'},
         { key: 'fromDate', label: 'From',type :'date' },
         { key: 'toDate', label: 'To', type: 'date', align: 'center' },

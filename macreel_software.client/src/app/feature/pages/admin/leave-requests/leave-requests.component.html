@@ -128,17 +128,17 @@
   </button>
 </ng-template>
 
-<ng-template #statustemplate let-row>
-  <button class="px-2 py-1 text-xs rounded"
-          [ngClass]="{
-            'text-green-600': row.status === 'Approved',
-            'text-red-600': row.status === 'Unapproved',
-            'text-gray-600': row.status === 'Pending'
-          }"
-          (click)="openReason(row.reason)">
-    {{ row.status }}
-  </button>
-</ng-template>
+    <ng-template #statustemplate let-row>
+    <button class="px-2 py-1 text-xs rounded"
+            [ngClass]="{
+                'text-green-600': row.status === 'Approved',
+                'text-red-600': row.status === 'Unapproved',
+                'text-gray-600': row.status === 'Pending'
+            }"
+            (click)="openReason(row.reason)">
+        {{ row.status }}
+    </button>
+    </ng-template>
 
 <!-- DOCUMENT MODAL -->
 <div *ngIf="showFilesModal"
