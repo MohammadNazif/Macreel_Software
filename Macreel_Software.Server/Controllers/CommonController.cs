@@ -24,9 +24,10 @@ namespace Macreel_Software.Server.Controllers
         private readonly FileUploadService _fileUploadService;
         private readonly IAdminServices _adminservice;
         private readonly MailSender _mailservice;
+        private readonly int _userId;
 
 
-        public CommonController(ICommonServices service, PasswordEncrypt pass, FileUploadService fileUploadService,IAdminServices adminservice, MailSender mailservice, IAdminServices adminService)
+        public CommonController(ICommonServices service, PasswordEncrypt pass, FileUploadService fileUploadService,IAdminServices adminservice, MailSender mailservice, IAdminServices adminService, IHttpContextAccessor http)
         {
             _service = service;
             _pass = pass;
@@ -34,6 +35,11 @@ namespace Macreel_Software.Server.Controllers
             _adminservice = adminservice;
             _mailservice = mailservice;
             _services = adminService;
+            var user = http.HttpContext?.User;
+            if (user != null && user.Identity?.IsAuthenticated == true)
+            {
+                _userId = Convert.ToInt32(user.FindFirst("UserId")?.Value);
+            }
         }
 
         [HttpGet("getAllStateList")]
@@ -491,6 +497,95 @@ namespace Macreel_Software.Server.Controllers
                 });
             }
         }
+        #endregion
+
+
+        #region Assigned Project for employee
+
+        [HttpPost("AssignProjectToEmp")]
+        public async Task<IActionResult> AssignProjectToEmp([FromBody] ProjectEmp data)
+        {
+            try
+            {
+                bool res = await _service.InsertProjectEmp(data, _userId);
+
+                if (res)
+                {
+                    return Ok(new
+                    {
+                        status = true,
+                        statusCode = 200,
+                        message = "Project assigned successfully"
+                    });
+                }
+                else
+                {
+                    return BadRequest(new
+                    {
+                        status = false,
+                        statusCode = 400,
+                        message = "No record inserted"
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    status = false,
+                    statusCode = 500,
+                    message = "Internal server error",
+                    error = ex.Message
+                });
+            }
+        }
+
+
+
+        [HttpGet("AssignedProjectEmpList")]
+        public async Task<IActionResult> AssignedProjectEmpList(int projectId)
+        {
+            try
+            {
+                ApiResponse<List<AssignedProjectEmpDto>> result =
+                    await _service.AssignedProjectEmpList(projectId);
+
+
+                return StatusCode(result.StatusCode, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<List<AssignedProjectEmpDto>>.FailureResponse(
+                    "An error occurred while fetching assigned project emp list",
+                    500,
+                    "SERVER_ERROR"
+                ));
+            }
+        }
+        #endregion
+
+        #region get al emp
+
+        [HttpGet("GetAllEmployees")]
+        public async Task<IActionResult> GetAllEmployees(string? searchTerm, int? pageNumber, int? pageSize)
+        {
+            try
+            {
+                ApiResponse<List<employeeRegistration>> result =
+                    await _services.GetAllEmpData(searchTerm, pageNumber, pageSize);
+
+                return StatusCode(result.StatusCode, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500,
+                    ApiResponse<List<employeeRegistration>>.FailureResponse(
+                        "An error occurred while fetching employee data",
+                        500,
+                        "SERVER_ERROR"));
+            }
+        }
+
         #endregion
     }
 }

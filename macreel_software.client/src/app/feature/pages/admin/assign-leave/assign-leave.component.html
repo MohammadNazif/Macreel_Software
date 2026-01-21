@@ -60,69 +60,13 @@
   <!-- CARD 3: Leave Table -->
   <div *ngIf="selectedEmployee" class="bg-white shadow-lg rounded-xl border border-gray-200 overflow-x-auto">
 
-    <!-- PAGINATOR -->
-    <div class="flex justify-end ">
-      <mat-paginator [length]="totalRecords" [pageSize]="pageSize" [pageSizeOptions]="[10,25,50]"
-        (page)="onPageChange($event)">
-      </mat-paginator>
-    </div>
-
-    <table mat-table [dataSource]="dataSource" class="min-w-[700px] w-full
-           border border-gray-300
-           divide-y divide-gray-300
-           table-fixed
-           text-sm md:text-base">
-
-      <!-- CHECKBOX -->
-      <ng-container matColumnDef="select">
-        <th mat-header-cell *matHeaderCellDef
-          class=" px-1 py-1 text-center !bg-[#dd3d4f] text-white text-[14px]">
-          Select
-        </th>
-        <td mat-cell *matCellDef="let element" class="px-1 py-1 text-center">
-          <input type="checkbox" [(ngModel)]="element.isSelected" class="w-4 h-4 accent-green-600">
-        </td>
-      </ng-container>
-
-
-      <!-- NO OF LEAVE -->
-      <ng-container matColumnDef="noOfLeave">
-        <th mat-header-cell *matHeaderCellDef class="px-1 py-1 !bg-[#dd3d4f] text-white text-[14px]">
-          No Of Leave
-        </th>
-        <td mat-cell *matCellDef="let element" class="px-1 py-1 text-center">
-          <input type="number" [(ngModel)]="element.noOfLeave"
-            class="border border-gray-300 rounded p-1.5 w-[55px] h-[25px] text-center text-[12px]">
-        </td>
-      </ng-container>
-
-      <!-- LEAVE NAME -->
-      <ng-container matColumnDef="leaveName">
-        <th mat-header-cell *matHeaderCellDef class="px-1 py-1 !bg-[#dd3d4f] text-white text-[14px]">
-          Type Of Leave
-        </th>
-        <td mat-cell *matCellDef="let element" class="px-1 py-1 text-[12px] m-[2]">
-          {{ element.leaveName }}
-        </td>
-      </ng-container>
-
-      <!-- DESCRIPTION -->
-      <ng-container matColumnDef="description">
-        <th mat-header-cell *matHeaderCellDef class="px-1 py-1 !bg-[#dd3d4f] text-white text-[14px]">
-          Description
-        </th>
-        <td mat-cell *matCellDef="let element" class="px-1 py-1 text-[12px]">
-          {{ element.description }}
-        </td>
-      </ng-container>
-
-      <!-- HEADER ROW -->
-      <tr mat-header-row *matHeaderRowDef="displayedColumns" class="!h-9"></tr>
-
-      <!-- DATA ROW -->
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="hover:bg-gray-100 !h-9"></tr>
-
-    </table>
+<app-generic-table
+  [columns]="leaves"
+  [data]="dataSource.data"
+  (checkboxChange)="onTableCheckboxChange($event)"
+  (numberChange)="onTableNumberChange($event)"
+  [showActions]="false">
+</app-generic-table>
 
     <div class="flex justify-end p-2">
       <button (click)="submitAssignedLeave()"

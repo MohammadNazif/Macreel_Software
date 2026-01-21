@@ -3,6 +3,8 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import Swal from 'sweetalert2';
 import { ManageMasterdataService } from '../../../../../core/services/manage-masterdata.service';
+import { TableColumn } from '../../../../../core/models/interface';
+import { PeriodicElement } from '../add-role/add-role.component';
 
 @Component({
   selector: 'app-add-technology',
@@ -14,7 +16,7 @@ export class AddTechnologyComponent implements OnInit {
 
   softwareType: string = '';
   technologyName: string = '';
-
+  data : any = [];
   displayedColumns: string[] = ['srNo', 'softwareType', 'technologyName', 'action'];
   dataSource = new MatTableDataSource<TechnologyElement>([]);
 
@@ -31,6 +33,12 @@ export class AddTechnologyComponent implements OnInit {
   editingId: number | null = null;
 
   constructor(private master: ManageMasterdataService) { }
+  
+   technolgy: TableColumn<TechnologyElement>[] = [
+       { key: 'softwareType', label: 'Software Name' },
+        { key: 'technologyName', label: 'Technology Name' },
+      
+     ];
 
   ngOnInit(): void {
     this.loadTechnology();
@@ -43,7 +51,7 @@ export class AddTechnologyComponent implements OnInit {
         const data = res.data || [];
         this.totalRecords = res.totalRecords;
 
-        this.dataSource.data = data.map((item: any, index: number) => ({
+        this.data = data.map((item: any, index: number) => ({
           srNo: (this.pageNumber - 1) * this.pageSize + index + 1,
           id: item.id,
           softwareType: item.softwareType,

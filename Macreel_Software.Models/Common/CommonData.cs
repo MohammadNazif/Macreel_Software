@@ -71,4 +71,12 @@ namespace Macreel_Software.Models.Common
     {
         public string email { get; set; }
     }
+
+    public class ProjectEmp
+    {
+        public int? projectId { get; set; }
+        public string? empIds { get; set; }   
+    }
+
+
 }

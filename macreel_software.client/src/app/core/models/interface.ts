@@ -78,7 +78,7 @@ export interface PaginatedResult<T> {
   data: T[];
   totalPages: number;
 }
-export type TableColumnType = 'text' | 'date' | 'custom' | 'time';
+export type TableColumnType = 'text' | 'date' | 'custom' | 'time' | 'checkbox'  | 'number';
 export type TableColumnAlign = 'left' | 'center' | 'right';
 
 export interface TableColumn<T> {

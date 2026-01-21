@@ -5,6 +5,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { ManageEmployeeService } from '../../../../core/services/manage-employee.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { TableColumn } from '../../../../core/models/interface';
 
 
 @Component({
@@ -18,7 +19,7 @@ export class EmployeeListComponent implements OnInit {
 
   displayedColumns: string[] = ['srNo', 'empCode', 'empName', 'designationName', 'empEmail', 'Contact', 'action'];
   dataSource = new MatTableDataSource<any>([]);
-
+  data : any=[];
   totalRecords = 0;
   pageSize = 20;
   pageIndex = 0; // for paginator
@@ -31,7 +32,16 @@ export class EmployeeListComponent implements OnInit {
   editEmployee(emp: any) {
   this.router.navigate(['/home/edit-employee', emp.id]);
 }
+     employee: TableColumn<employee>[] = [
+      { key: 'empCode', label: 'Code' },
+      { key: 'empName', label: 'Name' },
+      { key: 'designationName', label: 'Designation' },
+      { key: 'emailId', label: 'Email' },
+      { key: 'mobile', label: 'Mobile' },
 
+
+     
+    ];
   ngOnInit(): void {
     this.getEmployees();
   }
@@ -40,7 +50,7 @@ export class EmployeeListComponent implements OnInit {
   getEmployees(pageNumber: number = 1, pageSize: number = this.pageSize, searchText: string = this.searchText) {
     this.employeeService.getAllEmployees(pageNumber, pageSize, searchText).subscribe((res: any) => {
       if (res.success) {
-        this.dataSource.data = res.data;
+        this.data = res.data;
         this.totalRecords = res.totalRecords || res.data.length; // API should return totalRecords for pagination
         this.dataSource.paginator = this.paginator;
       }
@@ -69,7 +79,7 @@ export class EmployeeListComponent implements OnInit {
   // }
 
 
-deleteEmployee(id: number) {
+deleteEmployee(id: any) {
   Swal.fire({
     title: 'Are you sure?',
     text: 'This employee will be permanently deleted!',
@@ -115,4 +125,14 @@ deleteEmployee(id: number) {
 
 
 
+}
+export interface employee {
+  srNo: number;
+  id: number,
+  name: string;
+empCode :number
+ empName :string
+ designationName:string
+ emailId :string
+ mobile :number
 }
