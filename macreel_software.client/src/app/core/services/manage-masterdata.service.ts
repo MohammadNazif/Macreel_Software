@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -75,9 +76,6 @@ export class ManageMasterdataService {
   }
 
   addOrUpdateDepartment(role: any) {
-    // const headers = new HttpHeaders({
-    //   'Authorization' : `Bearer ${this.token}`
-    // })
     return this.http.post(`${this.baseUrl}Master/insertDepartment`, role, {})
   }
 
@@ -91,36 +89,82 @@ export class ManageMasterdataService {
 
   // ================= TECHNOLOGY APIs =================
 
-// Add / Update Technology (USING FORM DATA)
-// addOrUpdateTechnology(formData: FormData) {
-//   return this.http.post<any>(`${this.baseUrl}Master/insertTechnology`, formData);
-// }
+  addOrUpdateTechnology(payload: any) {
+    return this.http.post<any>(`${this.baseUrl}Master/insertTechnology`, payload);
+  }
 
-addOrUpdateTechnology(payload: any) {
-  return this.http.post<any>(`${this.baseUrl}Master/insertTechnology`, payload);
-}
+  // Get All Technology with pagination & search
+  getAllTechnology(pageNumber: number | null = null, pageSize: number | null = null, searchText: string = '') {
+    let params = new HttpParams();
 
+    if (pageNumber !== null) params = params.set('pageNumber', pageNumber);
+    if (pageSize !== null) params = params.set('pageSize', pageSize);
+    if (searchText) params = params.set('searchTerm', searchText);
 
-// Get All Technology with pagination & search
-getAllTechnology(pageNumber: number | null = null, pageSize: number | null = null, searchText: string = '') {
-  let params = new HttpParams();
+    return this.http.get<any>(`${this.baseUrl}Master/GetAllTechnology`, { params });
+  }
 
-  if (pageNumber !== null) params = params.set('pageNumber', pageNumber);
-  if (pageSize !== null) params = params.set('pageSize', pageSize);
-  if (searchText) params = params.set('searchTerm', searchText);
+  // Get Technology By ID
+  getTechnologyById(id: number) {
+    return this.http.get<any>(`${this.baseUrl}Master/GetAllTechnologyById?id=${id}`);
+  }
 
-  return this.http.get<any>(`${this.baseUrl}Master/GetAllTechnology`, { params });
-}
+  // Delete Technology
+  deleteTechnologyById(id: number) {
+    return this.http.delete<any>(`${this.baseUrl}Master/deleteTechnologyById?id=${id}`);
+  }
 
-// Get Technology By ID
-getTechnologyById(id: number) {
-  return this.http.get<any>(`${this.baseUrl}Master/GetAllTechnologyById?id=${id}`);
-}
+  //=============Page Services==============
+  insertPage(data: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}Master/insertPage`,
+      data,
+      { withCredentials: true }
+    );
+  }
+  getAllPages(
+    pageNumber?: number,
+    pageSize?: number
+  ): Observable<any> {
 
-// Delete Technology
-deleteTechnologyById(id: number) {
-  return this.http.delete<any>(`${this.baseUrl}Master/deleteTechnologyById?id=${id}`);
-}
+    let params = new HttpParams();
 
+    if (pageNumber !== null && pageNumber !== undefined) {
+      params = params.set('pageNumber', pageNumber.toString());
+    }
+
+    if (pageSize !== null && pageSize !== undefined) {
+      params = params.set('pageSize', pageSize.toString());
+    }
+
+    return this.http.get<any>(
+      `${this.baseUrl}Master/getAllPages`,
+      { params, withCredentials: true }
+    );
+  }
+  getPageById(pageId: number): Observable<any> {
+    let params = new HttpParams();
+
+    if (pageId !== null && pageId !== undefined) {
+      params = params.set('pageId', pageId.toString());
+    }
+
+    return this.http.get<any>(
+      `${this.baseUrl}Master/getPageById`,
+      { params, withCredentials: true }
+    );
+  }
+  deletePageById(pageId: number): Observable<any> {
+    let params = new HttpParams();
+
+    if (pageId !== null && pageId !== undefined) {
+      params = params.set('pageId', pageId.toString());
+    }
+
+    return this.http.delete<any>(
+      `${this.baseUrl}Master/deletePageById`,
+      { params, withCredentials: true }
+    );
+  }
 
 }

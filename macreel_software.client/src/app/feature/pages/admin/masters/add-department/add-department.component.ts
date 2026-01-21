@@ -3,6 +3,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import Swal from 'sweetalert2';
 import { ManageMasterdataService } from '../../../../../core/services/manage-masterdata.service';
+import { TableColumn } from '../../../../../core/models/interface';
 
 @Component({
   selector: 'app-add-department',
@@ -24,9 +25,13 @@ export class AddDepartmentComponent implements OnInit {
   pageNumber: number = 1;
   totalRecords: number = 0;
   searchText: string = '';
-
+   data: any[] = [];
   constructor(private master: ManageMasterdataService) {}
 
+   Roles: TableColumn<DepartmentRow>[] = [
+          { key: 'name', label: 'Name' },
+         
+        ];
   ngOnInit(): void {
     this.loadDepartments();
   }
@@ -42,7 +47,7 @@ export class AddDepartmentComponent implements OnInit {
         const list = res.data || [];
         this.totalRecords = res.totalRecords || 0;
 
-        this.dataSource.data = list.map((item: any, index: number) => ({
+        this.data = list.map((item: any, index: number) => ({
           srNo: (this.pageNumber - 1) * this.pageSize + index + 1,
           id: item.id,
           name: item.departmentName || item.name

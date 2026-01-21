@@ -63,9 +63,9 @@ export class ManageLeaveService {
     return this.http.get<any>(`${this.baseUrl}Admin/getAssignedLeaveById?empId=${empId}`);
   }
   // Update Leave Requests
-  UpdateLeaveStatus(id:number,leaveCount:number,status:number) {
+  UpdateLeaveStatus(id:number,status:number,reason : string | null) {
     return this.http.put<any>(
-      `${this.baseUrl}Admin/updateLeaveStatus?id=${id}&leaveCount=${leaveCount}&status=${status}`,{withCredential:true}
+      `${this.baseUrl}Admin/updateLeaveStatus?id=${id}&status=${status}&reason=${reason}`,{withCredential:true}
     );
   }
   //Leave Requests

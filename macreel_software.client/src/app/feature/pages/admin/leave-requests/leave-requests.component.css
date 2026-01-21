@@ -1,3 +1,4 @@
+
 /* Hide "Items per page" label */
 ::ng-deep .mat-mdc-paginator-page-size-label {
   display: none !important;
@@ -14,3 +15,8 @@
   min-width: 55px !important;
 }
 
+/* Reduce dropdown height */
+::ng-deep .mat-mdc-select-trigger {
+  height: 22px !important;
+  font-size: 13px !important;
+}

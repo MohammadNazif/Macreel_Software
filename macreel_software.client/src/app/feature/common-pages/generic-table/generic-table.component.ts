@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, TemplateRef } from '@angular/co
 
 import { DatePipe } from '@angular/common';
 import { TableColumn } from '../../../core/models/interface';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-generic-table',
@@ -21,7 +22,13 @@ export class GenericTableComponent<T> {
   @Output() tableScroll = new EventEmitter<Event>();
   @Input() showActions = true;
 
-  constructor(private datePipe: DatePipe) {}
+
+  @Output() cellAction = new EventEmitter<{ action: string, row: any }>();
+  @Input() router!: Router;
+
+  constructor(private datePipe: DatePipe,
+    private Router : Router
+  ) {}
 
   private isDate(value: any): boolean {
     return value instanceof Date || !isNaN(Date.parse(value));
@@ -42,5 +49,16 @@ export class GenericTableComponent<T> {
     this.tableScroll.emit(event);
   }
 
+onCellClick(row: any, col: TableColumn<any>) {
+
+  if (col.apiActions?.length) {
+    col.apiActions.forEach(action => this.cellAction.emit({ action, row }));
+  }
+
+    if (col.route) {
+      console.log(col.route)
+      this.Router.navigate([col.route], { queryParams: { id: row.id } });
+    }
+}
 
 }

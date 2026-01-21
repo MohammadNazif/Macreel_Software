@@ -50,9 +50,9 @@
       </h1>
 
       <!-- RIGHT SIDE: SEARCH + PAGINATOR -->
-      <div class="flex flex-col md:flex-row md:items-center gap-2 w-full md:w-auto justify-end">
+      <!-- <div class="flex flex-col md:flex-row md:items-center gap-2 w-full md:w-auto justify-end">
 
-        <!-- SEARCH INPUT -->
+      
         <div class="relative">
           <input type="text" placeholder="Search Role" (keyup)="applyFilter($event)" class=" pl-10 pr-3 py-[6px] text-[12px] rounded-lg bg-[#F6F7FB] border border-gray-300
                focus:outline-none focus:ring-2 focus:ring-[#C5192F] table-search" />
@@ -60,80 +60,34 @@
             class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-[12px]"></i>
         </div>
 
-        <!-- PAGINATOR -->
+   
         <div class="w-full md:w-auto">
           <mat-paginator [pageSizeOptions]="[20,50,100]" [pageSize]="pageSize" [length]="totalRecords"
             showFirstLastButtons (page)="onPageChange($event)">
           </mat-paginator>
         </div>
 
-      </div>
-
-    </div>
-
-
-
-    <!-- ================= TABLE WRAPPER ================= -->
-    <div class="relative overflow-x-auto w-full">
-
-      <table mat-table [dataSource]="dataSource" class="min-w-[700px] w-full
-               border border-gray-300
-               divide-y divide-gray-300
-               table-fixed
-               text-sm md:text-base">
-
-        <!-- SR NO -->
-        <ng-container matColumnDef="srNo">
-          <th mat-header-cell *matHeaderCellDef class="w-[70px] text-[14px] px-1 py-1 text-center
-                   !bg-[#dd3d4f] text-white whitespace-nowrap">
-            Sr No.
-          </th>
-
-          <td mat-cell *matCellDef="let element" class="px-1 py-1 text-[12px] text-center">
-            {{ element.srNo }}
-          </td>
-        </ng-container>
-
-        <!-- ROLE NAME -->
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef class="min-w-[200px] text-[14px] px-1 py-1
-                   !bg-[#dd3d4f] text-white">
-            Role Name
-          </th>
-
-          <td mat-cell *matCellDef="let element" class="px-1 py-1 text-[12px] ">
-            {{ element.name }}
-          </td>
-        </ng-container>
-
-        <!-- ACTION -->
-        <ng-container matColumnDef="action">
-          <th mat-header-cell *matHeaderCellDef class="w-[120px] text-[14px] px-1 py-1 text-center
-                   !bg-[#dd3d4f] text-white">
-            Action
-          </th>
-
-          <td mat-cell *matCellDef="let element" class="px-1 py-1 text-center">
-
-            <button class="text-green-700 p-2 rounded-full hover:bg-green-100 mr-1" (click)="editRole(element)">
-              <i class="fa fa-pencil"></i>
-            </button>
-            <button class="text-red-500 p-2 rounded-full hover:bg-red-100" (click)="deleteRole(element)">
-              <i class="fa fa-trash"></i>
-            </button>
-
-          </td>
-        </ng-container>
-
-        <!-- ROWS -->
-        <tr mat-header-row *matHeaderRowDef="displayedColumns" class="!h-9">
-        </tr>
-
-        <tr mat-row *matRowDef="let row; columns: displayedColumns" class="hover:bg-gray-100 !h-9">
-        </tr>
-
-      </table>
-
-    </div>
+      </div> -->
+<form class="relative w-full md:w-60">
+      <input type="text" formControlName="search" placeholder="Search projects"
+        class="w-full h-8 rounded-lg border border-gray-300 pl-8 pr-3 text-[12px] text-gray-700 placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-[#dd3d4f] focus:border-[#dd3d4f]" />
+    </form>
   </div>
+
+   <app-generic-table
+  [columns]="Roles"
+  [data]=" data"
+  (edit)="editRole($event)"
+  (delete)="deleteRole($event)"
+ >
+</app-generic-table>
+
+    </div>
+
+
+   
+    <!-- ================= TABLE WRAPPER ================= -->
+
+
+
 </div>

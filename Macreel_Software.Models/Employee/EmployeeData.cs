@@ -36,11 +36,12 @@ namespace Macreel_Software.Models.Employee
         public int? leaveTypeId { get; set; }
         public string? description { get; set; }
         public string? status { get; set; }
-
+        public int? statuscode { get; set; }
         public string? empName { get; set; }
         public DateTime? applieddate { get; set; }
         public int? leaveCount { get; set; }
         public string? leaveName { get; set; }
+        public string? reason { get; set; }
 
     }
     public class Dashboard

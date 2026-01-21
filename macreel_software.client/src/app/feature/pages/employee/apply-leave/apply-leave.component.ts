@@ -27,7 +27,7 @@ export class ApplyLeaveComponent {
 
   dataSource = new MatTableDataSource<any>([]);
   pageNumber = 1;
-  pageSize = 5;
+  pageSize = 10;
   totalRecords = 0;
   allLeaves: any[] = [];
   searchTerm: string = ''

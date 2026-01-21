@@ -30,14 +30,11 @@
     </div>
 
 
-    <!-- ================= TABLE WRAPPER ================= -->
-<app-generic-table
-  [columns]="taskColumns"
-  [data]="tasks"  
-
-  (edit)="onEdit($event)"
-  (delete)="onDelete($event)">
+      <app-generic-table
+  [columns]="employee"
+  [data]="data"
+  (delete)="deleteEmployee($event)"
+ >
 </app-generic-table>
-
   </div>
 </div>
