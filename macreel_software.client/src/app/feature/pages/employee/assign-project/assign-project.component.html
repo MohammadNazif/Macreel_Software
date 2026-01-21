@@ -1,99 +1,177 @@
-<div class="bg-gray-50 p-2 md:p-2">
+<div class="bg-gray-50 p-2">
   <div class="bg-white shadow rounded-lg p-1">
 
-    <!-- HEADER -->
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-1 mb-1">
-      <h1 class="ml-2 text-lg md:text-[16px] font-semibold text-[#444] text-center md:text-left">
-        Assign Project List
-      </h1>
+    <h1 class="ml-2 text-lg font-semibold text-[#444]">
+      Assigned Project List
+    </h1>
+
+    <app-generic-table
+      [columns]="projectsColumns"
+      [data]="projectsData"
+      [loading]="loading"
+      [showActions]="false">
+    </app-generic-table>
+
+  </div>
+</div>
+
+<!-- ACTION TEMPLATE -->
+<ng-template #filesTemplate let-row>
+  <div class="flex gap-2 justify-center">
+
+    <!-- Assign Employee -->
+    <button
+      class="w-7 h-7 text-green-600 hover:bg-green-100 rounded"
+      title="Assign Employee"
+      (click)="viewEmployee(row)">
+       <i class="fa-solid fa-user-plus"></i>
+    </button>
+
+    <!-- Show Assigned Employees -->
+    <button
+      class="px-2 py-1 text-blue-600 hover:underline"
+      (click)="showAssignedEmployees(row)">
+      <i class="fa-solid fa-users mr-1"></i>
+    </button>
+
+  </div>
+</ng-template>
+
+
+<!-- <ng-template #filesTemplate let-row>
+  <div class="flex justify-center">
+    <button
+      class="w-7 h-7 text-green-600 hover:bg-green-100 rounded"
+      title="Assign Employee"
+      (click)="viewEmployee(row)">
+      👤
+    </button>
+  </div>
+</ng-template> -->
+
+<ng-template #filesTemplate let-row>
+  <div class="flex justify-center">
+    <button
+      class="px-2 py-1 text-blue-600 hover:underline"
+      (click)="showAssignedEmployees(row)">
+      Show Employees
+    </button>
+  </div>
+</ng-template>
+
+
+<!-- MODAL -->
+<div *ngIf="showEmployeeModal"
+     class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+
+  <div class="bg-white w-[420px] rounded-xl shadow-xl flex flex-col">
+
+    <!-- Header -->
+    <div class="flex justify-between items-center px-4 py-2 border-b">
+      <h3 class="font-semibold">Select Employees</h3>
+      <button (click)="closeModal()">✕</button>
     </div>
 
-    <!-- TABLE WRAPPER -->
-    <div class="relative overflow-x-auto w-full">
+    <!-- Body -->
+    <div class="p-4">
 
-      <table mat-table [dataSource]="[
-        { projectName:'Macreel Software', assignDate:'2026-01-10', completionDate:'2026-01-15', completionStatus:'Completed' },
-        { projectName:'Alpha Project', assignDate:'2026-02-05', completionDate:'2026-02-20', completionStatus:'In Progress' },
-        { projectName:'Beta Development', assignDate:'2026-03-12', completionDate:'2026-03-30', completionStatus:'Pending' },
-        { projectName:'Gamma Initiative', assignDate:'2026-04-01', completionDate:'2026-04-15', completionStatus:'Completed' },
-        { projectName:'Delta Taskforce', assignDate:'2026-05-20', completionDate:'2026-06-05', completionStatus:'In Progress' },
-        { projectName:'TTMS', assignDate:'Neha Verma', completionDate:'UI/UX Designer', completionStatus:'neha@example.com' }
-      ]"
-      class="min-w-[900px] w-full border border-gray-300 divide-y divide-gray-300 table-fixed text-sm md:text-base">
+      <mat-form-field class="w-full">
+        <mat-label>Select Employees</mat-label>
 
-        <!-- SR NO -->
-        <ng-container matColumnDef="srNo">
-          <th mat-header-cell *matHeaderCellDef class="w-[70px] whitespace-nowrap px-1 py-1 text-center !bg-[#dd3d4f] text-white">
-            Sr No.
-          </th>
-          <td mat-cell *matCellDef="let element; let i = index" class="px-1 py-1 text-center text-[12px]">
-            {{ i + 1 }}
-          </td>
-        </ng-container>
+        <mat-chip-grid #chipGrid>
+          <mat-chip-row
+            *ngFor="let emp of selectedEmployees"
+            (removed)="removeEmployee(emp)">
+            {{ emp.empName }}
+            <button matChipRemove>✕</button>
+          </mat-chip-row>
 
-        <!-- PROJECT NAME -->
-        <ng-container matColumnDef="projectName">
-          <th mat-header-cell *matHeaderCellDef class="min-w-[180px] px-1 py-1 !bg-[#dd3d4f] text-white">
-            Project Name
-          </th>
-          <td mat-cell *matCellDef="let element" class="px-1 py-1 text-[12px]">
-            {{ element.projectName }}
-          </td>
-        </ng-container>
+          <input
+            placeholder="Search employee..."
+            [formControl]="employeeCtrl"
+            [matAutocomplete]="autoEmp"
+            [matChipInputFor]="chipGrid" />
+        </mat-chip-grid>
 
-        <!-- ASSIGN DATE -->
-        <ng-container matColumnDef="assignDate">
-          <th mat-header-cell *matHeaderCellDef class="min-w-[150px] px-1 py-1 !bg-[#dd3d4f] text-white">
-            Assign Date
-          </th>
-          <td mat-cell *matCellDef="let element" class="px-1 py-1 text-[12px]">
-            {{ element.assignDate }}
-          </td>
-        </ng-container>
+        <mat-autocomplete
+          #autoEmp="matAutocomplete"
+          (optionSelected)="onEmployeeSelected($event)">
+          <mat-option *ngFor="let emp of employees" [value]="emp.id">
+            {{ emp.empName }}
+          </mat-option>
+        </mat-autocomplete>
 
-        <!-- COMPLETION DATE -->
-        <ng-container matColumnDef="completionDate">
-          <th mat-header-cell *matHeaderCellDef class="min-w-[150px] px-1 py-1 !bg-[#dd3d4f] text-white">
-            Completion Date
-          </th>
-          <td mat-cell *matCellDef="let element" class="px-1 py-1 text-[12px]">
-            {{ element.completionDate }}
-          </td>
-        </ng-container>
+      </mat-form-field>
 
-        <!-- COMPLETION STATUS -->
-        <ng-container matColumnDef="completionStatus">
-          <th mat-header-cell *matHeaderCellDef class="min-w-[150px] px-1 py-1 !bg-[#dd3d4f] text-white">
-            Completion Status
-          </th>
-          <td mat-cell *matCellDef="let element" class="px-1 py-1 text-[12px]">
-            {{ element.completionStatus }}
-          </td>
-        </ng-container>
+    </div>
 
-        <!-- ACTION -->
-        <ng-container matColumnDef="action">
-  <th mat-header-cell *matHeaderCellDef class="w-[160px] px-1 py-1 text-center !bg-[#dd3d4f] text-white">
-    Action
-  </th>
-  <td mat-cell *matCellDef="let element" class="px-1 py-1 text-center whitespace-nowrap">
-    <div class="flex justify-center gap-2">
-      <button class="text-blue-700 px-3 py-1 rounded-md hover:bg-blue-100 text-[12px]">
-        View
+    <!-- Footer -->
+    <div class="flex justify-end gap-2 px-4 py-2 border-t">
+      <button (click)="closeModal()" class="border px-4 py-1 rounded">
+        Cancel
       </button>
-      <button class="text-green-700 px-3 py-1 rounded-md hover:bg-green-100 text-[12px]">
-        Add Employee
+
+      <button
+        (click)="submit()"
+        [disabled]="!selectedEmployees.length"
+        class="bg-[#dd3d4f] text-white px-4 py-1 rounded disabled:opacity-50">
+        Submit
       </button>
     </div>
-  </td>
-</ng-container>
+
+  </div>
+</div>
 
 
-        <!-- HEADER & ROWS -->
-        <tr mat-header-row *matHeaderRowDef="['srNo','projectName','assignDate','completionDate','completionStatus','action']" class="!h-9"></tr>
-        <tr mat-row *matRowDef="let row; columns: ['srNo','projectName','assignDate','completionDate','completionStatus','action']" class="hover:bg-gray-100 !h-9"></tr>
+<!-- EMPLOYEE LIST MODAL -->
+<div *ngIf="showEmployeeListModal"
+     class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
 
+  <div class="bg-white w-[650px] rounded-xl shadow-xl">
+
+    <!-- Header -->
+    <div class="flex justify-between items-center px-4 py-2 border-b">
+      <h3 class="font-semibold">Assigned Employees</h3>
+      <button (click)="showEmployeeListModal = false">✕</button>
+    </div>
+
+    <!-- Body -->
+    <div class="p-4 max-h-[400px] overflow-auto">
+
+      <table class="w-full border text-sm">
+        <thead class="bg-gray-100">
+          <tr>
+            <th class="border px-2 py-1">Name</th>
+            <th class="border px-2 py-1">Mobile</th>
+            <th class="border px-2 py-1">Designation</th>
+            <th class="border px-2 py-1">Category</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let emp of assignedEmployees">
+            <td class="border px-2 py-1">{{ emp.empName }}</td>
+            <td class="border px-2 py-1">{{ emp.mobile }}</td>
+            <td class="border px-2 py-1">{{ emp.designation }}</td>
+            <td class="border px-2 py-1">{{ emp.category }}</td>
+          </tr>
+        </tbody>
       </table>
+
+      <p *ngIf="!assignedEmployees.length" class="text-center text-gray-500">
+        No employees found
+      </p>
+
     </div>
+
+    <!-- Footer -->
+    <div class="flex justify-end px-4 py-2 border-t">
+      <button
+        (click)="showEmployeeListModal = false"
+        class="border px-4 py-1 rounded">
+        Close
+      </button>
+    </div>
+
   </div>
 </div>

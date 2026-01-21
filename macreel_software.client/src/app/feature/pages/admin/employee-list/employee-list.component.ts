@@ -19,7 +19,7 @@ export class EmployeeListComponent implements OnInit {
 
   displayedColumns: string[] = ['srNo', 'empCode', 'empName', 'designationName', 'empEmail', 'Contact', 'action'];
   dataSource = new MatTableDataSource<any>([]);
-  data : any=[];
+  data: any = [];
   totalRecords = 0;
   pageSize = 20;
   pageIndex = 0; // for paginator
@@ -30,6 +30,17 @@ export class EmployeeListComponent implements OnInit {
   constructor(private employeeService: ManageEmployeeService, private router: Router) { }
 
   editEmployee(emp: any) {
+<<<<<<< HEAD
+    this.router.navigate(['/home/edit-employee', emp.id]);
+  }
+  employee: TableColumn<employee>[] = [
+    { key: 'empCode', label: 'Name' },
+    { key: 'empName', label: 'Name' },
+    { key: 'empCode', label: 'Name' },
+    { key: 'designationName', label: 'Name' },
+    { key: 'empEmail', label: 'Name' },
+    { key: 'Contact', label: 'Name' },
+=======
   this.router.navigate(['/home/edit-employee', emp.id]);
 }
      employee: TableColumn<employee>[] = [
@@ -39,9 +50,10 @@ export class EmployeeListComponent implements OnInit {
       { key: 'emailId', label: 'Email' },
       { key: 'mobile', label: 'Mobile' },
 
+>>>>>>> d46015d300249b638049e73f6b113cb8012c417a
 
-     
-    ];
+
+  ];
   ngOnInit(): void {
     this.getEmployees();
   }
@@ -79,60 +91,67 @@ export class EmployeeListComponent implements OnInit {
   // }
 
 
-deleteEmployee(id: any) {
-  Swal.fire({
-    title: 'Are you sure?',
-    text: 'This employee will be permanently deleted!',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#C5192F',
-    cancelButtonColor: '#6c757d',
-    confirmButtonText: 'Yes, delete it!',
-    cancelButtonText: 'Cancel'
-  }).then((result) => {
+  deleteEmployee(id: any) {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This employee will be permanently deleted!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#C5192F',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
 
-    if (result.isConfirmed) {
+      if (result.isConfirmed) {
 
-      this.employeeService.deleteDepartmentById(id).subscribe({
-        next: (res: any) => {
+        this.employeeService.deleteDepartmentById(id).subscribe({
+          next: (res: any) => {
 
-          if (res.status === true) {
+            if (res.status === true) {
 
-            Swal.fire({
-              title: 'Deleted!',
-              text: res.message || 'Employee deleted successfully.',
-              icon: 'success',
-              confirmButtonText: 'OK'
-            }).then(() => {
-              // 🔄 FULL PAGE REFRESH
-              window.location.reload();
-            });
+              Swal.fire({
+                title: 'Deleted!',
+                text: res.message || 'Employee deleted successfully.',
+                icon: 'success',
+                confirmButtonText: 'OK'
+              }).then(() => {
+                // 🔄 FULL PAGE REFRESH
+                window.location.reload();
+              });
 
-          } else {
-            Swal.fire('Error', res.message || 'Delete failed', 'error');
+            } else {
+              Swal.fire('Error', res.message || 'Delete failed', 'error');
+            }
+
+          },
+          error: () => {
+            Swal.fire('Error', 'Something went wrong!', 'error');
           }
+        });
 
-        },
-        error: () => {
-          Swal.fire('Error', 'Something went wrong!', 'error');
-        }
-      });
+      }
 
-    }
-
-  });
-}
-
-
+    });
+  }
 
 }
 export interface employee {
   srNo: number;
   id: number,
   name: string;
+<<<<<<< HEAD
+  empCode: number
+  empName: string
+  designationName: string
+  empEmail: string
+  Contact: number
+
+=======
 empCode :number
  empName :string
  designationName:string
  emailId :string
  mobile :number
+>>>>>>> d46015d300249b638049e73f6b113cb8012c417a
 }
