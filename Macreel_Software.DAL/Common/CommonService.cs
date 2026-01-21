@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Data;
+using System.Threading.Tasks;
 using Macreel_Software.Contracts.DTOs;
 using Macreel_Software.Models;
 using Macreel_Software.Models.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using OfficeOpenXml;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace Macreel_Software.DAL.Common
 {
@@ -462,7 +464,43 @@ namespace Macreel_Software.DAL.Common
             }
 
         }
-        
+
+        public async Task<bool> UpdateProjectEmpStatus(int projectId,int empId,int approveStatus,int? newEmpId,int addedBy)
+        {
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("sp_addAndAssignProject", _conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@action", "updateStatusOfProjectEmp");
+                    cmd.Parameters.AddWithValue("@projectId", projectId);
+                    cmd.Parameters.AddWithValue("@addedBy", addedBy);
+                    cmd.Parameters.AddWithValue("@empId", empId);
+                    cmd.Parameters.AddWithValue("@approveStatus", approveStatus);
+                    cmd.Parameters.AddWithValue("@newEmpId",
+                        newEmpId.HasValue ? newEmpId.Value : (object)DBNull.Value);
+
+                    if (_conn.State == ConnectionState.Closed)
+                        await _conn.OpenAsync();
+
+                    int rowAffected = await cmd.ExecuteNonQueryAsync();
+                    return rowAffected > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw; 
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    await _conn.CloseAsync();
+            }
+        }
+
+
+
 
     }
 }

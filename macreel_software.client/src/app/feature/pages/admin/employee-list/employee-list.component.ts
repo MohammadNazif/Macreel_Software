@@ -5,7 +5,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { ManageEmployeeService } from '../../../../core/services/manage-employee.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { TableColumn } from '../../../../core/models/interface';
+import { employee, TableColumn } from '../../../../core/models/interface';
 
 
 @Component({
@@ -30,7 +30,6 @@ export class EmployeeListComponent implements OnInit {
   constructor(private employeeService: ManageEmployeeService, private router: Router) { }
 
   editEmployee(emp: any) {
-<<<<<<< HEAD
     this.router.navigate(['/home/edit-employee', emp.id]);
   }
   employee: TableColumn<employee>[] = [
@@ -40,20 +39,7 @@ export class EmployeeListComponent implements OnInit {
     { key: 'designationName', label: 'Name' },
     { key: 'empEmail', label: 'Name' },
     { key: 'Contact', label: 'Name' },
-=======
-  this.router.navigate(['/home/edit-employee', emp.id]);
-}
-     employee: TableColumn<employee>[] = [
-      { key: 'empCode', label: 'Code' },
-      { key: 'empName', label: 'Name' },
-      { key: 'designationName', label: 'Designation' },
-      { key: 'emailId', label: 'Email' },
-      { key: 'mobile', label: 'Mobile' },
-
->>>>>>> d46015d300249b638049e73f6b113cb8012c417a
-
-
-  ];
+  ]
   ngOnInit(): void {
     this.getEmployees();
   }
@@ -101,8 +87,7 @@ export class EmployeeListComponent implements OnInit {
       cancelButtonColor: '#6c757d',
       confirmButtonText: 'Yes, delete it!',
       cancelButtonText: 'Cancel'
-    }).then((result) => {
-
+    }).then((result)=>{
       if (result.isConfirmed) {
 
         this.employeeService.deleteDepartmentById(id).subscribe({
@@ -131,27 +116,6 @@ export class EmployeeListComponent implements OnInit {
         });
 
       }
-
-    });
+    })
   }
-
-}
-export interface employee {
-  srNo: number;
-  id: number,
-  name: string;
-<<<<<<< HEAD
-  empCode: number
-  empName: string
-  designationName: string
-  empEmail: string
-  Contact: number
-
-=======
-empCode :number
- empName :string
- designationName:string
- emailId :string
- mobile :number
->>>>>>> d46015d300249b638049e73f6b113cb8012c417a
 }

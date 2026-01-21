@@ -53,4 +53,14 @@ namespace Macreel_Software.Models.Employee
         public int? TotalTasks { get; set; }
         public int? CompletedTasks { get; set; }
     }
+    public class UpdateTaskStatus
+    {
+        public int projectId { get; set; }
+
+        public int empResponse { get; set; }
+        public string empComment { get; set; }
+
+        public IFormFile? document1 { get; set; }
+        public IFormFile? document2 { get; set; }
+    }
 }

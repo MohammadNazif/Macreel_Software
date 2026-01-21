@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Macreel_Software.DAL.Employee
 {
-    public class EmployeeServices:IEmployeeService
+    public class EmployeeServices : IEmployeeService
     {
         private readonly IConfiguration _config;
         private readonly SqlConnection _conn;
@@ -24,31 +24,31 @@ namespace Macreel_Software.DAL.Employee
             try
             {
                 SqlCommand cmd = new SqlCommand("sp_ruleBookResponse", _conn);
-                cmd.CommandType =CommandType.StoredProcedure;
+                cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@action", "getUserResponseByEmpId");
                 cmd.Parameters.AddWithValue("@empId", data.empId);
                 cmd.Parameters.AddWithValue("@ruleBookId", data.ruleBookId);
                 cmd.Parameters.AddWithValue("@response", data.response);
-                if(_conn.State==ConnectionState.Closed)
+                if (_conn.State == ConnectionState.Closed)
                     await _conn.OpenAsync();
 
-                int rows=await cmd.ExecuteNonQueryAsync();
+                int rows = await cmd.ExecuteNonQueryAsync();
                 return rows > 0;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw;
             }
             finally
             {
-                if(_conn.State==ConnectionState.Open)
+                if (_conn.State == ConnectionState.Open)
                     await _conn.CloseAsync();
             }
-        
+
         }
 
-        public async Task<ApiResponse<List<assignedLeave>>> AssignedLeaveListByEmpId(int empId,string? searchTerm,
-        int? pageNumber,int? pageSize)
+        public async Task<ApiResponse<List<assignedLeave>>> AssignedLeaveListByEmpId(int empId, string? searchTerm,
+        int? pageNumber, int? pageSize)
         {
             List<assignedLeave> list = new();
             int totalRecords = 0;
@@ -269,14 +269,14 @@ namespace Macreel_Software.DAL.Employee
                     {
                         id = Convert.ToInt32(sdr["id"]),
                         empId = sdr["empId"] as int?,
-                        leaveTypeId= sdr["leaveType"] as int?,
-                        fromDate = sdr["fromDate"] != DBNull.Value ? Convert.ToDateTime(sdr["fromDate"]):null,
-                        toDate = sdr["toDate"] != DBNull.Value ? Convert.ToDateTime(sdr["toDate"]):null, 
+                        leaveTypeId = sdr["leaveType"] as int?,
+                        fromDate = sdr["fromDate"] != DBNull.Value ? Convert.ToDateTime(sdr["fromDate"]) : null,
+                        toDate = sdr["toDate"] != DBNull.Value ? Convert.ToDateTime(sdr["toDate"]) : null,
                         leaveCount = sdr["leaveCount"] as int?,
                         leaveName = sdr["leaveName"]?.ToString(),
                         description = sdr["description"]?.ToString(),
-                        applieddate = sdr["appliedDate"] != DBNull.Value ? Convert.ToDateTime(sdr["appliedDate"]):null,
-                        status = Convert.ToInt32(sdr["adminStatus"]) == 0?"Pending": Convert.ToInt32(sdr["adminStatus"]) ==1?"Approved": Convert.ToInt32(sdr["adminStatus"]) == 2 ?"Unapproved":""
+                        applieddate = sdr["appliedDate"] != DBNull.Value ? Convert.ToDateTime(sdr["appliedDate"]) : null,
+                        status = Convert.ToInt32(sdr["adminStatus"]) == 0 ? "Pending" : Convert.ToInt32(sdr["adminStatus"]) == 1 ? "Approved" : Convert.ToInt32(sdr["adminStatus"]) == 2 ? "Unapproved" : ""
                     });
                 }
 
@@ -316,7 +316,7 @@ namespace Macreel_Software.DAL.Employee
             }
         }
 
-        public async Task<ApiResponse<List<applyLeave>>> getAllApplyLeaveById(int id , int empId)
+        public async Task<ApiResponse<List<applyLeave>>> getAllApplyLeaveById(int id, int empId)
         {
             List<applyLeave> list = new();
 
@@ -382,7 +382,7 @@ namespace Macreel_Software.DAL.Employee
             }
         }
 
-        public async Task<bool> deleteApplyLeaveById(int id,int empId)
+        public async Task<bool> deleteApplyLeaveById(int id, int empId)
         {
             try
             {
@@ -480,19 +480,19 @@ namespace Macreel_Software.DAL.Employee
                 if (_conn.State == ConnectionState.Closed)
                     await _conn.OpenAsync();
 
-                using(SqlDataReader sdr=await cmd.ExecuteReaderAsync())
+                using (SqlDataReader sdr = await cmd.ExecuteReaderAsync())
                 {
-                    if(sdr.HasRows)
+                    if (sdr.HasRows)
                     {
-                        while(await sdr.ReadAsync())
+                        while (await sdr.ReadAsync())
                         {
                             list.Add(new AssignedProjectDto
                             {
-                                id = sdr["id"] != DBNull.Value ? Convert.ToInt32(sdr["id"]):null,
-                                projectName = sdr["projectTitle"] != DBNull.Value ? sdr["projectTitle"].ToString():null,
-                                assignDate = sdr["assignDate"] != DBNull.Value ? Convert.ToDateTime(sdr["assignDate"]):null,
-                                completionDate = sdr["completionDate"] != DBNull.Value ? Convert.ToDateTime(sdr["completionDate"]):null,
-                                projectStatus = sdr["ProjectStatus"] != DBNull.Value ? sdr["ProjectStatus"].ToString():null,
+                                id = sdr["id"] != DBNull.Value ? Convert.ToInt32(sdr["id"]) : null,
+                                projectName = sdr["projectTitle"] != DBNull.Value ? sdr["projectTitle"].ToString() : null,
+                                assignDate = sdr["assignDate"] != DBNull.Value ? Convert.ToDateTime(sdr["assignDate"]) : null,
+                                completionDate = sdr["completionDate"] != DBNull.Value ? Convert.ToDateTime(sdr["completionDate"]) : null,
+                                projectStatus = sdr["ProjectStatus"] != DBNull.Value ? sdr["ProjectStatus"].ToString() : null,
                             });
                         }
                     }
@@ -516,8 +516,94 @@ namespace Macreel_Software.DAL.Employee
                     await _conn.CloseAsync();
             }
         }
-          
-    }
+
+
         #endregion
-    
+
+
+        #region employee task status update
+
+        public async Task<ApiResponse<List<AssignedTaskDto>>> assignedTaskData(int projectId,int empId)
+        {
+            List<AssignedTaskDto> list = new List<AssignedTaskDto>();
+            try
+            {
+                SqlCommand cmd = new SqlCommand("sp_assignTask", _conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@action", "selectAssignedTaskDetailByTaskId");
+                cmd.Parameters.AddWithValue("@id", projectId);
+                cmd.Parameters.AddWithValue("@empId", empId);
+                if (_conn.State == ConnectionState.Closed)
+                    await _conn.OpenAsync();
+
+                using(SqlDataReader sdr=await cmd.ExecuteReaderAsync())
+                {
+                    if(sdr.HasRows)
+                    {
+                        while(await sdr.ReadAsync())
+                        {
+                            list.Add(new AssignedTaskDto
+                            {
+                                projectId = sdr["id"] != DBNull.Value ? Convert.ToInt32(sdr["id"]):null,
+                                taskTitle = sdr["title"] != DBNull.Value ? sdr["title"].ToString():null,
+                                description = sdr["description"] !=DBNull.Value? sdr["description"].ToString():null,
+                                taskStatus = sdr["taskStatus"] != DBNull.Value ? Convert.ToInt32(sdr["taskStatus"]):null,
+                                assignedDate = sdr["assignedDate"] != DBNull.Value ? Convert.ToDateTime(sdr["assignedDate"]):null,
+                                completedDate = sdr["completedDate"] != DBNull.Value ? Convert.ToDateTime(sdr["completedDate"]):null
+                            });
+                        }
+                    }
+                }
+                return ApiResponse<List<AssignedTaskDto>>.SuccessResponse(
+                   list,
+                   "Assigned project detail for emp fetched successfully"
+               );
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<List<AssignedTaskDto>>.FailureResponse(
+                    ex.Message,
+                    500,
+                    "ASSIGNED_PROJECT_DETAILS_ERROR"
+                );
+            }
+
+        }
+
+
+        public async Task<bool> updateTaskStatus( UpdateTaskStatus data, int empId, string? document1Path,string? document2Path)
+        {
+            try
+            {
+                SqlCommand cmd = new SqlCommand("sp_assignTask", _conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@action", "updateTaskByEmp");
+                cmd.Parameters.AddWithValue("@empId", empId);
+                cmd.Parameters.AddWithValue("@id", data.projectId);
+                cmd.Parameters.AddWithValue("@empResponse", data.empResponse);
+                cmd.Parameters.AddWithValue("@empComment", data.empComment);
+
+                cmd.Parameters.AddWithValue("@empDocument1",
+                    (object?)document1Path ?? DBNull.Value);
+
+                cmd.Parameters.AddWithValue("@empDocument2",
+                    (object?)document2Path ?? DBNull.Value);
+
+                if (_conn.State == ConnectionState.Closed)
+                    await _conn.OpenAsync();
+
+                return await cmd.ExecuteNonQueryAsync() > 0;
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    await _conn.CloseAsync();
+            }
+        }
+
+
+        #endregion
+
+    }
 }
