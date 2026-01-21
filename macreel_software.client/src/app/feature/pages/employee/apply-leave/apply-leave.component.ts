@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
 import { MatTableDataSource } from '@angular/material/table';
 import { PageEvent } from '@angular/material/paginator';
 import { ManageLeaveService } from '../../../../core/services/manage-leave.service';
 import Swal from 'sweetalert2';
-import { LeaveBalance, LeaveRequest, LeaveRow } from '../../../../core/models/interface';
+import { LeaveBalance, LeaveRequest, LeaveRow, TableColumn } from '../../../../core/models/interface';
 
 @Component({
   selector: 'app-apply-leave',
@@ -14,7 +14,7 @@ import { LeaveBalance, LeaveRequest, LeaveRow } from '../../../../core/models/in
   styleUrl: './apply-leave.component.css'
 })
 export class ApplyLeaveComponent {
-
+    @ViewChild('statustemplate', { static: true }) statustemplate!: TemplateRef<any>;
   displayedColumns: string[] = [
     'srNo',
     'appliedDate',
@@ -63,6 +63,19 @@ export class ApplyLeaveComponent {
       }
     );
   }
+
+ leave: TableColumn<any>[] = [
+    { key: 'applieddate', label: 'Applied Date',type:'date',align:'center' },
+    { key: 'fromDate', label: 'From', type: 'date',align:'center' },
+    { key: 'toDate', label: 'To', type: 'date',align:'center' },
+    { key: 'leaveName', label: 'Type' },
+    { key: 'description', label: 'Description' },
+    {
+     key: 'status',
+      label: 'Status',
+     template: this.statustemplate
+     }
+  ];
 
   dateRangeValidator(form: AbstractControl) {
     const fromDate = form.get('fromDate')?.value;
