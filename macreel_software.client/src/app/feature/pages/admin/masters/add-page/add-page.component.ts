@@ -5,6 +5,7 @@ import { ManageMasterdataService } from '../../../../../core/services/manage-mas
 import { PageEvent } from '@angular/material/paginator';
 import Swal from 'sweetalert2';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { TableColumn } from '../../../../../core/models/interface';
 
 @Component({
   selector: 'app-add-page',
@@ -21,13 +22,17 @@ export class AddPageComponent implements OnInit {
   totalRecords = 0;
   searchTerm: string = '';
   searchControl = new FormControl<string>("");
-
+  data : any =[]
   isEditMode = false;
   editId: number | null = null;
   constructor(
     private readonly fb: FormBuilder,
   private readonly master:ManageMasterdataService) { }
-
+  
+    Page: TableColumn<any>[] = [
+        { key: 'pageName', label: 'Name' },
+         { key: 'pageUrl', label: 'Url' }
+      ];
   ngOnInit(): void {
     this.pageForm = this.fb.group({
       pageName: ['', Validators.required],
@@ -106,7 +111,7 @@ export class AddPageComponent implements OnInit {
     this.master.getAllPages(this.pageNumber, this.pageSize).subscribe({
       next: res => {
         if (res.success) {
-          this.dataSource.data = res.data;
+          this.data = res.data;
           this.totalRecords = res.totalRecords ?? 0;
           console.log('Total Records',this.totalRecords);
         }

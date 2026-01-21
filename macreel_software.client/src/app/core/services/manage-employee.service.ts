@@ -40,7 +40,7 @@ export class ManageEmployeeService {
     if (pageSize !== null) params = params.set('pageSize', pageSize.toString());
     if (searchText) params = params.set('searchTerm', searchText);
 
-    return this.http.get<any>(`${this.baseUrl}Admin/GetAllEmployees`, { params });
+    return this.http.get<any>(`${this.baseUrl}Common/GetAllEmployees`, { params });
   }
 
   getEmployeeById(id: number) {

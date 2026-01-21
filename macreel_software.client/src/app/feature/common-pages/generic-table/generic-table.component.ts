@@ -26,6 +26,9 @@ export class GenericTableComponent<T> {
   @Output() cellAction = new EventEmitter<{ action: string, row: any }>();
   @Input() router!: Router;
 
+  @Output() checkboxChange = new EventEmitter<{ row: any; key: string; value: boolean }>();
+  @Output() numberChange = new EventEmitter<{ row: any; key: string; value: number }>();
+
   constructor(private datePipe: DatePipe,
     private Router : Router
   ) {}
@@ -59,6 +62,26 @@ onCellClick(row: any, col: TableColumn<any>) {
       console.log(col.route)
       this.Router.navigate([col.route], { queryParams: { id: row.id } });
     }
+}
+onCheckboxChange(item: any, key: any, event: Event) {
+  const input = event.target as HTMLInputElement | null;
+
+
+  if (!input) return;
+  const checked = input.checked;
+    console.log("das",input.checked)
+  item[key] = checked;
+
+  this.checkboxChange.emit({ row: item, key, value: checked });
+}
+
+onNumberChange(item: any, key: any, event: Event) {
+  const input = event.target as HTMLInputElement | null;
+  if (!input) return;
+  const value = Number(input.value);
+  item[key] = value;
+
+  this.numberChange.emit({ row: item, key, value });
 }
 
 }

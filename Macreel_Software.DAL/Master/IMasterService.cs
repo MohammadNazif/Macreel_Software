@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Macreel_Software.Contracts.DTOs;
+using Macreel_Software.Models;
+using Macreel_Software.Models.Master;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Macreel_Software.Models;
-using Macreel_Software.Models.Master;
 
 namespace Macreel_Software.DAL.Master
 {
@@ -40,6 +41,7 @@ namespace Macreel_Software.DAL.Master
         Task<bool> DeletePageById(int id);
         Task<ApiResponse<List<Page>>> GetAllPages(int? id, int? pageNumber, int? pageSize);
         Task<bool> InsertUpdatePage(Page data);
-
+        Task<ApiResponse<bool>> AssignOrUpdateRolePages(AssignPage data);
+        Task<ApiResponse<List<RolePagesDto>>> GetAllAssignedPages(int? id = null, int? pageNumber = null, int? pageSize = null);
     }
 }
