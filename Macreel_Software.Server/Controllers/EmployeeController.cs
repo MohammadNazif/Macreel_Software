@@ -270,5 +270,28 @@ namespace Macreel_Software.Server.Controllers
 
 
         #endregion
+
+        #region ASSIGNED PROJECT
+
+        [HttpGet("AssignedProjectByEmpId")]
+        public async Task<IActionResult> AssignedProjectByEmpId()
+        {
+            try
+            {
+                var result = await _service.assignedProjectByEmpId(_userId);
+                return StatusCode(result.StatusCode, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<role>.FailureResponse(
+                    "An error occurred while fetching apply leave.",
+                    500,
+                    "SERVER_ERROR"
+                ));
+            }
+        }
+        #endregion
+
+
     }
 }

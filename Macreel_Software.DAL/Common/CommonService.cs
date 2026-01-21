@@ -365,6 +365,33 @@ namespace Macreel_Software.DAL.Common
     }
     #endregion
 
+    #region project Employee
+        //public async Task<bool> insertProjectEmp(ProjectEmp data, int? addedBy)
+        //{
+        //    try
+        //    {
+        //        SqlCommand cmd = new SqlCommand("sp_addAndAssignProject", _conn);
+        //        cmd.CommandType = CommandType.StoredProcedure;
+        //        cmd.Parameters.AddWithValue("@action", "insertProjectEmp");
+        //        cmd.Parameters.AddWithValue("@projectId", data.projectId);
+        //        cmd.Parameters.AddWithValue("@empId", data.empId);
+        //        if (_conn.State == ConnectionState.Closed)
+        //            await _conn.OpenAsync();
+
+
+
+        //    }
+        //    catch
+        //    {
+
+        //    }
+        //    finally
+        //    {
+
+        //    }
+        //}
+
+    #endregion
 
 }
 
