@@ -127,3 +127,11 @@ export interface Page {
   pageName: string;
   pageUrl: string;
 }
+export interface PageAssign {
+  pageId: number;
+}
+
+export interface AssignRolePages {
+  roleId: number;
+  pages: PageAssign[];
+}

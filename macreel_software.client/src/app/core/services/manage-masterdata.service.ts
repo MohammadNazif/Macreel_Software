@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
+import { ApiResponse, AssignRolePages } from '../models/interface';
 
 @Injectable({
   providedIn: 'root'
@@ -9,16 +10,13 @@ import { Observable } from 'rxjs';
 export class ManageMasterdataService {
 
   constructor(
-    private http: HttpClient
+    private readonly http: HttpClient
   ) { }
 
-  private baseUrl: string = environment.apiUrl
+  private readonly baseUrl: string = environment.apiUrl
   private readonly token: string | null = "Get Token";
 
   AddRole(role: any) {
-    // const headers = new HttpHeaders({
-    //   'Authorization' : `Bearer ${this.token}`
-    // })
     return this.http.post(`${this.baseUrl}Master/insertRole`, role, {})
   }
 
@@ -167,4 +165,14 @@ export class ManageMasterdataService {
     );
   }
 
+  //Assign Page
+  assignRolePages(payload: any): Observable<ApiResponse<null>> {
+    return this.http.post<ApiResponse<null>>(
+      `${this.baseUrl}Master/assignRolePages`,
+      {payload,withCredentials:true}
+    );
+  }
+  getPagesByRoleId(roleId?: number): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}Master/get-pages-by-role/${roleId}`,{withCredentials:true});
+  }
 }

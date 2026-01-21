@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Macreel_Software.Contracts.DTOs;
 using Macreel_Software.Models;
 using Macreel_Software.Models.Master;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using QuestPDF.Helpers;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Macreel_Software.DAL.Master
@@ -956,7 +957,7 @@ namespace Macreel_Software.DAL.Master
 
         #endregion
 
-        #region Mange Page   
+        #region  Add Pages & Assign Pages          
         public async Task<bool> InsertUpdatePage(Page data)
         {
             try
@@ -1070,6 +1071,148 @@ namespace Macreel_Software.DAL.Master
                     int rowsAffected = await cmd.ExecuteNonQueryAsync();
                     return rowsAffected > 0;
                 }
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    await _conn.CloseAsync();
+            }
+        }
+
+        public async Task<ApiResponse<bool>> AssignOrUpdateRolePages(AssignPage data)
+        {
+            if (data.pages == null || !data.pages.Any())
+            {
+                return ApiResponse<bool>.FailureResponse(
+                    "Pages are required",
+                    400,
+                    "VALIDATION_ERROR");
+            }
+
+            try
+            {
+                if (_conn.State != ConnectionState.Open)
+                    await _conn.OpenAsync();
+
+                using (SqlCommand cmd =
+                       new SqlCommand("sp_managePages", _conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@action", "assignOrUpdateRolePages");
+                    cmd.Parameters.AddWithValue("@roleId", data.roleId);
+
+                    // TVP
+                    DataTable dt = new DataTable();
+                    dt.Columns.Add("pageId", typeof(int));
+
+                    foreach (var p in data.pages)
+                        dt.Rows.Add(p.pageId);
+
+                    SqlParameter tvpParam = cmd.Parameters.AddWithValue("@pageIds", dt);
+                    tvpParam.SqlDbType = SqlDbType.Structured;
+                    tvpParam.TypeName = "PageIdTableType";
+
+                    await cmd.ExecuteNonQueryAsync();
+                }
+
+                return ApiResponse<bool>.SuccessResponse(
+                    true,
+                    "Role pages updated successfully");
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<bool>.FailureResponse(
+                    ex.Message,
+                    500,
+                    "ROLE_PAGE_UPDATE_ERROR");
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    await _conn.CloseAsync();
+            }
+        }
+        public async Task<ApiResponse<List<RolePagesDto>>> GetAllAssignedPages(int? id = null,int? pageNumber = null,int? pageSize = null)
+        {
+            List<RolePagesDto> result = new();
+            Dictionary<int, RolePagesDto> roleDict = new();
+
+            int totalRecords = 0;
+
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("sp_managePages", _conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@action", "getPages");
+                    cmd.Parameters.AddWithValue("@id", id.HasValue ? id.Value : DBNull.Value);
+
+                    cmd.Parameters.AddWithValue("@pageNumber",
+                        pageNumber.HasValue ? pageNumber.Value : DBNull.Value);
+
+                    cmd.Parameters.AddWithValue("@pageSize",
+                        pageSize.HasValue ? pageSize.Value : DBNull.Value);
+
+                    if (_conn.State != ConnectionState.Open)
+                        await _conn.OpenAsync();
+
+                    using (SqlDataReader sdr = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await sdr.ReadAsync())
+                        {
+                            if (totalRecords == 0 && sdr["TotalRecords"] != DBNull.Value)
+                                totalRecords = Convert.ToInt32(sdr["TotalRecords"]);
+
+                            int roleId = Convert.ToInt32(sdr["roleId"]);
+
+                            // Agar role pehle se nahi hai
+                            if (!roleDict.ContainsKey(roleId))
+                            {
+                                roleDict[roleId] = new RolePagesDto
+                                {
+                                    roleId = roleId,
+                                    roleName = sdr["roleName"].ToString()
+                                };
+                            }
+
+                            // Page add karo
+                            roleDict[roleId].pages.Add(new PageDto
+                            {
+                                pageId = Convert.ToInt32(sdr["pageId"]),
+                                pageName = sdr["pageName"].ToString(),
+                                pageUrl = sdr["pageUrl"].ToString()
+                            });
+                        }
+                    }
+                }
+
+                result = roleDict.Values.ToList();
+
+                // Pagination response
+                if (pageNumber.HasValue && pageSize.HasValue)
+                {
+                    return ApiResponse<List<RolePagesDto>>.PagedResponse(
+                        result,
+                        pageNumber.Value,
+                        pageSize.Value,
+                        totalRecords,
+                        "Role wise pages fetched successfully");
+                }
+
+                var response = ApiResponse<List<RolePagesDto>>.SuccessResponse(
+                    result,
+                    "Role wise pages fetched successfully");
+
+                response.TotalRecords = totalRecords;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<List<RolePagesDto>>.FailureResponse(
+                    ex.Message,
+                    500,
+                    "ROLE_PAGE_FETCH_ERROR");
             }
             finally
             {
