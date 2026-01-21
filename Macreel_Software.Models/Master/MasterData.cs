@@ -53,7 +53,19 @@ namespace Macreel_Software.Models.Master
         [Required(ErrorMessage = "Page URL is required")]
         public string pageUrl { get; set; }
     }
-
+    public class AssignPage
+    {
+        public int id { get; set; }
+        [Required(ErrorMessage = "Role is required")]
+        public int roleId { get; set; }
+        [Required(ErrorMessage = "Pages are required")]
+        public List<PagesModel>? pages { get; set; }
+    }
+    public class PagesModel
+    {
+        public int? id { get; set; }
+        public int pageId { get; set; }
+    }
 
 
 }

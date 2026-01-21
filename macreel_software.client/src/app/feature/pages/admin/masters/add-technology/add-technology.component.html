@@ -21,9 +21,13 @@
                 <label class="block text-[#7E7E7E] font-bold text-[14px] mb-1">
                   Software Type :
                 </label>
-                <input type="text" [(ngModel)]="softwareType" name="softwareType" required
-                  placeholder="Enter Software Type" autocomplete="off"
-                  class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#C5192F] text-[12px]" />
+                <select type="text" [(ngModel)]="softwareType" name="softwareType" required
+                   autocomplete="off"
+                  class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#C5192F] text-[12px]" >
+                  <option value="" selected>Select type</option>
+                  <option value="app">App</option>
+                  <option value="web">Web</option>
+                  </select>
               </div>
 
               <!-- TECHNOLOGY NAME -->

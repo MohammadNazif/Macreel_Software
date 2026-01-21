@@ -1,4 +1,5 @@
-﻿using Macreel_Software.DAL.Master;
+﻿using Macreel_Software.Contracts.DTOs;
+using Macreel_Software.DAL.Master;
 using Macreel_Software.Models;
 using Macreel_Software.Models.Master;
 using Microsoft.AspNetCore.Authorization;
@@ -656,7 +657,6 @@ namespace Macreel_Software.Server.Controllers
             }
         }
 
-
         [HttpGet("getPageById")]
         public async Task<IActionResult> getPageById(int pageId)
         {
@@ -712,6 +712,100 @@ namespace Macreel_Software.Server.Controllers
                     message = "An error occurred while deleting page.",
                     error = ex.Message
                 });
+            }
+        }
+        [HttpPost("assignRolePages")]
+        public async Task<IActionResult> AssignRolePages([FromBody] AssignPage data)
+        {
+            try
+            {
+                // 🔹 Model validation
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ApiResponse<object>.FailureResponse(
+                        ModelState.Values
+                            .SelectMany(v => v.Errors)
+                            .FirstOrDefault()?.ErrorMessage!,
+                        400
+                    ));
+                }
+
+                if (data.pages == null || !data.pages.Any())
+                {
+                    return BadRequest(ApiResponse<object>.FailureResponse(
+                        "At least one page is required",
+                        400
+                    ));
+                }
+
+                var result = await _service.AssignOrUpdateRolePages(data);
+
+                if (result != null)
+                {
+                    return Ok(ApiResponse<object>.SuccessResponse(
+                        null,
+                        "Role pages assigned/updated successfully"
+                    ));
+                }
+
+                return BadRequest(ApiResponse<object>.FailureResponse(
+                    "Some error occurred while assigning pages",
+                    400
+                ));
+            }
+            catch (SqlException ex) when (ex.Number == 50000)
+            {
+                // 🔥 Custom SQL THROW error
+                return StatusCode(409, ApiResponse<object>.FailureResponse(
+                    ex.Message,
+                    409
+                ));
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, ApiResponse<object>.FailureResponse(
+                    "Internal server error",
+                    500
+                ));
+            }
+        }
+        [HttpGet("get-pages-by-role/{roleId?}")]
+        public async Task<IActionResult> GetPagesByRole(int? roleId)
+        {
+            try
+            {
+                var result = await _service.GetAllAssignedPages(roleId);
+
+                return result.Success
+                    ? Ok(result)
+                    : BadRequest(result);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500,
+                    ApiResponse<object>.FailureResponse(
+                        "Internal server error",
+                        500
+                    ));
+            }
+        }
+        [HttpGet("getAllAssignedPages")]
+        public async Task<IActionResult> GetAllAssignedPages(int? pageNumber = null, int? pageSize = null)
+        {
+            try
+            {
+                ApiResponse<List<RolePagesDto>> result =
+                    await _service.GetAllAssignedPages(null, pageNumber, pageSize);
+
+                return StatusCode(result.StatusCode, result);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, ApiResponse<List<Page>>.FailureResponse(
+                    "An error occurred while fetching pages",
+                    500,
+                    "SERVER_ERROR"
+                ));
             }
         }
         #endregion
