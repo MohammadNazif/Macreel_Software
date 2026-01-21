@@ -10,6 +10,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { AssignProjectComponent } from './assign-project/assign-project.component';
+import { CommonPagesModule } from "../../common-pages/common-pages.module";
+import { SafeUrlPipe } from "../../../core/pipes/capitalize.pipe";
 
 
 @NgModule({
@@ -27,7 +29,9 @@ import { AssignProjectComponent } from './assign-project/assign-project.componen
     ReactiveFormsModule,
     MatTableModule,
     MatPaginator,
-    MatPaginatorModule
-  ]
+    MatPaginatorModule,
+    CommonPagesModule,
+    SafeUrlPipe
+]
 })
 export class EmployeeModule { }

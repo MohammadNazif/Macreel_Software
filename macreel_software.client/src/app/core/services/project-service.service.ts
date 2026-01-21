@@ -9,10 +9,10 @@ export class ProjectService {
 
   private readonly baseUrl = environment.apiUrl;
 
-  constructor(private readonly http: HttpClient) {}
+  constructor(private readonly http: HttpClient) { }
 
   // Get projects with table-only loader (disable global loader)
- getProjects(search: string, page: number, size: number): Observable<PaginatedResult<Project>> {
+  getProjects(search: string, page: number, size: number): Observable<PaginatedResult<Project>> {
     let params = new HttpParams()
       .set('searchTerm', search)
       .set('pageNumber', page)
@@ -29,4 +29,11 @@ export class ProjectService {
 
     return this.http.delete(`${this.baseUrl}Admin/deleteProjectById?id=${id}`, { headers });
   }
+
+  // Get assigned projects for logged-in employee
+getAssignedProjectsByEmp(): Observable<Project[]> {
+  return this.http.get<Project[]>(`${this.baseUrl}Employee/AssignedProjectByEmpId`);
+}
+
+
 }
