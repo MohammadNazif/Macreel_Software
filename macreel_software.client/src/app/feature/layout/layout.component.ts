@@ -46,6 +46,7 @@ export class LayoutComponent implements OnInit {
           route: '/home/admin/master/add-technology', roles: ['admin']
         },
         { label: 'Add Leave', route: '/home/admin/master/add-leave', roles: ['admin'] },
+        { label: 'Add Page', route: '/home/admin/master/add-pages', roles: ['admin'] },
       ]
     },
     {
@@ -112,6 +113,11 @@ export class LayoutComponent implements OnInit {
         {
           label: 'Assigned Tasks',
           route: '/home/employee/assigned-tasks',
+          roles: ['employee']
+        },
+        {
+          label: 'Assigned Projects',
+          route: '/home/employee/assign-project',
           roles: ['employee']
         }
       ]

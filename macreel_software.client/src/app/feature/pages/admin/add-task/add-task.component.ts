@@ -196,7 +196,6 @@ bindEditData() {
     )
   });
 
-  // If you want to show existing attachments
   this.attachment1Name = this.editTask.document1Path || '';
   this.attachment2Name = this.editTask.document2Path || '';
 }

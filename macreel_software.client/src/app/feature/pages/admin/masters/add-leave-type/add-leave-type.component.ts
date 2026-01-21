@@ -4,7 +4,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import Swal from 'sweetalert2';
 import { ManageLeaveService } from '../../../../../core/services/manage-leave.service';
-import { LeaveRow } from '../../../../../core/models/interface';
+import { LeaveRow, TableColumn } from '../../../../../core/models/interface';
 
 @Component({
   selector: 'app-add-leave-type',
@@ -14,6 +14,8 @@ import { LeaveRow } from '../../../../../core/models/interface';
 })
 export class AddLeaveTypeComponent implements OnInit {
 
+
+  data :any = []
   leaveForm!: FormGroup;
 
   displayedColumns: string[] = ['srNo', 'leaveName', 'description', 'action'];
@@ -34,6 +36,11 @@ export class AddLeaveTypeComponent implements OnInit {
     private readonly fb: FormBuilder,
     private readonly leaveService: ManageLeaveService
   ) {}
+   
+    leaves: TableColumn<LeaveRow>[] = [
+       { key: 'leaveName', label: 'Name' },
+         { key: 'description', label: 'Description' },
+     ];
 
   ngOnInit(): void {
     this.leaveForm = this.fb.group({
@@ -53,7 +60,7 @@ export class AddLeaveTypeComponent implements OnInit {
           const list = res.data || [];
           this.totalRecords = res.totalRecords || 0;
 
-          this.dataSource.data = list.map((item: any, index: number) => ({
+          this.data = list.map((item: any, index: number) => ({
             srNo: (this.pageNumber - 1) * this.pageSize + index + 1,
             id: item.id,
             leaveName: item.leaveName,

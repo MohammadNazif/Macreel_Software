@@ -1,8 +1,9 @@
 ﻿using Macreel_Software.DAL.Master;
-using Macreel_Software.Models.Master;
-using Microsoft.AspNetCore.Mvc;
 using Macreel_Software.Models;
+using Macreel_Software.Models.Master;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 
 namespace Macreel_Software.Server.Controllers
 {
@@ -579,5 +580,140 @@ namespace Macreel_Software.Server.Controllers
 
         #endregion
 
+        #region page api
+
+        [HttpPost("insertPage")]
+        public async Task<IActionResult> insertPage([FromBody] Page data)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ApiResponse<object>.FailureResponse(
+                        ModelState.Values
+                            .SelectMany(v => v.Errors)
+                            .FirstOrDefault()?.ErrorMessage!,
+                        400
+                    ));
+                }
+                bool result = await _service.InsertUpdatePage(data);
+
+                if (data.id > 0 && result)
+                {
+                    return Ok(ApiResponse<object>.SuccessResponse(
+                        null,
+                        "Page updated successfully"
+                    ));
+                }
+
+                if (data.id == 0 && result)
+                {
+                    return Ok(ApiResponse<object>.SuccessResponse(
+                        null,
+                        "Page inserted successfully"
+                    ));
+                }
+
+                return BadRequest(ApiResponse<object>.FailureResponse(
+                    "Some error occurred while saving page",
+                    400
+                ));
+            }
+            catch (SqlException ex) when (ex.Number == 50000)
+            {
+                return StatusCode(409, ApiResponse<object>.FailureResponse(
+                    ex.Message,
+                    409
+                ));
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, ApiResponse<object>.FailureResponse(
+                    "Internal server error",
+                    500
+                ));
+            }
+        }
+
+
+        [HttpGet("getAllPages")]
+        public async Task<IActionResult> getAllPages(int? pageNumber = null,int? pageSize = null)
+        {
+            try
+            {
+                ApiResponse<List<Page>> result =
+                    await _service.GetAllPages(null, pageNumber, pageSize);
+
+                return StatusCode(result.StatusCode, result);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, ApiResponse<List<Page>>.FailureResponse(
+                    "An error occurred while fetching pages",
+                    500,
+                    "SERVER_ERROR"
+                ));
+            }
+        }
+
+
+        [HttpGet("getPageById")]
+        public async Task<IActionResult> getPageById(int pageId)
+        {
+            try
+            {
+                var result = await _service.GetAllPages(pageId, null, null);
+
+                return StatusCode(result.StatusCode, result);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, ApiResponse<Page>.FailureResponse(
+                    "An error occurred while fetching page.",
+                    500,
+                    "SERVER_ERROR"
+                ));
+            }
+        }
+
+
+        [HttpDelete("deletePageById")]
+        public async Task<IActionResult> deletePageById(int pageId)
+        {
+            try
+            {
+                var res = await _service.DeletePageById(pageId);
+
+                if (res)
+                {
+                    return Ok(new
+                    {
+                        status = true,
+                        StatusCode = 200,
+                        message = "Page deleted successfully!!!"
+                    });
+                }
+                else
+                {
+                    return Ok(new
+                    {
+                        status = false,
+                        StatusCode = 404,
+                        message = "Page not deleted!!"
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    status = false,
+                    StatusCode = 500,
+                    message = "An error occurred while deleting page.",
+                    error = ex.Message
+                });
+            }
+        }
+        #endregion
     }
 }

@@ -71,55 +71,20 @@
         </div>
 
         <!-- PAGINATOR -->
-        <mat-paginator [length]="totalRecords" [pageSize]="pageSize" [pageSizeOptions]="[20, 50, 100]"
-          showFirstLastButtons (page)="onPageChange($event)">
-        </mat-paginator>
+ 
 
       </div>
 
     </div>
 
 
-    <!-- TABLE -->
-    <div class="overflow-x-auto w-full">
-      <table mat-table [dataSource]="dataSource"
-        class="min-w-[600px] w-full border border-gray-300 divide-y divide-gray-300 text-sm table-fixed">
-
-        <!-- SR NO -->
-        <ng-container matColumnDef="srNo">
-          <th mat-header-cell *matHeaderCellDef class="w-[70px] px-1 text-[14px] py-1 text-center
-                   !bg-[#dd3d4f] text-white  whitespace-nowrap">Sr No.</th>
-          <td mat-cell *matCellDef="let row" class="px-1 py-1 text-[12px] text-center ">{{ row.srNo }}</td>
-        </ng-container>
-
-        <!-- LEAVE NAME -->
-        <ng-container matColumnDef="leaveName">
-          <th mat-header-cell *matHeaderCellDef class="min-w-[150px] px-1 py-1 !bg-[#dd3d4f] !text-white ">Leave
-            Type</th>
-          <td mat-cell *matCellDef="let row" class="px-1 py-1 text-[12px]">{{ row.leaveName }}</td>
-        </ng-container>
-
-        <!-- DESCRIPTION -->
-        <ng-container matColumnDef="description">
-          <th mat-header-cell *matHeaderCellDef class="min-w-[200px] px-1 py-1 !bg-[#dd3d4f] !text-white ">
-            Description</th>
-          <td mat-cell *matCellDef="let row" class="px-1 py-1 text-[12px]">{{ row.description }}</td>
-        </ng-container>
-
-        <!-- ACTION -->
-        <ng-container matColumnDef="action">
-          <th mat-header-cell *matHeaderCellDef class="w-28 px-1 py-1 text-center !bg-[#dd3d4f] !text-white">Action</th>
-          <td mat-cell *matCellDef="let row" class="px-1 py-1 text-center space-x-2">
-            <i class="fa fa-pencil text-green-600 cursor-pointer" (click)="onEdit(row)"></i>
-            <i class="fa fa-trash text-red-600 cursor-pointer" (click)="onDelete(row)"></i>
-          </td>
-        </ng-container>
-
-        <!-- ROWS -->
-        <tr mat-header-row *matHeaderRowDef="displayedColumns" class="!h-9"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns" class="hover:bg-gray-100 !h-9"></tr>
-      </table>
-    </div>
-
+     <app-generic-table
+  [columns]="leaves"
+  [data]="data"
+  (edit)="onEdit($event)"
+  (delete)="onDelete($event)"
+ >
+</app-generic-table>
+   
   </div>
 </div>

@@ -4,13 +4,15 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { AssignedTaskComponent } from './assigned-task/assigned-task.component';
 import { ApplyLeaveComponent } from './apply-leave/apply-leave.component';
 import { AssignedLeavesComponent } from './assigned-leaves/assigned-leaves.component';
+import { AssignProjectComponent } from './assign-project/assign-project.component';
 
 const routes: Routes = [
   {path:'',redirectTo:'dashboard',pathMatch:'full'},
   {path:'dashboard',component:DashboardComponent},
   {path:'assigned-tasks',component:AssignedTaskComponent},
   {path:'assigned-leaves',component:AssignedLeavesComponent},
-  {path:'apply-leave',component:ApplyLeaveComponent}
+  {path:'apply-leave',component:ApplyLeaveComponent},
+  {path:'assign-project',component:AssignProjectComponent}
 ];
 
 @NgModule({

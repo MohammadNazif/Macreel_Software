@@ -1,20 +1,11 @@
-// import { Component } from '@angular/core';
 
-// @Component({
-//   selector: 'app-employee-list',
-//   standalone: false,
-//   templateUrl: './employee-list.component.html',
-//   styleUrl: './employee-list.component.css'
-// })
-// export class EmployeeListComponent {
-
-// }
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { ManageEmployeeService } from '../../../../core/services/manage-employee.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { TableColumn } from '../../../../core/models/interface';
 
 
 @Component({
@@ -28,9 +19,9 @@ export class EmployeeListComponent implements OnInit {
 
   displayedColumns: string[] = ['srNo', 'empCode', 'empName', 'designationName', 'empEmail', 'Contact', 'action'];
   dataSource = new MatTableDataSource<any>([]);
-
+  data : any=[];
   totalRecords = 0;
-  pageSize = 10;
+  pageSize = 20;
   pageIndex = 0; // for paginator
   searchText = '';
 
@@ -41,7 +32,16 @@ export class EmployeeListComponent implements OnInit {
   editEmployee(emp: any) {
   this.router.navigate(['/home/edit-employee', emp.id]);
 }
+     employee: TableColumn<employee>[] = [
+      { key: 'empCode', label: 'Name' },
+      { key: 'empName', label: 'Name' },
+      { key: 'empCode', label: 'Name' },
+      { key: 'designationName', label: 'Name' },
+      { key: 'empEmail', label: 'Name' },
+      { key: 'Contact', label: 'Name' },
 
+     
+    ];
   ngOnInit(): void {
     this.getEmployees();
   }
@@ -50,7 +50,7 @@ export class EmployeeListComponent implements OnInit {
   getEmployees(pageNumber: number = 1, pageSize: number = this.pageSize, searchText: string = this.searchText) {
     this.employeeService.getAllEmployees(pageNumber, pageSize, searchText).subscribe((res: any) => {
       if (res.success) {
-        this.dataSource.data = res.data;
+        this.data = res.data;
         this.totalRecords = res.totalRecords || res.data.length; // API should return totalRecords for pagination
         this.dataSource.paginator = this.paginator;
       }
@@ -79,7 +79,7 @@ export class EmployeeListComponent implements OnInit {
   // }
 
 
-deleteEmployee(id: number) {
+deleteEmployee(id: any) {
   Swal.fire({
     title: 'Are you sure?',
     text: 'This employee will be permanently deleted!',
@@ -124,5 +124,16 @@ deleteEmployee(id: number) {
 }
 
 
+
+}
+export interface employee {
+  srNo: number;
+  id: number,
+  name: string;
+empCode :number
+ empName :string
+ designationName:string
+ empEmail :string
+ Contact :number
 
 }
