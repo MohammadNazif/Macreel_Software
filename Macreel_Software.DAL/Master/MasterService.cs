@@ -1145,7 +1145,7 @@ namespace Macreel_Software.DAL.Master
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
 
-                    cmd.Parameters.AddWithValue("@action", "getPages");
+                    cmd.Parameters.AddWithValue("@action", "getAssignPages");
                     cmd.Parameters.AddWithValue("@id", id.HasValue ? id.Value : DBNull.Value);
 
                     cmd.Parameters.AddWithValue("@pageNumber",

@@ -166,13 +166,18 @@ export class ManageMasterdataService {
   }
 
   //Assign Page
+  // Assign Page
   assignRolePages(payload: any): Observable<ApiResponse<null>> {
     return this.http.post<ApiResponse<null>>(
       `${this.baseUrl}Master/assignRolePages`,
-      {payload,withCredentials:true}
+      payload,
+      { withCredentials: true }
     );
   }
+  getAssignPages(pageNumber?: number, pageSize?: number) {
+    return this.http.get<any>(`${this.baseUrl}Master/getAllAssignedPages?pageNumber=${pageNumber}&pageSize=${pageSize}`, { withCredentials: true })
+  }
   getPagesByRoleId(roleId?: number): Observable<any> {
-    return this.http.get<any>(`${this.baseUrl}Master/get-pages-by-role/${roleId}`,{withCredentials:true});
+    return this.http.get<any>(`${this.baseUrl}Master/get-pages-by-role/${roleId}`, { withCredentials: true });
   }
 }

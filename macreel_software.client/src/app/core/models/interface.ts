@@ -126,6 +126,7 @@ export interface Page {
   id: number;
   pageName: string;
   pageUrl: string;
+  checked : boolean;
 }
 export interface PageAssign {
   pageId: number;
@@ -134,4 +135,10 @@ export interface PageAssign {
 export interface AssignRolePages {
   roleId: number;
   pages: PageAssign[];
+}
+export interface PageRow {
+  pageId: number;
+  pageName: string;
+  pageUrl: string;
+  checked: boolean;
 }
