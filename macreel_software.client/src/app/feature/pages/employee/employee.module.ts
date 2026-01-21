@@ -36,7 +36,6 @@ import { SafeUrlPipe } from '../../../core/pipes/capitalize.pipe';
     ReactiveFormsModule,
 
     MatTableModule,
-<<<<<<< HEAD
     MatPaginatorModule,
     MatFormFieldModule,
     MatInputModule,
@@ -45,9 +44,7 @@ import { SafeUrlPipe } from '../../../core/pipes/capitalize.pipe';
 
     CommonPagesModule,
     SafeUrlPipe
-  ]
-=======
-    MatPaginator,
+  ],exports:[
     MatPaginatorModule,
     A11yModule
 ]
