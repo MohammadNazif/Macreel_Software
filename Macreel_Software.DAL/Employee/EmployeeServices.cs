@@ -464,5 +464,60 @@ namespace Macreel_Software.DAL.Employee
 
 
         #endregion
+
+
+        #region assigned project
+
+        public async Task<ApiResponse<List<AssignedProjectDto>>> assignedProjectByEmpId(int empId)
+        {
+            List<AssignedProjectDto> list = new List<AssignedProjectDto>();
+            try
+            {
+                SqlCommand cmd = new SqlCommand("sp_addAndAssignProject", _conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@action", "AssignedProjectByEmpId");
+                cmd.Parameters.AddWithValue("@empId", empId);
+                if (_conn.State == ConnectionState.Closed)
+                    await _conn.OpenAsync();
+
+                using(SqlDataReader sdr=await cmd.ExecuteReaderAsync())
+                {
+                    if(sdr.HasRows)
+                    {
+                        while(await sdr.ReadAsync())
+                        {
+                            list.Add(new AssignedProjectDto
+                            {
+                                id = sdr["id"] != DBNull.Value ? Convert.ToInt32(sdr["id"]):null,
+                                projectName = sdr["projectTitle"] != DBNull.Value ? sdr["projectTitle"].ToString():null,
+                                assignDate = sdr["assignDate"] != DBNull.Value ? Convert.ToDateTime(sdr["assignDate"]):null,
+                                completionDate = sdr["completionDate"] != DBNull.Value ? Convert.ToDateTime(sdr["completionDate"]):null,
+                                projectStatus = sdr["ProjectStatus"] != DBNull.Value ? sdr["ProjectStatus"].ToString():null,
+                            });
+                        }
+                    }
+                }
+                return ApiResponse<List<AssignedProjectDto>>.SuccessResponse(
+                list,
+                "Assigned project fetched successfully"
+            );
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<List<AssignedProjectDto>>.FailureResponse(
+                    ex.Message,
+                    500,
+                    "ASSIGNED_PROJECT_ERROR"
+                );
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    await _conn.CloseAsync();
+            }
+        }
+          
     }
+        #endregion
+    
 }
