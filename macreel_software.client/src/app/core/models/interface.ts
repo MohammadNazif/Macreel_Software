@@ -136,6 +136,20 @@ export interface AssignRolePages {
   roleId: number;
   pages: PageAssign[];
 }
+
+export interface employee {
+  srNo: number;
+  id: number,
+  name: string;
+  empCode: number;
+  empName: string;
+  designationName: string;
+  empEmail: string;
+  Contact: number;
+ emailId :string;
+ mobile :number;
+}
+}
 export interface PageRow {
   pageId: number;
   pageName: string;

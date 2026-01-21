@@ -1,7 +1,7 @@
-﻿using Macreel_Software.DAL.Admin;
-﻿using System.Reflection;
+﻿﻿using System.Reflection;
 using Macreel_Software.Contracts.DTOs;
 using Macreel_Software.DAL;
+using Macreel_Software.DAL.Admin;
 using Macreel_Software.DAL.Admin;
 using Macreel_Software.DAL.Auth;
 using Macreel_Software.DAL.Common;
@@ -11,6 +11,7 @@ using Macreel_Software.Models.Master;
 using Macreel_Software.Services.FileUpload.Services;
 using Macreel_Software.Services.MailSender;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 
 namespace Macreel_Software.Server.Controllers
 {
@@ -562,9 +563,37 @@ namespace Macreel_Software.Server.Controllers
                 ));
             }
         }
+
+        [HttpPost("update-project-emp-status")]
+        public async Task<IActionResult> UpdateProjectEmpStatus([FromForm]ProjectEmpStatusRequest model)
+        {
+            try
+            {
+                int addedBy = _userId;
+                bool result = await _service.UpdateProjectEmpStatus(model.ProjectId, model.EmpId,model.ApproveStatus,model.NewEmpId, _userId);
+                if (result)
+                {
+                    string msg = model.ApproveStatus == 1? "Project employee approved successfully.": "Project employee rejected and updated successfully.";
+                    return Ok(new{success = true, message = msg});
+                }
+                else
+                {
+                    return Ok(new { success = false,message = "No record updated. Please try again."});
+                }
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, new
+                {
+                    success = false,
+                    message = "Some error occurred while processing your request."
+                });
+            }           
+        }
+
         #endregion
 
-        #region get al emp
+        #region get all emp
 
         [HttpGet("GetAllEmployees")]
         public async Task<IActionResult> GetAllEmployees(string? searchTerm, int? pageNumber, int? pageSize)

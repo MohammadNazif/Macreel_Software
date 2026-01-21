@@ -39,8 +39,8 @@ import { SafeUrlPipe } from "../../../core/pipes/capitalize.pipe";
     AddProjectComponent,
     AddTaskComponent,
     ViewTaskComponent,
-   ViewProjectComponent,
-   LeaveRequestsComponent
+    ViewProjectComponent,
+    LeaveRequestsComponent
 
   ],
   imports: [
@@ -56,10 +56,10 @@ import { SafeUrlPipe } from "../../../core/pipes/capitalize.pipe";
     ReactiveFormsModule,
     CommonPagesModule,
     SafeUrlPipe
-],
+  ],
 
-providers:[
-  DatePipe
-]
+  providers: [
+    DatePipe
+  ]
 })
 export class AdminModule { }

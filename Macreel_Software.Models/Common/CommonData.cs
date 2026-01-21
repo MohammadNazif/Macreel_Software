@@ -78,5 +78,13 @@ namespace Macreel_Software.Models.Common
         public string? empIds { get; set; }   
     }
 
+    public class ProjectEmpStatusRequest
+    {
+        public int ProjectId { get; set; }
+        public int EmpId { get; set; }         
+        public int ApproveStatus { get; set; }  
+        public int? NewEmpId { get; set; }      
+    }
+
 
 }

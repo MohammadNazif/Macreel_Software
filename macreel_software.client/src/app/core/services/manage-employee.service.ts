@@ -40,7 +40,7 @@ export class ManageEmployeeService {
     if (pageSize !== null) params = params.set('pageSize', pageSize.toString());
     if (searchText) params = params.set('searchTerm', searchText);
 
-    return this.http.get<any>(`${this.baseUrl}Admin/GetAllEmployees`, { params });
+    return this.http.get<any>(`${this.baseUrl}Common/GetAllEmployees`, { params });
   }
 
   getEmployeeById(id: number) {
@@ -67,6 +67,17 @@ sendLinkForReg(payload: { email: string }): Observable<any> {
     return this.http.get<any>(`${this.baseUrl}Common/EmailIdByAccessId`, {
       params: { accessId}
     });
+  }
+
+  getAssignedTaskById(projectId:number):Observable<any>{
+    return this.http.get<any>(`${this.baseUrl}Employee/AssignedProjectDetailForUpdate`,{params:{projectId}});
+  }
+
+  updateTaskStatus(data:FormData){
+    return this.http.post(
+      `${this.baseUrl}Employee/Update-Task-Status`, data
+    );
+
   }
 
 }

@@ -4,6 +4,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ManageLeaveService } from '../../../../core/services/manage-leave.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { TableColumn } from '../../../../core/models/interface';
 
 @Component({
   selector: 'app-assigned-leaves',
@@ -30,7 +31,13 @@ export class AssignedLeavesComponent {
   constructor(
     private readonly leaveService: ManageLeaveService
   ) { }
+  
 
+ projectColumns: TableColumn<any>[] = [
+    { key: 'leaveName', label: 'Type' ,align:'center'},
+    { key: 'noOfLeave', label: 'No. Of Leaves' ,align:'center'},
+   
+  ];
   ngOnInit(): void {
     this.loadAssignedLeaves();
     // Server-side search subscription

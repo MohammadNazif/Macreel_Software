@@ -168,108 +168,32 @@
                 </div>
 
                 <!-- PAGINATOR -->
-                <mat-paginator [length]="totalRecords" [pageSize]="pageSize" [pageIndex]="pageNumber - 1"
+                <!-- <mat-paginator [length]="totalRecords" [pageSize]="pageSize" [pageIndex]="pageNumber - 1"
                     [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons (page)="onPageChange($event)">
-                </mat-paginator>
+                </mat-paginator> -->
 
             </div>
 
         </div>
 
-        <!-- ================= TABLE WRAPPER ================= -->
-        <div class="relative overflow-x-auto w-full">
-
-            <table mat-table [dataSource]="dataSource" class="min-w-[700px] w-full
-               border border-gray-300
-               divide-y divide-gray-300
-               table-fixed
-               text-sm md:text-base">
-
-                <!-- SR NO -->
-                <ng-container matColumnDef="srNo">
-                    <th mat-header-cell *matHeaderCellDef
-                        class="w-[70px] text-center !bg-[#dd3d4f] border-r text-white">
-                        Sr No.
-                    </th>
-
-                    <td mat-cell *matCellDef="let row; let i = index" class="text-center border-r text-[12px]">
-                        {{ (pageNumber - 1) * pageSize + i + 1 }}
-                    </td>
-                </ng-container>
-
-
-                <!-- Applied Date -->
-                <ng-container matColumnDef="appliedDate">
-                    <th mat-header-cell *matHeaderCellDef
-                        class="w-[70px] text-center !bg-[#dd3d4f] border-r text-white">Applied
-                        Date</th>
-                    <td mat-cell *matCellDef="let row" class="border-r">
-                        {{ row.applieddate | date:'dd-MM-yyyy' }}
-                    </td>
-                </ng-container>
-
-                <!-- From Date -->
-                <ng-container matColumnDef="fromDate">
-                    <th mat-header-cell *matHeaderCellDef
-                        class="w-[70px] text-center !bg-[#dd3d4f] border-r text-white">From
-                        Date</th>
-                    <td mat-cell *matCellDef="let row" class="border-r">
-                        {{ row.fromDate | date:'dd-MM-yyyy' }}
-                    </td>
-                </ng-container>
-
-                <!-- To Date -->
-                <ng-container matColumnDef="toDate">
-                    <th mat-header-cell *matHeaderCellDef
-                        class="w-[70px] text-center !bg-[#dd3d4f] border-r text-white">To Date
-                    </th>
-                    <td mat-cell *matCellDef="let row" class="border-r">
-                        {{ row.toDate | date:'dd-MM-yyyy' }}
-                    </td>
-                </ng-container>
-
-                <!-- Leave Name -->
-                <ng-container matColumnDef="leaveName">
-                    <th mat-header-cell *matHeaderCellDef
-                        class="w-[70px] text-center !bg-[#dd3d4f] border-r text-white">Leave
-                        Type</th>
-                    <td mat-cell *matCellDef="let row" class="border-r">{{ row.leaveName }}</td>
-                </ng-container>
-
-                <!-- Description -->
-                <ng-container matColumnDef="description">
-                    <th mat-header-cell *matHeaderCellDef
-                        class="w-[70px] text-center !bg-[#dd3d4f] border-r text-white">
-                        Description</th>
-                    <td mat-cell *matCellDef="let row" class="border-r">{{ row.description }}</td>
-                </ng-container>
-
-                <!-- Status -->
-                <ng-container matColumnDef="status">
-                    <th mat-header-cell *matHeaderCellDef
-                        class="w-[70px] text-center !bg-[#dd3d4f] border-r text-white">Status
-                    </th>
-                    <td mat-cell *matCellDef="let row">
-                        <span [ngClass]="{
-        'text-yellow-600': row.status === 'Pending',
-        'text-green-600': row.status === 'Approved',
-        'text-red-600': row.status === 'Unapproved'
-      }">
-                            {{ row.status }}
-                        </span>
-                    </td>
-                </ng-container>
-
-
-                <!-- ROWS -->
-                <tr mat-header-row *matHeaderRowDef="displayedColumns" class="!h-9">
-                </tr>
-
-                <tr mat-row *matRowDef="let row; columns: displayedColumns" class="hover:bg-gray-100 !h-9">
-                </tr>
-
-            </table>
-
-        </div>
+       <app-generic-table
+       [columns]="leave"
+       [data]="dataSource.data"
+       [showActions]="false">
+  
+       </app-generic-table>
+        
     </div>
 </div>
+
+<ng-template #statustemplate let-row>
+  <button class="px-2 py-1 text-xs rounded"
+          [ngClass]="{
+            'text-green-600': row.status === 'Approved',
+            'text-red-600': row.status === 'Unapproved',
+            'text-gray-600': row.status === 'Pending'
+          }"
+          >
+    {{ row.status }}
+  </button>
+</ng-template>

@@ -292,6 +292,86 @@ namespace Macreel_Software.Server.Controllers
         }
         #endregion
 
+        #region assigned project detail for emp
+
+        [HttpGet("AssignedProjectDetailForUpdate")]
+        public async Task<IActionResult> AssignedTaskDetail(int projectId)
+        {
+            try
+            {
+                var result = await _service.assignedTaskData(projectId,_userId);
+                return StatusCode(result.StatusCode, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<AssignedTaskDto>.FailureResponse(
+                    "An error occurred while fetching assign project details.",
+                    500,
+                    "SERVER_ERROR"
+                ));
+            }
+        }
+
+        [HttpPost("Update-Task-Status")]
+        public async Task<IActionResult> UpdateTaskStatus([FromForm] UpdateTaskStatus data)
+        {
+            try
+            {
+                string? doc1Path = null;
+                string? doc2Path = null;
+
+                if (data.document1 != null)
+                {
+                    doc1Path = _uploadFileService.ValidateAndGeneratePath(
+                        data.document1,
+                        "TaskDocuments",
+                        new[] { ".pdf", ".jpg", ".jpeg", ".png" ,".doc",".docx"}
+                    );
+                }
+
+                if (data.document2 != null)
+                {
+                    doc2Path = _uploadFileService.ValidateAndGeneratePath(
+                        data.document2,
+                        "TaskDocuments",
+                        new[] { ".pdf", ".jpg", ".jpeg", ".png" , ".doc", ".docx" }
+                    );
+                }
+
+                bool res = await _service.updateTaskStatus(
+                    data,
+                    _userId,
+                    doc1Path,
+                    doc2Path
+                );
+
+                if (res)
+                {
+                    if (data.document1 != null)
+                        await _uploadFileService.UploadAsync(data.document1, doc1Path!);
+
+                    if (data.document2 != null)
+                        await _uploadFileService.UploadAsync(data.document2, doc2Path!);
+
+                    return Ok(ApiResponse<object>.SuccessResponse(
+                        null!,
+                        "Task Status updated successfully"
+                    ));
+                }
+
+                return Ok(ApiResponse<object>.FailureResponse(
+                    "Some error occurred during update task status!!",
+                    400
+                ));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ApiResponse<object>.FailureResponse(ex.Message, 400));
+            }
+        }
+
+
+        #endregion
 
     }
 }
