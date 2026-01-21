@@ -20,5 +20,7 @@ namespace Macreel_Software.DAL.Employee
         Task<ApiResponse<Dashboard>> DashboardCount(int empId);
         Task<ApiResponse<List<AssignedLeaveDto>>> GetAllAssignedLeaveByEmpCode(int empcode);
         Task<ApiResponse<List<AssignedProjectDto>>> assignedProjectByEmpId(int empId);
+        Task<ApiResponse<List<AssignedTaskDto>>> assignedTaskData(int projectId, int empId);
+        Task<bool> updateTaskStatus(UpdateTaskStatus data, int empId, string? document1Path, string? document2Path);
     }
 }
