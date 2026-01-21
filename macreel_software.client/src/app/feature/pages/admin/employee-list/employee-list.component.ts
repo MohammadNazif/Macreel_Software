@@ -33,12 +33,12 @@ export class EmployeeListComponent implements OnInit {
   this.router.navigate(['/home/edit-employee', emp.id]);
 }
      employee: TableColumn<employee>[] = [
-      { key: 'empCode', label: 'Name' },
+      { key: 'empCode', label: 'Code' },
       { key: 'empName', label: 'Name' },
-      { key: 'empCode', label: 'Name' },
-      { key: 'designationName', label: 'Name' },
-      { key: 'empEmail', label: 'Name' },
-      { key: 'Contact', label: 'Name' },
+      { key: 'designationName', label: 'Designation' },
+      { key: 'emailId', label: 'Email' },
+      { key: 'mobile', label: 'Mobile' },
+
 
      
     ];
@@ -133,7 +133,6 @@ export interface employee {
 empCode :number
  empName :string
  designationName:string
- empEmail :string
- Contact :number
-
+ emailId :string
+ mobile :number
 }
