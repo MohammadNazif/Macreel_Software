@@ -30,6 +30,7 @@ export class PageAccessComponent {
   pageCtrl = new FormControl('');
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   pageRows: PageRow[] = [];
+  isAllSelected: boolean = false;
 
   isEditMode = false;
   editId: number | null = null;
@@ -48,6 +49,16 @@ export class PageAccessComponent {
       pageUrl: [page.pageUrl],
       checked: [checked]
     });
+  }
+  toggleSelectAll() {
+    this.isAllSelected = !this.isAllSelected;
+
+    this.pageRows.forEach(row => {
+      row.checked = this.isAllSelected;
+    });
+
+    // table refresh
+    this.dataSource.data = [...this.pageRows];
   }
 
   loadPagesByRole(roleId: number) {
@@ -93,6 +104,9 @@ export class PageAccessComponent {
   }
   getCheckbox(event: { row: PageRow; key: string; value: boolean }) {
     event.row.checked = event.value;
+
+    // agar koi ek bhi unchecked hai → Select All false
+    this.isAllSelected = this.pageRows.every(p => p.checked);
   }
 
   onSubmit() {
@@ -114,7 +128,7 @@ export class PageAccessComponent {
 
     this.master.assignRolePages(payload).subscribe(res => {
       if (res.success) {
-        Swal.fire('Success', res.message, 'success').then(()=>{
+        Swal.fire('Success', res.message, 'success').then(() => {
           location.reload();
         })
       }
@@ -177,6 +191,8 @@ export class PageAccessComponent {
       // refresh table
       this.dataSource.data = [...this.pageRows];
     });
+    this.isAllSelected = this.pageRows.length > 0 &&
+      this.pageRows.every(p => p.checked);
   }
 
   loadPages(): void {

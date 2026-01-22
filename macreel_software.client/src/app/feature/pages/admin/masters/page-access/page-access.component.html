@@ -16,7 +16,7 @@
               </label>
             </div>
 
-            <!-- ROLE DROPDOWN -->  
+            <!-- ROLE DROPDOWN -->
             <div class="w-full md:w-[25%]">
               <select formControlName="roleId" (change)="onRoleChange($event)" class="w-full border border-gray-300 rounded-md px-3 py-2 text-[12px]
                        focus:outline-none focus:ring-2 focus:ring-[#C5192F]">
@@ -42,8 +42,15 @@
                 <h1 class="ml-2 text-lg md:text-[16px] font-semibold text-[#444]">
                   Page List
                 </h1>
+                <div class="flex items-center gap-2 mb-2">
+                  <button type="button" (click)="toggleSelectAll()"
+                    class="h-[32px] px-4 bg-[#249378] text-white text-[12px] rounded-md hover:bg-[#1d7f65] transition">
+                    {{ isAllSelected ? 'Unselect All' : 'Select All' }}
+                  </button>
+                </div>
               </div>
-              <app-generic-table [columns]="Pages" [data]="dataSource.data" [showActions]="false" (checkboxChange)="getCheckbox($event)">
+              <app-generic-table [columns]="Pages" [data]="dataSource.data" [showActions]="false"
+                (checkboxChange)="getCheckbox($event)">
 
               </app-generic-table>
               <!-- ================= TABLE ================= -->

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
+import { ManageMasterdataService } from '../../core/services/manage-masterdata.service';
 
 @Component({
   selector: 'app-layout',
@@ -15,11 +16,14 @@ export class LayoutComponent implements OnInit {
   openMenu: string | null = null;
   currentRole: string | '' = ''; // This should be set based on actual user role
   profileOpen = false;
-
+  sidebarMenuList: any;
+  allowedPageUrls: string[] = [];
+  filteredMenusFromApi: any[] = [];
 
   constructor(
     private readonly auth: AuthService,
-    private readonly router : Router
+    private readonly router: Router,
+    private readonly master: ManageMasterdataService
   ) { }
 
   menus = [
@@ -157,9 +161,49 @@ export class LayoutComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.currentRole = this.auth.getRole() as any;
+    this.currentRole = this.auth.getRole()?.toLocaleLowerCase() as any;
+    this.loadData(this.currentRole);
     this.checkScreen();
     window.addEventListener('resize', () => this.checkScreen());
+  }
+  loadData(role: string) {
+    this.master.getAssignPages().subscribe({
+      next: res => {
+        if (res.success) {
+          const data = res.data;
+
+          const roleData = data.find(
+            (m: any) => m.roleName.toLowerCase() === role.toLowerCase()
+          );
+
+          if (!roleData) return;
+
+          // 1️⃣ extract allowed urls
+          this.allowedPageUrls = roleData.pages.map(
+            (p: any) => p.pageUrl
+          );
+
+          // 2️⃣ filter menus using allowed urls
+          this.filteredMenusFromApi = this.menus
+            // 1️⃣ role-based parent menu
+            .filter(menu => menu.roles.includes(this.currentRole))
+            .map(menu => {
+
+              // 2️⃣ role + page based children
+              const children = menu.children.filter(child =>
+                child.roles.includes(this.currentRole) &&
+                this.allowedPageUrls.includes(child.route)
+              );
+
+              return { ...menu, children };
+            })
+            // 3️⃣ remove empty parents
+            .filter(menu => menu.children.length > 0);
+
+        }
+      },
+      error: err => console.error(err)
+    });
   }
 
   checkScreen() {

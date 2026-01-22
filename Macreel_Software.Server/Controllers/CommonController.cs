@@ -1,17 +1,13 @@
-﻿﻿using System.Reflection;
-using Macreel_Software.Contracts.DTOs;
-using Macreel_Software.DAL;
+﻿using Macreel_Software.Contracts.DTOs;
 using Macreel_Software.DAL.Admin;
-using Macreel_Software.DAL.Admin;
-using Macreel_Software.DAL.Auth;
 using Macreel_Software.DAL.Common;
+using Macreel_Software.DAL.Master;
 using Macreel_Software.Models;
 using Macreel_Software.Models.Common;
 using Macreel_Software.Models.Master;
 using Macreel_Software.Services.FileUpload.Services;
 using Macreel_Software.Services.MailSender;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
 
 namespace Macreel_Software.Server.Controllers
 {
@@ -26,9 +22,10 @@ namespace Macreel_Software.Server.Controllers
         private readonly IAdminServices _adminservice;
         private readonly MailSender _mailservice;
         private readonly int _userId;
+        private readonly IMasterService _masterservice;
 
 
-        public CommonController(ICommonServices service, PasswordEncrypt pass, FileUploadService fileUploadService,IAdminServices adminservice, MailSender mailservice, IAdminServices adminService, IHttpContextAccessor http)
+        public CommonController(ICommonServices service, PasswordEncrypt pass, FileUploadService fileUploadService,IAdminServices adminservice, MailSender mailservice, IAdminServices adminService, IHttpContextAccessor http,IMasterService masterservice)
         {
             _service = service;
             _pass = pass;
@@ -36,6 +33,7 @@ namespace Macreel_Software.Server.Controllers
             _adminservice = adminservice;
             _mailservice = mailservice;
             _services = adminService;
+            _masterservice = masterservice;
             var user = http.HttpContext?.User;
             if (user != null && user.Identity?.IsAuthenticated == true)
             {
@@ -615,6 +613,28 @@ namespace Macreel_Software.Server.Controllers
             }
         }
 
+        #endregion
+
+        #region Role Assign Page
+        [HttpGet("getAllAssignedPages")]
+        public async Task<IActionResult> GetAllAssignedPages(string? searchTerm = null, int? pageNumber = null, int? pageSize = null)
+        {
+            try
+            {
+                ApiResponse<List<RolePagesDto>> result =
+                    await _masterservice.GetAllAssignedPages(null, pageNumber, pageSize, searchTerm);
+
+                return StatusCode(result.StatusCode, result);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, ApiResponse<List<Page>>.FailureResponse(
+                    "An error occurred while fetching pages",
+                    500,
+                    "SERVER_ERROR"
+                ));
+            }
+        }
         #endregion
     }
 }

@@ -5,7 +5,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { ManageEmployeeService } from '../../../../core/services/manage-employee.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import {  TableColumn } from '../../../../core/models/interface';
+import {  employee, TableColumn } from '../../../../core/models/interface';
 
 
 @Component({
