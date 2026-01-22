@@ -67,17 +67,17 @@ namespace Macreel_Software.Server.Controllers
 
                 var files = new[]
                 {
-            new { File = model.ProfilePic, Path = (Action<string>)(p => model.ProfilePicPath = p), Ext = imgExt, Name = "Profile Picture" },
-            new { File = model.AadharImg, Path = (Action<string>)(p => model.AadharImgPath = p), Ext = imgExt, Name = "Aadhar Front Image" },
-            new { File = model.AadharBackImg, Path = (Action<string>)(p => model.AadharBackImgPath = p), Ext = imgExt, Name = "Aadhar Back Image" },
-            new { File = model.PanImg, Path = (Action<string>)(p => model.PanImgPath = p), Ext = imgExt, Name = "PAN Front Image" },
-            new { File = model.PanBackImg, Path = (Action<string>)(p => model.PanBackImgPath = p), Ext = imgExt, Name = "PAN Back Image" },
-            new { File = model.ExperienceCertificate, Path = (Action<string>)(p => model.ExperienceCertificatePath = p), Ext = docExt, Name = "Experience Certificate" },
-            new { File = model.TenthCertificate, Path = (Action<string>)(p => model.TenthCertificatePath = p), Ext = docExt, Name = "10th Certificate" },
-            new { File = model.TwelthCertificate, Path = (Action<string>)(p => model.TwelthCertificatePath = p), Ext = docExt, Name = "12th Certificate" },
-            new { File = model.GraduationCertificate, Path = (Action<string>)(p => model.GraduationCertificatePath = p), Ext = docExt, Name = "Graduation Certificate" },
-            new { File = model.MastersCertificate, Path = (Action<string>)(p => model.MastersCertificatePath = p), Ext = docExt, Name = "Masters Certificate" },
-        };
+                    new { File = model.ProfilePic, Path = (Action<string>)(p => model.ProfilePicPath = p), Ext = imgExt, Name = "Profile Picture" },
+                    new { File = model.AadharImg, Path = (Action<string>)(p => model.AadharImgPath = p), Ext = imgExt, Name = "Aadhar Front Image" },
+                    new { File = model.AadharBackImg, Path = (Action<string>)(p => model.AadharBackImgPath = p), Ext = imgExt, Name = "Aadhar Back Image" },
+                    new { File = model.PanImg, Path = (Action<string>)(p => model.PanImgPath = p), Ext = imgExt, Name = "PAN Front Image" },
+                    new { File = model.PanBackImg, Path = (Action<string>)(p => model.PanBackImgPath = p), Ext = imgExt, Name = "PAN Back Image" },
+                    new { File = model.ExperienceCertificate, Path = (Action<string>)(p => model.ExperienceCertificatePath = p), Ext = docExt, Name = "Experience Certificate" },
+                    new { File = model.TenthCertificate, Path = (Action<string>)(p => model.TenthCertificatePath = p), Ext = docExt, Name = "10th Certificate" },
+                    new { File = model.TwelthCertificate, Path = (Action<string>)(p => model.TwelthCertificatePath = p), Ext = docExt, Name = "12th Certificate" },
+                    new { File = model.GraduationCertificate, Path = (Action<string>)(p => model.GraduationCertificatePath = p), Ext = docExt, Name = "Graduation Certificate" },
+                    new { File = model.MastersCertificate, Path = (Action<string>)(p => model.MastersCertificatePath = p), Ext = docExt, Name = "Masters Certificate" },
+                };
 
                 // ---------- STEP 1: FILE VALIDATION ----------
                 foreach (var f in files)
@@ -140,35 +140,20 @@ namespace Macreel_Software.Server.Controllers
                 // ---------- STEP 3: FILE UPLOAD ----------
                 foreach (var f in files)
                 {
-                    if (f.File == null) continue;
-
-                    try
-                    {
-                        await _fileUploadService.UploadAsync(
-                            f.File,
-                            f.File == model.ProfilePic ? model.ProfilePicPath! :
-                            f.File == model.AadharImg ? model.AadharImgPath! :
-                            f.File == model.AadharBackImg ? model.AadharBackImgPath! :
-                            f.File == model.PanImg ? model.PanImgPath! :
-                            f.File == model.PanBackImg ? model.PanBackImgPath! :
-                            f.File == model.ExperienceCertificate ? model.ExperienceCertificatePath! :
-                            f.File == model.TenthCertificate ? model.TenthCertificatePath! :
-                            f.File == model.TwelthCertificate ? model.TwelthCertificatePath! :
-                            f.File == model.GraduationCertificate ? model.GraduationCertificatePath! :
-                            model.MastersCertificatePath!
+                    if (f.File != null)
+                        await _fileUploadService.UploadAsync(f.File,
+                                f.File == model.ProfilePic ? model.ProfilePicPath!
+                                : f.File == model.AadharImg ? model.AadharImgPath!
+                                : f.File == model.AadharBackImg ? model.AadharBackImgPath!
+                                : f.File == model.PanImg ? model.PanImgPath!
+                                : f.File == model.PanBackImg ? model.PanBackImgPath!
+                                : f.File == model.ExperienceCertificate ? model.ExperienceCertificatePath!
+                                : f.File == model.TenthCertificate ? model.TenthCertificatePath!
+                                : f.File == model.TwelthCertificate ? model.TwelthCertificatePath!
+                                : f.File == model.GraduationCertificate ? model.GraduationCertificatePath!
+                                : model.MastersCertificatePath!
                         );
-                    }
-                    catch (Exception ex)
-                    {
-                        return StatusCode(500, new
-                        {
-                            status = false,
-                            statusCode = 500,
-                            message = $"Upload failed for {f.Name}: {ex.Message}"
-                        });
-                    }
                 }
-
                 return Ok(new
                 {
                     status = true,
@@ -559,11 +544,11 @@ namespace Macreel_Software.Server.Controllers
             }
         }
         [HttpPut("updateLeaveStatus")]
-        public async Task<IActionResult> UpdateLeaveStatus(int id, int status,string reason = null)
+        public async Task<IActionResult> UpdateLeaveStatus(int id, int status, string reason = null)
         {
             try
             {
-                bool result = await _services.UpdateLeaveRequest(id, status,reason);
+                bool result = await _services.UpdateLeaveRequest(id, status, reason);
 
                 if (result)
                 {
@@ -571,7 +556,7 @@ namespace Macreel_Software.Server.Controllers
                     {
                         status = true,
                         statusCode = 200,
-                        message =status==1? "Approved Sucessfully":"Rejected Successfully"
+                        message = status == 1 ? "Approved Sucessfully" : "Rejected Successfully"
                     });
                 }
                 return Ok(new
@@ -672,9 +657,9 @@ namespace Macreel_Software.Server.Controllers
             if (string.IsNullOrWhiteSpace(data.projectTitle))
                 return BadRequest("Project title is required.");
 
-            if (data.sopDocument == null && data.id<=0)
             if (data.sopDocument == null && data.id <= 0)
-                return BadRequest("SOP document is required.");
+                if (data.sopDocument == null && data.id <= 0)
+                    return BadRequest("SOP document is required.");
 
             if (data.startDate == null)
                 return BadRequest("Start date is required.");

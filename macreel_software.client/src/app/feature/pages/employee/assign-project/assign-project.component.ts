@@ -20,11 +20,13 @@ export class AssignProjectComponent implements OnInit {
   filesTemplate!: TemplateRef<any>;
 
   projectsColumns: TableColumn<any>[] = [];
+  employeeColumns: TableColumn<any>[] = [];
+
   projectsData: Project[] = [];
   loading = false;
 
   showEmployeeListModal = false;
-assignedEmployees: any[] = [];
+  assignedEmployees: any[] = [];
 
   showEmployeeModal = false;
   employees: any[] = [];
@@ -36,7 +38,7 @@ assignedEmployees: any[] = [];
   constructor(
     private projectService: ProjectService,
     private manageEmployeeService: ManageEmployeeService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.projectsColumns = [
@@ -50,7 +52,9 @@ assignedEmployees: any[] = [];
         type: 'custom',
         template: this.filesTemplate
       }
-    ];
+    ],[this.employeeColumns=[{ key: 'empName', label: 'Employee Name',width:'150px' },
+      { key: 'designation', label: 'Designation', width: '170px' },
+      { key: 'category', label: 'Category',width:'170px' }]];
 
     this.fetchProjects();
   }
@@ -58,20 +62,20 @@ assignedEmployees: any[] = [];
   /* =======================
      FETCH ASSIGNED PROJECTS
      ======================= */
-fetchProjects() {
-  this.loading = true;
-  this.projectService.getAssignedProjectsByEmp().subscribe({
-    next: (res: any) => {
-      console.log('API RESPONSE:', res); // 👈 debug
-      this.projectsData = res?.success ? res.data : [];
-      this.loading = false;
-    },
-    error: () => {
-      this.projectsData = [];
-      this.loading = false;
-    }
-  });
-}
+  fetchProjects() {
+    this.loading = true;
+    this.projectService.getAssignedProjectsByEmp().subscribe({
+      next: (res: any) => {
+        console.log('API RESPONSE:', res); // 👈 debug
+        this.projectsData = res?.success ? res.data : [];
+        this.loading = false;
+      },
+      error: () => {
+        this.projectsData = [];
+        this.loading = false;
+      }
+    });
+  }
 
 
   /* =======================
@@ -120,68 +124,68 @@ fetchProjects() {
   }
 
   showAssignedEmployees(row: any) {
-  const projectId = row.id;
+    const projectId = row.id;
 
-  this.projectService.getAssignedProjectEmpList(projectId).subscribe({
-    next: (res: any) => {
-      if (res?.success) {
-        this.assignedEmployees = res.data;
-        this.showEmployeeListModal = true;
+    this.projectService.getAssignedProjectEmpList(projectId).subscribe({
+      next: (res: any) => {
+        if (res?.success) {
+          this.assignedEmployees = res.data;
+          this.showEmployeeListModal = true;
+        }
+      },
+      error: () => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to load employees'
+        });
       }
-    },
-    error: () => {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Failed to load employees'
-      });
-    }
-  });
-}
+    });
+  }
 
 
   /* =======================
      SUBMIT ASSIGN PROJECT
      ======================= */
-submit() {
-  if (!this.selectedProjectId || this.selectedEmployees.length === 0) {
-    Swal.fire({
-      icon: 'warning',
-      title: 'Validation Error',
-      text: 'Please select at least one employee'
-    });
-    return;
-  }
-
-  const payload = {
-    projectId: this.selectedProjectId,
-    empIds: this.selectedEmployees.map(e => e.id).join(',')
-  };
-
-  this.projectService.assignProjectToEmp(payload).subscribe({
-    next: (res: any) => {
-      if (res?.status) {
-        Swal.fire({
-          icon: 'success',
-          title: 'Success',
-          text: res.message || 'Project assigned successfully',
-          timer: 2000,
-          showConfirmButton: false
-        });
-
-        this.closeModal();
-        this.fetchProjects();
-      }
-    },
-    error: () => {
+  submit() {
+    if (!this.selectedProjectId || this.selectedEmployees.length === 0) {
       Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Something went wrong'
+        icon: 'warning',
+        title: 'Validation Error',
+        text: 'Please select at least one employee'
       });
+      return;
     }
-  });
-}
+
+    const payload = {
+      projectId: this.selectedProjectId,
+      empIds: this.selectedEmployees.map(e => e.id).join(',')
+    };
+
+    this.projectService.assignProjectToEmp(payload).subscribe({
+      next: (res: any) => {
+        if (res?.status) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: res.message || 'Project assigned successfully',
+            timer: 2000,
+            showConfirmButton: false
+          });
+
+          this.closeModal();
+          this.fetchProjects();
+        }
+      },
+      error: () => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Something went wrong'
+        });
+      }
+    });
+  }
 
 
   /* =======================
