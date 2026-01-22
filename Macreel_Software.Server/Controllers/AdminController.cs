@@ -68,7 +68,9 @@ namespace Macreel_Software.Server.Controllers
                 {
             new { File = model.ProfilePic, Folder = "EmployeeFiles", Ext = imgExt, Set = (Action<string>)(p => model.ProfilePicPath = p) },
             new { File = model.AadharImg, Folder = "EmployeeFiles", Ext = imgExt, Set = (Action<string>)(p => model.AadharImgPath = p) },
+            new { File = model.AadharBackImg, Folder = "EmployeeFiles", Ext = imgExt, Set = (Action<string>)(p => model.AadharBackImgPath = p) },
             new { File = model.PanImg, Folder = "EmployeeFiles", Ext = imgExt, Set = (Action<string>)(p => model.PanImgPath = p) },
+            new { File = model.PanBackImg, Folder = "EmployeeFiles", Ext = imgExt, Set = (Action<string>)(p => model.PanBackImgPath = p) },
             new { File = model.ExperienceCertificate, Folder = "EmployeeFiles", Ext = docExt, Set = (Action<string>)(p => model.ExperienceCertificatePath = p) },
             new { File = model.TenthCertificate, Folder = "EmployeeFiles", Ext = docExt, Set = (Action<string>)(p => model.TenthCertificatePath = p) },
             new { File = model.TwelthCertificate, Folder = "EmployeeFiles", Ext = docExt, Set = (Action<string>)(p => model.TwelthCertificatePath = p) },
@@ -108,7 +110,9 @@ namespace Macreel_Software.Server.Controllers
                             f.Folder == "profile"
                                 ? model.ProfilePicPath!
                                 : f.File == model.AadharImg ? model.AadharImgPath!
+                                : f.File == model.AadharBackImg ? model.AadharBackImgPath!
                                 : f.File == model.PanImg ? model.PanImgPath!
+                                : f.File == model.PanBackImg ? model.PanBackImgPath!
                                 : f.File == model.ExperienceCertificate ? model.ExperienceCertificatePath!
                                 : f.File == model.TenthCertificate ? model.TenthCertificatePath!
                                 : f.File == model.TwelthCertificate ? model.TwelthCertificatePath!
