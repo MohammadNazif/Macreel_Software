@@ -50,9 +50,11 @@ export class ViewAttendanceComponent implements OnInit {
 attendanceColumns: TableColumn<Attendance>[] = [
 
   { key: 'attendanceDate', label: 'Date', type: 'date' },
+   { key: 'day', label: 'Day' },  
   { key: 'status', label: 'Status',align:'center' },
   { key: 'inTime', label: 'In Time',align:'center' },
   { key: 'outTime', label: 'Out Time',align:'center' },
+    { key: 'totalHours', label: 'Total Hours',align:'center' ,width:'170px'},
  
 ];
 
@@ -98,8 +100,17 @@ attendanceColumns: TableColumn<Attendance>[] = [
     };
 
     this.attendanceService.getAttendance(payload).subscribe({
-      next: (res) => {
-        this.attendancedetails = res.data;
+      next: (res :any) => {
+        const updateData =  res.data.map((item:any)=>{
+          const date = new Date(item.attendanceDate)
+          return {
+        ...item,
+         day: date.toLocaleDateString("en-US", { weekday: "long" })
+
+       };
+        })
+        console.log("day",updateData)
+        this.attendancedetails = updateData;
         this.isLoading = false;
       },
       error: (err) => {

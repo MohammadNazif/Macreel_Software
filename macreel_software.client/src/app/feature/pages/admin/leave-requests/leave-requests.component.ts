@@ -15,16 +15,7 @@ import { TableColumn } from '../../../../core/models/interface';
   styleUrl: './leave-requests.component.css'
 })
 export class LeaveRequestsComponent {
-  displayedColumns: string[] = [
-    'srNo',
-    'name',
-    'leaveName',
-    'fromDate',
-    'toDate',
-    'document',
-    'description',
-    'action'
-  ];
+
   dataSource = new MatTableDataSource<any>([]);
   pageNumber = 1;
   pageSize = 10;
@@ -38,12 +29,16 @@ export class LeaveRequestsComponent {
   leavereq!: TableColumn<any>[];
   isModalOpen = false;
   statusForm!: FormGroup;
+
   // For document modal
   showFilesModal = false;
   selectedDocuments: any = [];
   // For status modal
   showStatusModal = false;
   selectedReason: string = '';
+
+
+
 
   data: any = [];
   @ViewChild('filesTemplate', { static: true }) filesTemplate!: TemplateRef<any>;
@@ -59,15 +54,24 @@ export class LeaveRequestsComponent {
     });
   }
 
-  openModal(id: number) {
-    const leave = this.allLeaves.find(x => x.id === id);
+
+
+
+  openModal(id: any) {
+    const leave = this.allLeaves.find(x => x.id === id.id);
+
     if (!leave) return;
     this.statusForm.get('leaveCount')?.setValue(leave.leaveCount);
     this.statusForm.get('id')?.setValue(leave.id);
     this.isModalOpen = true;
   }
-  openReasonModal(id: number) {
-    const leave = this.allLeaves.find(x => x.id === id);
+
+
+
+  openReasonModal(id: any) {
+    debugger
+    const leave = this.allLeaves.find(x => x.id == id.id);
+
     if (!leave) return;
     this.reason = leave.reason;
     this.isReasonModal = true;
@@ -78,11 +82,11 @@ export class LeaveRequestsComponent {
     this.statusForm.reset();
   }
 
-  ApproveLeave(id: number) {
-    debugger;
-    if (id > 0) {
-      this.leaveService.UpdateLeaveStatus(id, 1, null).subscribe({
+  ApproveLeave(id: any) {
+    if (id.id > 0) {
+      this.leaveService.UpdateLeaveStatus(id.id, 1, null).subscribe({
         next: (res) => {
+          console.log("dar", res)
           if (res.status) {
             Swal.fire({
               title: 'Success',
@@ -102,6 +106,32 @@ export class LeaveRequestsComponent {
       })
     }
   }
+
+  RejectLeave(id: any) {
+    if (id.id > 0) {
+      this.leaveService.UpdateLeaveStatus(id.id, 2, null).subscribe({
+        next: (res) => {
+          console.log("dar", res)
+          if (res.status) {
+            Swal.fire({
+              title: 'Success',
+              text: res.message,
+              icon: 'success',
+              didClose: () => {
+                location.reload();
+              }
+            });
+          } else {
+            Swal.fire('Error', res.message, 'error');
+          }
+        },
+        error: (err) => {
+          Swal.fire('Error', err.error.errorMessage, 'error');
+        }
+      })
+    }
+  }
+
 
   onSubmitStatus() {
     if (!this.statusForm.valid) {

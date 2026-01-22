@@ -109,6 +109,7 @@ export interface Attendance {
   day :Date;
   Month  :Date;
   Year :Date;
+  totalHours : number;
 }
 
 export interface AdminDashboard{
