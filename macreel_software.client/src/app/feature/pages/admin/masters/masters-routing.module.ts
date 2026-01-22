@@ -7,6 +7,7 @@ import { AddTechnologyComponent } from './add-technology/add-technology.componen
 import { AddLeaveTypeComponent } from './add-leave-type/add-leave-type.component';
 import { AddPageComponent } from './add-page/add-page.component';
 import { PageAccessComponent } from './page-access/page-access.component';
+import { AssignPageListComponent } from './assign-page-list/assign-page-list.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'add-role', pathMatch: 'full' },
@@ -16,7 +17,8 @@ const routes: Routes = [
   { path:'add-technology',component:AddTechnologyComponent},
   { path:'add-leave',component:AddLeaveTypeComponent},
   {path:'add-pages',component:AddPageComponent},
-  {path:'assign-page',component:PageAccessComponent}
+  {path:'assign-page',component:PageAccessComponent},
+  {path:'assign-page-list',component:AssignPageListComponent}
 ];
 
 @NgModule({

@@ -1132,7 +1132,7 @@ namespace Macreel_Software.DAL.Master
                     await _conn.CloseAsync();
             }
         }
-        public async Task<ApiResponse<List<RolePagesDto>>> GetAllAssignedPages(int? id = null,int? pageNumber = null,int? pageSize = null)
+        public async Task<ApiResponse<List<RolePagesDto>>> GetAllAssignedPages(int? id = null,int? pageNumber = null,int? pageSize = null,string ? searchTerm = null)
         {
             List<RolePagesDto> result = new();
             Dictionary<int, RolePagesDto> roleDict = new();
@@ -1145,7 +1145,7 @@ namespace Macreel_Software.DAL.Master
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
 
-                    cmd.Parameters.AddWithValue("@action", "getPages");
+                    cmd.Parameters.AddWithValue("@action", "getAssignPages");
                     cmd.Parameters.AddWithValue("@id", id.HasValue ? id.Value : DBNull.Value);
 
                     cmd.Parameters.AddWithValue("@pageNumber",
@@ -1153,6 +1153,8 @@ namespace Macreel_Software.DAL.Master
 
                     cmd.Parameters.AddWithValue("@pageSize",
                         pageSize.HasValue ? pageSize.Value : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@searchTerm",
+                        searchTerm!=null ? searchTerm : DBNull.Value);
 
                     if (_conn.State != ConnectionState.Open)
                         await _conn.OpenAsync();

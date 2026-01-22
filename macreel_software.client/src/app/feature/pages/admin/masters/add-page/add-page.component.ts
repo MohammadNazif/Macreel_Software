@@ -4,8 +4,9 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ManageMasterdataService } from '../../../../../core/services/manage-masterdata.service';
 import { PageEvent } from '@angular/material/paginator';
 import Swal from 'sweetalert2';
-import { debounceTime, distinctUntilChanged } from 'rxjs';
-import { TableColumn } from '../../../../../core/models/interface';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs';
+import { Project, TableColumn } from '../../../../../core/models/interface';
+import { PaginatedList } from '../../../../../core/utils/paginated-list';
 
 @Component({
   selector: 'app-add-page',
@@ -15,41 +16,45 @@ import { TableColumn } from '../../../../../core/models/interface';
 })
 export class AddPageComponent implements OnInit {
   pageForm!: FormGroup;
-  displayedColumns: string[] = ['srNo', 'pageName', 'pageUrl', 'action'];
-  dataSource = new MatTableDataSource<any>([]);
-  pageNumber = 1;
-  pageSize = 10;
-  totalRecords = 0;
-  searchTerm: string = '';
-  searchControl = new FormControl<string>("");
-  data : any =[]
+  searchForm!: FormGroup;
+  paginator!: PaginatedList<Project>;
+  data: any = []
   isEditMode = false;
   editId: number | null = null;
   constructor(
     private readonly fb: FormBuilder,
-  private readonly master:ManageMasterdataService) { }
-  
-    Page: TableColumn<any>[] = [
-        { key: 'pageName', label: 'Name' },
-         { key: 'pageUrl', label: 'Url' }
-      ];
+    private readonly master: ManageMasterdataService) { }
+
+  Page: TableColumn<any>[] = [
+    { key: 'pageName', label: 'Name' },
+    { key: 'pageUrl', label: 'Url' }
+  ];
   ngOnInit(): void {
     this.pageForm = this.fb.group({
       pageName: ['', Validators.required],
       pageUrl: ['', Validators.required],
     });
-    this.loadPages();
+    this.paginator = new PaginatedList<Project>(
+      30,
+      (search, page, size) => this.loadPages(search, page, size)
+    );
+
+    this.paginator.load();
     // Server-side search subscription
-        this.searchControl.valueChanges
-          .pipe(
-            debounceTime(400),
-            distinctUntilChanged()
-          )
-          .subscribe(value => {
-            this.searchTerm = value?.trim() || '';
-            this.pageNumber = 1; // reset page
-            this.loadPages();
-          });
+    this.searchForm.get('search')!
+      .valueChanges
+      .pipe(
+        debounceTime(400),
+        distinctUntilChanged()
+      )
+      .subscribe(search => {
+        debugger;
+        this.paginator.reset();
+        this.paginator.load(search);
+      });
+  }
+  onScroll(event: Event): void {
+    this.paginator.handleScroll(event, this.searchForm.value.search);
   }
 
   onSubmit(): void {
@@ -64,15 +69,15 @@ export class AddPageComponent implements OnInit {
     this.master.insertPage(payload).subscribe({
       next: res => {
         if (res.success) {
-          Swal.fire('Success',res.message,'success').then(()=>{
+          Swal.fire('Success', res.message, 'success').then(() => {
             this.resetForm();
-            this.loadPages();
+            this.paginator.load();
           });
-        }else{
-          Swal.fire('Success',res.message,'success');
+        } else {
+          Swal.fire('Success', res.message, 'success');
         }
-      },error:err=>{
-        Swal.fire('Error',err.error.errorMessage,'error')
+      }, error: err => {
+        Swal.fire('Error', err.error.errorMessage, 'error')
       }
     });
   }
@@ -93,33 +98,24 @@ export class AddPageComponent implements OnInit {
     this.master.deletePageById(row.id).subscribe({
       next: res => {
         if (res.status) {
-          Swal.fire('Success',res.message,'success').then(()=>{
-            this.loadPages();
+          Swal.fire('Success', res.message, 'success').then(() => {
+            this.paginator.load();
           })
         }
       }
     });
   }
-  // MUST be called on paginator event
-  onPageChange(event: PageEvent): void {
-    this.pageNumber = event.pageIndex + 1;
-    this.pageSize = event.pageSize;
-    this.loadPages();
-  }
 
-  loadPages(): void {
-    this.master.getAllPages(this.pageNumber, this.pageSize).subscribe({
-      next: res => {
+  loadPages(searchTerm: string, pageNumber: number, pageSize: number) {
+    return this.master.getAllPages(pageNumber, pageSize, searchTerm).pipe(
+      map(res => {
         if (res.success) {
           this.data = res.data;
-          this.totalRecords = res.totalRecords ?? 0;
-          console.log('Total Records',this.totalRecords);
+        }else{
+          return res
         }
-      },error: err => {
-        console.error('Error : ',err);        
-        Swal.fire('Error',err.error.errorMessage,'error')
-      }
-    });
+      })
+    );
   }
   resetForm(): void {
     this.pageForm.reset();

@@ -5,7 +5,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { ManageEmployeeService } from '../../../../core/services/manage-employee.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import {  TableColumn } from '../../../../core/models/interface';
+import {  employee, TableColumn } from '../../../../core/models/interface';
 
 
 @Component({
@@ -50,7 +50,8 @@ export class EmployeeListComponent implements OnInit {
     this.employeeService.getAllEmployees(pageNumber, pageSize, searchText).subscribe((res: any) => {
       if (res.success) {
         this.data = res.data;
-        this.totalRecords = res.totalRecords || res.data.length; // API should return totalRecords for pagination
+        this.totalRecords = res.totalRecords || res.data.length; 
+        // API should return totalRecords for pagination
         this.dataSource.paginator = this.paginator;
       }
     }, (err: any) => {
@@ -119,18 +120,4 @@ export class EmployeeListComponent implements OnInit {
       }
     })
   }
-
 }
-
-export interface employee {
-  srNo: number;
-  id: number,
-  name: string;
-  empCode: number
-  empName: string
-  designationName: string
-  empEmail: string
-  Contact: number
-
-}
-

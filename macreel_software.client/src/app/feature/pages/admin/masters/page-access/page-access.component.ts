@@ -1,13 +1,11 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators, FormArray } from '@angular/forms';
-import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { ManageMasterdataService } from '../../../../../core/services/manage-masterdata.service';
 import Swal from 'sweetalert2';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
-import { Page } from '../../../../../core/models/interface';
+import { Page, PageRow, TableColumn } from '../../../../../core/models/interface';
 
 @Component({
   selector: 'app-page-access',
@@ -31,6 +29,8 @@ export class PageAccessComponent {
   selectedPages: any[] = [];
   pageCtrl = new FormControl('');
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
+  pageRows: PageRow[] = [];
+  isAllSelected: boolean = false;
 
   isEditMode = false;
   editId: number | null = null;
@@ -50,9 +50,19 @@ export class PageAccessComponent {
       checked: [checked]
     });
   }
+  toggleSelectAll() {
+    this.isAllSelected = !this.isAllSelected;
+
+    this.pageRows.forEach(row => {
+      row.checked = this.isAllSelected;
+    });
+
+    // table refresh
+    this.dataSource.data = [...this.pageRows];
+  }
 
   loadPagesByRole(roleId: number) {
-
+    debugger
     this.master.getPagesByRoleId(roleId).subscribe(res => {
 
       const assignedPageIds =
@@ -60,76 +70,90 @@ export class PageAccessComponent {
 
       this.master.getAllPages().subscribe(all => {
 
-        this.pagesArray.clear(); // 🔥 important
+        this.pagesArray.clear();
 
         all.data.forEach((page: any) => {
-          const isChecked = assignedPageIds.includes(page.pageId);
           this.pagesArray.push(
-            this.createPageGroup(page, isChecked)
+            this.fb.group({
+              pageId: [page.id],
+              pageName: [page.pageName],
+              pageUrl: [page.pageUrl],
+              checked: [assignedPageIds.includes(page.id)]
+            })
           );
         });
 
-        // this.dataSource.data = this.pagesArray.controls;
+        this.dataSource.data = this.pagesArray.value;
       });
     });
   }
+
+  Pages: TableColumn<Page>[] = [
+    { key: 'pageName', label: 'Page Name' },
+    { key: 'checked', label: 'Allow Access', type: 'checkbox' }
+  ];
+
   ngOnInit(): void {
     this.pageForm = this.fb.group({
       roleId: ['', Validators.required],
       pages: this.fb.array([])
     });
-    this.loadPages();
-    // Role change → prechecked data
-    this.pageForm = this.fb.group({
-      roleId: ['', Validators.required],
-      pages: this.fb.array([])
-    });
 
-    // Server-side search subscription
-    this.searchControl.valueChanges
-      .pipe(
-        debounceTime(400),
-        distinctUntilChanged()
-      )
-      .subscribe(value => {
-        this.searchTerm = value?.trim() || '';
-        this.pageNumber = 1; // reset page
-        this.loadPages();
-      });
+    this.loadAllPages();
+    this.loadRoles();
+  }
+  getCheckbox(event: { row: PageRow; key: string; value: boolean }) {
+    event.row.checked = event.value;
+
+    // agar koi ek bhi unchecked hai → Select All false
+    this.isAllSelected = this.pageRows.every(p => p.checked);
   }
 
   onSubmit() {
     if (this.pageForm.invalid) return;
 
-    const selectedPages = this.pagesArray.value
-      .filter((p: any) => p.checked)
-      .map((p: any) => ({
-        pageId: p.pageId
-      }));
+    const pages = this.pageRows
+      .filter(p => p.checked)
+      .map(p => ({ pageId: p.pageId }));
+
+    if (pages.length === 0) {
+      Swal.fire('Warning', 'Please select at least one page', 'warning');
+      return;
+    }
 
     const payload = {
       roleId: this.pageForm.value.roleId,
-      pageIds: selectedPages
+      pages
     };
 
     this.master.assignRolePages(payload).subscribe(res => {
       if (res.success) {
-        Swal.fire('Success', res.message, 'success');
+        Swal.fire('Success', res.message, 'success').then(() => {
+          location.reload();
+        })
       }
     });
   }
-
-  // MUST be called on paginator event
-  onPageChange(event: PageEvent): void {
-    this.pageNumber = event.pageIndex + 1;
-    this.pageSize = event.pageSize;
-    this.loadPages();
+  loadRoles() {
+    this.master.getRoles().subscribe({
+      next: res => {
+        if (res.success) {
+          this.roles = res.data;
+        }
+      }
+    })
   }
   loadAllPages() {
     this.master.getAllPages().subscribe(res => {
       if (res.success) {
-        this.allPages = res.data;
-        this.buildPagesForm(this.allPages, []);
+        this.pageRows = res.data.map((p: any) => ({
+          pageId: p.id,
+          pageName: p.pageName,
+          pageUrl: p.pageUrl,
+          checked: false
+        }));
+
+        this.dataSource.data = this.pageRows;
       }
     });
   }
@@ -149,25 +173,33 @@ export class PageAccessComponent {
       );
     });
 
-    // this.dataSource.data = this.pagesArray.controls;
+    this.dataSource.data = this.pagesArray.controls;
   }
   onRoleChange(event: Event) {
-    const roleId = 0;
+    const roleId = Number((event.target as HTMLSelectElement).value);
+    if (!roleId) return;
+
     this.master.getPagesByRoleId(roleId).subscribe(res => {
-      if (res.success && res.data.length > 0) {
-        const assignedPages = res.data[0].pages; // role wise pages
-        this.buildPagesForm(this.allPages, assignedPages);
-      } else {
-        this.buildPagesForm(this.allPages, []);
-      }
+
+      const assignedPageIds =
+        res.data?.[0]?.pages?.map((p: any) => p.pageId) || [];
+
+      this.pageRows.forEach(row => {
+        row.checked = assignedPageIds.includes(row.pageId);
+      });
+
+      // refresh table
+      this.dataSource.data = [...this.pageRows];
     });
+    this.isAllSelected = this.pageRows.length > 0 &&
+      this.pageRows.every(p => p.checked);
   }
+
   loadPages(): void {
     this.master.getAllPages().subscribe({
       next: res => {
         if (res.success) {
-          debugger
-          this.dataSource = res.data;
+          this.dataSource.data = res.data;
           this.totalRecords = res.totalRecords ?? 0;
           console.log('Total Records', this.dataSource);
         }
