@@ -28,7 +28,6 @@ const routes: Routes = [
   { path:'assign-leave',component:AssignLeaveComponent},
   { path: 'upload-attendance', component: UploadAttendanceComponent },
   { path: 'view-attendance', component: ViewAttendanceComponent },
-  { path:'assign-leave',component:AssignLeaveComponent},
   { path:'assigned-employees-leaves',component:AllEmployeeLeaveListComponent},
   {path: 'add-task',component:AddTaskComponent},
   {path: 'view-task',component:ViewTaskComponent},
