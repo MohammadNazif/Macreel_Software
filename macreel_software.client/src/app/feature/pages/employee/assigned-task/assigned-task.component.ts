@@ -91,7 +91,7 @@ export class AssignedTaskComponent {
       completedDate: [{ value: '', disabled: true }],
       description: [{ value: '', disabled: true }],
       comment: [''],
-      isCompleted: [false],
+      isCompleted: [0],
       document1: [''],
       document2: [''],
     });
@@ -135,7 +135,7 @@ export class AssignedTaskComponent {
   onFileSelected2(event: Event): void {
     const target = event.target as HTMLInputElement;
     if (target.files && target.files.length > 0) {
-      this.selectedFile1 = target.files[0];
+      this.selectedFile2 = target.files[0];
     }
   }
 
@@ -143,39 +143,20 @@ export class AssignedTaskComponent {
     if (!this.statusForm.valid) {
       return;
     }
-
     const formValue = this.statusForm.value;
-
     const formData = new FormData();
-
     if (this.selectedProjectId) {
       formData.append('projectId', this.selectedProjectId.toString());
     }
-
     formData.append('empComment', formValue.comment || '');
-    // formData.append('empResponse', formValue. || '');
-    formData.append('isCompleted', formValue.isCompleted ? 'true' : 'false');
-
-    // const fileInput1: any = document.querySelector(
-    //   'input[type="file"]:nth-of-type(1)',
-    // );
-    // const fileInput2: any = document.querySelector(
-    //   'input[type="file"]:nth-of-type(2)',
-    // );
-
-    // if (fileInput1 && fileInput1.files.length > 0) {
-    //   formData.append('document1', fileInput1.files[0]);
-    // }
-    // if (fileInput2 && fileInput2.files.length > 0) {
-    //   formData.append('document2', fileInput2.files[0]);
-    // }
-    
+    formData.append('empResponse', formValue.isCompleted ? 'true' : 'false');
     formData.append('document1', this.selectedFile1);
     formData.append('document2', this.selectedFile2);
     this.employeeService.updateTaskStatus(formData).subscribe({
       next: (res: any) => {
         if (res.statusCode === 200) {
           Swal.fire('Success', res.message, 'success');
+          this.closeModal();
           // location.reload();
         } else {
           Swal.fire('Error', res.message, 'error');
