@@ -5,7 +5,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { ManageEmployeeService } from '../../../../core/services/manage-employee.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { TableColumn } from '../../../../core/models/interface';
+import {  TableColumn } from '../../../../core/models/interface';
 
 
 @Component({
@@ -30,19 +30,24 @@ export class EmployeeListComponent implements OnInit {
   constructor(private employeeService: ManageEmployeeService, private router: Router) { }
 
   editEmployee(emp: any) {
-
+<<<<<<< HEAD
     this.router.navigate(['/home/edit-employee', emp.id]);
   }
   employee: TableColumn<any>[] = [
     { key: 'empCode', label: 'Name' },
     { key: 'empName', label: 'Name' },
+
     { key: 'empCode', label: 'Name' },
     { key: 'designationName', label: 'Name' },
     { key: 'empEmail', label: 'Name' },
     { key: 'Contact', label: 'Name' },
-  ];
+
+    { key: 'designationName', label: 'Designation' },
+    { key: 'empEmail', label: 'Email' },
+    { key: 'Contact', label: 'Mobile' },
 
 
+  ]
   ngOnInit(): void {
     this.getEmployees();
   }
@@ -90,8 +95,7 @@ export class EmployeeListComponent implements OnInit {
       cancelButtonColor: '#6c757d',
       confirmButtonText: 'Yes, delete it!',
       cancelButtonText: 'Cancel'
-    }).then((result) => {
-
+    }).then((result)=>{
       if (result.isConfirmed) {
 
         this.employeeService.deleteDepartmentById(id).subscribe({
@@ -120,9 +124,20 @@ export class EmployeeListComponent implements OnInit {
         });
 
       }
-
-    });
+    })
   }
+
+}
+
+export interface employee {
+  srNo: number;
+  id: number,
+  name: string;
+  empCode: number
+  empName: string
+  designationName: string
+  empEmail: string
+  Contact: number
 
 }
 

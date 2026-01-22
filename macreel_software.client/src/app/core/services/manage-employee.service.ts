@@ -69,4 +69,15 @@ sendLinkForReg(payload: { email: string }): Observable<any> {
     });
   }
 
+  getAssignedTaskById(projectId:number):Observable<any>{
+    return this.http.get<any>(`${this.baseUrl}Employee/AssignedProjectDetailForUpdate`,{params:{projectId}});
+  }
+
+  updateTaskStatus(data:FormData){
+    return this.http.post(
+      `${this.baseUrl}Employee/Update-Task-Status`, data
+    );
+
+  }
+
 }
