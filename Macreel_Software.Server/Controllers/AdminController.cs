@@ -107,7 +107,7 @@ namespace Macreel_Software.Server.Controllers
                 {
                     if (f.File != null)
                         await _fileUploadService.UploadAsync(f.File,
-                            f.Folder == "profile"
+                            f.Folder == "EmployeeFiles"
                                 ? model.ProfilePicPath!
                                 : f.File == model.AadharImg ? model.AadharImgPath!
                                 : f.File == model.AadharBackImg ? model.AadharBackImgPath!

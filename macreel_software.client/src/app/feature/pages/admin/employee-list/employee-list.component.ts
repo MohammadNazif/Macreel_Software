@@ -86,7 +86,8 @@ export class EmployeeListComponent implements OnInit {
 
 
   deleteEmployee(id: any) {
-    Swal.fire({
+    console.log('Delete', id);
+      Swal.fire({
       title: 'Are you sure?',
       text: 'This employee will be permanently deleted!',
       icon: 'warning',
@@ -98,7 +99,7 @@ export class EmployeeListComponent implements OnInit {
     }).then((result)=>{
       if (result.isConfirmed) {
 
-        this.employeeService.deleteDepartmentById(id).subscribe({
+        this.employeeService.deleteDepartmentById(id.id).subscribe({
           next: (res: any) => {
 
             if (res.status === true) {

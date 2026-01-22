@@ -34,6 +34,10 @@ export class AddEmployeeComponent implements OnInit {
   profilePic?: File;
   aadharImg?: File;
   panImg?: File;
+
+  aadharBackImg?: File;
+  panBackImg?: File;
+
   experienceCertificate?: File;
   tenthCertificate?: File;
   twelthCertificate?: File;
@@ -76,24 +80,25 @@ export class AddEmployeeComponent implements OnInit {
       departmentId: ['', Validators.required],
       designationId: ['', Validators.required],
       emailId: ['', [Validators.required, Validators.email]],
-      salary: [''],
+      salary: ['', Validators.required],
       dateOfJoining: ['', Validators.required],
       dob: ['', Validators.required],
       password: ['', Validators.required],
-      gender: [''],
-      nationality: [''],
-      maritalStatus: [''],
-      presentAddress: [''],
+      gender: ['', Validators.required],
+      nationality: ['', Validators.required],
+      maritalStatus: ['', Validators.required],
+      presentAddress: ['', Validators.required],
       stateId: ['', Validators.required],
       cityId: ['', Validators.required],
-      reportingManagerId: [''],
-      pincode: [''],
-      bankName: [''],
-      accountNo: [''],
-      ifscCode: [''],
-      bankBranch: [''],
-      emergencyContactPersonName: [''],
-      emergencyContactNum: [''],
+      reportingManagerId: ['', Validators.required],
+
+      pincode: ['', Validators.required],
+      bankName: ['', Validators.required],
+      accountNo: ['', Validators.required],
+      ifscCode: ['', Validators.required],
+      bankBranch: ['', Validators.required],
+      emergencyContactPersonName: ['', Validators.required],
+      emergencyContactNum: ['', Validators.required],
 
       // IMPORTANT - Multi select array
       skillIds: [[]],
@@ -102,6 +107,13 @@ export class AddEmployeeComponent implements OnInit {
       yearOfExperience: [''],
       technology: [''],
       companyContactNo: [''],
+
+      profilePic: [null, Validators.required],
+      aadharImg: [null, Validators.required],
+      panImg: [null, Validators.required],
+
+      aadharBackImg: [null, Validators.required],
+      panBackImg: [null, Validators.required],
 
       addedBy: [1],
     });
@@ -123,6 +135,8 @@ export class AddEmployeeComponent implements OnInit {
       this.isEditMode = true;
       this.employeeForm.get('password')?.disable();
       this.employeeForm.get('emailId')?.disable();
+
+      this.disableFileValidationForEdit();
       this.getEmployeeById(this.employeeId);
     }
 
@@ -145,7 +159,6 @@ export class AddEmployeeComponent implements OnInit {
       this.employeeForm.get('skillIds')?.setValue([]);
     }
   }
-
 
   private loadTechnologies(): Promise<void> {
     return new Promise((resolve) => {
@@ -235,6 +248,23 @@ export class AddEmployeeComponent implements OnInit {
       },
     });
   }
+
+  private disableFileValidationForEdit(): void {
+    const fileFields = [
+      'profilePic',
+      'aadharImg',
+      'panImg',
+      'aadharBackImg',
+      'panBackImg',
+    ];
+
+    fileFields.forEach(field => {
+      const control = this.employeeForm.get(field);
+      control?.clearValidators();
+      control?.updateValueAndValidity();
+    });
+  }
+
 
   // ================= TECHNOLOGY CHIP LOGIC =================
 
@@ -341,11 +371,32 @@ export class AddEmployeeComponent implements OnInit {
       'departmentId',
       'designationId',
       'emailId',
+      'salary',
       'dateOfJoining',
       'dob',
       'password',
+      'gender',
+      'nationality',
+      'maritalStatus',
+      'presentAddress',
       'stateId',
       'cityId',
+
+      'reportingManagerId',
+      'pincode',
+      'bankName',
+      'accountNo',
+      'ifscCode',
+      'bankBranch',
+      'emergencyContactPersonName',
+      'emergencyContactNum',
+
+      'profilePic',
+      'aadharImg',
+      'panImg',
+
+      'aadharBackImg',
+      'panBackImg',
     ];
 
     step1Controls.forEach((control) => {
@@ -380,13 +431,28 @@ export class AddEmployeeComponent implements OnInit {
     switch (type) {
       case 'profile':
         this.profilePic = file;
+        this.employeeForm.get('profilePic')?.setValue(file);
         break;
       case 'aadhar':
         this.aadharImg = file;
+        this.employeeForm.get('aadharImg')?.setValue(file);
         break;
+
+      case 'aadharBack':
+        this.aadharBackImg = file;
+        this.employeeForm.get('aadharBackImg')?.setValue(file);
+        break;
+
       case 'pan':
         this.panImg = file;
+        this.employeeForm.get('panImg')?.setValue(file);
         break;
+
+      case 'panBack':
+        this.panBackImg = file;
+        this.employeeForm.get('panBackImg')?.setValue(file);
+        break;
+
       case 'experience':
         this.experienceCertificate = file;
         break;
@@ -403,6 +469,7 @@ export class AddEmployeeComponent implements OnInit {
         this.mastersCertificate = file;
         break;
     }
+
   }
 
   onSubmit(): void {
@@ -414,7 +481,21 @@ export class AddEmployeeComponent implements OnInit {
     const formData = new FormData();
     const rawValue = this.employeeForm.getRawValue();
 
+    // Object.entries(rawValue).forEach(([key, value]) => {
+    //   if (value !== null && value !== undefined && value !== '') {
+    //     if (Array.isArray(value)) {
+    //       formData.append(key, value.join(','));
+    //     } else {
+    //       formData.append(key, value.toString());
+    //     }
+    //   }
+    // });
+
+    const FILE_KEYS = ['profilePic', 'aadharImg', 'panImg'];
+
     Object.entries(rawValue).forEach(([key, value]) => {
+      if (FILE_KEYS.includes(key)) return; // ⛔ FILES SKIP
+
       if (value !== null && value !== undefined && value !== '') {
         if (Array.isArray(value)) {
           formData.append(key, value.join(','));
@@ -424,9 +505,16 @@ export class AddEmployeeComponent implements OnInit {
       }
     });
 
+
     if (this.profilePic) formData.append('ProfilePic', this.profilePic);
     if (this.aadharImg) formData.append('AadharImg', this.aadharImg);
     if (this.panImg) formData.append('PanImg', this.panImg);
+    if (this.aadharBackImg)
+      formData.append('AadharBackImg', this.aadharBackImg);
+
+    if (this.panBackImg)
+      formData.append('PanBackImg', this.panBackImg);
+
     if (this.experienceCertificate)
       formData.append('ExperienceCertificate', this.experienceCertificate);
     if (this.tenthCertificate)
