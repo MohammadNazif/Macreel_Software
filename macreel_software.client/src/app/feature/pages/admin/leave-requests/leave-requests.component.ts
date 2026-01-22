@@ -58,6 +58,7 @@ export class LeaveRequestsComponent {
 
 
   openModal(id: any) {
+    console.log(id)
     const leave = this.allLeaves.find(x => x.id === id.id);
 
     if (!leave) return;
@@ -83,6 +84,7 @@ export class LeaveRequestsComponent {
   }
 
   ApproveLeave(id: any) {
+    debugger
     if (id.id > 0) {
       this.leaveService.UpdateLeaveStatus(id.id, 1, null).subscribe({
         next: (res) => {
@@ -164,9 +166,9 @@ export class LeaveRequestsComponent {
   ngOnInit(): void {
     // ? Initialize columns here AFTER filesTemplate is available
     this.leavereq = [
-      { key: 'empName', label: 'Name', clickable: true, route: '/home/admin/employee-details' },
+      { key: 'empName', label: 'Name', route: '/home/admin/employee-details' },
       { key: 'leaveName', label: 'Leave Name' },
-      { key: 'fromDate', label: 'From', type: 'date' },
+      { key: 'fromDate', label: 'From', type: 'date',align:'center' },
       { key: 'toDate', label: 'To', type: 'date', align: 'center' },
       {
         key: 'fileName',
@@ -224,7 +226,7 @@ export class LeaveRequestsComponent {
     this.selectedDocuments = Array.isArray(filePath)
       ? filePath.map(doc => `${this.pdfUrl}${doc}`)
       : [`${this.pdfUrl}${filePath}`];
-
+    
     this.showFilesModal = true;
   }
 
@@ -234,7 +236,8 @@ export class LeaveRequestsComponent {
   }
 
 
-  openReason(reason: string) {
+  openReason(reason: any) {
+    console.log("reason",reason)
     this.selectedReason = reason;
     this.showStatusModal = true;
   }

@@ -59,8 +59,7 @@ onCellClick(row: any, col: TableColumn<any>) {
   }
 
     if (col.route) {
-      console.log(col.route)
-      this.Router.navigate([col.route], { queryParams: { id: row.id } });
+      this.Router.navigate([col.route], { queryParams: row  });
     }
 }
 onCheckboxChange(item: any, key: any, event: Event) {
