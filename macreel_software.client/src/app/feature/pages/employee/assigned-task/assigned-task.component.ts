@@ -37,7 +37,8 @@ export class AssignedTaskComponent {
     'assignedBy',
     'assignedDate',
     'completionDate',
-    'taskStatus',
+    'adminTaskStatus',
+    'empTaskStatus',
     'action',
   ];
   pageSize = 10;
@@ -64,10 +65,11 @@ export class AssignedTaskComponent {
 
      pages: TableColumn<any>[] = [
         { key: 'title', label: 'Title' ,align:'center'},
-        { key: 'assignedBy', label: 'Assigned By' ,align:'center'},
+        { key: 'assignedByName', label: 'Assigned By' ,align:'center'},
              { key: 'assignedDate', label: 'Assigned To' ,align:'center',type:'date'},
-        { key: 'completionDate', label: 'Completion Date' ,align:'center',type:'date'},
-             { key: 'taskStatus', label: 'Task Status' ,align:'center'},
+        { key: 'completedDate', label: 'Completion Date' ,align:'center',type:'date'},
+             { key: 'adminTaskStatus', label: 'Status By Admin' ,align:'center'},
+             { key: 'taskStatus', label: 'Status By Employee' ,align:'center'},
        
        
       ];

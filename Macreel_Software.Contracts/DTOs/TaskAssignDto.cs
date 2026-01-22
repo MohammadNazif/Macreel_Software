@@ -18,6 +18,7 @@ namespace Macreel_Software.Contracts.DTOs
         public string? empName { get; set; }
         public DateTime? assignedDate { get; set; }
         public string? taskStatus { get; set; }
+        public string? adminTaskStatus { get; set; }
         public string assignedByName { get; set; } = string.Empty;
     }
 
