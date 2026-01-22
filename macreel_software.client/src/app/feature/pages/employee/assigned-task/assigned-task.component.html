@@ -26,196 +26,201 @@
             class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"
           >
           </i>
-
         </div>
-      <div class="relative overflow-x-auto w-full">
-      </div>
+        <div class="relative overflow-x-auto w-full"></div>
       </div>
     </div>
-       <app-generic-table
-    [columns]="pages"
-    [data]="dataSource.data"
+    <app-generic-table
+      [columns]="pages"
+      [data]="dataSource.data"
+      [showActions]="false"
     >
-
     </app-generic-table>
-    </div>
+  </div>
 
-        <!-- PAGINATOR -->
-
-     
-        <!-- <mat-paginator [length]="totalRecords" [pageSize]="pageSize" [pageIndex]="pageNumber - 1"
-          [pageSizeOptions]="[10,20,30]" showFirstLastButtons (page)="onPageChange($event)">
-        </mat-paginator> -->
-
-      
-   
-
-
-    <!-- ================= TABLE WRAPPER ================= -->
-    
-
-   
-    
-
-  
-
-
-<!-- MODAL BACKDROP -->
-<div
-  *ngIf="isModalOpen"
-  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
->
-  <!-- MODAL CARD -->
+  <!-- MODAL BACKDROP -->
   <div
-    class="bg-white w-full max-w-3xl rounded-lg shadow-lg relative max-h-[90vh] overflow-y-auto"
+    *ngIf="isModalOpen"
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
   >
-    <!-- CLOSE BUTTON -->
-    <button
-      type="button"
-      (click)="closeModal()"
-      class="absolute top-3 right-3 text-gray-500 hover:text-red-600 text-lg"
+    <!-- MODAL CARD -->
+    <div
+      class="bg-white w-full max-w-3xl rounded-lg shadow-lg relative max-h-[90vh] overflow-y-auto"
     >
-      <i class="fa-solid fa-xmark"></i>
-    </button>
+      <!-- CLOSE BUTTON -->
+      <button
+        type="button"
+        (click)="closeModal()"
+        class="absolute top-3 right-3 text-gray-500 hover:text-red-600 text-lg"
+      >
+        <i class="fa-solid fa-xmark"></i>
+      </button>
 
-    <!-- MODAL HEADER -->
-    <div class="border-b px-5 py-3">
-      <h2 class="text-lg font-semibold text-gray-700">Update Task Status</h2>
+      <!-- MODAL HEADER -->
+      <div class="border-b px-5 py-3">
+        <h2 class="text-lg font-semibold text-gray-700">Update Task Status</h2>
+      </div>
+
+      <!-- MODAL BODY -->
+      <form
+        [formGroup]="statusForm"
+        (ngSubmit)="onSubmitStatus()"
+        class="px-5 py-4 space-y-4"
+      >
+        <!-- ROW 1 -->
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1"
+              >Status</label
+            >
+            <input
+              type="text"
+              formControlName="taskStatus"
+              readonly
+              class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#C5192F]"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1"
+              >Task Title</label
+            >
+            <input
+              type="text"
+              formControlName="taskTitle"
+              readonly
+              class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#C5192F]"
+            />
+          </div>
+        </div>
+
+        <!-- ROW 2 -->
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1"
+              >Assigned Date</label
+            >
+            <input
+              type="date"
+              formControlName="assignedDate"
+              class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#C5192F]"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1"
+              >Completion Date</label
+            >
+            <input
+              type="date"
+              formControlName="completedDate"
+              class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#C5192F]"
+            />
+          </div>
+        </div>
+
+        <!-- ROW 3 -->
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1"
+              >Description</label
+            >
+            <textarea
+              rows="3"
+              formControlName="description"
+              readonly
+              class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#C5192F]"
+            ></textarea>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1">
+              Comment (If Any)
+            </label>
+            <textarea
+              rows="3"
+              formControlName="comment"
+              class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#C5192F]"
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- DOCUMENT UPLOAD -->
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1">
+              Upload Document 1
+            </label>
+            <input
+              type="file"
+              (change)="onFileSelected($event)"
+              formControlName="Document"
+              formControlName="document1"
+              class="w-full text-sm border border-gray-300 rounded-md file:px-3 file:py-2 file:border-0 file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1">
+              Upload Document 2
+            </label>
+            <input
+              type="file"
+              (change)="onFileSelected2($event)"
+              formControlName="document2"
+              class="w-full text-sm border border-gray-300 rounded-md file:px-3 file:py-2 file:border-0 file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200"
+            />
+          </div>
+        </div>
+
+        <!-- MARK COMPLETE -->
+        <div class="flex items-center gap-3">
+          <input
+            type="checkbox"
+            formControlName="isCompleted"
+            class="w-4 h-4 text-[#C5192F] border-gray-300 rounded"
+          />
+          <label class="text-sm font-medium text-gray-700">
+            Mark this task as completed
+          </label>
+        </div>
+
+        <!-- ACTION BUTTON -->
+        <div class="flex justify-center pt-3 border-t">
+          <button
+            type="submit"
+            [disabled]="statusForm.invalid"
+            class="px-6 py-2 text-sm rounded-md text-white bg-[#C5192F] hover:bg-[#b3162a] disabled:opacity-50"
+          >
+            Submit
+          </button>
+        </div>
+      </form>
     </div>
-
-    <!-- MODAL BODY -->
-    <form
-      [formGroup]="statusForm"
-      (ngSubmit)="onSubmitStatus()"
-      class="px-5 py-4 space-y-4"
-    >
-      <!-- ROW 1 -->
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label class="block text-sm font-medium text-gray-600 mb-1"
-            >Status</label
-          >
-          <input
-            type="text"
-            formControlName="taskStatus"
-            readonly
-            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#C5192F]"
-          />
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-600 mb-1"
-            >Task Title</label
-          >
-          <input
-            type="text"
-            formControlName="taskTitle"
-            readonly
-            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#C5192F]"
-          />
-        </div>
-      </div>
-
-      <!-- ROW 2 -->
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label class="block text-sm font-medium text-gray-600 mb-1"
-            >Assigned Date</label
-          >
-          <input
-            type="date"
-            formControlName="assignedDate"
-            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#C5192F]"
-          />
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-600 mb-1"
-            >Completion Date</label
-          >
-          <input
-            type="date"
-            formControlName="completedDate"
-            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#C5192F]"
-          />
-        </div>
-      </div>
-
-      <!-- ROW 3 -->
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label class="block text-sm font-medium text-gray-600 mb-1"
-            >Description</label
-          >
-          <textarea
-            rows="3"
-            formControlName="description"
-            readonly
-            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#C5192F]"
-          ></textarea>
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-600 mb-1">
-            Comment (If Any)
-          </label>
-          <textarea
-            rows="3"
-            formControlName="comment"
-            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#C5192F]"
-          ></textarea>
-        </div>
-      </div>
-
-      <!-- DOCUMENT UPLOAD -->
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label class="block text-sm font-medium text-gray-600 mb-1">
-            Upload Document 1
-          </label>
-          <input
-            type="file" (change)="onFileSelected($event)"
-        formControlName="Document"
-            formControlName="document1"
-            class="w-full text-sm border border-gray-300 rounded-md file:px-3 file:py-2 file:border-0 file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200"
-          />
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-600 mb-1">
-            Upload Document 2
-          </label>
-          <input
-            type="file"
-            (change)="onFileSelected2($event)"
-            formControlName="document2"
-            class="w-full text-sm border border-gray-300 rounded-md file:px-3 file:py-2 file:border-0 file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200"
-          />
-        </div>
-      </div>
-
-      <!-- MARK COMPLETE -->
-      <div class="flex items-center gap-3">
-        <input
-          type="checkbox"
-          formControlName="isCompleted"
-          class="w-4 h-4 text-[#C5192F] border-gray-300 rounded"
-        />
-        <label class="text-sm font-medium text-gray-700">
-          Mark this task as completed
-        </label>
-      </div>
-
-      <!-- ACTION BUTTON -->
-      <div class="flex justify-center pt-3 border-t">
-        <button
-          type="submit"
-          [disabled]="statusForm.invalid"
-          class="px-6 py-2 text-sm rounded-md text-white bg-[#C5192F] hover:bg-[#b3162a] disabled:opacity-50"
-        >
-          Submit
-        </button>
-      </div>
-    </form>
   </div>
 </div>
+<ng-template #statustemplate let-row>
+  <button
+        *ngIf="row.taskStatus === 'Pending'"
+    class="w-7 ms-6 h-7 flex items-center justify-center rounded text-gray-600 hover:text-blue-600 hover:bg-gray-100"
+    title="View Documents"
+  >
+    <!-- Eye icon -->
+  <svg
+  class="w-4 h-4 ms-3 cursor-pointer"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  viewBox="0 0 24 24"
+  (click)="openModal(row.id)"
+>
+  <path
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5
+       M18.5 2.5a2.121 2.121 0 113 3L12 15l-4 1 1-4 9.5-9.5z"
+  />
+</svg>
+
+  </button>
+</ng-template>

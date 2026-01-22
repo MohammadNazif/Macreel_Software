@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -31,24 +31,14 @@ export class AssignedTaskComponent {
   selectedFile1: any;
   selectedFile2: any;
   selectedTask: any;
-  displayedColumns: string[] = [
-    'srNo',
-    'title',
-    'assignedBy',
-    'assignedDate',
-    'completionDate',
-    'adminTaskStatus',
-    'empTaskStatus',
-    'action',
-  ];
   pageSize = 10;
   pageNumber = 1;
   totalRecords = 0;
   searchTerm = '';
-
+ pages!: TableColumn<any>[];
   pageSizeControl = new FormControl<string>('10');
   searchControl = new FormControl<string>('');
-
+    @ViewChild('statustemplate', { static: true }) statustemplate!: TemplateRef<any>;
   constructor(
     private readonly taskservice: TaskService,
     private readonly fb: FormBuilder,
@@ -63,20 +53,26 @@ export class AssignedTaskComponent {
   }
 
 
+  
 
-  pages: TableColumn<any>[] = [
-    { key: 'title', label: 'Title', align: 'center' },
-    { key: 'assignedBy', label: 'Assigned By', align: 'center' },
-    { key: 'assignedDate', label: 'Assigned To', align: 'center', type: 'date' },
-    { key: 'completionDate', label: 'Completion Date', align: 'center', type: 'date' },
-    { key: 'taskStatus', label: 'Task Status', align: 'center' },
-
-
-  ];
-
-
-
+  
   ngOnInit(): void {
+
+       this.pages = [
+        { key: 'title', label: 'Title' ,align:'center'},
+        { key: 'assignedByName', label: 'Assigned By' ,align:'center'},
+             { key: 'assignedDate', label: 'Assigned To' ,align:'center',type:'date'},
+        { key: 'completedDate', label: 'Completion Date' ,align:'center',type:'date'},
+             { key: 'adminTaskStatus', label: 'Status By Admin' ,align:'center'},
+             { key: 'taskStatus', label: 'Status By Employee' ,align:'center'},
+        {
+          key: 'taskStatus',
+          label: 'Action',
+          type : 'custom',
+          template: this.statustemplate
+        }
+       
+      ];
     this.loadAssignedTasks();
     // Server-side search subscription
     this.searchControl.valueChanges
@@ -180,7 +176,7 @@ export class AssignedTaskComponent {
         if (res.statusCode === 200) {
           Swal.fire('Success', res.message, 'success');
           this.closeModal();
-          // location.reload();
+          location.reload();
         } else {
           Swal.fire('Error', res.message, 'error');
         }

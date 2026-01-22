@@ -8,6 +8,7 @@ using Macreel_Software.Services.FileUpload.Services;
 using Macreel_Software.Services.MailSender;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 
 namespace Macreel_Software.Server.Controllers
 {
@@ -62,84 +63,131 @@ namespace Macreel_Software.Server.Controllers
             {
                 string[] imgExt = { ".jpg", ".jpeg", ".png" };
                 string[] docExt = { ".pdf", ".jpg", ".jpeg", ".png" };
+                long maxSize = 2 * 1024 * 1024; // 2 MB
 
-                // ---------- FILE CONFIG (INLINE) ----------
                 var files = new[]
                 {
-            new { File = model.ProfilePic, Folder = "EmployeeFiles", Ext = imgExt, Set = (Action<string>)(p => model.ProfilePicPath = p) },
-            new { File = model.AadharImg, Folder = "EmployeeFiles", Ext = imgExt, Set = (Action<string>)(p => model.AadharImgPath = p) },
-            new { File = model.AadharBackImg, Folder = "EmployeeFiles", Ext = imgExt, Set = (Action<string>)(p => model.AadharBackImgPath = p) },
-            new { File = model.PanImg, Folder = "EmployeeFiles", Ext = imgExt, Set = (Action<string>)(p => model.PanImgPath = p) },
-            new { File = model.PanBackImg, Folder = "EmployeeFiles", Ext = imgExt, Set = (Action<string>)(p => model.PanBackImgPath = p) },
-            new { File = model.ExperienceCertificate, Folder = "EmployeeFiles", Ext = docExt, Set = (Action<string>)(p => model.ExperienceCertificatePath = p) },
-            new { File = model.TenthCertificate, Folder = "EmployeeFiles", Ext = docExt, Set = (Action<string>)(p => model.TenthCertificatePath = p) },
-            new { File = model.TwelthCertificate, Folder = "EmployeeFiles", Ext = docExt, Set = (Action<string>)(p => model.TwelthCertificatePath = p) },
-            new { File = model.GraduationCertificate, Folder = "EmployeeFiles", Ext = docExt, Set = (Action<string>)(p => model.GraduationCertificatePath = p) },
-            new { File = model.MastersCertificate, Folder = "EmployeeFiles", Ext = docExt, Set = (Action<string>)(p => model.MastersCertificatePath = p) },
+            new { File = model.ProfilePic, Path = (Action<string>)(p => model.ProfilePicPath = p), Ext = imgExt, Name = "Profile Picture" },
+            new { File = model.AadharImg, Path = (Action<string>)(p => model.AadharImgPath = p), Ext = imgExt, Name = "Aadhar Front Image" },
+            new { File = model.AadharBackImg, Path = (Action<string>)(p => model.AadharBackImgPath = p), Ext = imgExt, Name = "Aadhar Back Image" },
+            new { File = model.PanImg, Path = (Action<string>)(p => model.PanImgPath = p), Ext = imgExt, Name = "PAN Front Image" },
+            new { File = model.PanBackImg, Path = (Action<string>)(p => model.PanBackImgPath = p), Ext = imgExt, Name = "PAN Back Image" },
+            new { File = model.ExperienceCertificate, Path = (Action<string>)(p => model.ExperienceCertificatePath = p), Ext = docExt, Name = "Experience Certificate" },
+            new { File = model.TenthCertificate, Path = (Action<string>)(p => model.TenthCertificatePath = p), Ext = docExt, Name = "10th Certificate" },
+            new { File = model.TwelthCertificate, Path = (Action<string>)(p => model.TwelthCertificatePath = p), Ext = docExt, Name = "12th Certificate" },
+            new { File = model.GraduationCertificate, Path = (Action<string>)(p => model.GraduationCertificatePath = p), Ext = docExt, Name = "Graduation Certificate" },
+            new { File = model.MastersCertificate, Path = (Action<string>)(p => model.MastersCertificatePath = p), Ext = docExt, Name = "Masters Certificate" },
         };
 
-                // ---------- STEP 1: VALIDATE ONLY ----------
+                // ---------- STEP 1: FILE VALIDATION ----------
                 foreach (var f in files)
                 {
                     if (f.File == null) continue;
 
-                    f.Set(_fileUploadService.ValidateAndGeneratePath(
-                        f.File,
-                        f.Folder,
-                        f.Ext
-                    ));
+                    if (f.File.Length > maxSize)
+                    {
+                        return BadRequest(new
+                        {
+                            status = false,
+                            statusCode = 400,
+                            message = $"{f.Name} size should not exceed 2 MB"
+                        });
+                    }
+
+                    try
+                    {
+                        f.Path(_fileUploadService.ValidateAndGeneratePath(
+                            f.File,
+                            "EmployeeFiles",
+                            f.Ext
+                        ));
+                    }
+                    catch (Exception ex)
+                    {
+                        return BadRequest(new
+                        {
+                            status = false,
+                            statusCode = 400,
+                            message = $"{f.Name} error: {ex.Message}"
+                        });
+                    }
                 }
 
                 // ---------- STEP 2: DB INSERT ----------
-                string plainPassword = model.Password!;
                 model.Password = _pass.EncryptPassword(model.Password!);
-
                 string dbMessage = await _services.InsertEmployeeRegistrationData(model);
 
                 if (dbMessage.Contains("Email already exists"))
-                    return Conflict(new { status = false, statusCode = 409, message = dbMessage });
+                {
+                    return Conflict(new
+                    {
+                        status = false,
+                        statusCode = 409,
+                        message = "Email already registered"
+                    });
+                }
 
                 if (!dbMessage.ToLower().Contains("success"))
-                    return BadRequest(new { status = false, statusCode = 400, message = dbMessage });
+                {
+                    return BadRequest(new
+                    {
+                        status = false,
+                        statusCode = 400,
+                        message = dbMessage
+                    });
+                }
 
-                // ---------- STEP 3: ACTUAL UPLOAD ----------
+                // ---------- STEP 3: FILE UPLOAD ----------
                 foreach (var f in files)
                 {
-                    if (f.File != null)
-                        await _fileUploadService.UploadAsync(f.File,
-                            f.Folder == "profile"
-                                ? model.ProfilePicPath!
-                                : f.File == model.AadharImg ? model.AadharImgPath!
-                                : f.File == model.AadharBackImg ? model.AadharBackImgPath!
-                                : f.File == model.PanImg ? model.PanImgPath!
-                                : f.File == model.PanBackImg ? model.PanBackImgPath!
-                                : f.File == model.ExperienceCertificate ? model.ExperienceCertificatePath!
-                                : f.File == model.TenthCertificate ? model.TenthCertificatePath!
-                                : f.File == model.TwelthCertificate ? model.TwelthCertificatePath!
-                                : f.File == model.GraduationCertificate ? model.GraduationCertificatePath!
-                                : model.MastersCertificatePath!
+                    if (f.File == null) continue;
+
+                    try
+                    {
+                        await _fileUploadService.UploadAsync(
+                            f.File,
+                            f.File == model.ProfilePic ? model.ProfilePicPath! :
+                            f.File == model.AadharImg ? model.AadharImgPath! :
+                            f.File == model.AadharBackImg ? model.AadharBackImgPath! :
+                            f.File == model.PanImg ? model.PanImgPath! :
+                            f.File == model.PanBackImg ? model.PanBackImgPath! :
+                            f.File == model.ExperienceCertificate ? model.ExperienceCertificatePath! :
+                            f.File == model.TenthCertificate ? model.TenthCertificatePath! :
+                            f.File == model.TwelthCertificate ? model.TwelthCertificatePath! :
+                            f.File == model.GraduationCertificate ? model.GraduationCertificatePath! :
+                            model.MastersCertificatePath!
                         );
+                    }
+                    catch (Exception ex)
+                    {
+                        return StatusCode(500, new
+                        {
+                            status = false,
+                            statusCode = 500,
+                            message = $"Upload failed for {f.Name}: {ex.Message}"
+                        });
+                    }
                 }
 
                 return Ok(new
                 {
                     status = true,
                     statusCode = 201,
-                    message = dbMessage
+                    message = "Employee registered successfully"
                 });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return BadRequest(new
+                return StatusCode(500, new
                 {
                     status = false,
                     statusCode = 500,
-                    message = ex.Message
+                    message = "Internal server error. Please try again later."
                 });
             }
         }
 
-   
+
         [HttpDelete("deleteEmployeeById")]
         public async Task<IActionResult> deleteEmployeeById(int id)
         {
@@ -191,30 +239,54 @@ namespace Macreel_Software.Server.Controllers
             {
                 string[] imgExt = { ".jpg", ".jpeg", ".png" };
                 string[] docExt = { ".pdf", ".jpg", ".jpeg", ".png" };
+                long maxSize = 2 * 1024 * 1024; // 2 MB
 
-                // ---------- FILE CONFIG (INLINE, NO EXTRA METHOD) ----------
                 var files = new[]
                 {
-            new { File = model.ProfilePic, Folder = "EmployeeFiles", Ext = imgExt, Set = (Action<string>)(p => model.ProfilePicPath = p), Get = (Func<string?>)(() => model.ProfilePicPath) },
-            new { File = model.AadharImg, Folder = "EmployeeFiles", Ext = imgExt, Set = (Action<string>)(p => model.AadharImgPath = p), Get = (Func<string?>)(() => model.AadharImgPath) },
-            new { File = model.PanImg, Folder = "EmployeeFiles", Ext = imgExt, Set = (Action<string>)(p => model.PanImgPath = p), Get = (Func<string?>)(() => model.PanImgPath) },
-            new { File = model.ExperienceCertificate, Folder = "EmployeeFiles", Ext = docExt, Set = (Action<string>)(p => model.ExperienceCertificatePath = p), Get = (Func<string?>)(() => model.ExperienceCertificatePath) },
-            new { File = model.TenthCertificate, Folder = "EmployeeFiles", Ext = docExt, Set = (Action<string>)(p => model.TenthCertificatePath = p), Get = (Func<string?>)(() => model.TenthCertificatePath) },
-            new { File = model.TwelthCertificate, Folder = "EmployeeFiles", Ext = docExt, Set = (Action<string>)(p => model.TwelthCertificatePath = p), Get = (Func<string?>)(() => model.TwelthCertificatePath) },
-            new { File = model.GraduationCertificate, Folder = "EmployeeFiles", Ext = docExt, Set = (Action<string>)(p => model.GraduationCertificatePath = p), Get = (Func<string?>)(() => model.GraduationCertificatePath) },
-            new { File = model.MastersCertificate, Folder = "EmployeeFiles", Ext = docExt, Set = (Action<string>)(p => model.MastersCertificatePath = p), Get = (Func<string?>)(() => model.MastersCertificatePath) },
+            new { File = model.ProfilePic, Name = "Profile Picture", Ext = imgExt, Set = (Action<string>)(p => model.ProfilePicPath = p), Get = (Func<string?>)(() => model.ProfilePicPath) },
+            new { File = model.AadharImg, Name = "Aadhar Front Image", Ext = imgExt, Set = (Action<string>)(p => model.AadharImgPath = p), Get = (Func<string?>)(() => model.AadharImgPath) },
+            new { File = model.AadharBackImg, Name = "Aadhar Back Image", Ext = imgExt, Set = (Action<string>)(p => model.AadharBackImgPath = p), Get = (Func<string?>)(() => model.AadharBackImgPath) },
+            new { File = model.PanImg, Name = "PAN Front Image", Ext = imgExt, Set = (Action<string>)(p => model.PanImgPath = p), Get = (Func<string?>)(() => model.PanImgPath) },
+            new { File = model.PanBackImg, Name = "PAN Back Image", Ext = imgExt, Set = (Action<string>)(p => model.PanBackImgPath = p), Get = (Func<string?>)(() => model.PanBackImgPath) },
+            new { File = model.ExperienceCertificate, Name = "Experience Certificate", Ext = docExt, Set = (Action<string>)(p => model.ExperienceCertificatePath = p), Get = (Func<string?>)(() => model.ExperienceCertificatePath) },
+            new { File = model.TenthCertificate, Name = "10th Certificate", Ext = docExt, Set = (Action<string>)(p => model.TenthCertificatePath = p), Get = (Func<string?>)(() => model.TenthCertificatePath) },
+            new { File = model.TwelthCertificate, Name = "12th Certificate", Ext = docExt, Set = (Action<string>)(p => model.TwelthCertificatePath = p), Get = (Func<string?>)(() => model.TwelthCertificatePath) },
+            new { File = model.GraduationCertificate, Name = "Graduation Certificate", Ext = docExt, Set = (Action<string>)(p => model.GraduationCertificatePath = p), Get = (Func<string?>)(() => model.GraduationCertificatePath) },
+            new { File = model.MastersCertificate, Name = "Masters Certificate", Ext = docExt, Set = (Action<string>)(p => model.MastersCertificatePath = p), Get = (Func<string?>)(() => model.MastersCertificatePath) },
         };
 
-                // ---------- STEP 1: VALIDATE + GENERATE PATH (ONLY IF FILE PROVIDED) ----------
+                // ---------- STEP 1: FILE VALIDATION ----------
                 foreach (var f in files)
                 {
                     if (f.File == null) continue;
 
-                    f.Set(_fileUploadService.ValidateAndGeneratePath(
-                        f.File,
-                        f.Folder,
-                        f.Ext
-                    ));
+                    if (f.File.Length > maxSize)
+                    {
+                        return BadRequest(new
+                        {
+                            status = false,
+                            statusCode = 400,
+                            message = $"{f.Name} size should not exceed 2 MB"
+                        });
+                    }
+
+                    try
+                    {
+                        f.Set(_fileUploadService.ValidateAndGeneratePath(
+                            f.File,
+                            "EmployeeFiles",
+                            f.Ext
+                        ));
+                    }
+                    catch (Exception ex)
+                    {
+                        return BadRequest(new
+                        {
+                            status = false,
+                            statusCode = 400,
+                            message = $"{f.Name} error: {ex.Message}"
+                        });
+                    }
                 }
 
                 // ---------- STEP 2: DB UPDATE ----------
@@ -226,15 +298,28 @@ namespace Macreel_Software.Server.Controllers
                     {
                         status = false,
                         statusCode = 400,
-                        message = "Employee update failed"
+                        message = "Employee update failed. Please check entered details."
                     });
                 }
 
-                // ---------- STEP 3: ACTUAL FILE UPLOAD ----------
+                // ---------- STEP 3: FILE UPLOAD ----------
                 foreach (var f in files)
                 {
-                    if (f.File != null)
+                    if (f.File == null) continue;
+
+                    try
+                    {
                         await _fileUploadService.UploadAsync(f.File, f.Get()!);
+                    }
+                    catch (Exception ex)
+                    {
+                        return StatusCode(500, new
+                        {
+                            status = false,
+                            statusCode = 500,
+                            message = $"Upload failed for {f.Name}: {ex.Message}"
+                        });
+                    }
                 }
 
                 return Ok(new
@@ -244,16 +329,17 @@ namespace Macreel_Software.Server.Controllers
                     message = "Employee updated successfully"
                 });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode(500, new
                 {
                     status = false,
                     statusCode = 500,
-                    message = "Update failed: " + ex.Message
+                    message = "Internal server error. Please try again later."
                 });
             }
         }
+
         #endregion
 
         #region leave api

@@ -19,6 +19,8 @@ namespace Macreel_Software.Contracts.DTOs
         public DateTime? assignedDate { get; set; }
         public string? taskStatus { get; set; }
         public string? adminTaskStatus { get; set; }
+        public bool? autoReassign { get; set; }
+        public int? timePeriodDays { get; set; }
         public string assignedByName { get; set; } = string.Empty;
     }
 
