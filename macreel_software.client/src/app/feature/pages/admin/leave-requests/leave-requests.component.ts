@@ -134,7 +134,7 @@ selectedReason: string = '';
   }
 
   ngOnInit(): void {
-       // ✅ Initialize columns here AFTER filesTemplate is available
+     
       this.leavereq = [
         { key: 'empName', label: 'Name' ,clickable:true ,route: '/home/admin/employee-details'},
         { key: 'leaveName', label: 'Leave Name'},
@@ -153,7 +153,6 @@ selectedReason: string = '';
         }
       ];
     this.loadAssignedLeaves();
-    // Server-side search subscription
     this.searchControl.valueChanges
       .pipe(
         debounceTime(400),
@@ -161,12 +160,11 @@ selectedReason: string = '';
       )
       .subscribe(value => {
         this.searchTerm = value?.trim() || '';
-        this.pageNumber = 1; // reset page
+        this.pageNumber = 1;
         this.loadAssignedLeaves();
       });
   }
 
-  // MUST be called on paginator event
   onPageChange(event: PageEvent): void {
     this.pageNumber = event.pageIndex + 1;
     this.pageSize = event.pageSize;
@@ -187,10 +185,7 @@ selectedReason: string = '';
         }
       });
   }
-
   pdfUrl: string =  'https://localhost:7253/'
-
-
 openFile(filePath: string) {
   console.log("File path:", filePath);
     this.selectedDocuments = Array.isArray(filePath)

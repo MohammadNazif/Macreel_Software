@@ -10,7 +10,12 @@ import { MatTableDataSource } from '@angular/material/table';
 import { TaskService } from '../../../../core/services/add-task.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import Swal from 'sweetalert2';
+
 import { ManageEmployeeService } from '../../../../core/services/manage-employee.service';
+import { TableColumn } from '../../../../core/models/interface';
+
+
+
 
 @Component({
   selector: 'app-assigned-task',
@@ -51,10 +56,23 @@ export class AssignedTaskComponent {
     this.statusForm = this.fb.group({
       id: null,
       status: ['', Validators.required],
+
       leaveCount: [null, [Validators.required, Validators.min(1)]],
     });
   }
 
+
+     pages: TableColumn<any>[] = [
+        { key: 'title', label: 'Title' ,align:'center'},
+        { key: 'assignedBy', label: 'Assigned By' ,align:'center'},
+             { key: 'assignedDate', label: 'Assigned To' ,align:'center',type:'date'},
+        { key: 'completionDate', label: 'Completion Date' ,align:'center',type:'date'},
+             { key: 'taskStatus', label: 'Task Status' ,align:'center'},
+       
+       
+      ];
+
+  
   ngOnInit(): void {
     this.loadAssignedTasks();
     // Server-side search subscription
