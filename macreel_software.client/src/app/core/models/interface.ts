@@ -149,7 +149,6 @@ export interface employee {
  emailId :string;
  mobile :number;
 }
-}
 export interface PageRow {
   pageId: number;
   pageName: string;

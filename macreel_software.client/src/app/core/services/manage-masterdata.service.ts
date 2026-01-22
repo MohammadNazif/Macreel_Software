@@ -174,8 +174,20 @@ export class ManageMasterdataService {
       { withCredentials: true }
     );
   }
-  getAssignPages(pageNumber?: number, pageSize?: number) {
-    return this.http.get<any>(`${this.baseUrl}Master/getAllAssignedPages?pageNumber=${pageNumber}&pageSize=${pageSize}`, { withCredentials: true })
+  getAssignPages(searchTerm?: string, pageNumber?: number, pageSize?: number) {
+    let params = new HttpParams();
+    if (searchTerm) {
+      params = params.set('searchTerm', searchTerm);
+    }
+
+    if (pageNumber !== null && pageNumber !== undefined) {
+      params = params.set('pageNumber', pageNumber.toString());
+    }
+
+    if (pageSize !== null && pageSize !== undefined) {
+      params = params.set('pageSize', pageSize.toString());
+    }
+    return this.http.get<any>(`${this.baseUrl}Master/getAllAssignedPages?pageNumber=${pageNumber}&pageSize=${pageSize}`, {params:params, withCredentials: true })
   }
   getPagesByRoleId(roleId?: number): Observable<any> {
     return this.http.get<any>(`${this.baseUrl}Master/get-pages-by-role/${roleId}`, { withCredentials: true });

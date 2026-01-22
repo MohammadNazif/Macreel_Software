@@ -33,12 +33,11 @@ export class EmployeeListComponent implements OnInit {
     this.router.navigate(['/home/edit-employee', emp.id]);
   }
   employee: TableColumn<employee>[] = [
-    { key: 'empCode', label: 'Name' },
+    { key: 'empCode', label: 'Code' },
     { key: 'empName', label: 'Name' },
-    { key: 'empCode', label: 'Name' },
-    { key: 'designationName', label: 'Name' },
-    { key: 'empEmail', label: 'Name' },
-    { key: 'Contact', label: 'Name' },
+    { key: 'designationName', label: 'Designation' },
+    { key: 'emailId', label: 'Email' },
+    { key: 'mobile', label: 'Mobile' },
   ]
   ngOnInit(): void {
     this.getEmployees();
@@ -49,7 +48,8 @@ export class EmployeeListComponent implements OnInit {
     this.employeeService.getAllEmployees(pageNumber, pageSize, searchText).subscribe((res: any) => {
       if (res.success) {
         this.data = res.data;
-        this.totalRecords = res.totalRecords || res.data.length; // API should return totalRecords for pagination
+        this.totalRecords = res.totalRecords || res.data.length; 
+        // API should return totalRecords for pagination
         this.dataSource.paginator = this.paginator;
       }
     }, (err: any) => {

@@ -48,6 +48,7 @@ export class LayoutComponent implements OnInit {
         { label: 'Add Leave', route: '/home/admin/master/add-leave', roles: ['admin'] },
         { label: 'Add Page', route: '/home/admin/master/add-pages', roles: ['admin'] },
         { label: 'Assign Page', route: '/home/admin/master/assign-page', roles: ['admin'] },
+        { label: 'Assign Page List', route: '/home/admin/master/assign-page-list', roles: ['admin'] },
       ]
     },
     {
