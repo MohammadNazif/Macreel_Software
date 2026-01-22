@@ -120,13 +120,12 @@ export class ManageMasterdataService {
       { withCredentials: true }
     );
   }
-  getAllPages(
-    pageNumber?: number,
-    pageSize?: number
-  ): Observable<any> {
+  getAllPages(pageNumber?: number,pageSize?: number,searchTerm?:string) {
 
     let params = new HttpParams();
-
+    if (searchTerm) {
+      params = params.set('searchTerm', searchTerm);
+    }
     if (pageNumber !== null && pageNumber !== undefined) {
       params = params.set('pageNumber', pageNumber.toString());
     }
@@ -165,14 +164,30 @@ export class ManageMasterdataService {
     );
   }
 
-  //Assign Page
+  // Assign Page
   assignRolePages(payload: any): Observable<ApiResponse<null>> {
     return this.http.post<ApiResponse<null>>(
       `${this.baseUrl}Master/assignRolePages`,
-      {payload,withCredentials:true}
+      payload,
+      { withCredentials: true }
     );
   }
+  getAssignPages(searchTerm?: string|null, pageNumber?: number|null, pageSize?: number|null) {
+    let params = new HttpParams();
+    if (searchTerm) {
+      params = params.set('searchTerm', searchTerm);
+    }
+
+    if (pageNumber !== null && pageNumber !== undefined) {
+      params = params.set('pageNumber', pageNumber.toString());
+    }
+
+    if (pageSize !== null && pageSize !== undefined) {
+      params = params.set('pageSize', pageSize.toString());
+    }
+    return this.http.get<any>(`${this.baseUrl}Common/getAllAssignedPages`, {params:params})
+  }
   getPagesByRoleId(roleId?: number): Observable<any> {
-    return this.http.get<any>(`${this.baseUrl}Master/get-pages-by-role/${roleId}`,{withCredentials:true});
+    return this.http.get<any>(`${this.baseUrl}Master/get-pages-by-role/${roleId}`, { withCredentials: true });
   }
 }

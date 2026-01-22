@@ -148,7 +148,27 @@ export class AssignedTaskComponent {
       formData.append('projectId', this.selectedProjectId.toString());
     }
     formData.append('empComment', formValue.comment || '');
+
     formData.append('empResponse', formValue.isCompleted ? 'true' : 'false');
+
+    // formData.append('empResponse', formValue. || '');
+    formData.append('isCompleted', formValue.isCompleted ? 'true' : 'false');
+
+    // const fileInput1: any = document.querySelector(
+    //   'input[type="file"]:nth-of-type(1)',
+    // );
+    // const fileInput2: any = document.querySelector(
+    //   'input[type="file"]:nth-of-type(2)',
+    // );
+
+    // if (fileInput1 && fileInput1.files.length > 0) {
+    //   formData.append('document1', fileInput1.files[0]);
+    // }
+    // if (fileInput2 && fileInput2.files.length > 0) {
+    //   formData.append('document2', fileInput2.files[0]);
+    // }
+
+
     formData.append('document1', this.selectedFile1);
     formData.append('document2', this.selectedFile2);
     this.employeeService.updateTaskStatus(formData).subscribe({

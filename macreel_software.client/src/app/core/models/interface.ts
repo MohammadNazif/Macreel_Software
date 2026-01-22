@@ -127,6 +127,7 @@ export interface Page {
   id: number;
   pageName: string;
   pageUrl: string;
+  checked : boolean;
 }
 export interface PageAssign {
   pageId: number;
@@ -148,4 +149,10 @@ export interface employee {
   Contact: number;
  emailId :string;
  mobile :number;
+}
+export interface PageRow {
+  pageId: number;
+  pageName: string;
+  pageUrl: string;
+  checked: boolean;
 }

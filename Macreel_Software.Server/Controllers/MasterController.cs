@@ -790,12 +790,12 @@ namespace Macreel_Software.Server.Controllers
             }
         }
         [HttpGet("getAllAssignedPages")]
-        public async Task<IActionResult> GetAllAssignedPages(int? pageNumber = null, int? pageSize = null)
+        public async Task<IActionResult> GetAllAssignedPages(string? searchTerm = null,int? pageNumber = null, int? pageSize = null)
         {
             try
             {
                 ApiResponse<List<RolePagesDto>> result =
-                    await _service.GetAllAssignedPages(null, pageNumber, pageSize);
+                    await _service.GetAllAssignedPages(null, pageNumber, pageSize,searchTerm);
 
                 return StatusCode(result.StatusCode, result);
             }
