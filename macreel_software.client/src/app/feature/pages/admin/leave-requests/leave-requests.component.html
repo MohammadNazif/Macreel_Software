@@ -118,6 +118,7 @@
     </svg>
   </button>
 </ng-template>
+<ng-template #statustemplate let-row>
 
 <ng-template #statustemplate let-row>
   <button class="px-2 py-1 text-xs rounded" [ngClass]="{
@@ -131,6 +132,45 @@
 
 <!-- DOCUMENT MODAL -->
 <div *ngIf="showFilesModal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+  <button
+    *ngIf="row.status === 'Unapproved'"
+    class="px-2 py-1 text-xs rounded w-12 text-red-600 hover:bg-red-50"
+    (click)="openReason(row.reason)">
+    {{ row.status }}
+  </button>
+
+  <span
+    *ngIf="row.status === 'Approved'"
+    class="px-2 py-1 text-xs rounded text-green-600 bg-green-50">
+    {{ row.status }}
+  </span>
+
+  <div
+    *ngIf="row.status === 'Pending'"
+    class="flex items-center border w-[90px] rounded overflow-hidden">
+
+  <button
+  class="px-2 py-1 text-green-600 hover:bg-green-50 min-w-[40px]"
+  (click)="ApproveLeave(row)"
+  title="Approve">
+  <i class="fa fa-check text-xs"></i>
+</button>
+
+    <span class="h-4 w-px bg-gray-300"></span>
+
+    <button
+  class="px-2 py-1 text-red-600 hover:bg-red-50 min-w-[40px]"
+  (click)="openModal(row)"
+  title="Reject">
+  <i class="fa fa-times text-xs"></i>
+</button>
+
+  </div>
+
+
+<div *ngIf="showFilesModal"
+     class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+
   <div class="bg-white w-full max-w-4xl max-h-full rounded-xl shadow-xl flex flex-col overflow-hidden">
 
     <!-- Modal Header -->
@@ -142,6 +182,7 @@
 
     <div *ngIf="showFilesModal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
       <div class="bg-white w-[600px] max-w-full h-[500px] rounded-xl shadow-xl flex flex-col overflow-hidden">
+
 
         <!-- Header -->
         <div class="flex justify-between items-center px-4 py-2 border-b">
@@ -171,6 +212,38 @@
           </p>
         </div>
       </div>
+    </div>
+=======
+    <div class="flex justify-between items-center px-4 py-2 border-b">
+      <h3 class="font-semibold text-gray-700">Document Preview</h3>
+
+      <div class="flex gap-2">
+   
+        <a 
+          *ngIf="selectedDocuments"
+          [href]="selectedDocuments" 
+          download
+          class="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700">
+          Download
+        </a>
+
+        <button (click)="closeFiles()" class="text-gray-500 hover:text-red-500 font-bold text-lg">✕</button>
+      </div>
+    </div>
+
+
+    <div class="flex-1 overflow-auto p-2">
+      <ng-container *ngIf="selectedDocuments">
+        <iframe 
+          [src]="selectedDocuments | safeUrl" 
+          class="w-full h-full border rounded" 
+          frameborder="0">
+        </iframe>
+      </ng-container>
+
+      <p *ngIf="!selectedDocuments" class="text-center text-gray-400 mt-10">
+        No document available
+      </p>
     </div>
   </div>
 </div>
