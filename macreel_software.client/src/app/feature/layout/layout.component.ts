@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
 import { ManageMasterdataService } from '../../core/services/manage-masterdata.service';
@@ -9,7 +9,7 @@ import { ManageMasterdataService } from '../../core/services/manage-masterdata.s
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.css']
 })
-export class LayoutComponent implements OnInit {
+export class LayoutComponent implements OnInit, OnDestroy {
 
   sidebarOpen = true;
   isMobile = false;
@@ -25,6 +25,7 @@ export class LayoutComponent implements OnInit {
     private readonly router: Router,
     private readonly master: ManageMasterdataService
   ) { }
+  private resizeListener = () => this.checkScreen();
 
   menus = [
     {
@@ -165,6 +166,9 @@ export class LayoutComponent implements OnInit {
     this.loadData(this.currentRole);
     this.checkScreen();
     window.addEventListener('resize', () => this.checkScreen());
+  }
+  ngOnDestroy(): void {
+    window.removeEventListener('resize', this.resizeListener);
   }
   loadData(role: string) {
     this.master.getAssignPages().subscribe({
