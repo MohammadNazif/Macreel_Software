@@ -57,7 +57,7 @@ namespace Macreel_Software.Models.Employee
     {
         public int projectId { get; set; }
 
-        public int empResponse { get; set; }
+        public bool empResponse { get; set; }
         public string empComment { get; set; }
 
         public IFormFile? document1 { get; set; }

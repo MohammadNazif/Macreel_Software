@@ -132,7 +132,7 @@ export class LeaveRequestsComponent {
   }
 
   ngOnInit(): void {
-    // ✅ Initialize columns here AFTER filesTemplate is available
+    // ? Initialize columns here AFTER filesTemplate is available
     this.leavereq = [
       { key: 'empName', label: 'Name', clickable: true, route: '/home/admin/employee-details' },
       { key: 'leaveName', label: 'Leave Name' },
@@ -153,7 +153,6 @@ export class LeaveRequestsComponent {
       }
     ];
     this.loadAssignedLeaves();
-    // Server-side search subscription
     this.searchControl.valueChanges
       .pipe(
         debounceTime(400),
@@ -161,12 +160,11 @@ export class LeaveRequestsComponent {
       )
       .subscribe(value => {
         this.searchTerm = value?.trim() || '';
-        this.pageNumber = 1; // reset page
+        this.pageNumber = 1;
         this.loadAssignedLeaves();
       });
   }
 
-  // MUST be called on paginator event
   onPageChange(event: PageEvent): void {
     this.pageNumber = event.pageIndex + 1;
     this.pageSize = event.pageSize;

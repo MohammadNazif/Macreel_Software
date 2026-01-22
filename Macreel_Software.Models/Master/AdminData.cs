@@ -34,7 +34,9 @@ namespace Macreel_Software.Models.Master
 
         public IFormFile? ProfilePic { get; set; }
         public IFormFile? AadharImg { get; set; }
+        public IFormFile? AadharBackImg { get; set; }
         public IFormFile? PanImg { get; set; }
+        public IFormFile? PanBackImg { get; set; }
 
         public string? BankName { get; set; }
         public string? AccountNo { get; set; }
@@ -72,7 +74,9 @@ namespace Macreel_Software.Models.Master
 
         public string? ProfilePicPath { get; set; }
         public string? AadharImgPath { get; set; }
+        public string? AadharBackImgPath { get; set; }
         public string? PanImgPath { get; set; }
+        public string? PanBackImgPath { get; set; }
 
 
         public string? ExperienceCertificatePath { get; set; }

@@ -50,7 +50,9 @@ namespace Macreel_Software.DAL.Admin
 
                     cmd.Parameters.AddWithValue("@profilePic", data.ProfilePicPath ?? "");
                     cmd.Parameters.AddWithValue("@aadharImg", data.AadharImgPath ?? "");
+                    cmd.Parameters.AddWithValue("@adharBackImg", data.AadharBackImgPath ?? "");
                     cmd.Parameters.AddWithValue("@panImg", data.PanImgPath ?? "");
+                    cmd.Parameters.AddWithValue("@panBackImg", data.PanBackImgPath ?? "");
 
                     cmd.Parameters.AddWithValue("@emailId", data.EmailId);
                     cmd.Parameters.AddWithValue("@dateOfJoining", data.DateOfJoining);
@@ -216,6 +218,8 @@ namespace Macreel_Software.DAL.Admin
                                 designationName = sdr["designationName"]?.ToString(),
                                 ReportingManagerId = sdr["reportingManager"] != DBNull.Value ? Convert.ToInt32(sdr["reportingManager"]) : (int?)null,
                                 AadharImgPath = sdr["aadharImg"]?.ToString(),
+                                AadharBackImgPath = sdr["adharBackImg"]?.ToString(),
+                                PanBackImgPath = sdr["panBackImg"]?.ToString(),
                                 PanImgPath = sdr["panImg"]?.ToString(),
                                 EmailId = sdr["emailId"]?.ToString(),
                                 DateOfJoining = sdr["dateOfJoining"] != DBNull.Value ? Convert.ToDateTime(sdr["dateOfJoining"]) : DateTime.MinValue,
@@ -1633,7 +1637,8 @@ namespace Macreel_Software.DAL.Admin
                                 document2Path = sdr["document2"] != DBNull.Value ? sdr["document2"].ToString() : null,
                                 empName = sdr["empName"] != DBNull.Value ? sdr["empName"].ToString() : null,
                                 assignedDate= sdr["createdAt"] != DBNull.Value ? Convert.ToDateTime(sdr["CompletedDate"]) : null,
-                                taskStatus = sdr["taskStatus"] != DBNull.Value ? sdr["taskStatus"].ToString() : null,
+                                taskStatus = sdr["taskStatusEmp"] != DBNull.Value ? sdr["taskStatusEmp"].ToString() : null,
+                                adminTaskStatus = sdr["AdminTaskStatus"] != DBNull.Value ? sdr["AdminTaskStatus"].ToString() : null,
                                 assignedByName = sdr["roleName"] != DBNull.Value ? sdr["roleName"].ToString()! : "",
                             });
                         }
