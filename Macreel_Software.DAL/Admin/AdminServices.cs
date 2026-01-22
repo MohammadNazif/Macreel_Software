@@ -454,6 +454,8 @@ namespace Macreel_Software.DAL.Admin
                     cmd.Parameters.AddWithValue("@profilePic", (object?)data.ProfilePicPath ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@aadharImg", (object?)data.AadharImgPath ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@panImg", (object?)data.PanImgPath ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@adharBackImg", (object?)data.AadharBackImgPath ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("panBackImg", (object?)data.PanBackImgPath ?? DBNull.Value);
 
                     cmd.Parameters.AddWithValue("@dateOfJoining", data.DateOfJoining);
                     cmd.Parameters.AddWithValue("@salary", data.Salary);
@@ -1582,6 +1584,9 @@ namespace Macreel_Software.DAL.Admin
                 cmd.Parameters.AddWithValue("@description", data.description);
                 cmd.Parameters.AddWithValue("@completedDate", data.CompletedDate);
                 cmd.Parameters.AddWithValue("@assignedBy", data.assignedBy);
+                cmd.Parameters.AddWithValue("@autoReassign", data.autoReassign);
+                cmd.Parameters.AddWithValue("@adminResponse", data.adminResponse);
+                cmd.Parameters.AddWithValue("@timePeriodDays", data.timePeriodDay);
                 cmd.Parameters.AddWithValue("@document1", data.document1Path ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@document2", data.document2Path ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@action",data.id>0? "update":"insert");
@@ -1640,6 +1645,9 @@ namespace Macreel_Software.DAL.Admin
                                 taskStatus = sdr["taskStatusEmp"] != DBNull.Value ? sdr["taskStatusEmp"].ToString() : null,
                                 adminTaskStatus = sdr["AdminTaskStatus"] != DBNull.Value ? sdr["AdminTaskStatus"].ToString() : null,
                                 assignedByName = sdr["roleName"] != DBNull.Value ? sdr["roleName"].ToString()! : "",
+                                autoReassign = sdr["autoReassign"] != DBNull.Value ? Convert.ToBoolean(sdr["autoReassign"]):null,
+                                timePeriodDays = sdr["timePeriodDays"] != DBNull.Value ? Convert.ToInt32(sdr["timePeriodDays"]):null
+
                             });
                         }
                     }

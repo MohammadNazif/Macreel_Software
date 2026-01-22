@@ -18,6 +18,7 @@ export interface Task {
   assignedDate: string;
   completionDate: string;
   taskStatus: string;
+  adminTaskStatus:string;
   documents :[];
 }
 
