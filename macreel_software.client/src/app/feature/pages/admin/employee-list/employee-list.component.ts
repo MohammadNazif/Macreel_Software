@@ -30,7 +30,7 @@ export class EmployeeListComponent implements OnInit {
   constructor(private employeeService: ManageEmployeeService, private router: Router) { }
 
   editEmployee(emp: any) {
-<<<<<<< HEAD
+
     this.router.navigate(['/home/edit-employee', emp.id]);
   }
   employee: TableColumn<any>[] = [
