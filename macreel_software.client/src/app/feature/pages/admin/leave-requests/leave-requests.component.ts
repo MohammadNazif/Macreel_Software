@@ -31,24 +31,23 @@ export class LeaveRequestsComponent {
   totalRecords = 0;
   searchTerm: string = '';
   allLeaves: any[] = [];
-  reason : string = '';
+  reason: string = '';
   isReasonModal = false;
-  pageSizeControl = new FormControl<string>("10")
   searchControl = new FormControl<string>("");
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   leavereq!: TableColumn<any>[];
   isModalOpen = false;
   statusForm!: FormGroup;
-   // For document modal
-showFilesModal = false;
-selectedDocuments: any = [];
-// For status modal
-showStatusModal = false;
-selectedReason: string = '';
+  // For document modal
+  showFilesModal = false;
+  selectedDocuments: any = [];
+  // For status modal
+  showStatusModal = false;
+  selectedReason: string = '';
 
-  data: any= [];
+  data: any = [];
   @ViewChild('filesTemplate', { static: true }) filesTemplate!: TemplateRef<any>;
-    @ViewChild('statustemplate', { static: true }) statustemplate!: TemplateRef<any>;
+  @ViewChild('statustemplate', { static: true }) statustemplate!: TemplateRef<any>;
   constructor(
     private readonly leaveService: ManageLeaveService,
     private readonly fb: FormBuilder,
@@ -60,7 +59,6 @@ selectedReason: string = '';
     });
   }
 
-
   openModal(id: number) {
     const leave = this.allLeaves.find(x => x.id === id);
     if (!leave) return;
@@ -68,7 +66,7 @@ selectedReason: string = '';
     this.statusForm.get('id')?.setValue(leave.id);
     this.isModalOpen = true;
   }
-  openReasonModal(id:number){
+  openReasonModal(id: number) {
     const leave = this.allLeaves.find(x => x.id === id);
     if (!leave) return;
     this.reason = leave.reason;
@@ -134,24 +132,26 @@ selectedReason: string = '';
   }
 
   ngOnInit(): void {
-     
-      this.leavereq = [
-        { key: 'empName', label: 'Name' ,clickable:true ,route: '/home/admin/employee-details'},
-        { key: 'leaveName', label: 'Leave Name'},
-        { key: 'fromDate', label: 'From',type :'date' },
-        { key: 'toDate', label: 'To', type: 'date', align: 'center' },
-        {key: 'fileName',
-          label: 'Document',
-          type :'custom',
-          template: this.filesTemplate },
-          
-        { key: 'description', label: 'Description' },
-        {
-          key: 'action',
-          label: 'Action',
-          template: this.statustemplate
-        }
-      ];
+    // ? Initialize columns here AFTER filesTemplate is available
+    this.leavereq = [
+      { key: 'empName', label: 'Name', clickable: true, route: '/home/admin/employee-details' },
+      { key: 'leaveName', label: 'Leave Name' },
+      { key: 'fromDate', label: 'From', type: 'date' },
+      { key: 'toDate', label: 'To', type: 'date', align: 'center' },
+      {
+        key: 'fileName',
+        label: 'Document',
+        type: 'custom',
+        template: this.filesTemplate
+      },
+
+      { key: 'description', label: 'Description' },
+      {
+        key: 'action',
+        label: 'Action',
+        template: this.statustemplate
+      }
+    ];
     this.loadAssignedLeaves();
     this.searchControl.valueChanges
       .pipe(
@@ -185,31 +185,34 @@ selectedReason: string = '';
         }
       });
   }
-  pdfUrl: string =  'https://localhost:7253/'
-openFile(filePath: string) {
-  console.log("File path:", filePath);
+
+  pdfUrl: string = 'https://localhost:7253/'
+
+
+  openFile(filePath: string) {
+    console.log("File path:", filePath);
     this.selectedDocuments = Array.isArray(filePath)
-    ? filePath.map(doc => `${this.pdfUrl}${doc}`)
-    : [`${this.pdfUrl}${filePath}`];
+      ? filePath.map(doc => `${this.pdfUrl}${doc}`)
+      : [`${this.pdfUrl}${filePath}`];
 
-  this.showFilesModal = true;
-}
+    this.showFilesModal = true;
+  }
 
-closeFiles() {
-  this.showFilesModal = false;
-  this.selectedDocuments = [];
-}
+  closeFiles() {
+    this.showFilesModal = false;
+    this.selectedDocuments = [];
+  }
 
 
-openReason(reason: string) {
-  this.selectedReason = reason;
-  this.showStatusModal = true;
-}
+  openReason(reason: string) {
+    this.selectedReason = reason;
+    this.showStatusModal = true;
+  }
 
-closeStatusModal() {
-  this.showStatusModal = false;
-  this.selectedReason = '';
-}
+  closeStatusModal() {
+    this.showStatusModal = false;
+    this.selectedReason = '';
+  }
 
 
 }

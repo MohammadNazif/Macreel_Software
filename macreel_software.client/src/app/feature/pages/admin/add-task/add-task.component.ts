@@ -28,13 +28,31 @@ attachment2Name: string = '';
   ) {}
 
  ngOnInit(): void {
-  this.taskForm = this.fb.group({
-    id: [''],
-    title: ['', Validators.required],
-    employee: ['', Validators.required],
-    completionDate: ['', Validators.required],
-    description: ['', Validators.required]
-  });
+ this.taskForm = this.fb.group({
+  id: [''],
+  title: ['', Validators.required],
+  employee: ['', Validators.required],
+  completionDate: ['', Validators.required],
+  description: ['', Validators.required],
+  autoReassign: [false],
+  reassignDuration: [''],
+  adminstatus: [false]
+});
+
+this.taskForm.get('autoReassign')?.valueChanges.subscribe(val => {
+  const durationCtrl = this.taskForm.get('reassignDuration');
+
+  if (val) {
+    durationCtrl?.setValidators([Validators.required]);
+  } else {
+    durationCtrl?.reset();
+    durationCtrl?.clearValidators();
+  }
+  durationCtrl?.updateValueAndValidity();
+});
+
+
+
 
   this.loadEmployees();
 
@@ -50,6 +68,7 @@ attachment2Name: string = '';
   event.preventDefault();
   event.stopPropagation();
 }
+
 
 // Drop event
 onFileDrop(event: DragEvent, type: number) {
@@ -95,24 +114,34 @@ submit() {
 
   const formValue = this.taskForm.getRawValue();
 
-  const payload: any = {
-    id: this.editTask?.id ?? 0,
-    title: formValue.title,
-    description: formValue.description,
-    CompletedDate: formValue.completionDate,
-    empId: formValue.employee?.id,
-    empName: formValue.employee?.empName
-  };
+const payload: any = {
+  id: this.editTask?.id ?? 0,
+  title: formValue.title,
+  description: formValue.description,
+  CompletedDate: formValue.completionDate,
+  autoReassign: formValue.autoReassign,
+  ReassignDuration: formValue.reassignDuration,
+  adminstatus: formValue.adminstatus,
+  empId: formValue.employee?.id,
+  empName: formValue.employee?.empName
+};
+
+
 
   // Build FormData
   const formData = new FormData();
-  formData.append('id', payload.id.toString());
-  formData.append('empId', payload.empId);
-  formData.append('empName', payload.empName);
-  formData.append('title', payload.title);
-  formData.append('description', payload.description);
-  formData.append('CompletedDate', payload.CompletedDate);
+formData.append('id', payload.id.toString());
+formData.append('empId', payload.empId.toString());
+formData.append('empName', payload.empName);
+formData.append('title', payload.title);
+formData.append('description', payload.description);
+formData.append('CompletedDate', payload.CompletedDate);
 
+formData.append('autoReassign', payload.autoReassign ? 'true' : 'false');
+formData.append('adminResponse', payload.adminstatus ? 'true' : 'false');
+formData.append('timePeriodDay', payload.ReassignDuration?.toString() || '');
+
+  
 
 if (this.attachment1) {
   formData.append('document1', this.attachment1);
@@ -182,22 +211,36 @@ loadEmployees(pageNumber: number = 1, pageSize: number = 10, search: string = ''
   
 
 bindEditData() {
-    this.attachment1Name = this.editTask.document1Path;
-  this.attachment2Name = this.editTask.document2Path;
+  if (!this.editTask) return;
+
+  this.attachment1Name = this.editTask.document1Path
+    ? this.editTask.document1Path.split('/').pop()
+    : '';
+
+  this.attachment2Name = this.editTask.document2Path
+    ? this.editTask.document2Path.split('/').pop()
+    : '';
+
   this.taskForm.patchValue({
-    id: this.editTask?.id ?? 0,
+    id: this.editTask.id,
     title: this.editTask.title,
     description: this.editTask.description,
-     completionDate: this.editTask.completedDate
-      ? this.editTask.completedDate.substring(0, 10)  
+
+    completionDate: this.editTask.completedDate
+      ? this.editTask.completedDate.substring(0, 10)
       : '',
+
     employee: this.employees.find(
       (e: any) => e.id == this.editTask.empId
-    )
-  });
+    ) || '',
 
-  this.attachment1Name = this.editTask.document1Path || '';
-  this.attachment2Name = this.editTask.document2Path || '';
+    autoReassign: this.editTask.autoReassign === true,
+
+    reassignDuration: this.editTask.timePeriodDays ?? '',
+
+    adminstatus:
+      this.editTask.adminTaskStatus === 'Completed' ? '1' : '0'
+  });
 }
 
 }

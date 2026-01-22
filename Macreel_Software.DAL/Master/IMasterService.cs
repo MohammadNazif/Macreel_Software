@@ -42,6 +42,6 @@ namespace Macreel_Software.DAL.Master
         Task<ApiResponse<List<Page>>> GetAllPages(int? id, int? pageNumber, int? pageSize);
         Task<bool> InsertUpdatePage(Page data);
         Task<ApiResponse<bool>> AssignOrUpdateRolePages(AssignPage data);
-        Task<ApiResponse<List<RolePagesDto>>> GetAllAssignedPages(int? id = null, int? pageNumber = null, int? pageSize = null);
+        Task<ApiResponse<List<RolePagesDto>>> GetAllAssignedPages(int? id = null, int? pageNumber = null, int? pageSize = null,string? searchTerm = null);
     }
 }

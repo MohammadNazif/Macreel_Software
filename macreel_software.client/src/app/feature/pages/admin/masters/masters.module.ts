@@ -18,6 +18,7 @@ import { PageAccessComponent } from './page-access/page-access.component';
 import { CommonPagesModule } from "../../../common-pages/common-pages.module";
 import { MatChipGrid, MatChipRow, MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule, MatOption } from '@angular/material/autocomplete';
+import { AssignPageListComponent } from './assign-page-list/assign-page-list.component';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import { MatAutocompleteModule, MatOption } from '@angular/material/autocomplete
     AddTechnologyComponent,
     AddLeaveTypeComponent,
     AddPageComponent,
-    PageAccessComponent
+    PageAccessComponent,
+    AssignPageListComponent
   ],
   imports: [
     CommonModule,

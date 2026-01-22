@@ -18,6 +18,7 @@ export interface Task {
   assignedDate: string;
   completionDate: string;
   taskStatus: string;
+  adminTaskStatus:string;
   documents :[];
 }
 
@@ -126,6 +127,7 @@ export interface Page {
   id: number;
   pageName: string;
   pageUrl: string;
+  checked : boolean;
 }
 export interface PageAssign {
   pageId: number;
@@ -147,4 +149,10 @@ export interface employee {
   Contact: number;
  emailId :string;
  mobile :number;
+}
+export interface PageRow {
+  pageId: number;
+  pageName: string;
+  pageUrl: string;
+  checked: boolean;
 }

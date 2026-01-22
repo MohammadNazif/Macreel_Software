@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -31,24 +31,14 @@ export class AssignedTaskComponent {
   selectedFile1: any;
   selectedFile2: any;
   selectedTask: any;
-  displayedColumns: string[] = [
-    'srNo',
-    'title',
-    'assignedBy',
-    'assignedDate',
-    'completionDate',
-    'adminTaskStatus',
-    'empTaskStatus',
-    'action',
-  ];
   pageSize = 10;
   pageNumber = 1;
   totalRecords = 0;
   searchTerm = '';
-
+ pages!: TableColumn<any>[];
   pageSizeControl = new FormControl<string>('10');
   searchControl = new FormControl<string>('');
-
+    @ViewChild('statustemplate', { static: true }) statustemplate!: TemplateRef<any>;
   constructor(
     private readonly taskservice: TaskService,
     private readonly fb: FormBuilder,
@@ -63,19 +53,26 @@ export class AssignedTaskComponent {
   }
 
 
-     pages: TableColumn<any>[] = [
+  
+
+  
+  ngOnInit(): void {
+
+       this.pages = [
         { key: 'title', label: 'Title' ,align:'center'},
         { key: 'assignedByName', label: 'Assigned By' ,align:'center'},
              { key: 'assignedDate', label: 'Assigned To' ,align:'center',type:'date'},
         { key: 'completedDate', label: 'Completion Date' ,align:'center',type:'date'},
              { key: 'adminTaskStatus', label: 'Status By Admin' ,align:'center'},
              { key: 'taskStatus', label: 'Status By Employee' ,align:'center'},
-       
+        {
+          key: 'taskStatus',
+          label: 'Action',
+          type : 'custom',
+          template: this.statustemplate
+        }
        
       ];
-
-  
-  ngOnInit(): void {
     this.loadAssignedTasks();
     // Server-side search subscription
     this.searchControl.valueChanges
@@ -151,7 +148,27 @@ export class AssignedTaskComponent {
       formData.append('projectId', this.selectedProjectId.toString());
     }
     formData.append('empComment', formValue.comment || '');
+
     formData.append('empResponse', formValue.isCompleted ? 'true' : 'false');
+
+    // formData.append('empResponse', formValue. || '');
+    formData.append('isCompleted', formValue.isCompleted ? 'true' : 'false');
+
+    // const fileInput1: any = document.querySelector(
+    //   'input[type="file"]:nth-of-type(1)',
+    // );
+    // const fileInput2: any = document.querySelector(
+    //   'input[type="file"]:nth-of-type(2)',
+    // );
+
+    // if (fileInput1 && fileInput1.files.length > 0) {
+    //   formData.append('document1', fileInput1.files[0]);
+    // }
+    // if (fileInput2 && fileInput2.files.length > 0) {
+    //   formData.append('document2', fileInput2.files[0]);
+    // }
+
+
     formData.append('document1', this.selectedFile1);
     formData.append('document2', this.selectedFile2);
     this.employeeService.updateTaskStatus(formData).subscribe({
@@ -159,7 +176,7 @@ export class AssignedTaskComponent {
         if (res.statusCode === 200) {
           Swal.fire('Success', res.message, 'success');
           this.closeModal();
-          // location.reload();
+          location.reload();
         } else {
           Swal.fire('Error', res.message, 'error');
         }

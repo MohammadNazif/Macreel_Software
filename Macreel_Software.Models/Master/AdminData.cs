@@ -208,6 +208,8 @@ namespace Macreel_Software.Models.Master
         public IFormFile? sopDocument { get; set; }
         public IFormFile? technicalDocument { get; set; }
 
+      
+
         public string? SEO { get; set; }
         public string? SMO { get; set; }
         public string? paidAds { get; set; }
@@ -235,7 +237,9 @@ namespace Macreel_Software.Models.Master
 
         public IFormFile? document1 { get; set; }
         public IFormFile? document2 { get; set; }
-
+        public bool? autoReassign { get; set; }
+        public bool? adminResponse { get; set; }
+        public int? timePeriodDay { get; set; }
         public string? document1Path { get; set; }
         public string? document2Path { get; set; }
         public string? taskStatus { get; set; }

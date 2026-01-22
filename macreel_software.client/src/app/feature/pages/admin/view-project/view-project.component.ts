@@ -4,15 +4,13 @@ import { ProjectService } from '../../../../core/services/project-service.servic
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
-import { AddProjectService } from '../../../../core/services/add-project.service';
 import { Project, TableColumn } from '../../../../core/models/interface';
-
 import { PaginatedList } from '../../../../core/utils/paginated-list';
 
 
 @Component({
   selector: 'app-view-project',
-  standalone:false,
+  standalone: false,
   templateUrl: './view-project.component.html',
   styleUrls: ['./view-project.component.css']
 })
@@ -22,23 +20,22 @@ export class ViewProjectComponent implements OnInit {
   paginator!: PaginatedList<Project>;
 
   projectColumns: TableColumn<Project>[] = [
-    { key: 'projectTitle', label: 'Project',clickable: true,route : '/home/admin/project-details' },
+    { key: 'projectTitle', label: 'Project', clickable: true, route: '/home/admin/project-details' },
     { key: 'category', label: 'Category' },
     { key: 'startDate', label: 'Start Date', type: 'date',align:'center' },
     { key: 'completionDate', label: 'Completion Date', type: 'date',align:'center' },
     { key: 'endDate', label: 'End Date', type: 'date',align:'center' },
     { key: 'appEmpName', label: 'App Employee' },
     { key: 'webEmpName', label: 'Web Employee' },
-    { key: 'delayedDays', label: 'Delay', align:'center' }
+    { key: 'delayedDays', label: 'Delay', align: 'center' }
   ];
 
   constructor(
     private readonly fb: FormBuilder,
     private readonly projectService: ProjectService,
-    private readonly router: Router,
-    private readonly addProjectService: AddProjectService 
+    private readonly router: Router
 
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.searchForm = this.fb.group({
@@ -68,24 +65,14 @@ export class ViewProjectComponent implements OnInit {
     this.paginator.handleScroll(event, this.searchForm.value.search);
   }
 
-// edit(p: Project) {
-//   // Navigate to AddProjectComponent or open the form
-//    console.log('Clicked project ID:', p.id);
-//   this.router.navigate(['/home/admin/add-project'], { queryParams: { id: p.id } });
-// }
-
-edit(emp: any) {
-  this.router.navigate(
-    ['/home/admin/add-project'],
-    { state: { project: emp }
-
+  edit(emp: any) {
+    this.router.navigate(
+      ['/home/admin/add-project'],
+      {
+        state: { project: emp }
+      }
+    );
   }
-    
-  );
-}
-
-
-
 
   Delete(p: Project): void {
     Swal.fire({

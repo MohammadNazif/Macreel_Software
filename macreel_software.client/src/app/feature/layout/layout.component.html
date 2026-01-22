@@ -31,33 +31,24 @@
       </div>
 
       <div>
-        <ng-container *ngFor="let menu of filteredMenus">
-
+        <ng-container *ngFor="let menu of filteredMenusFromApi">
           <div (click)="toggleMenu(menu.key)"
             class="flex items-center p-2 justify-between rounded-lg cursor-pointer hover:bg-[#FDECEA]">
-
             <div class="flex items-center gap-3">
               <i [class]="menu.icon"></i>
               <span *ngIf="sidebarOpen">{{ menu.label }}</span>
             </div>
-
             <span *ngIf="sidebarOpen" class="transition-transform" [ngClass]="openMenu === menu.key ? 'rotate-90' : ''">
               <i class="fa-solid fa-chevron-right"></i>
             </span>
           </div>
-
           <div *ngIf="openMenu === menu.key && sidebarOpen" class="ml-10 space-y-1 text-sm">
-
             <a *ngFor="let item of menu.children" [routerLink]="item.route" (click)="closeSidebarOnMobile()"
               class="block p-2 hover:text-[#E6354B]">
-
               {{ item.label }}
             </a>
-
           </div>
-
         </ng-container>
-
       </div>
     </nav>
   </aside>

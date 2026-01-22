@@ -7,9 +7,6 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { TableColumn, Task } from '../../../../core/models/interface';
 import { Router } from '@angular/router';
 
-
-
-
 @Component({
   selector: 'app-view-task',
   standalone: false,
@@ -44,7 +41,9 @@ export class ViewTaskComponent implements OnInit {
       { key: 'assignedByName', label: 'Assigned By' },
       { key: 'assignedDate', label: 'Assigned Date', type: 'date', align: 'center' },
       { key: 'completedDate', label: 'Completion Date', type: 'date', align: 'center' },
-      { key: 'taskStatus', label: 'Status' },
+      { key: 'taskStatus', label: 'Employee Status' },
+      {key:'adminTaskStatus',label:'Admin Status'},
+
       {
         key: 'uploadedDocuments',
         label: 'Files',
@@ -78,7 +77,9 @@ export class ViewTaskComponent implements OnInit {
       { key: 'assignedByName', label: 'Assigned By' },
       { key: 'assignedDate', label: 'Assigned Date', type: 'date', align: 'center' },
       { key: 'completedDate', label: 'Completion Date', type: 'date', align: 'center' },
-      { key: 'taskStatus', label: 'Status' },
+      { key: 'taskStatus', label: 'Employee Status' },
+      {key:'adminTaskStatus',label:'Admin Status'},
+  
       {
         key: 'uploadedDocuments',
         label: 'Files',
