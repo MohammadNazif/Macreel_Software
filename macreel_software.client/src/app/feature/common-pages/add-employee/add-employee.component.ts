@@ -41,9 +41,11 @@ export class AddEmployeeComponent implements OnInit {
   mastersCertificate?: File;
   showPassword = false;
 
+  showTechnologySection = false;
+
   sendLinkForm!: FormGroup;
   isSendingLink = false;
-  showSendLinkButton:any;
+  showSendLinkButton: any;
 
   togglePassword(): void {
     this.showPassword = !this.showPassword;
@@ -60,7 +62,7 @@ export class AddEmployeeComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly announcer: LiveAnnouncer,
-  ) {}
+  ) { }
 
   employeeId!: number;
   isEditMode = false;
@@ -124,8 +126,26 @@ export class AddEmployeeComponent implements OnInit {
       this.getEmployeeById(this.employeeId);
     }
 
+    this.employeeForm.get('departmentId')?.valueChanges.subscribe((deptId) => {
+      this.handleDepartmentChange(deptId);
+    });
+
+
     this.checkAccessId();
   }
+
+  private handleDepartmentChange(deptId: any): void {
+    const selectedDept = this.departments.find(d => d.id == deptId);
+
+    this.showTechnologySection =
+      selectedDept?.departmentName === 'Information Technology';
+
+    if (!this.showTechnologySection) {
+      this.selectedTechnologies = [];
+      this.employeeForm.get('skillIds')?.setValue([]);
+    }
+  }
+
 
   private loadTechnologies(): Promise<void> {
     return new Promise((resolve) => {
@@ -150,8 +170,8 @@ export class AddEmployeeComponent implements OnInit {
         if (res.success && res.data) {
           this.employeeForm.get('emailId')?.patchValue(res.data[0].email);
           this.showSendLinkButton = res.data[0].email;
-          console.log("button",this.showSendLinkButton);
-          
+          console.log("button", this.showSendLinkButton);
+
         } else {
           Swal.fire('Error', 'Invalid registration link', 'error');
         }
@@ -280,21 +300,24 @@ export class AddEmployeeComponent implements OnInit {
           companyContactNo: emp.companyContactNo,
         });
 
-     if (emp.skill && emp.skill.length) {
+        this.handleDepartmentChange(emp.departmentId);
 
-  this.loadTechnologies().then(() => {
 
-    const skillIds = emp.skill.map((s: any) => s.id);
+        if (emp.skill && emp.skill.length) {
 
-    // 🔥 FIX: Match by ID + Name (safe binding)
-    this.selectedTechnologies = this.technologies.filter(t =>
-      skillIds.includes(t.id) ||
-      emp.skill.some((s: any) => s.skillName === t.technologyName)
-    );
+          this.loadTechnologies().then(() => {
 
-    this.employeeForm.get('skillIds')?.setValue(skillIds);
-  });
-}
+            const skillIds = emp.skill.map((s: any) => s.id);
+
+            // 🔥 FIX: Match by ID + Name (safe binding)
+            this.selectedTechnologies = this.technologies.filter(t =>
+              skillIds.includes(t.id) ||
+              emp.skill.some((s: any) => s.skillName === t.technologyName)
+            );
+
+            this.employeeForm.get('skillIds')?.setValue(skillIds);
+          });
+        }
 
 
         if (emp.stateId) {
@@ -420,11 +443,11 @@ export class AddEmployeeComponent implements OnInit {
     // 🔥 ADD vs UPDATE decision
     const apiCall = this.isEditMode
       ? this.employeeService.updateEmployee(
-          (() => {
-            formData.append('Id', this.employeeId.toString());
-            return formData;
-          })(),
-        )
+        (() => {
+          formData.append('Id', this.employeeId.toString());
+          return formData;
+        })(),
+      )
       : this.employeeService.addEmployee(formData);
 
     apiCall.pipe(finalize(() => (this.isLoading = false))).subscribe({
@@ -454,7 +477,7 @@ export class AddEmployeeComponent implements OnInit {
       this.twelthCertificate =
       this.graduationCertificate =
       this.mastersCertificate =
-        undefined;
+      undefined;
   }
   isModalOpen = false;
   openModal() {
