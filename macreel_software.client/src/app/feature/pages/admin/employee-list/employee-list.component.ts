@@ -32,18 +32,12 @@ export class EmployeeListComponent implements OnInit {
   editEmployee(emp: any) {
     this.router.navigate(['/home/edit-employee', emp.id]);
   }
-  employee: TableColumn<employee>[] = [
+  employee: TableColumn<any>[] = [
     { key: 'empCode', label: 'Emp Code' },
-    { key: 'empName', label: 'Name' },
-
-    { key: 'empCode', label: 'Name' },
-    { key: 'designationName', label: 'Name' },
-    { key: 'empEmail', label: 'Name' },
-    { key: 'Contact', label: 'Name' },
-
+    { key: 'empName', label: 'Emp Name' },
     { key: 'designationName', label: 'Designation' },
-    { key: 'empEmail', label: 'Email' },
-    { key: 'Contact', label: 'Mobile' },
+    { key: 'emailId', label: 'Email' },
+    { key: 'mobile', label: 'Mobile' }
 
 
   ]
