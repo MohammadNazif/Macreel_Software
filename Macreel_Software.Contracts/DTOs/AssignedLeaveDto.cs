@@ -30,6 +30,7 @@ namespace Macreel_Software.Contracts.DTOs
         public int? ELTotal { get; set; }
         public int? ELUsed { get; set; }
         public int? ELRemaining { get; set; }
+        public int? ELCarryForward { get; set; }
 
         public int? SLTotal { get; set; }
         public int? SLUsed { get; set; }

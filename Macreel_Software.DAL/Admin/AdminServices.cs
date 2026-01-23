@@ -742,6 +742,7 @@ namespace Macreel_Software.DAL.Admin
                                 ELTotal = sdr["ELTotal"] != DBNull.Value ? Convert.ToInt32(sdr["ELTotal"]) : null,
                                 ELRemaining = sdr["ELRemaining"] != DBNull.Value ? Convert.ToInt32(sdr["ELRemaining"]) : null,
                                 ELUsed = sdr["ELUsed"] != DBNull.Value ? Convert.ToInt32(sdr["ELUsed"]) : null,
+                                ELCarryForward = sdr["ELCarryForward"] != DBNull.Value ? Convert.ToInt32(sdr["ELCarryForward"]) : null,
                             });
                         }
                     }
