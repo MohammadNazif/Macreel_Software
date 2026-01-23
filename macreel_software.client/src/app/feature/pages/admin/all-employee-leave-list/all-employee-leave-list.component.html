@@ -34,7 +34,7 @@
 
 
   <!-- ================= TABLE ================= -->
-  <div class="bg-white shadow rounded-lg relative overflow-x-auto w-full">
+  <div class="bg-white shadow rounded-lg relative overflow-x-auto w-auto">
 
     <table mat-table [dataSource]="dataSource"
       class="min-w-[700px] w-full border border-gray-300 divide-y divide-gray-300 table-fixed text-sm md:text-base">
@@ -139,10 +139,33 @@
 
 
       <ng-container matColumnDef="SL">
-        <th mat-header-cell *matHeaderCellDef class="min-w-[160px] !bg-[#dd3d4f] text-white px-1 py-1">
+        <th mat-header-cell *matHeaderCellDef class="min-w-[160px] !bg-[#dd3d4f] text-white px-1 py-1 border-r">
 
           <div class="text-center text-[12px] md:text-[14px] font-semibold">
             SL
+          </div>
+
+          <div class="grid grid-cols-2 text-[11px] md:text-[12px] border-white ">
+            <div class="text-center border-white px-4">Total</div>
+            <div class="text-center px-4">Remaining</div>
+          </div>
+        </th>
+
+        <td mat-cell *matCellDef="let element" class="py-1 text-center border-r">
+          <div class="grid grid-cols-2 text-[12px] md:text-[14px]">
+            <div class="text-center">{{ element.slTotal || 0 }}</div>
+            <div class="text-center">{{ element.slRemaining || 0 }}</div>
+          </div>
+        </td>
+
+      </ng-container>
+      
+
+      <ng-container matColumnDef="CF">
+        <th mat-header-cell *matHeaderCellDef class="min-w-[160px] !bg-[#dd3d4f] text-white px-1 py-1">
+
+          <div class="text-center text-[12px] md:text-[14px] font-semibold">
+            CF
           </div>
 
           <div class="grid grid-cols-2 text-[11px] md:text-[12px] border-white">
@@ -159,7 +182,6 @@
         </td>
 
       </ng-container>
-
 
 
 
