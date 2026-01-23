@@ -5,8 +5,8 @@
     <div class="flex items-center gap-3">
       <img
      
-  [src]="employee?.profilePicPath 
-    ? employee.profilePicPath 
+  [src]="  employee?.profilePicPath 
+    ?  pdfBaseUrl + employee.profilePicPath 
     : 'https://static.vecteezy.com/system/resources/previews/027/951/137/non_2x/stylish-spectacles-guy-3d-avatar-character-illustrations-png.png'"
   class="w-12 h-12 rounded-full object-cover border border-gray-300"
 />
@@ -176,7 +176,7 @@
         <div>
           <p class="text-gray-400 text-xs">PAN</p>
           <p class="font-medium text-gray-700">{{ employee?.panImgPath !=null ? 'Available' : 'Not Available' }}</p>
-          <a *ngIf="employee?.panImgPath" [href]="employee.panImgPath" target="_blank" class="text-blue-600 hover:underline text-xs">Download</a>
+          <a *ngIf=" employee?.panImgPath" [href]=" pdfBaseUrl +employee.panImgPath" target="_blank" class="text-blue-600 hover:underline text-xs">Download</a>
         </div>
       </div>
 
@@ -184,8 +184,8 @@
         <i class="fa-solid fa-address-card text-yellow-300 mt-1"></i>
         <div>
           <p class="text-gray-400 text-xs">Aadhaar</p>
-          <p class="font-medium text-gray-700">{{ employee?.aadharImgPath ? 'Available' : '—' }}</p>
-          <a *ngIf="employee?.aadharImgPath" [href]="employee.aadharImgPath" target="_blank" class="text-blue-600 hover:underline text-xs">Download</a>
+          <p class="font-medium text-gray-700">{{ pdfBaseUrl+ employee?.aadharImgPath ? 'Available' : '—' }}</p>
+          <a *ngIf="employee?.aadharImgPath" [href]=" pdfBaseUrl+ employee.aadharImgPath" target="_blank" class="text-blue-600 hover:underline text-xs">Download</a>
         </div>
       </div>
 
@@ -230,11 +230,11 @@
       <div>
         <p class="text-gray-400 text-xs">Experience Certificate</p>
         <p class="font-medium text-gray-700">
-          {{ employee?.experienceCertificatePath ? 'Available' : 'Not Available' }}
+          {{  'https://localhost:7253/'+ employee?.experienceCertificatePath ? 'Available' : 'Not Available' }}
         </p>
         <a
           *ngIf="employee?.experienceCertificatePath"
-          [href]="employee.experienceCertificatePath"
+          [href]="pdfBaseUrl+employee.experienceCertificatePath"
           target="_blank"
           class="text-blue-600 hover:underline text-xs"
         >

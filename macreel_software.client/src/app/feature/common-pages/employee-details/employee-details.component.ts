@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EnvironmentInjector, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { environment, pdfUrl } from '../../../../environments/environment';
 
 export interface EmployeeDetails {
   id: string;
@@ -54,11 +55,14 @@ export interface EmployeeDetails {
   templateUrl: './employee-details.component.html',
   styleUrls: ['./employee-details.component.css']
 })
-export class EmployeeDetailsComponent implements OnInit {
+  export class EmployeeDetailsComponent implements OnInit  {
+      
+  apiUrl = environment.apiUrl;
+  pdfBaseUrl = pdfUrl.pdfUrl;
+    
+    employee!: EmployeeDetails;
 
-  employee!: EmployeeDetails;
-
-  constructor(private route: ActivatedRoute) { }
+    constructor(private route: ActivatedRoute) { }
 
  ngOnInit(): void {
  
