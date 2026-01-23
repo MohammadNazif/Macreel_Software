@@ -1380,9 +1380,9 @@ namespace Macreel_Software.DAL.Admin
                                 webTechnology = sdr["webTechnology"] != DBNull.Value ? Convert.ToInt32(sdr["webTechnology"]):null,
                                 webTechnologyName = sdr["webTechnology"] != DBNull.Value ? sdr["webTechnology"].ToString():null,
                                 appEmpId = sdr["appEmpId"] != DBNull.Value ? Convert.ToInt32(sdr["appEmpId"]):null,
-                                appEmpName = sdr["appEmp"] != DBNull.Value ?sdr["appEmp"].ToString():null,
+                                appEmpName = sdr["AppTeamLead"] != DBNull.Value ?sdr["AppTeamLead"].ToString():null,
                                 webEmpId = sdr["webEmpId"] != DBNull.Value ? Convert.ToInt32(sdr["webEmpId"]):null,
-                                webEmpName = sdr["webEmp"] != DBNull.Value ? sdr["webEmp"].ToString():null,
+                                webEmpName = sdr["WebTeamLead"] != DBNull.Value ? sdr["WebTeamLead"].ToString():null,
                                 startDate = sdr["startDate"] != DBNull.Value ?Convert.ToDateTime(sdr["startDate"]):DateTime.MinValue,
                                 assignDate = sdr["assignDate"] != DBNull.Value ? Convert.ToDateTime(sdr["assignDate"]):DateTime.MinValue,
                                 endDate = sdr["endDate"] != DBNull.Value ? Convert.ToDateTime(sdr["endDate"]):DateTime.MinValue,
@@ -1395,6 +1395,12 @@ namespace Macreel_Software.DAL.Admin
                                 technicalDocumentPath = sdr["technicalDocument"] != DBNull.Value ? sdr["technicalDocument"].ToString():null,
                                 delayedDays = sdr["DelayedDays"] != DBNull.Value ? Convert.ToInt32(sdr["DelayedDays"]) : null,
                                 projectStatus = sdr["projectStatus"] != DBNull.Value ? sdr["projectStatus"].ToString():null,
+                                appProjectMembers = sdr["AppMembersJson"] != DBNull.Value
+                                ? JsonSerializer.Deserialize<List<appProjectMember>>(sdr["AppMembersJson"].ToString())
+                                : new List<appProjectMember>(),
+                                webProjectMembers = sdr["WebMembersJson"] != DBNull.Value
+                                    ? JsonSerializer.Deserialize<List<webProjectMember>>(sdr["WebMembersJson"].ToString())
+                                    : new List<webProjectMember>()
                             });
                         }
                     }
