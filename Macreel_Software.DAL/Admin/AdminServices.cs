@@ -6,6 +6,7 @@ using Macreel_Software.Services.AttendanceUpload;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Identity.Client;
 using System.Data;
 using System.Text.Json;
 
@@ -495,25 +496,20 @@ namespace Macreel_Software.DAL.Admin
                     DataTable dtSkills = new DataTable();
                     dtSkills.Columns.Add("technolgyId", typeof(int));
 
-                    if (!string.IsNullOrWhiteSpace(data?.SkillIds))
+                    if (!string.IsNullOrWhiteSpace(data.SkillIds))
                     {
                         var ids = data.SkillIds
                                       .Split(',', StringSplitOptions.RemoveEmptyEntries)
-                                      .Select(s =>
-                                      {
-                                          int.TryParse(s.Trim(), out int val);
-                                          return val;
-                                      })
+                                      .Select(s => int.TryParse(s.Trim(), out int v) ? v : 0)
                                       .Where(v => v > 0);
 
                         foreach (var id in ids)
                             dtSkills.Rows.Add(id);
                     }
 
-                    // Always pass DataTable (even if empty)
-                    var param = cmd.Parameters.Add("@TechnologyIds", SqlDbType.Structured);
-                    param.TypeName = "dbo.TechnologyTableType";
-                    param.Value = dtSkills;
+                    var tvp = cmd.Parameters.Add("@TechnologyIds", SqlDbType.Structured);
+                    tvp.TypeName = "dbo.TechnologyTableType";
+                    tvp.Value = dtSkills;
 
                     if (_conn.State == ConnectionState.Closed)
                         await _conn.OpenAsync();
@@ -1823,6 +1819,51 @@ namespace Macreel_Software.DAL.Admin
                     await _conn.CloseAsync();
             }
         }
+
+        #endregion
+
+
+        #region assigned project emp list
+
+        //public async Task<ApiResponse<List<AssignedProjectEmpListDto>>> assignedProjectEmpList(int projectId, int addedBy)
+        //{
+        //    List<AssignedProjectEmpListDto> list = new List<AssignedProjectEmpListDto>();
+        //    try
+        //    {
+        //        SqlCommand cmd = new SqlCommand("sp_addAndAssignProject", _conn);
+        //        cmd.CommandType = CommandType.StoredProcedure;
+        //        cmd.Parameters.AddWithValue("@action", "getEmpListForAssignedProject");
+        //        cmd.Parameters.AddWithValue("@projectId", projectId);
+        //        cmd.Parameters.AddWithValue("@addedBy", addedBy);
+        //        if (_conn.State == ConnectionState.Closed)
+        //            await _conn.OpenAsync();
+
+        //        using(SqlDataReader sdr=await cmd.ExecuteReaderAsync())
+        //        {
+        //            if(sdr.HasRows)
+        //            {
+        //                while(await sdr.ReadAsync())
+        //                {
+        //                    list.Add(new AssignedProjectEmpListDto
+        //                    {
+        //                        id = sdr["id"] != DBNull.Value ? Convert.ToInt32(sdr[""]):null,
+        //                        projectId = sdr[""] != DBNull.Value ? Convert.ToInt32(sdr[""]):null,
+        //                        empId = sdr[""] != DBNull.Value ? Convert.ToInt32(sdr[""]):null,
+        //                        approveStatus = sdr[""] != DBNull.Value ? Convert.ToInt32(sdr[""]):null,
+        //                    });
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch
+        //    {
+
+        //    }
+        //    finally
+        //    {
+
+        //    }
+        //}
 
         #endregion
     }
