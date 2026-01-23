@@ -16,6 +16,7 @@ import { CdkAutofill } from "@angular/cdk/text-field";
 import { SafeUrlPipe } from "../../core/pipes/capitalize.pipe";
 import { ProjectDetailsComponent } from './project-details/project-details.component';
 import { EmployeeDetailsComponent } from './employee-details/employee-details.component';
+import { ProjectProgressComponent } from './project-progress/project-progress.component';
 
 
 
@@ -25,7 +26,8 @@ import { EmployeeDetailsComponent } from './employee-details/employee-details.co
     EmployeeProfileComponent,
      GenericTableComponent,
      ProjectDetailsComponent,
-     EmployeeDetailsComponent
+     EmployeeDetailsComponent,
+     ProjectProgressComponent
 
   ],
   imports: [

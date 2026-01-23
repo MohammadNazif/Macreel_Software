@@ -521,8 +521,11 @@ namespace Macreel_Software.DAL.Admin
                     return Convert.ToBoolean(result);
                    
 
-
                 }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
             finally
             {

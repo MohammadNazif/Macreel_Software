@@ -20,32 +20,11 @@
   </button>
 </ng-template>
 
-<div class="bg-white rounded-2xl shadow-sm mt-1 px-4 md:px-6 py-4 md:mx-auto max-w-6xl font-[Poppins]">
-  <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-3">
-    <h2 class="text-sm font-semibold text-gray-700">Project List</h2>
-    <form [formGroup]="searchForm" class="relative w-full md:w-60">
-      <input type="text" formControlName="search" placeholder="Search projects"
-        class="w-full h-8 rounded-lg border border-gray-300 pl-8 pr-3 text-[12px] text-gray-700 placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-[#dd3d4f] focus:border-[#dd3d4f]" />
-    </form>
-  </div>
 
-  <app-generic-table [columns]="projectColumns" [data]="paginator.items" [showActions]="true"
-    [loading]="paginator.loading " (edit)="edit($event)">
-  </app-generic-table>
-</div>
-
-<!-- Employee Button Template -->
-<ng-template #filesTemplate let-row>
+<ng-template #webTemplate let-row>
   <button class="w-auto h-7 flex items-center justify-center rounded
                  text-gray-600 hover:text-blue-600 hover:bg-gray-100" (click)="openEmployeeModal()">
-    {{ row.appEmpName }}
-  </button>
-</ng-template>
-
-<ng-template #filesTemplate let-row>
-  <button class="w-auto h-7 flex items-center justify-center rounded
-                 text-gray-600 hover:text-blue-600 hover:bg-gray-100" (click)="openEmployeeModal()">
-    {{ row.WebEmpName }}
+    {{ row.webEmpName }}
   </button>
 </ng-template>
 
@@ -53,32 +32,59 @@
 
 <!-- Employee Modal (Static Design) -->
 <div *ngIf="showEmployeeModal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+
   <div class="bg-white w-[600px] rounded-xl shadow-xl flex flex-col">
-    <!-- Header -->
-    <div class="flex justify-between items-center px-4 py-2 border-b">
-      <h3 class="font-semibold">Added Employees List</h3>
-      <button (click)="closeModal()">✕</button>
+
+    <!-- 🔝 HEADER WITH + ICON -->
+    <div class="flex justify-between items-center px-4 py-2">
+      <h3 class="font-semibold">Added Employees</h3>
+
+      <div class="flex gap-2">
+        <button class="w-8 h-8 flex items-center justify-center rounded-full
+                 bg-[#C5192F] text-white hover:bg-red-600" (click)="onAddEmployeeClick()">
+          <i class="fa fa-plus text-sm"></i>
+        </button>
+
+        <button (click)="closeModal()">✕</button>
+      </div>
     </div>
 
-    <!-- Body: Employee Table -->
-    <div class="p-2 max-h-[400px] overflow-auto">
-      <app-generic-table [columns]="employeeColumns" [data]="selectedEmployees" [showActions]="false">
+    <!-- 🟦 CHIPS SECTION -->
+    <div class="px-4 py-2 flex flex-wrap gap-2 border-b max-h-[80px]">
+      <ng-container *ngFor="let emp of selectedEmployees">
+        <span class="flex items-center gap-1 bg-gray-200 text-sm px-2 py-1 rounded-full">
+          {{ emp.empName }}
+          <button class="text-red-500" (click)="removeChip(emp)">✕</button>
+        </span>
+      </ng-container>
+    </div>
+
+    <!-- 📋 EMPLOYEE LIST (API DATA) -->
+    <div *ngIf="showEmployeeDropdown" class="px-4 py-2 max-h-40 overflow-auto border-b" style="max-height: 80px;">
+
+      <div *ngFor="let emp of allEmployees" class="cursor-pointer px-2 py-1 rounded text-sm hover:bg-gray-200"
+        (click)="addChip(emp)">
+        {{ emp.empName }} ({{ emp.designationName }})
+      </div>
+
+    </div>
+
+    <!-- 📊 TABLE -->
+    <div class="p-2 max-h-[300px] overflow-auto">
+      <app-generic-table [columns]="employeeColumns" [data]="employees" [showActions]="false">
       </app-generic-table>
     </div>
 
-   <div class="flex justify-end px-1 py-1">
-  <button
-    type="button"
-    class="px-2 py-1.5 text-sm bg-[#C5192F] text-white rounded-md hover:bg-red-600"
-    (click)="saveEmployees()">
-    Submit
-  </button>
-</div>
-
-   
+    <!-- FOOTER -->
+    <div class="flex justify-end px-3 py-2 border-t">
+      <button class="px-3 py-1.5 text-sm bg-[#C5192F] text-white rounded-md hover:bg-red-600" (click)="saveEmployees()">
+        Submit
+      </button>
+    </div>
 
   </div>
 </div>
+
 
 <ng-template #iconsTemplate let-row>
   <div class="flex gap-2">

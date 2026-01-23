@@ -98,6 +98,7 @@ namespace Macreel_Software.Models.Master
     public class Skill
     {
         public int id { get; set; }
+        public int techId { get; set; }
         public string skillName { get; set; }
     }
     public class ReportingManger

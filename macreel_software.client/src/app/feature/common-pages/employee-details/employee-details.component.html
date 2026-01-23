@@ -1,313 +1,160 @@
-<div class="p-5 bg-gray-50 rounded-xl shadow-sm max-w-7xl mx-auto">
+<div class="p-5 bg-gray-50 rounded-xl shadow-sm max-w-7xl mx-auto space-y-6">
 
-  <!-- HEADER -->
+  <!-- PROFILE HEADER -->
   <div class="flex justify-between items-center mb-6 border-b pb-3">
-    <div class="flex items-center gap-3">
+    <div class="flex items-center gap-4">
       <img
-     
-  [src]="  employee?.profilePicPath 
-    ?  pdfBaseUrl + employee.profilePicPath 
-    : 'https://static.vecteezy.com/system/resources/previews/027/951/137/non_2x/stylish-spectacles-guy-3d-avatar-character-illustrations-png.png'"
-  class="w-12 h-12 rounded-full object-cover border border-gray-300"
-/>
-
-      <h1 class="text-2xl font-bold text-black">{{ employee?.empName || '—' }}</h1>
+        [src]="employee.profilePicPath 
+          ? pdfBaseUrl + employee.profilePicPath 
+          : 'https://static.vecteezy.com/system/resources/previews/027/951/137/non_2x/stylish-spectacles-guy-3d-avatar-character-illustrations-png.png'"
+        class="w-16 h-16 rounded-full object-cover border-2 border-gray-300 shadow-sm"
+      />
+      <div>
+        <h1 class="text-xl font-bold text-gray-600">{{ employee.empName || '—' }}</h1>
+        <p class="text-gray-400">{{ employee.designationName || '—' }} | {{ employee.departmentName || '—' }}</p>
+      </div>
     </div>
     <span class="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-full
                  bg-green-100 text-green-700 border border-green-200">
       <i class="fa-solid fa-circle-check"></i>
-       Active
+      Active
     </span>
   </div>
 
   <!-- PERSONAL & PROFESSIONAL DETAILS -->
-  <div class="bg-white border border-gray-200 rounded-lg p-5 mb-6">
-    <h2 class="text-black font-semibold mb-4 flex items-center gap-2">
-      <i class="fa-solid fa-id-card text-blue-500"></i>
-      Personal & Professional Details
+  <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+    <h2 class="text-xl text-gray-900 font-semibold mb-4 flex items-center gap-2">
+      <i class="fa-solid fa-id-card text-blue-500"></i> Personal & Professional
     </h2>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-
-      <div class="flex items-center gap-3">
-        <i class="fa-solid fa-user text-blue-300 mt-1"></i>
-        <div>
-          <p class="text-gray-400 text-xs">Employee Code</p>
-          <p class="font-medium text-gray-700">{{ employee?.empCode || '—' }}</p>
+      <ng-container *ngFor="let item of [
+        {icon:'fa-user', label:'Employee Code', value: employee.empCode},
+        {icon:'fa-calendar', label:'Date of Birth', value: (employee.dob | date)},
+        {icon:'fa-phone', label:'Mobile', value: employee.mobile},
+        {icon:'fa-envelope', label:'Email', value: employee.emailId},
+        {icon:'fa-venus-mars', label:'Gender', value: employee.gender},
+        {icon:'fa-house', label:'Address', value: employee.presentAddress},
+        {icon:'fa-building', label:'Department', value: employee.departmentName},
+        {icon:'fa-briefcase', label:'Designation', value: employee.designationName},
+        {icon:'fa-calendar-check', label:'Joining Date', value: employee.dateOfJoining ? (employee.dateOfJoining | date) : '—'},
+        {icon:'fa-money-bill-wave', label:'Salary', value: employee.salary ? (employee.salary | currency:'INR') : '—'},
+        {icon:'fa-user-tie', label:'Reporting Manager', value: employee.reportingManagerId},
+        {icon:'fa-briefcase', label:'Experience', value: employee.yearOfExperience ? (employee.yearOfExperience + ' yrs') : '—'}
+      ]">
+        <div class="flex items-center gap-3">
+          <i class="fa-solid {{item.icon}} text-blue-400 mt-1 w-5"></i>
+          <div>
+            <p class="text-gray-400 text-xs">{{ item.label }}</p>
+            <p class="font-medium text-gray-700">{{ item.value || '—' }}</p>
+          </div>
         </div>
-      </div>
-
-      <div class="flex items-center gap-3">
-        <i class="fa-solid fa-calendar text-green-300 mt-1"></i>
-        <div>
-          <p class="text-gray-400 text-xs">Date of Birth</p>
-          <p class="font-medium text-gray-700">{{ employee?.dob | date  }}</p>
-        </div>
-      </div>
-
-      <div class="flex items-center gap-3">
-        <i class="fa-solid fa-phone text-indigo-300 mt-1"></i>
-        <div>
-          <p class="text-gray-400 text-xs">Mobile</p>
-          <p class="font-medium text-gray-700">{{ employee?.mobile || '—' }}</p>
-        </div>
-      </div>
-
-      <div class="flex items-center gap-3">
-        <i class="fa-solid fa-envelope text-yellow-300 mt-1"></i>
-        <div>
-          <p class="text-gray-400 text-xs">Email</p>
-          <p class="font-medium text-gray-700">{{ employee?.emailId || '—' }}</p>
-        </div>
-      </div>
-
-      <div class="flex items-center gap-3">
-        <i class="fa-solid fa-venus-mars text-purple-300 mt-1"></i>
-        <div>
-          <p class="text-gray-400 text-xs">Gender</p>
-          <p class="font-medium text-gray-700">{{ employee?.gender || '—' }}</p>
-        </div>
-      </div>
-
-      <div class="flex items-center gap-3">
-        <i class="fa-solid fa-house text-pink-300 mt-1"></i>
-        <div>
-          <p class="text-gray-400 text-xs">Address</p>
-          <p class="font-medium text-gray-700">{{ employee?.presentAddress || '—' }}</p>
-        </div>
-      </div>
-
-      <div class="flex items-center gap-3">
-        <i class="fa-solid fa-building text-blue-300 mt-1"></i>
-        <div>
-          <p class="text-gray-400 text-xs">Department</p>
-          <p class="font-medium text-gray-700">{{ employee?.departmentName || '—' }}</p>
-        </div>
-      </div>
-
-      <div class="flex items-center gap-3">
-        <i class="fa-solid fa-briefcase text-green-300 mt-1"></i>
-        <div>
-          <p class="text-gray-400 text-xs">Designation</p>
-          <p class="font-medium text-gray-700">{{ employee?.designationName || '—' }}</p>
-        </div>
-      </div>
-
-      <div class="flex items-center gap-3">
-        <i class="fa-solid fa-calendar-check text-indigo-300 mt-1"></i>
-        <div>
-          <p class="text-gray-400 text-xs">Joining Date</p>
-          <p class="font-medium text-gray-700">{{ employee?.dateOfJoining ? (employee.dateOfJoining | date ) : '—'  }}</p>
-        </div>
-      </div>
-
-      <div class="flex items-center gap-3">
-        <i class="fa-solid fa-money-bill-wave text-purple-300 mt-1"></i>
-        <div>
-          <p class="text-gray-400 text-xs">Salary</p>
-          <p class="font-medium text-gray-700">
-            {{ employee?.salary ? (employee.salary | currency:'INR') : '—' }}
-          </p>
-        </div>
-      </div>
-
-      <div class="flex items-center gap-3">
-        <i class="fa-solid fa-user-tie text-yellow-300 mt-1"></i>
-        <div>
-          <p class="text-gray-400 text-xs">Reporting Manager</p>
-          <p class="font-medium text-gray-700">{{ employee?.reportingManagerId || '—' }}</p>
-        </div>
-      </div>
-
-      <div class="flex items-center gap-3">
-        <i class="fa-solid fa-briefcase text-pink-300 mt-1"></i>
-        <div>
-          <p class="text-gray-400 text-xs">Years of Experience</p>
-          <p class="font-medium text-gray-700">
-            {{ employee?.yearOfExperience !=null ? employee.yearOfExperience + ' years' : '—' }}
-          </p>
-        </div>
-      </div>
-
+      </ng-container>
     </div>
   </div>
 
-  <!-- BANK & IDENTITY DETAILS -->
-  <div class="bg-white border border-gray-200 rounded-lg p-5 mb-6">
-    <h2 class="text-black font-semibold mb-4 flex items-center gap-2">
-      <i class="fa-solid fa-university text-green-500"></i>
-      Bank & Identity
+  <!-- BANK & IDENTITY -->
+  <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+    <h2 class="text-xl text-gray-900 font-semibold mb-4 flex items-center gap-2">
+      <i class="fa-solid fa-university text-green-500"></i> Bank & Identity
     </h2>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-
-      <div class="flex items-center gap-3">
-        <i class="fa-solid fa-building-columns text-blue-300 mt-1"></i>
-        <div>
-          <p class="text-gray-400 text-xs">Bank Name</p>
-          <p class="font-medium text-gray-700">{{ employee?.bankName || '—' }}</p>
+      <ng-container *ngFor="let item of [
+        {icon:'fa-building-columns', label:'Bank Name', value: employee.bankName},
+        {icon:'fa-building-columns', label:'Branch Name', value: employee.bankBranch},
+        {icon:'fa-credit-card', label:'Account No', value: employee.accountNo},
+        {icon:'fa-credit-card', label:'IFSC', value: employee.ifscCode},
+        {icon:'fa-id-card', label:'PAN', value: employee.panImgPath ? 'Available' : 'Not Available', link: employee.panImgPath},
+        {icon:'fa-address-card', label:'Aadhaar', value: employee.aadharImgPath ? 'Available' : 'Not Available', link: employee.aadharImgPath}
+      ]">
+        <div class="flex items-center gap-3">
+          <i class="fa-solid {{item.icon}} text-green-400 mt-1 w-5"></i>
+          <div>
+            <p class="text-gray-400 text-xs">{{ item.label }}</p>
+            <p class="font-medium text-gray-700 inline-flex items-center gap-1">
+              {{ item.value }}
+              <a *ngIf="item.link" [href]="pdfBaseUrl+item.link" target="_blank" class="text-blue-600 hover:text-green-400 hover:bg-green-100 text-xs px-1 rounded">View</a>
+            </p>
+          </div>
         </div>
-      </div>
- <div class="flex items-center gap-3">
-        <i class="fa-solid fa-building-columns text-blue-300 mt-1"></i>
-        <div>
-          <p class="text-gray-400 text-xs">Branch Name</p>
-          <p class="font-medium text-gray-700">{{ employee?.bankBranch || '—' }}</p>
-        </div>
-      </div>
-      <div class="flex items-center gap-3">
-        <i class="fa-solid fa-credit-card text-purple-300 mt-1"></i>
-        <div>
-          <p class="text-gray-400 text-xs">Account Number</p>
-          <p class="font-medium text-gray-700">{{ employee?.accountNo || '—' }}</p>
-        </div>
-      </div>
-
-         <div class="flex items-center gap-3">
-        <i class="fa-solid fa-credit-card text-purple-300 mt-1"></i>
-        <div>
-          <p class="text-gray-400 text-xs">IFSC Code</p>
-          <p class="font-medium text-gray-700">{{ employee?.ifscCode || '—' }}</p>
-        </div>
-      </div>
-
-      <div class="flex items-center gap-3">
-        <i class="fa-solid fa-id-card text-green-300 mt-1"></i>
-        <div>
-          <p class="text-gray-400 text-xs">PAN</p>
-          <p class="font-medium text-gray-700">{{ employee?.panImgPath !=null ? 'Available' : 'Not Available' }}</p>
-          <a *ngIf=" employee?.panImgPath" [href]=" pdfBaseUrl +employee.panImgPath" target="_blank" class="text-blue-600 hover:underline text-xs">Download</a>
-        </div>
-      </div>
-
-      <div class="flex items-center gap-3">
-        <i class="fa-solid fa-address-card text-yellow-300 mt-1"></i>
-        <div>
-          <p class="text-gray-400 text-xs">Aadhaar</p>
-          <p class="font-medium text-gray-700">{{ pdfBaseUrl+ employee?.aadharImgPath ? 'Available' : '—' }}</p>
-          <a *ngIf="employee?.aadharImgPath" [href]=" pdfBaseUrl+ employee.aadharImgPath" target="_blank" class="text-blue-600 hover:underline text-xs">Download</a>
-        </div>
-      </div>
-
+      </ng-container>
     </div>
   </div>
 
   <!-- PREVIOUS EMPLOYMENT -->
- <div class="bg-white border border-gray-200 rounded-lg p-5 mb-6">
-  <h2 class="text-black font-semibold mb-4 flex items-center gap-2">
-    <i class="fa-solid fa-building text-indigo-500"></i>
-    Previous Employment
-  </h2>
-
-  <!-- Grid -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-
-    <!-- Company Name -->
-    <div class="flex items-start gap-3">
-      <i class="fa-solid fa-credit-card text-purple-300 mt-1"></i>
-      <div>
-        <p class="text-gray-400 text-xs">Company Name</p>
-        <p class="font-medium text-gray-700">
-          {{ employee?.companyName || '—' }}
-        </p>
-      </div>
+  <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+    <h2 class="text-xl text-gray-900 font-semibold mb-4 flex items-center gap-2">
+      <i class="fa-solid fa-building text-indigo-500"></i> Previous Employment
+    </h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <ng-container *ngFor="let item of [
+        {icon:'fa-building', label:'Company', value: employee.companyName},
+        {icon:'fa-phone', label:'Contact No', value: employee.companyContactNo},
+        {icon:'fa-id-card', label:'Experience Certificate', value: employee.experienceCertificatePath ? 'Available' : 'Not Available', link: employee.experienceCertificatePath}
+      ]">
+        <div class="flex items-start gap-3">
+          <i class="fa-solid {{item.icon}} text-indigo-400 mt-1 w-5"></i>
+          <div>
+            <p class="text-gray-400 text-xs">{{ item.label }}</p>
+            <p class="font-medium text-gray-700 inline-flex items-center gap-1">
+              {{ item.value }}
+              <a *ngIf="item.link" [href]="pdfBaseUrl+item.link" target="_blank" class="text-blue-600 hover:text-green-400 hover:bg-green-100 text-xs px-1 rounded">View</a>
+            </p>
+          </div>
+        </div>
+      </ng-container>
     </div>
-
-    <!-- Contact Number -->
-    <div class="flex items-start gap-3">
-      <i class="fa-solid fa-phone text-purple-300 mt-1"></i>
-      <div>
-        <p class="text-gray-400 text-xs">Contact Number</p>
-        <p class="font-medium text-gray-700">
-          {{ employee?.companyContactNo || '—' }}
-        </p>
-      </div>
-    </div>
-
-    <!-- PAN -->
-    <div class="flex items-start gap-3">
-      <i class="fa-solid fa-id-card text-green-300 mt-1"></i>
-      <div>
-        <p class="text-gray-400 text-xs">Experience Certificate</p>
-        <p class="font-medium text-gray-700">
-          {{  'https://localhost:7253/'+ employee?.experienceCertificatePath ? 'Available' : 'Not Available' }}
-        </p>
-        <a
-          *ngIf="employee?.experienceCertificatePath"
-          [href]="pdfBaseUrl+employee.experienceCertificatePath"
-          target="_blank"
-          class="text-blue-600 hover:underline text-xs"
-        >
-          Download
-        </a>
-      </div>
-    </div>
-
-   
   </div>
-</div>
-
 
   <!-- QUALIFICATIONS -->
-  <div class="bg-white border border-gray-200 rounded-lg p-5 mb-6">
-    <h2 class="text-black font-semibold mb-4 flex items-center gap-2">
-      <i class="fa-solid fa-graduation-cap text-blue-500"></i>
-      Qualifications
+  <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+    <h2 class="text-xl text-gray-900 font-semibold mb-4 flex items-center gap-2">
+      <i class="fa-solid fa-graduation-cap text-blue-500"></i> Qualifications
     </h2>
 
-    <div *ngIf="employee; else noQualifications" class="grid grid-cols-1 gap-3">
-      <!-- <div *ngFor="let q of employee.qualifications">
-        <p class="text-sm font-medium">{{ q.degree }} - {{ q.institution }} ({{ q.year }})</p>
-        <a *ngIf="q.attachment" [href]="q.attachment" target="_blank" class="text-blue-600 text-xs hover:underline">Download</a>
-      </div> -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <ng-container *ngFor="let item of [
+        {icon:'fa-school', label:'10th', value: employee.tenthCertificatePath ? 'Available' : 'Not Available', link: employee.tenthCertificatePath},
+        {icon:'fa-school', label:'12th', value: employee.twelthCertificatePath ? 'Available' : 'Not Available', link: employee.twelthCertificatePath},
+        {icon:'fa-user-graduate', label:'Graduation', value: employee.graduationCertificatePathan ? 'Available' : 'Not Available', link: employee.graduationCertificatePathan},
+        {icon:'fa-user-graduate', label:'Masters', value: employee.mastersCertificatePath ? 'Available' : 'Not Available', link: employee.mastersCertificatePath}
+      ]">
+        <div class="flex items-start gap-3">
+          <i class="fa-solid {{item.icon}} text-yellow-500 mt-1 w-5"></i>
+          <div>
+            <p class="text-gray-400 text-xs">{{ item.label }} Certificate</p>
+            <p class="font-medium text-gray-700 inline-flex items-center gap-1">
+              {{ item.value }}
+              <a *ngIf="item.link" [href]="pdfBaseUrl+item.link" target="_blank" class="text-blue-600 hover:text-green-400 hover:bg-green-100 text-xs px-1 rounded">View</a>
+            </p>
+          </div>
+        </div>
+      </ng-container>
     </div>
-
-    <ng-template #noQualifications>
-      <p class="text-gray-400 text-sm">No qualifications available</p>
-    </ng-template>
   </div>
- <div class="bg-white border border-gray-200 rounded-lg p-5 mb-6">
-  <h2 class="text-black font-semibold mb-4 flex items-center gap-2">
-    <i class="fa-solid fa-building text-indigo-500"></i>
-    Other Details
-  </h2>
 
-  <!-- Grid -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  <!-- OTHER DETAILS -->
+  <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+    <h2 class="text-xl text-gray-900 font-semibold mb-4 flex items-center gap-2">
+      <i class="fa-solid fa-info-circle text-indigo-500"></i> Other Details
+    </h2>
 
-    <!-- Company Name -->
-    <div class="flex items-start gap-3">
-      <i class="fa-solid fa-credit-card text-purple-300 mt-1"></i>
-      <div>
-        <p class="text-gray-400 text-xs">Nationality</p>
-        <p class="font-medium text-gray-700">
-          {{ employee?.nationality || '—' }}
-        </p>
-      </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <ng-container *ngFor="let item of [
+        {icon:'fa-flag', label:'Nationality', value: employee.nationality},
+        {icon:'fa-user', label:'Emergency Contact Person', value: employee.emergencyContactPersonName},
+        {icon:'fa-phone', label:'Emergency Contact No', value: employee.emergencyContactNum}
+      ]">
+        <div class="flex items-start gap-3">
+          <i class="fa-solid {{item.icon}} text-indigo-400 mt-1 w-5"></i>
+          <div>
+            <p class="text-gray-400 text-xs">{{ item.label }}</p>
+            <p class="font-medium text-gray-700">{{ item.value || '—' }}</p>
+          </div>
+        </div>
+      </ng-container>
     </div>
-
-    <!-- Contact Number -->
-    <div class="flex items-start gap-3">
-      <i class="fa-solid fa-phone text-purple-300 mt-1"></i>
-      <div>
-        <p class="text-gray-400 text-xs">Contact Person</p>
-        <p class="font-medium text-gray-700">
-          {{ employee?.emergencyContactPersonName || '—' }}
-        </p>
-      </div>
-    </div>
-    <div class="flex items-start gap-3">
-      <i class="fa-solid fa-phone text-purple-300 mt-1"></i>
-      <div>
-        <p class="text-gray-400 text-xs">Contact Number</p>
-        <p class="font-medium text-gray-700">
-          {{ employee?.emergencyContactNum || '—' }}
-        </p>
-      </div>
-    </div>
-
-
   </div>
-</div>
 
 </div>

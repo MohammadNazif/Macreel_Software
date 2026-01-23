@@ -181,7 +181,8 @@ export class LeaveRequestsComponent {
       {
         key: 'action',
         label: 'Action',
-        template: this.statustemplate
+        template: this.statustemplate,
+        width:"50px"
       }
     ];
     this.loadAssignedLeaves();
