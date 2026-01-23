@@ -228,22 +228,53 @@ namespace Macreel_Software.Server.Controllers
 
                 var files = new[]
                 {
-            new { File = model.ProfilePic, Name = "Profile Picture", Ext = imgExt, Set = (Action<string>)(p => model.ProfilePicPath = p), Get = (Func<string?>)(() => model.ProfilePicPath) },
-            new { File = model.AadharImg, Name = "Aadhar Front Image", Ext = imgExt, Set = (Action<string>)(p => model.AadharImgPath = p), Get = (Func<string?>)(() => model.AadharImgPath) },
-            new { File = model.AadharBackImg, Name = "Aadhar Back Image", Ext = imgExt, Set = (Action<string>)(p => model.AadharBackImgPath = p), Get = (Func<string?>)(() => model.AadharBackImgPath) },
-            new { File = model.PanImg, Name = "PAN Front Image", Ext = imgExt, Set = (Action<string>)(p => model.PanImgPath = p), Get = (Func<string?>)(() => model.PanImgPath) },
-            new { File = model.PanBackImg, Name = "PAN Back Image", Ext = imgExt, Set = (Action<string>)(p => model.PanBackImgPath = p), Get = (Func<string?>)(() => model.PanBackImgPath) },
-            new { File = model.ExperienceCertificate, Name = "Experience Certificate", Ext = docExt, Set = (Action<string>)(p => model.ExperienceCertificatePath = p), Get = (Func<string?>)(() => model.ExperienceCertificatePath) },
-            new { File = model.TenthCertificate, Name = "10th Certificate", Ext = docExt, Set = (Action<string>)(p => model.TenthCertificatePath = p), Get = (Func<string?>)(() => model.TenthCertificatePath) },
-            new { File = model.TwelthCertificate, Name = "12th Certificate", Ext = docExt, Set = (Action<string>)(p => model.TwelthCertificatePath = p), Get = (Func<string?>)(() => model.TwelthCertificatePath) },
-            new { File = model.GraduationCertificate, Name = "Graduation Certificate", Ext = docExt, Set = (Action<string>)(p => model.GraduationCertificatePath = p), Get = (Func<string?>)(() => model.GraduationCertificatePath) },
-            new { File = model.MastersCertificate, Name = "Masters Certificate", Ext = docExt, Set = (Action<string>)(p => model.MastersCertificatePath = p), Get = (Func<string?>)(() => model.MastersCertificatePath) },
+            new { File = model.ProfilePic, Name = "Profile Picture", Ext = imgExt,
+                Set = (Action<string>)(p => model.ProfilePicPath = p),
+                Get = (Func<string?>)(() => model.ProfilePicPath) },
+
+            new { File = model.AadharImg, Name = "Aadhar Front Image", Ext = imgExt,
+                Set = (Action<string>)(p => model.AadharImgPath = p),
+                Get = (Func<string?>)(() => model.AadharImgPath) },
+
+            new { File = model.AadharBackImg, Name = "Aadhar Back Image", Ext = imgExt,
+                Set = (Action<string>)(p => model.AadharBackImgPath = p),
+                Get = (Func<string?>)(() => model.AadharBackImgPath) },
+
+            new { File = model.PanImg, Name = "PAN Front Image", Ext = imgExt,
+                Set = (Action<string>)(p => model.PanImgPath = p),
+                Get = (Func<string?>)(() => model.PanImgPath) },
+
+            new { File = model.PanBackImg, Name = "PAN Back Image", Ext = imgExt,
+                Set = (Action<string>)(p => model.PanBackImgPath = p),
+                Get = (Func<string?>)(() => model.PanBackImgPath) },
+
+            new { File = model.ExperienceCertificate, Name = "Experience Certificate", Ext = docExt,
+                Set = (Action<string>)(p => model.ExperienceCertificatePath = p),
+                Get = (Func<string?>)(() => model.ExperienceCertificatePath) },
+
+            new { File = model.TenthCertificate, Name = "10th Certificate", Ext = docExt,
+                Set = (Action<string>)(p => model.TenthCertificatePath = p),
+                Get = (Func<string?>)(() => model.TenthCertificatePath) },
+
+            new { File = model.TwelthCertificate, Name = "12th Certificate", Ext = docExt,
+                Set = (Action<string>)(p => model.TwelthCertificatePath = p),
+                Get = (Func<string?>)(() => model.TwelthCertificatePath) },
+
+            new { File = model.GraduationCertificate, Name = "Graduation Certificate", Ext = docExt,
+                Set = (Action<string>)(p => model.GraduationCertificatePath = p),
+                Get = (Func<string?>)(() => model.GraduationCertificatePath) },
+
+            new { File = model.MastersCertificate, Name = "Masters Certificate", Ext = docExt,
+                Set = (Action<string>)(p => model.MastersCertificatePath = p),
+                Get = (Func<string?>)(() => model.MastersCertificatePath) },
         };
 
-                // ---------- STEP 1: FILE VALIDATION ----------
+                // ================= STEP 1: FILE VALIDATION =================
                 foreach (var f in files)
                 {
-                    if (f.File == null) continue;
+                    // 🔥 FILE NULL → SKIP
+                    if (f.File == null)
+                        continue;
 
                     if (f.File.Length > maxSize)
                     {
@@ -257,11 +288,13 @@ namespace Macreel_Software.Server.Controllers
 
                     try
                     {
-                        f.Set(_fileUploadService.ValidateAndGeneratePath(
+                        var path = _fileUploadService.ValidateAndGeneratePath(
                             f.File,
                             "EmployeeFiles",
                             f.Ext
-                        ));
+                        );
+
+                        f.Set(path);
                     }
                     catch (Exception ex)
                     {
@@ -274,7 +307,7 @@ namespace Macreel_Software.Server.Controllers
                     }
                 }
 
-                // ---------- STEP 2: DB UPDATE ----------
+                // ================= STEP 2: DB UPDATE =================
                 bool isUpdated = await _services.UpdateEmployeeRegistrationData(model);
 
                 if (!isUpdated)
@@ -287,10 +320,11 @@ namespace Macreel_Software.Server.Controllers
                     });
                 }
 
-                // ---------- STEP 3: FILE UPLOAD ----------
+                // ================= STEP 3: FILE UPLOAD =================
                 foreach (var f in files)
                 {
-                    if (f.File == null) continue;
+                    if (f.File == null)
+                        continue;
 
                     try
                     {

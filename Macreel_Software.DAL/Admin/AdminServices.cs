@@ -170,10 +170,7 @@ namespace Macreel_Software.DAL.Admin
         }
 
 
-        public async Task<ApiResponse<List<employeeRegistration>>> GetAllEmpData(
-       string? searchTerm,
-       int? pageNumber,
-       int? pageSize)
+        public async Task<ApiResponse<List<employeeRegistration>>> GetAllEmpData(string? searchTerm,int? pageNumber,int? pageSize)
         {
             List<employeeRegistration> list = new List<employeeRegistration>();
             int totalRecords = 0;
@@ -498,18 +495,26 @@ namespace Macreel_Software.DAL.Admin
                     DataTable dtSkills = new DataTable();
                     dtSkills.Columns.Add("technolgyId", typeof(int));
 
-                    if (!string.IsNullOrEmpty(data.SkillIds))
+                    if (!string.IsNullOrWhiteSpace(data?.SkillIds))
                     {
-                        var ids = data.SkillIds.Split(',')
-                                                  .Select(s => int.Parse(s.Trim()));
+                        var ids = data.SkillIds
+                                      .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                                      .Select(s =>
+                                      {
+                                          int.TryParse(s.Trim(), out int val);
+                                          return val;
+                                      })
+                                      .Where(v => v > 0);
 
                         foreach (var id in ids)
                             dtSkills.Rows.Add(id);
                     }
 
-                    var param = cmd.Parameters.AddWithValue("@TechnologyIds", dtSkills);
-                    param.SqlDbType = SqlDbType.Structured;
+                    // Always pass DataTable (even if empty)
+                    var param = cmd.Parameters.Add("@TechnologyIds", SqlDbType.Structured);
                     param.TypeName = "dbo.TechnologyTableType";
+                    param.Value = dtSkills;
+
                     if (_conn.State == ConnectionState.Closed)
                         await _conn.OpenAsync();
 
