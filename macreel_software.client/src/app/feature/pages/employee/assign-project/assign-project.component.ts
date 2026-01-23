@@ -52,9 +52,9 @@ export class AssignProjectComponent implements OnInit {
         type: 'custom',
         template: this.filesTemplate
       }
-    ],[this.employeeColumns=[{ key: 'empName', label: 'Employee Name',width:'150px' },
-      { key: 'designation', label: 'Designation', width: '170px' },
-      { key: 'category', label: 'Category',width:'170px' }]];
+    ], [this.employeeColumns = [{ key: 'empName', label: 'Employee Name', width: '150px' },
+    { key: 'designation', label: 'Designation', width: '170px' },
+    { key: 'category', label: 'Category', width: '170px' }]];
 
     this.fetchProjects();
   }

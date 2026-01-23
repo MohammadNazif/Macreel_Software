@@ -163,6 +163,7 @@ export class AddEmployeeComponent implements OnInit {
   private loadTechnologies(): Promise<void> {
     return new Promise((resolve) => {
       this.masterService.getAllTechnology(1, 100).subscribe((res) => {
+        console.log("complte tech data", res)
         this.technologies = res?.data ?? [];
         resolve();
       });
@@ -269,10 +270,10 @@ export class AddEmployeeComponent implements OnInit {
   // ================= TECHNOLOGY CHIP LOGIC =================
 
   onTechnologySelected(event: MatAutocompleteSelectedEvent): void {
-    const techId = event.option.value;
-    const tech = this.technologies.find((t) => t.id === techId);
+    const id = event.option.value;
+    const tech = this.technologies.find((t) => t.id === id);
 
-    if (tech && !this.selectedTechnologies.some((t) => t.id === techId)) {
+    if (tech && !this.selectedTechnologies.some((t) => t.id === id)) {
       this.selectedTechnologies.push(tech);
 
       const ids = this.selectedTechnologies.map((t) => t.id);
@@ -337,13 +338,13 @@ export class AddEmployeeComponent implements OnInit {
 
           this.loadTechnologies().then(() => {
 
-            const skillIds = emp.skill.map((s: any) => s.techId);
+            const skillIds = emp.skill.map((s: any) => s.techid);
 
-            console.log("my tech ID",skillIds)
+            console.log("my tech ID", skillIds)
 
             // 🔥 FIX: Match by ID + Name (safe binding)
             this.selectedTechnologies = this.technologies.filter(t =>
-              skillIds.includes(t.techId) ||
+              skillIds.includes(t.id) ||
               emp.skill.some((s: any) => s.skillName === t.technologyName)
             );
 
@@ -483,15 +484,6 @@ export class AddEmployeeComponent implements OnInit {
     const formData = new FormData();
     const rawValue = this.employeeForm.getRawValue();
 
-    // Object.entries(rawValue).forEach(([key, value]) => {
-    //   if (value !== null && value !== undefined && value !== '') {
-    //     if (Array.isArray(value)) {
-    //       formData.append(key, value.join(','));
-    //     } else {
-    //       formData.append(key, value.toString());
-    //     }
-    //   }
-    // });
 
     const FILE_KEYS = ['profilePic', 'aadharImg', 'panImg'];
 

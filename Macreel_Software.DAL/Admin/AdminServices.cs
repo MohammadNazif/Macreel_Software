@@ -11,7 +11,6 @@ using System.Data;
 using System.Text.Json;
 
 
-
 namespace Macreel_Software.DAL.Admin
 {
 

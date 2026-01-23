@@ -470,7 +470,6 @@
         </div>
 
 
-
         <div *ngIf="showTechnologySection"
           class="relative  flex items-center w-full min-h-[48px] multiple-select-div mt-6">
           <mat-label class="tech-label">Technology</mat-label>
@@ -494,7 +493,7 @@
 
             <mat-autocomplete #auto="matAutocomplete" class="text-[12px]" panelClass="tech-dropdown-panel"
               (optionSelected)="onTechnologySelected($event)">
-              <mat-option *ngFor="let tech of technologies" [value]="tech.tech">
+              <mat-option *ngFor="let tech of technologies" [value]="tech.id">
                 {{ tech.technologyName }}
               </mat-option>
             </mat-autocomplete>
