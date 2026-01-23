@@ -99,6 +99,7 @@ export interface LeaveBalance {
   assignedLeave: number;
   usedLeave: number;
   remainingLeave: number;
+  carryforwardleave :number;
 }
 export interface Attendance {
    EmpCode : number;
