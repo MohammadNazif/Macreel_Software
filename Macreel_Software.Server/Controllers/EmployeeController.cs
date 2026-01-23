@@ -274,11 +274,11 @@ namespace Macreel_Software.Server.Controllers
         #region ASSIGNED PROJECT
 
         [HttpGet("AssignedProjectByEmpId")]
-        public async Task<IActionResult> AssignedProjectByEmpId()
+        public async Task<IActionResult> AssignedProjectByEmpId(string? searchTerm, int? pageNumber, int? pageSize)
         {
             try
             {
-                var result = await _service.assignedProjectByEmpId(_userId);
+                var result = await _service.assignedProjectByEmpId(_userId, searchTerm, pageNumber, pageSize);
                 return StatusCode(result.StatusCode, result);
             }
             catch (Exception ex)
