@@ -92,6 +92,7 @@ export interface TableColumn<T> {
   route?: string;           
   apiActions?: string[];    
   template?: TemplateRef<any>;
+  formatter?: (value: any, row?: T) => any;
 }
 export interface LeaveBalance {
   leaveType: string;
