@@ -35,7 +35,7 @@ export class EmployeeListComponent implements OnInit {
   }
   employee: TableColumn<any>[] = [
     { key: 'empCode', label: 'Emp Code',align:'center' },
-    { key: 'empName', label: 'Emp Name' },
+    { key: 'empName', label: 'Emp Name',clickable:true,route:'/home/admin/employee-details' },
     { key: 'designationName', label: 'Designation' },
     { key: 'emailId', label: 'Email' },
     { key: 'mobile', label: 'Mobile',align:'center' }
@@ -46,7 +46,7 @@ export class EmployeeListComponent implements OnInit {
     this.getEmployees();
   }
   getEmployees(pageNumber: number = 1, pageSize: number = this.pageSize, searchText: string = this.searchText) {
-    this.employeeService.getAllEmployees(pageNumber, pageSize, searchText).subscribe((res: any) => {
+    this.employeeService.getAllEmployees(null, null, '').subscribe((res: any) => {
       if (res.success) {
         this.data = res.data;
         this.totalRecords = res.totalRecords || res.data.length; 
