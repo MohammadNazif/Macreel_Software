@@ -1,2 +1,16 @@
 ﻿
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+
+/* Apply scrollbar to any div that contains a table and has overflow */
+div:has(table) {
+  scrollbar-width: thin;
+  scrollbar-color: #c1c1c1 #f1f1f1;
+}
+
+div:has(table)::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+/* And so on... */

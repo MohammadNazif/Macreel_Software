@@ -8,12 +8,65 @@
     </form>
   </div>
 
- <app-generic-table
-  [columns]="projectColumns"
-  [data]="paginator.items"
-  [loading]="paginator.loading"
-  (edit)="edit($event)"
-  (delete)="Delete($event)"
-  (tableScroll)="onScroll($event)">
-</app-generic-table>
+  <app-generic-table [columns]="projectColumns" [data]="paginator.items" [loading]="paginator.loading"
+    (edit)="edit($event)" (delete)="Delete($event)" (tableScroll)="onScroll($event)">
+  </app-generic-table>
+</div>
+
+<ng-template #filesTemplate let-row>
+  <button class="w-auto h-7 flex items-center justify-center rounded
+           text-gray-600 hover:text-blue-600 hover:bg-gray-100" (click)="openEmployeeModal()">
+    {{ row.appEmpName }}
+  </button>
+</ng-template>
+
+<div class="bg-white rounded-2xl shadow-sm mt-1 px-4 md:px-6 py-4 md:mx-auto max-w-6xl font-[Poppins]">
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-3">
+    <h2 class="text-sm font-semibold text-gray-700">Project List</h2>
+    <form [formGroup]="searchForm" class="relative w-full md:w-60">
+      <input type="text" formControlName="search" placeholder="Search projects"
+        class="w-full h-8 rounded-lg border border-gray-300 pl-8 pr-3 text-[12px] text-gray-700 placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-[#dd3d4f] focus:border-[#dd3d4f]" />
+    </form>
+  </div>
+
+  <app-generic-table [columns]="projectColumns" [data]="paginator.items" [loading]="paginator.loading"
+    (edit)="edit($event)">
+  </app-generic-table>
+</div>
+
+<!-- Employee Button Template -->
+<ng-template #filesTemplate let-row>
+  <button class="w-auto h-7 flex items-center justify-center rounded
+                 text-gray-600 hover:text-blue-600 hover:bg-gray-100" (click)="openEmployeeModal()">
+    {{ row.appEmpName }}
+  </button>
+</ng-template>
+
+<ng-template #iconsTemplate let-employee>
+  <button 
+    class="p-1 text-gray-600 hover:text-red-500 hover:bg-gray-100 rounded"
+    (click)="edit(employee)">
+    <!-- Pencil Icon -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+      <path d="M17.414 2.586a2 2 0 010 2.828l-10 10A2 2 0 016 16H3a1 1 0 01-1-1v-3a2 2 0 01.586-1.414l10-10a2 2 0 012.828 0z" />
+    </svg>
+  </button>
+</ng-template>
+
+<!-- Employee Modal (Static Design) -->
+<div *ngIf="showEmployeeModal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+  <div class="bg-white w-[600px] rounded-xl shadow-xl flex flex-col">
+    <div class="flex justify-between items-center px-4 py-2 border-b">
+      <h3 class="font-semibold">Employees List</h3>
+      <button (click)="closeModal()">✕</button>
+    </div>
+
+    <div class="p-4 max-h-[400px] overflow-auto">
+      <app-generic-table 
+        [columns]="employeeColumns" 
+        [data]="selectedEmployees" 
+        [showActions]="false">
+      </app-generic-table>
+    </div>
+  </div>
 </div>

@@ -43,7 +43,7 @@
 </div>
 
 <!-- ================= Summary Cards ================= -->
-<div *ngIf="attendanceSummary" class="grid grid-cols-2 ms-1 md:grid-cols-4 gap-4 mb-3">
+<div *ngIf="attendanceSummary" class="grid grid-cols-2 ms-1 md:grid-cols-5 gap-4 mb-3">
 
   <div class="bg-white shadow rounded-xl p-4 text-center">
     <p class="text-gray-500 text-sm">Total Working Days</p>
@@ -63,6 +63,10 @@
   <div class="bg-yellow-50 shadow rounded-xl p-4 text-center">
     <p class="text-yellow-600 text-sm">Half Day</p>
     <h3 class="text-yellow-800 font-semibold text-lg">{{ attendanceSummary.halfDays }}</h3>
+  </div>
+   <div class="bg-purple-50 shadow rounded-xl p-4 text-center">
+    <p class="text-purple-600 text-sm">Late Entries</p>
+    <h3 class="text-purple-800 font-semibold text-lg">{{ attendanceSummary.lateEntries }}</h3>
   </div>
 
 </div>
