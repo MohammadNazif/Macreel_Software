@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ProjectService } from '../../../../core/services/project-service.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
@@ -6,7 +6,6 @@ import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { Project, TableColumn } from '../../../../core/models/interface';
 import { PaginatedList } from '../../../../core/utils/paginated-list';
-
 
 @Component({
   selector: 'app-view-project',
@@ -16,20 +15,36 @@ import { PaginatedList } from '../../../../core/utils/paginated-list';
 })
 export class ViewProjectComponent implements OnInit {
 
-  searchForm!: FormGroup;
-  paginator!: PaginatedList<Project>;
+  @ViewChild('iconsTemplate', { static: true })
+  iconsTemplate!: TemplateRef<any>;
 
-  projectColumns: TableColumn<Project>[] = [
-    { key: 'projectTitle', label: 'Project', clickable: true, route: '/home/admin/project-details' },
-    { key: 'category', label: 'Category' },
-    { key: 'startDate', label: 'Start Date', type: 'date',align:'center' },
-    { key: 'completionDate', label: 'Completion Date', type: 'date',align:'center' },
-    { key: 'endDate', label: 'End Date', type: 'date',align:'center' },
-    { key: 'appEmpName', label: 'App Employee' },
-    { key: 'webEmpName', label: 'Web Employee' },
-    { key: 'delayedDays', label: 'Delay', align: 'center' }
+  showEmployeeModal = false;
+  selectedEmployees: any[] = [];
+
+  // Static dummy employees (design only)
+  employees = [
+    { empName: 'John Doe', designation: 'Developer', category: 'Web' },
+    { empName: 'Jane Smith', designation: 'Tester', category: 'App' },
+    { empName: 'Michael Johnson', designation: 'Manager', category: 'Web' },
   ];
 
+  // Employee table columns for modal
+  employeeColumns: TableColumn<any>[] = [
+    { key: 'empName', label: 'Employee Name', width: '15%' },
+    { key: 'designation', label: 'Designation', width: '15%' },
+    { key: 'category', label: 'Category', width: '10%' },
+    {
+      key: 'actions',
+      label: 'Actions',
+      type: 'custom',
+      template: this.iconsTemplate
+    }
+  ];
+
+  searchForm!: FormGroup;
+  paginator!: PaginatedList<Project>;
+  @ViewChild('filesTemplate', { static: true }) filesTemplate!: TemplateRef<any>;
+  projectColumns: TableColumn<Project>[] = []
   constructor(
     private readonly fb: FormBuilder,
     private readonly projectService: ProjectService,
@@ -38,6 +53,22 @@ export class ViewProjectComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.projectColumns = [
+      { key: 'projectTitle', label: 'Project', clickable: true, route: '/home/admin/project-details' },
+      { key: 'category', label: 'Category' },
+      { key: 'startDate', label: 'Start Date', type: 'date', align: 'center' },
+      { key: 'endDate', label: 'End Date', type: 'date', align: 'center' },
+      { key: 'completionDate', label: 'Completion Date', type: 'date', align: 'center' },
+      {
+        key: 'appEmpName',
+        label: 'App Employee',
+        align: 'right',
+        type: 'custom',
+        template: this.filesTemplate
+      },
+      { key: 'webEmpName', label: 'Web Employee' },
+      // { key: 'delayedDays', label: 'Delay', align: 'center' }
+    ];
     this.searchForm = this.fb.group({
       search: ['']
     });
@@ -65,6 +96,17 @@ export class ViewProjectComponent implements OnInit {
     this.paginator.handleScroll(event, this.searchForm.value.search);
   }
 
+  openEmployeeModal() {
+    // list ko set kar do
+    this.selectedEmployees = [...this.employees];
+    this.showEmployeeModal = true;
+  }
+
+  closeModal() {
+    this.showEmployeeModal = false;
+    this.selectedEmployees = [];
+  }
+
   edit(emp: any) {
     this.router.navigate(
       ['/home/admin/add-project'],
@@ -74,6 +116,9 @@ export class ViewProjectComponent implements OnInit {
     );
   }
 
+  openFiles(docs: string[] = []) {
+    if (!docs.length) return;
+  }
   Delete(p: Project): void {
     Swal.fire({
       title: 'Are you sure?',
