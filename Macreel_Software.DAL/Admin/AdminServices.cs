@@ -1394,6 +1394,7 @@ namespace Macreel_Software.DAL.Admin
                                 sopDocumentPath = sdr["sopDocument"] != DBNull.Value ? sdr["sopDocument"].ToString():null,
                                 technicalDocumentPath = sdr["technicalDocument"] != DBNull.Value ? sdr["technicalDocument"].ToString():null,
                                 delayedDays = sdr["DelayedDays"] != DBNull.Value ? Convert.ToInt32(sdr["DelayedDays"]) : null,
+                                projectStatus = sdr["projectStatus"] != DBNull.Value ? sdr["projectStatus"].ToString():null,
                             });
                         }
                     }
@@ -1875,45 +1876,60 @@ namespace Macreel_Software.DAL.Admin
 
         #region assigned project emp list
 
-        //public async Task<ApiResponse<List<AssignedProjectEmpListDto>>> assignedProjectEmpList(int projectId, int addedBy)
-        //{
-        //    List<AssignedProjectEmpListDto> list = new List<AssignedProjectEmpListDto>();
-        //    try
-        //    {
-        //        SqlCommand cmd = new SqlCommand("sp_addAndAssignProject", _conn);
-        //        cmd.CommandType = CommandType.StoredProcedure;
-        //        cmd.Parameters.AddWithValue("@action", "getEmpListForAssignedProject");
-        //        cmd.Parameters.AddWithValue("@projectId", projectId);
-        //        cmd.Parameters.AddWithValue("@addedBy", addedBy);
-        //        if (_conn.State == ConnectionState.Closed)
-        //            await _conn.OpenAsync();
+        public async Task<ApiResponse<List<AssignedProjectEmpListDto>>> assignedProjectEmpList(int projectId, int pmId)
+        {
+            List<AssignedProjectEmpListDto> list = new List<AssignedProjectEmpListDto>();
+            try
+            {
+                SqlCommand cmd = new SqlCommand("sp_addAndAssignProject", _conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@action", "getEmpListForAssignedProject");
+                cmd.Parameters.AddWithValue("@projectId", projectId);
+                cmd.Parameters.AddWithValue("@pmId", pmId);
+                if (_conn.State == ConnectionState.Closed)
+                    await _conn.OpenAsync();
 
-        //        using(SqlDataReader sdr=await cmd.ExecuteReaderAsync())
-        //        {
-        //            if(sdr.HasRows)
-        //            {
-        //                while(await sdr.ReadAsync())
-        //                {
-        //                    list.Add(new AssignedProjectEmpListDto
-        //                    {
-        //                        id = sdr["id"] != DBNull.Value ? Convert.ToInt32(sdr[""]):null,
-        //                        projectId = sdr[""] != DBNull.Value ? Convert.ToInt32(sdr[""]):null,
-        //                        empId = sdr[""] != DBNull.Value ? Convert.ToInt32(sdr[""]):null,
-        //                        approveStatus = sdr[""] != DBNull.Value ? Convert.ToInt32(sdr[""]):null,
-        //                    });
-        //                }
-        //            }
-        //        }
-        //    }
-        //    catch
-        //    {
+                using (SqlDataReader sdr = await cmd.ExecuteReaderAsync())
+                {
+                    if (sdr.HasRows)
+                    {
+                        while (await sdr.ReadAsync())
+                        {
+                            list.Add(new AssignedProjectEmpListDto
+                            {
+                                id = sdr["id"] != DBNull.Value ? Convert.ToInt32(sdr["id"]) : null,
+                                projectId = sdr["projectId"] != DBNull.Value ? Convert.ToInt32(sdr["projectId"]) : null,
+                                empId = sdr["empId"] != DBNull.Value ? Convert.ToInt32(sdr["empId"]) : null,
+                                approveStatus = sdr["approveStatus"] != DBNull.Value ? Convert.ToInt32(sdr["approveStatus"]) : null,
+                                empName = sdr["empName"] != DBNull.Value ? sdr["empName"].ToString():null,
+                                designationName = sdr["designationName"] != DBNull.Value ? sdr["designationName"].ToString():null
+                            });
+                        }
+                    }
+                }
+                return ApiResponse<List<AssignedProjectEmpListDto>>.SuccessResponse(
+                list,
+                "Assigned Project All emp list fetched successfully!!"
+            );
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<List<AssignedProjectEmpListDto>>.FailureResponse(
+                  ex.Message,
+                  500,
+                  "ASSIGN_PROJECT_EMP_LIST_FETCH_ERROR"
+              );
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    await _conn.CloseAsync();
+            }
 
-        //    }
-        //    finally
-        //    {
-
-        //    }
-        //}
+        }
+            
+          
+        
 
         #endregion
     }

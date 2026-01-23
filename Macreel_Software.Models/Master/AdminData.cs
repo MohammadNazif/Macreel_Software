@@ -221,6 +221,7 @@ namespace Macreel_Software.Models.Master
         public string? webTechnologyName { get; set; }
         public string? appEmpName { get; set; }
         public string? webEmpName { get; set; }
+        public string? projectStatus { get; set; }
         public int? delayedDays { get; set; }
     }
 

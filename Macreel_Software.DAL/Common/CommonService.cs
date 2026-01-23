@@ -395,6 +395,7 @@ namespace Macreel_Software.DAL.Common
                     cmd.Parameters.AddWithValue("@action", "insertProjectEmp");
                     cmd.Parameters.AddWithValue("@projectId", data.projectId);
                     cmd.Parameters.AddWithValue("@empId", empId);
+                    cmd.Parameters.AddWithValue("@pmId", data.pmId);
                     cmd.Parameters.AddWithValue("@addedBy", addedBy);
 
                     int rows = await cmd.ExecuteNonQueryAsync();

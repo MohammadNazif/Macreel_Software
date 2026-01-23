@@ -46,5 +46,6 @@ namespace Macreel_Software.DAL.Admin
         Task<bool> UpdateLeaveRequest(int id, int status, string reason = null);
 
         Task<ApiResponse<List<AdminDashboardCountDto>>> adminDashboardCount();
+        Task<ApiResponse<List<AssignedProjectEmpListDto>>> assignedProjectEmpList(int projectId, int pmId);
     }
 }

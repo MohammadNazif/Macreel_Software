@@ -468,7 +468,7 @@ namespace Macreel_Software.DAL.Employee
 
         #region assigned project
 
-        public async Task<ApiResponse<List<AssignedProjectDto>>> assignedProjectByEmpId(int empId)
+        public async Task<ApiResponse<List<AssignedProjectDto>>> assignedProjectByEmpId(int empId, string? searchTerm,int? pageNumber, int? pageSize)
         {
             List<AssignedProjectDto> list = new List<AssignedProjectDto>();
             try
@@ -477,6 +477,9 @@ namespace Macreel_Software.DAL.Employee
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@action", "AssignedProjectByEmpId");
                 cmd.Parameters.AddWithValue("@empId", empId);
+                cmd.Parameters.AddWithValue("@searchTerm",string.IsNullOrWhiteSpace(searchTerm) ? (object)DBNull.Value : searchTerm);
+                cmd.Parameters.AddWithValue("@pageNumber",pageNumber.HasValue ? (object)pageNumber.Value : DBNull.Value);
+                cmd.Parameters.AddWithValue("@pageSize",pageSize.HasValue ? (object)pageSize.Value : DBNull.Value);
                 if (_conn.State == ConnectionState.Closed)
                     await _conn.OpenAsync();
 
