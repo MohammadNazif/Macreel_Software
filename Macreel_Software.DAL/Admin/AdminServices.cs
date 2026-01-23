@@ -6,6 +6,7 @@ using Macreel_Software.Services.AttendanceUpload;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Identity.Client;
 using System.Data;
 using System.Text.Json;
 
@@ -492,34 +493,35 @@ namespace Macreel_Software.DAL.Admin
                         (object?)data.MastersCertificatePath ?? DBNull.Value);
 
                     // ✅ Convert comma-separated SkillIdsCsv to DataTable for TVP
-                    DataTable dtSkills = new DataTable();
-                    dtSkills.Columns.Add("technolgyId", typeof(int));
+                    //DataTable dtSkills = new DataTable();
+                    //dtSkills.Columns.Add("technolgyId", typeof(int));
 
-                    if (!string.IsNullOrWhiteSpace(data?.SkillIds))
-                    {
-                        var ids = data.SkillIds
-                                      .Split(',', StringSplitOptions.RemoveEmptyEntries)
-                                      .Select(s =>
-                                      {
-                                          int.TryParse(s.Trim(), out int val);
-                                          return val;
-                                      })
-                                      .Where(v => v > 0);
+                    //if (!string.IsNullOrWhiteSpace(data.SkillIds))
+                    //{
+                    //    var ids = data.SkillIds
+                    //                  .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                    //                  .Select(s => int.TryParse(s.Trim(), out int v) ? v : 0)
+                    //                  .Where(v => v > 0);
 
-                        foreach (var id in ids)
-                            dtSkills.Rows.Add(id);
-                    }
+                    //    foreach (var id in ids)
+                    //        dtSkills.Rows.Add(id);
+                    //}
 
-                    // Always pass DataTable (even if empty)
-                    var param = cmd.Parameters.Add("@TechnologyIds", SqlDbType.Structured);
-                    param.TypeName = "dbo.TechnologyTableType";
-                    param.Value = dtSkills;
+                    //var tvp = cmd.Parameters.Add("@TechnologyIds", SqlDbType.Structured);
+                    //tvp.TypeName = "dbo.TechnologyTableType";
+                    //tvp.Value = dtSkills;
 
                     if (_conn.State == ConnectionState.Closed)
                         await _conn.OpenAsync();
 
                     object result = await cmd.ExecuteScalarAsync();
+                    int res = 0;
+                    if (data != null && !string.IsNullOrEmpty(data.SkillIds) && Convert.ToInt32(result)>0)
+                        res = await UpdateSkills(data.SkillIds, data.Id);
                     return Convert.ToBoolean(result);
+                   
+
+
                 }
             }
             catch (Exception ex)
@@ -531,6 +533,47 @@ namespace Macreel_Software.DAL.Admin
                 if (_conn.State == ConnectionState.Open)
                     _conn.Close();
             }
+        }
+
+
+        private async Task<int> UpdateSkills(string sk, int empId)
+        {
+            if (string.IsNullOrWhiteSpace(sk))
+                return 0;
+
+            int totalAffectedRows = 0;
+
+            try
+            {
+                var ids = sk.Split(',').Select(s => int.Parse(s.Trim()));
+
+                if (_conn.State == ConnectionState.Closed)
+                    await _conn.OpenAsync();
+
+                foreach (var id in ids)
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_employee", _conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@action", "UpdateSkills");
+                        cmd.Parameters.AddWithValue("@technologyId", id);
+                        cmd.Parameters.AddWithValue("@id", empId);
+
+                        totalAffectedRows += await cmd.ExecuteNonQueryAsync();
+                    }
+                }
+            }
+            catch
+            {
+                throw;
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    await _conn.CloseAsync();
+            }
+
+            return totalAffectedRows;
         }
 
         #endregion
@@ -1827,6 +1870,51 @@ namespace Macreel_Software.DAL.Admin
                     await _conn.CloseAsync();
             }
         }
+
+        #endregion
+
+
+        #region assigned project emp list
+
+        //public async Task<ApiResponse<List<AssignedProjectEmpListDto>>> assignedProjectEmpList(int projectId, int addedBy)
+        //{
+        //    List<AssignedProjectEmpListDto> list = new List<AssignedProjectEmpListDto>();
+        //    try
+        //    {
+        //        SqlCommand cmd = new SqlCommand("sp_addAndAssignProject", _conn);
+        //        cmd.CommandType = CommandType.StoredProcedure;
+        //        cmd.Parameters.AddWithValue("@action", "getEmpListForAssignedProject");
+        //        cmd.Parameters.AddWithValue("@projectId", projectId);
+        //        cmd.Parameters.AddWithValue("@addedBy", addedBy);
+        //        if (_conn.State == ConnectionState.Closed)
+        //            await _conn.OpenAsync();
+
+        //        using(SqlDataReader sdr=await cmd.ExecuteReaderAsync())
+        //        {
+        //            if(sdr.HasRows)
+        //            {
+        //                while(await sdr.ReadAsync())
+        //                {
+        //                    list.Add(new AssignedProjectEmpListDto
+        //                    {
+        //                        id = sdr["id"] != DBNull.Value ? Convert.ToInt32(sdr[""]):null,
+        //                        projectId = sdr[""] != DBNull.Value ? Convert.ToInt32(sdr[""]):null,
+        //                        empId = sdr[""] != DBNull.Value ? Convert.ToInt32(sdr[""]):null,
+        //                        approveStatus = sdr[""] != DBNull.Value ? Convert.ToInt32(sdr[""]):null,
+        //                    });
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch
+        //    {
+
+        //    }
+        //    finally
+        //    {
+
+        //    }
+        //}
 
         #endregion
     }
