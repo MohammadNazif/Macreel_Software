@@ -36,7 +36,8 @@ const routes: Routes = [
   {path:'leave-requests',component:LeaveRequestsComponent},
   {path:'master',loadChildren:()=>import('./masters/masters.module').then(n=>n.MastersModule)},
   {path:'project-details',component:ProjectDetailsComponent},
-   {path:'employee-details',component:EmployeeDetailsComponent}
+   {path:'employee-details',component:EmployeeDetailsComponent},
+    {path:'employee-details',component:EmployeeDetailsComponent}
 ];
 
 @NgModule({

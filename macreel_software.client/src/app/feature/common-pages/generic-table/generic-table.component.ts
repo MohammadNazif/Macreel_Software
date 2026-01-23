@@ -11,7 +11,11 @@ import { Router } from '@angular/router';
   providers: [DatePipe]   // ✅ DatePipe provider
 })
 export class GenericTableComponent<T> {
-
+ 
+  @Input() tableWidth: string = '100%';
+  @Input() tableMinWidth: string = '950px';
+   @Input() tableMaxWidth: string = '1150px';
+   
   @Input() columns: TableColumn<T>[] = [];
   @Input() data: T[] = [];
   @Input() loading = false;
