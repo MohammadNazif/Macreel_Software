@@ -1071,5 +1071,28 @@ namespace Macreel_Software.Server.Controllers
         #endregion
 
 
+        #region assignedProjectEmpList
+
+        [HttpGet("AllEmpListAssignedProject")]
+        public async Task<IActionResult> AllEmpListAssignedProject(int projectId,int pmId)
+        {
+            try
+            {
+                ApiResponse<List<AssignedProjectEmpListDto>> result =
+                    await _services.assignedProjectEmpList(projectId, pmId);
+
+
+                return StatusCode(result.StatusCode, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<List<AssignedProjectEmpListDto>>.FailureResponse(
+                    "An error occurred while fetching all emp list assigned project",
+                    500,
+                    "SERVER_ERROR"
+                ));
+            }
+        }
+        #endregion
     }
 }

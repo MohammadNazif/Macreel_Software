@@ -75,6 +75,7 @@ namespace Macreel_Software.Models.Common
     public class ProjectEmp
     {
         public int? projectId { get; set; }
+        public int? pmId { get; set; }
         public string? empIds { get; set; }   
     }
 
