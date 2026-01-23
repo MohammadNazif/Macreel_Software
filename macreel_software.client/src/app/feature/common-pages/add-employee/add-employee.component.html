@@ -276,6 +276,7 @@
             <option value="" disabled hidden></option>
 
             <option value="Married">Married</option>
+            <option value="Married">Unmarried</option>
             <option value="Divorced">Divorced</option>
             <option value="Widowed">Widowed</option>
           </select>
@@ -493,7 +494,7 @@
 
             <mat-autocomplete #auto="matAutocomplete" class="text-[12px]" panelClass="tech-dropdown-panel"
               (optionSelected)="onTechnologySelected($event)">
-              <mat-option *ngFor="let tech of technologies" [value]="tech.id">
+              <mat-option *ngFor="let tech of technologies" [value]="tech.tech">
                 {{ tech.technologyName }}
               </mat-option>
             </mat-autocomplete>

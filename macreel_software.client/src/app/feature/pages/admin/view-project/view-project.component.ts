@@ -18,6 +18,7 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
 
   @ViewChild('iconsTemplate', { static: true }) iconsTemplate!: TemplateRef<any>;
   @ViewChild('filesTemplate', { static: true }) filesTemplate!: TemplateRef<any>;
+    @ViewChild('webTemplate', { static: true }) webTemplate!: TemplateRef<any>;
 
   showEmployeeModal = false;
   selectedEmployees: any[] = [];
@@ -69,7 +70,7 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
         label: 'Web Employee',
         align: 'right',
         type: 'custom',
-        template: this.filesTemplate
+        template: this.webTemplate
       }
     ];
     this.employeeColumns = [
@@ -128,41 +129,41 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
     }
   }
 
- 
+
   onAddEmployeeClick() {
-  this.showEmployeeDropdown = !this.showEmployeeDropdown;
+    this.showEmployeeDropdown = !this.showEmployeeDropdown;
 
-  if (this.showEmployeeDropdown && this.allEmployees.length === 0) {
-    this.fetchEmployees();
+    if (this.showEmployeeDropdown && this.allEmployees.length === 0) {
+      this.fetchEmployees();
+    }
   }
-}
 
-fetchEmployees() {
-  this.loadingEmployees = true;
+  fetchEmployees() {
+    this.loadingEmployees = true;
 
-  this.employeeService.getAllEmployees(1, 50, '')
-    .subscribe(res => {
-      if (res.success) {
-        this.allEmployees = res.data;
-      }
-      this.loadingEmployees = false;
-    });
-}
-
-addChip(emp: any) {
-  if (!this.selectedEmployees.some(e => e.id === emp.id)) {
-    this.selectedEmployees.push({
-      id: emp.id,
-      empName: emp.empName,
-      designation: emp.designationName,
-      status: 1
-    });
+    this.employeeService.getAllEmployees(1, 50, '')
+      .subscribe(res => {
+        if (res.success) {
+          this.allEmployees = res.data;
+        }
+        this.loadingEmployees = false;
+      });
   }
-}
 
-removeChip(emp: any) {
-  this.selectedEmployees = this.selectedEmployees.filter(e => e.id !== emp.id);
-}
+  addChip(emp: any) {
+    if (!this.selectedEmployees.some(e => e.id === emp.id)) {
+      this.selectedEmployees.push({
+        id: emp.id,
+        empName: emp.empName,
+        designation: emp.designationName,
+        status: 1
+      });
+    }
+  }
+
+  removeChip(emp: any) {
+    this.selectedEmployees = this.selectedEmployees.filter(e => e.id !== emp.id);
+  }
 
   openEmployeedataModal() {
     this.employeeTableData = [...this.selectedEmployees]; // table stays same
