@@ -34,19 +34,17 @@ export class EmployeeListComponent implements OnInit {
     this.router.navigate(['/home/edit-employee', emp.id]);
   }
   employee: TableColumn<any>[] = [
-    { key: 'empCode', label: 'Emp Code' },
+    { key: 'empCode', label: 'Emp Code',align:'center' },
     { key: 'empName', label: 'Emp Name' },
     { key: 'designationName', label: 'Designation' },
     { key: 'emailId', label: 'Email' },
-    { key: 'mobile', label: 'Mobile' }
+    { key: 'mobile', label: 'Mobile',align:'center' }
 
 
   ]
   ngOnInit(): void {
     this.getEmployees();
   }
-
-  // Fetch employees from API via service
   getEmployees(pageNumber: number = 1, pageSize: number = this.pageSize, searchText: string = this.searchText) {
     this.employeeService.getAllEmployees(pageNumber, pageSize, searchText).subscribe((res: any) => {
       if (res.success) {
@@ -59,26 +57,17 @@ export class EmployeeListComponent implements OnInit {
       console.error('Error fetching employees', err);
     });
   }
-
-  // Search input
   applyFilter(event: any) {
     this.searchText = event.target.value.trim();
     this.pageIndex = 0; // reset to first page when searching
     this.getEmployees(1, this.pageSize, this.searchText);
   }
 
-  // Paginator change
   onPageChange(event: PageEvent) {
     this.pageIndex = event.pageIndex;
     this.pageSize = event.pageSize;
     this.getEmployees(this.pageIndex + 1, this.pageSize, this.searchText);
   }
-
-  // editEmployee(emp: any) {
-  //   console.log('Edit', emp);
-  //   // Open edit modal or navigate to edit page
-  // }
-
 
   deleteEmployee(id: any) {
     console.log('Delete', id);
@@ -105,7 +94,7 @@ export class EmployeeListComponent implements OnInit {
                 icon: 'success',
                 confirmButtonText: 'OK'
               }).then(() => {
-                // 🔄 FULL PAGE REFRESH
+                
                 window.location.reload();
               });
 
