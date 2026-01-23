@@ -14,7 +14,7 @@ export class GenericTableComponent<T> {
  
   @Input() tableWidth: string = '100%';
   @Input() tableMinWidth: string = '950px';
-   @Input() tableMaxWidth: string = '1150px';
+   @Input() tableMaxWidth: string = '100%'
    
   @Input() columns: TableColumn<T>[] = [];
   @Input() data: T[] = [];

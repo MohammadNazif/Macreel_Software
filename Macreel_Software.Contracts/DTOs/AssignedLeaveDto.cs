@@ -12,6 +12,7 @@ namespace Macreel_Software.Contracts.DTOs
         public int AssignedLeave { get; set; }      // assignedLeave
         public int UsedLeave { get; set; }          // usedLeave
         public int RemainingLeave { get; set; }     // remainingLeave
+        public int ELCarryForward { get; set; }     // remainingLeave
     }
 
 

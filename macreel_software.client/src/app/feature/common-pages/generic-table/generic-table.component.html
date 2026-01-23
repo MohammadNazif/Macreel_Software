@@ -1,12 +1,11 @@
 <div class="relative overflow-x-auto overflow-y-auto mb-2 ms-1 rounded-lg border border-gray-200"
-     [style.width]="tableWidth"
+    
      style="max-height: 72vh;"
      (scroll)="onScroll($event)">
 
-  <table class="w-full  text-[12px] text-left border-collapse"
+  <table class="w-full whitespace-nowrap text-[12px] text-left border-collapse"
             [style.max-width]="tableMaxWidth">
 
-    <!-- Table Header -->
     <thead class="sticky top-0 z-10 bg-[#dd3d4f]">
       <tr class="text-white border-b border-[#ccc]">
 

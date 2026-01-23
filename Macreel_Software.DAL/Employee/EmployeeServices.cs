@@ -153,7 +153,8 @@ namespace Macreel_Software.DAL.Employee
                         LeaveType = sdr["leaveType"].ToString(),
                         AssignedLeave = Convert.ToInt32(sdr["assignedLeave"]),
                         UsedLeave = Convert.ToInt32(sdr["usedLeave"]),
-                        RemainingLeave = Convert.ToInt32(sdr["remainingLeave"])
+                        RemainingLeave = Convert.ToInt32(sdr["remainingLeave"]),
+                        ELCarryForward = Convert.ToInt32(sdr["ELCarryForward"])
                     });
                 }
 
