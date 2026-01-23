@@ -176,24 +176,19 @@
 
         </div>
 
-       <app-generic-table
-       [columns]="leave"
-       [data]="dataSource.data"
-       [showActions]="false">
-  
-       </app-generic-table>
-        
+        <app-generic-table [columns]="leave" [data]="dataSource.data" [showActions]="false">
+
+        </app-generic-table>
+
     </div>
 </div>
 
 <ng-template #statustemplate let-row>
-  <button class="px-2 py-1 text-xs rounded"
-          [ngClass]="{
+    <button class="px-2 py-1 text-xs rounded" [ngClass]="{
             'text-green-600': row.status === 'Approved',
             'text-red-600': row.status === 'Unapproved',
             'text-gray-600': row.status === 'Pending'
-          }"
-          >
-    {{ row.status }}
-  </button>
+          }">
+        {{ row.status }}
+    </button>
 </ng-template>

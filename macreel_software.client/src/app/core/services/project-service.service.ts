@@ -34,6 +34,7 @@ export class ProjectService {
   getAssignedProjectsByEmp(): Observable<Project[]> {
     return this.http.get<Project[]>(`${this.baseUrl}Employee/AssignedProjectByEmpId`);
   }
+  
   assignProjectToEmp(payload: {
     projectId: number;
     empIds: string;
