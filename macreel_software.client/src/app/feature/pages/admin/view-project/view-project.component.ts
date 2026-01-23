@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ProjectService } from '../../../../core/services/project-service.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
@@ -13,46 +13,34 @@ import { PaginatedList } from '../../../../core/utils/paginated-list';
   templateUrl: './view-project.component.html',
   styleUrls: ['./view-project.component.css']
 })
-export class ViewProjectComponent implements OnInit {
+export class ViewProjectComponent implements OnInit, AfterViewInit {
 
-  @ViewChild('iconsTemplate', { static: true })
-  iconsTemplate!: TemplateRef<any>;
+  @ViewChild('iconsTemplate', { static: true }) iconsTemplate!: TemplateRef<any>;
+  @ViewChild('filesTemplate', { static: true }) filesTemplate!: TemplateRef<any>;
 
   showEmployeeModal = false;
   selectedEmployees: any[] = [];
 
-  // Static dummy employees (design only)
+  // Static dummy employees
   employees = [
-    { empName: 'John Doe', designation: 'Developer', category: 'Web' },
-    { empName: 'Jane Smith', designation: 'Tester', category: 'App' },
-    { empName: 'Michael Johnson', designation: 'Manager', category: 'Web' },
-  ];
-
-  // Employee table columns for modal
-  employeeColumns: TableColumn<any>[] = [
-    { key: 'empName', label: 'Employee Name', width: '15%' },
-    { key: 'designation', label: 'Designation', width: '15%' },
-    { key: 'category', label: 'Category', width: '10%' },
-    {
-      key: 'actions',
-      label: 'Actions',
-      type: 'custom',
-      template: this.iconsTemplate
-    }
+    { empName: 'John Doe', designation: 'Developer' },
+    { empName: 'Jane Smith', designation: 'Tester' },
+    { empName: 'Michael Johnson', designation: 'Manager' },
   ];
 
   searchForm!: FormGroup;
   paginator!: PaginatedList<Project>;
-  @ViewChild('filesTemplate', { static: true }) filesTemplate!: TemplateRef<any>;
-  projectColumns: TableColumn<Project>[] = []
+  projectColumns: TableColumn<Project>[] = [];
+  employeeColumns!: TableColumn<any>[]; // assign in ngAfterViewInit
+
   constructor(
     private readonly fb: FormBuilder,
     private readonly projectService: ProjectService,
     private readonly router: Router
-
-  ) { }
+  ) {}
 
   ngOnInit(): void {
+    // Project table columns
     this.projectColumns = [
       { key: 'projectTitle', label: 'Project', clickable: true, route: '/home/admin/project-details' },
       { key: 'category', label: 'Category' },
@@ -66,12 +54,26 @@ export class ViewProjectComponent implements OnInit {
         type: 'custom',
         template: this.filesTemplate
       },
-      { key: 'webEmpName', label: 'Web Employee' },
-      // { key: 'delayedDays', label: 'Delay', align: 'center' }
+      { 
+        key: 'webEmpName',
+        label: 'Web Employee',
+        align: 'right',
+        type: 'custom',
+        template: this.filesTemplate
+      }
     ];
-    this.searchForm = this.fb.group({
-      search: ['']
-    });
+this.employeeColumns = [
+      { key: 'empName', label: 'Employee Name', width: '15%' },
+      { key: 'designation', label: 'Designation', width: '20%' },
+      {
+        key: 'actions',
+        label: 'Actions',
+        type: 'custom',
+        template: this.iconsTemplate,
+        width: '10%'
+      }
+    ];
+    this.searchForm = this.fb.group({ search: [''] });
 
     this.paginator = new PaginatedList<Project>(
       30,
@@ -80,16 +82,17 @@ export class ViewProjectComponent implements OnInit {
 
     this.paginator.load();
 
-    this.searchForm.get('search')!
-      .valueChanges
-      .pipe(
-        debounceTime(400),
-        distinctUntilChanged()
-      )
+    this.searchForm.get('search')!.valueChanges
+      .pipe(debounceTime(400), distinctUntilChanged())
       .subscribe(search => {
         this.paginator.reset();
         this.paginator.load(search);
       });
+  }
+
+  ngAfterViewInit(): void {
+    // Employee table columns (after ViewChild is ready)
+    
   }
 
   onScroll(event: Event): void {
@@ -97,7 +100,6 @@ export class ViewProjectComponent implements OnInit {
   }
 
   openEmployeeModal() {
-    // list ko set kar do
     this.selectedEmployees = [...this.employees];
     this.showEmployeeModal = true;
   }
@@ -108,17 +110,9 @@ export class ViewProjectComponent implements OnInit {
   }
 
   edit(emp: any) {
-    this.router.navigate(
-      ['/home/admin/add-project'],
-      {
-        state: { project: emp }
-      }
-    );
+    this.router.navigate(['/home/admin/add-project'], { state: { project: emp } });
   }
 
-  openFiles(docs: string[] = []) {
-    if (!docs.length) return;
-  }
   Delete(p: Project): void {
     Swal.fire({
       title: 'Are you sure?',
@@ -135,14 +129,17 @@ export class ViewProjectComponent implements OnInit {
             this.paginator.load(this.searchForm.value.search);
           },
           error: (err) => {
-            Swal.fire(
-              'Error',
-              err?.error?.message || 'Failed to delete project',
-              'error'
-            );
+            Swal.fire('Error', err?.error?.message || 'Failed to delete project', 'error');
           }
         });
       }
     });
   }
+
+  AddEmployee() {
+    
+  }
+  CancelEmployee() {
+  }
+
 }
