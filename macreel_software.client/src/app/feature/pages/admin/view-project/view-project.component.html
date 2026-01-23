@@ -29,7 +29,7 @@
     </form>
   </div>
 
-  <app-generic-table [columns]="projectColumns" [data]="paginator.items" [loading]="paginator.loading"
+  <app-generic-table [columns]="projectColumns" [data]="paginator.items"   [showActions]="true" [loading]="paginator.loading "
     (edit)="edit($event)">
   </app-generic-table>
 </div>
@@ -42,31 +42,45 @@
   </button>
 </ng-template>
 
-<ng-template #iconsTemplate let-employee>
-  <button 
-    class="p-1 text-gray-600 hover:text-red-500 hover:bg-gray-100 rounded"
-    (click)="edit(employee)">
-    <!-- Pencil Icon -->
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-      <path d="M17.414 2.586a2 2 0 010 2.828l-10 10A2 2 0 016 16H3a1 1 0 01-1-1v-3a2 2 0 01.586-1.414l10-10a2 2 0 012.828 0z" />
-    </svg>
+<ng-template #filesTemplate let-row>
+  <button class="w-auto h-7 flex items-center justify-center rounded
+                 text-gray-600 hover:text-blue-600 hover:bg-gray-100" (click)="openEmployeeModal()">
+    {{ row.WebEmpName }}
   </button>
 </ng-template>
+
+
 
 <!-- Employee Modal (Static Design) -->
 <div *ngIf="showEmployeeModal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
   <div class="bg-white w-[600px] rounded-xl shadow-xl flex flex-col">
+    <!-- Header -->
     <div class="flex justify-between items-center px-4 py-2 border-b">
       <h3 class="font-semibold">Employees List</h3>
       <button (click)="closeModal()">✕</button>
     </div>
 
+    <!-- Body: Employee Table -->
     <div class="p-4 max-h-[400px] overflow-auto">
-      <app-generic-table 
-        [columns]="employeeColumns" 
-        [data]="selectedEmployees" 
-        [showActions]="false">
+      <app-generic-table [columns]="employeeColumns" [data]="selectedEmployees" [showActions]="false">
       </app-generic-table>
     </div>
   </div>
 </div>
+
+<ng-template #iconsTemplate let-row>
+  <div class="flex gap-2">
+    <!-- Edit Icon -->
+    <button class="px-2 text-green-600 hover:bg-green-100"
+      (click)="AddEmployee()">
+      <i class="fa fa-check text-xs"></i>
+    </button>
+
+    <span class="w-px bg-gray-300"></span>
+
+    <button class="px-2 text-red-600 hover:bg-red-100"
+      (click)="CancelEmployee()">
+      <i class="fa fa-times text-xs"></i>
+    </button>
+  </div>
+</ng-template>
