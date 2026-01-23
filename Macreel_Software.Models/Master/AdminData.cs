@@ -223,8 +223,21 @@ namespace Macreel_Software.Models.Master
         public string? webEmpName { get; set; }
         public string? projectStatus { get; set; }
         public int? delayedDays { get; set; }
+
+        public List<appProjectMember> appProjectMembers { get; set; } = new List<appProjectMember>();
+        public List<webProjectMember> webProjectMembers { get; set; } = new List<webProjectMember>();
     }
 
+    public class appProjectMember
+    {
+        public int? empId { get; set; }
+        public string? EmpName { get; set; }
+    }
+    public class webProjectMember
+    {
+        public int? empId { get; set; }
+        public string? EmpName { get; set; }
+    }
 
     public class Taskassign
     {
