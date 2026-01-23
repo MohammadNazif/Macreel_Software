@@ -53,32 +53,59 @@
 
 <!-- Employee Modal (Static Design) -->
 <div *ngIf="showEmployeeModal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+
   <div class="bg-white w-[600px] rounded-xl shadow-xl flex flex-col">
-    <!-- Header -->
+
+    <!-- 🔝 HEADER WITH + ICON -->
     <div class="flex justify-between items-center px-4 py-2 border-b">
-      <h3 class="font-semibold">Added Employees List</h3>
-      <button (click)="closeModal()">✕</button>
+      <h3 class="font-semibold">Added Employees</h3>
+
+      <div class="flex gap-2">
+        <button class="w-8 h-8 flex items-center justify-center rounded-full
+                 bg-[#C5192F] text-white hover:bg-red-600" (click)="onAddEmployeeClick()">
+          <i class="fa fa-plus text-sm"></i>
+        </button>
+
+        <button (click)="closeModal()">✕</button>
+      </div>
     </div>
 
-    <!-- Body: Employee Table -->
-    <div class="p-2 max-h-[400px] overflow-auto">
-      <app-generic-table [columns]="employeeColumns" [data]="selectedEmployees" [showActions]="false">
+    <!-- 🟦 CHIPS SECTION -->
+    <div class="px-4 py-2 flex flex-wrap gap-2 border-b max-h-[80px]">
+      <ng-container *ngFor="let emp of selectedEmployees">
+        <span class="flex items-center gap-1 bg-gray-200 text-sm px-2 py-1 rounded-full">
+          {{ emp.empName }}
+          <button class="text-red-500" (click)="removeChip(emp)">✕</button>
+        </span>
+      </ng-container>
+    </div>
+
+    <!-- 📋 EMPLOYEE LIST (API DATA) -->
+    <div *ngIf="showEmployeeDropdown" class="px-4 py-2 max-h-40 overflow-auto border-b" style="max-height: 80px;">
+
+      <div *ngFor="let emp of allEmployees" class="cursor-pointer px-2 py-1 rounded text-sm hover:bg-gray-200"
+        (click)="addChip(emp)">
+        {{ emp.empName }} ({{ emp.designationName }})
+      </div>
+
+    </div>
+
+    <!-- 📊 TABLE -->
+    <div class="p-2 max-h-[300px] overflow-auto">
+      <app-generic-table [columns]="employeeColumns" [data]="employees" [showActions]="false">
       </app-generic-table>
     </div>
 
-   <div class="flex justify-end px-1 py-1">
-  <button
-    type="button"
-    class="px-2 py-1.5 text-sm bg-[#C5192F] text-white rounded-md hover:bg-red-600"
-    (click)="saveEmployees()">
-    Submit
-  </button>
-</div>
-
-   
+    <!-- FOOTER -->
+    <div class="flex justify-end px-3 py-2 border-t">
+      <button class="px-3 py-1.5 text-sm bg-[#C5192F] text-white rounded-md hover:bg-red-600" (click)="saveEmployees()">
+        Submit
+      </button>
+    </div>
 
   </div>
 </div>
+
 
 <ng-template #iconsTemplate let-row>
   <div class="flex gap-2">

@@ -524,6 +524,10 @@ namespace Macreel_Software.DAL.Admin
 
                 }
             }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
             finally
             {
                 if (_conn.State == ConnectionState.Open)
