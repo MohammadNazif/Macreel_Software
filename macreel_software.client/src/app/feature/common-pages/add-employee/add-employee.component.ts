@@ -337,11 +337,13 @@ export class AddEmployeeComponent implements OnInit {
 
           this.loadTechnologies().then(() => {
 
-            const skillIds = emp.skill.map((s: any) => s.id);
+            const skillIds = emp.skill.map((s: any) => s.techId);
+
+            console.log("my tech ID",skillIds)
 
             // 🔥 FIX: Match by ID + Name (safe binding)
             this.selectedTechnologies = this.technologies.filter(t =>
-              skillIds.includes(t.id) ||
+              skillIds.includes(t.techId) ||
               emp.skill.some((s: any) => s.skillName === t.technologyName)
             );
 

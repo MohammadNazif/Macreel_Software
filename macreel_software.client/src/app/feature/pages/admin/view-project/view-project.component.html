@@ -20,32 +20,11 @@
   </button>
 </ng-template>
 
-<div class="bg-white rounded-2xl shadow-sm mt-1 px-4 md:px-6 py-4 md:mx-auto max-w-6xl font-[Poppins]">
-  <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-3">
-    <h2 class="text-sm font-semibold text-gray-700">Project List</h2>
-    <form [formGroup]="searchForm" class="relative w-full md:w-60">
-      <input type="text" formControlName="search" placeholder="Search projects"
-        class="w-full h-8 rounded-lg border border-gray-300 pl-8 pr-3 text-[12px] text-gray-700 placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-[#dd3d4f] focus:border-[#dd3d4f]" />
-    </form>
-  </div>
 
-  <app-generic-table [columns]="projectColumns" [data]="paginator.items" [showActions]="true"
-    [loading]="paginator.loading " (edit)="edit($event)">
-  </app-generic-table>
-</div>
-
-<!-- Employee Button Template -->
-<ng-template #filesTemplate let-row>
+<ng-template #webTemplate let-row>
   <button class="w-auto h-7 flex items-center justify-center rounded
                  text-gray-600 hover:text-blue-600 hover:bg-gray-100" (click)="openEmployeeModal()">
-    {{ row.appEmpName }}
-  </button>
-</ng-template>
-
-<ng-template #filesTemplate let-row>
-  <button class="w-auto h-7 flex items-center justify-center rounded
-                 text-gray-600 hover:text-blue-600 hover:bg-gray-100" (click)="openEmployeeModal()">
-    {{ row.WebEmpName }}
+    {{ row.webEmpName }}
   </button>
 </ng-template>
 
@@ -57,7 +36,7 @@
   <div class="bg-white w-[600px] rounded-xl shadow-xl flex flex-col">
 
     <!-- 🔝 HEADER WITH + ICON -->
-    <div class="flex justify-between items-center px-4 py-2 border-b">
+    <div class="flex justify-between items-center px-4 py-2">
       <h3 class="font-semibold">Added Employees</h3>
 
       <div class="flex gap-2">
