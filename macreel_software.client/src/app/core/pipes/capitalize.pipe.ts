@@ -12,7 +12,6 @@ export class CapitalizePipe implements PipeTransform {
   }
 
 }
-// safe-url.pipe.ts
 
 @Pipe({ name: 'safeUrl' })
 export class SafeUrlPipe implements PipeTransform {
