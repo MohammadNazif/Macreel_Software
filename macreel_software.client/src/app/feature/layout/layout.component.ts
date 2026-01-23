@@ -122,6 +122,11 @@ export class LayoutComponent implements OnInit, OnDestroy {
           route: '/home/employee/assigned-tasks',
           roles: ['employee']
         },
+        {
+          label: 'Task List',
+          route: '/home/employee/task-list',
+          roles: ['employee']
+        },
       ]
     },
     {
