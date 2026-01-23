@@ -59,7 +59,9 @@ onCellClick(row: any, col: TableColumn<any>) {
   }
 
     if (col.route) {
-      this.Router.navigate([col.route], { queryParams: row  });
+      this.Router.navigate([col.route], {state: {
+    employee: row}
+  });
     }
 }
 onCheckboxChange(item: any, key: any, event: Event) {

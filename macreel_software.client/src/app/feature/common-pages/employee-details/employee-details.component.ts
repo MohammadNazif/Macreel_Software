@@ -45,6 +45,7 @@ export interface EmployeeDetails {
   graduationCertificatePathan: string;
   mastersCertificatePath: string;
   skill: any[];
+  companyContactNo :number;
 }
 
 @Component({
@@ -59,10 +60,9 @@ export class EmployeeDetailsComponent implements OnInit {
 
   constructor(private route: ActivatedRoute) { }
 
-  ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      this.employee = params as EmployeeDetails;
-      console.log(this.employee);
-    });
-  }
+ ngOnInit(): void {
+ 
+  this.employee = history.state.employee;
+   console.log(this.employee)
+}
 }
