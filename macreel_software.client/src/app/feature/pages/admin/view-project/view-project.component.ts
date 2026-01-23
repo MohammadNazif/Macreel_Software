@@ -37,7 +37,7 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
     private readonly fb: FormBuilder,
     private readonly projectService: ProjectService,
     private readonly router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     // Project table columns
@@ -54,7 +54,7 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
         type: 'custom',
         template: this.filesTemplate
       },
-      { 
+      {
         key: 'webEmpName',
         label: 'Web Employee',
         align: 'right',
@@ -62,15 +62,15 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
         template: this.filesTemplate
       }
     ];
-this.employeeColumns = [
-      { key: 'empName', label: 'Employee Name', width: '15%' },
-      { key: 'designation', label: 'Designation', width: '20%' },
+    this.employeeColumns = [
+      { key: 'empName', label: 'Employee Name' },
+      { key: 'designation', label: 'Designation' },
       {
         key: 'actions',
         label: 'Actions',
         type: 'custom',
-        template: this.iconsTemplate,
-        width: '10%'
+        template: this.iconsTemplate
+
       }
     ];
     this.searchForm = this.fb.group({ search: [''] });
@@ -92,7 +92,7 @@ this.employeeColumns = [
 
   ngAfterViewInit(): void {
     // Employee table columns (after ViewChild is ready)
-    
+
   }
 
   onScroll(event: Event): void {
@@ -137,9 +137,10 @@ this.employeeColumns = [
   }
 
   AddEmployee() {
-    
+
   }
   CancelEmployee() {
   }
 
-}
+  saveEmployees() {
+}}
