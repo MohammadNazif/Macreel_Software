@@ -197,7 +197,7 @@ if (this.attachment2) {
 
  
 loadEmployees(pageNumber: number = 1, pageSize: number = 10, search: string = '') {
-  this.empservice.getAllEmployees(pageNumber, pageSize, search).subscribe(res => {
+  this.empservice.getAllEmployees(null,null, '').subscribe(res => {
     if (res.success) {
       this.employees = res.data;   
       console.log("RES",this.employees)// correct way for dropdown
