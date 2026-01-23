@@ -29,8 +29,8 @@
     </form>
   </div>
 
-  <app-generic-table [columns]="projectColumns" [data]="paginator.items"   [showActions]="true" [loading]="paginator.loading "
-    (edit)="edit($event)">
+  <app-generic-table [columns]="projectColumns" [data]="paginator.items" [showActions]="true"
+    [loading]="paginator.loading " (edit)="edit($event)">
   </app-generic-table>
 </div>
 
@@ -56,30 +56,40 @@
   <div class="bg-white w-[600px] rounded-xl shadow-xl flex flex-col">
     <!-- Header -->
     <div class="flex justify-between items-center px-4 py-2 border-b">
-      <h3 class="font-semibold">Employees List</h3>
+      <h3 class="font-semibold">Added Employees List</h3>
       <button (click)="closeModal()">✕</button>
     </div>
 
     <!-- Body: Employee Table -->
-    <div class="p-4 max-h-[400px] overflow-auto">
+    <div class="p-2 max-h-[400px] overflow-auto">
       <app-generic-table [columns]="employeeColumns" [data]="selectedEmployees" [showActions]="false">
       </app-generic-table>
     </div>
+
+   <div class="flex justify-end px-1 py-1">
+  <button
+    type="button"
+    class="px-2 py-1.5 text-sm bg-[#C5192F] text-white rounded-md hover:bg-red-600"
+    (click)="saveEmployees()">
+    Submit
+  </button>
+</div>
+
+   
+
   </div>
 </div>
 
 <ng-template #iconsTemplate let-row>
   <div class="flex gap-2">
     <!-- Edit Icon -->
-    <button class="px-2 text-green-600 hover:bg-green-100"
-      (click)="AddEmployee()">
+    <button class="px-2 text-green-600 hover:bg-green-100" (click)="AddEmployee()">
       <i class="fa fa-check text-xs"></i>
     </button>
 
     <span class="w-px bg-gray-300"></span>
 
-    <button class="px-2 text-red-600 hover:bg-red-100"
-      (click)="CancelEmployee()">
+    <button class="px-2 text-red-600 hover:bg-red-100" (click)="CancelEmployee()">
       <i class="fa fa-times text-xs"></i>
     </button>
   </div>
