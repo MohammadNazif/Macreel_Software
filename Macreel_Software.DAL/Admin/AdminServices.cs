@@ -10,13 +10,10 @@ using Microsoft.Identity.Client;
 using System.Data;
 using System.Text.Json;
 
-
 namespace Macreel_Software.DAL.Admin
 {
-
     public  class AdminServices:IAdminServices
     {
-
         private readonly SqlConnection _conn;
         private readonly UploadAttendance _upload;
 

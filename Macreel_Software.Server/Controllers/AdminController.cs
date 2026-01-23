@@ -693,7 +693,7 @@ namespace Macreel_Software.Server.Controllers
 
             if (data.sopDocument == null && data.id <= 0)
                 if (data.sopDocument == null && data.id <= 0)
-                    return BadRequest("SOP document is required.");
+                    return BadRequest("SOW document is required.");
 
             if (data.startDate == null)
                 return BadRequest("Start date is required.");
