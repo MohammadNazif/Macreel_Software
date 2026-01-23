@@ -89,3 +89,8 @@ select {
   appearance: none;
   -webkit-appearance: none;
 }
+
+.mat-mdc-form-field-flex
+ {
+    height: auto!important;
+}

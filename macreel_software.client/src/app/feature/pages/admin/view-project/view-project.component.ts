@@ -80,7 +80,8 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
         key: 'actions',
         label: 'Actions',
         type: 'custom',
-        template: this.iconsTemplate
+        template: this.iconsTemplate,
+        width:'10px'
 
       }
     ];
