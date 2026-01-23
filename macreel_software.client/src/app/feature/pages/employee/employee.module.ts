@@ -22,6 +22,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 import { SafeUrlPipe } from '../../../core/pipes/capitalize.pipe';
+import { TaskListComponent } from './task-list/task-list.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { SafeUrlPipe } from '../../../core/pipes/capitalize.pipe';
     DashboardComponent,
     AssignedLeavesComponent,
     ApplyLeaveComponent,
-    AssignProjectComponent
+    AssignProjectComponent,
+    TaskListComponent
   ],
   imports: [
     CommonModule,
