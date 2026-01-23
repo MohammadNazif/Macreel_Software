@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { Project, TableColumn } from '../../../../core/models/interface';
 import { PaginatedList } from '../../../../core/utils/paginated-list';
+import { ManageEmployeeService } from '../../../../core/services/manage-employee.service';
 
 @Component({
   selector: 'app-view-project',
@@ -20,6 +21,14 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
 
   showEmployeeModal = false;
   selectedEmployees: any[] = [];
+
+  allEmployees: any[] = [];
+  employeeTableData: any[] = [];
+
+  showAddEmployeeBox = false;
+  employeeSearch = '';
+  showEmployeeDropdown = false;
+  loadingEmployees = false;
 
   // Static dummy employees
   employees = [
@@ -36,7 +45,8 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
   constructor(
     private readonly fb: FormBuilder,
     private readonly projectService: ProjectService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly employeeService: ManageEmployeeService,
   ) { }
 
   ngOnInit(): void {
@@ -100,14 +110,66 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
   }
 
   openEmployeeModal() {
-    this.selectedEmployees = [...this.employees];
     this.showEmployeeModal = true;
+    this.showEmployeeDropdown = false;
   }
+
 
   closeModal() {
     this.showEmployeeModal = false;
     this.selectedEmployees = [];
   }
+
+  toggleAddEmployeeBox() {
+    this.showAddEmployeeBox = !this.showAddEmployeeBox;
+
+    if (this.showAddEmployeeBox && this.allEmployees.length === 0) {
+      this.fetchEmployees();
+    }
+  }
+
+ 
+  onAddEmployeeClick() {
+  this.showEmployeeDropdown = !this.showEmployeeDropdown;
+
+  if (this.showEmployeeDropdown && this.allEmployees.length === 0) {
+    this.fetchEmployees();
+  }
+}
+
+fetchEmployees() {
+  this.loadingEmployees = true;
+
+  this.employeeService.getAllEmployees(1, 50, '')
+    .subscribe(res => {
+      if (res.success) {
+        this.allEmployees = res.data;
+      }
+      this.loadingEmployees = false;
+    });
+}
+
+addChip(emp: any) {
+  if (!this.selectedEmployees.some(e => e.id === emp.id)) {
+    this.selectedEmployees.push({
+      id: emp.id,
+      empName: emp.empName,
+      designation: emp.designationName,
+      status: 1
+    });
+  }
+}
+
+removeChip(emp: any) {
+  this.selectedEmployees = this.selectedEmployees.filter(e => e.id !== emp.id);
+}
+
+  openEmployeedataModal() {
+    this.employeeTableData = [...this.selectedEmployees]; // table stays same
+    this.showEmployeeModal = true;
+  }
+
+
 
   edit(emp: any) {
     this.router.navigate(['/home/admin/add-project'], { state: { project: emp } });
@@ -143,4 +205,5 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
   }
 
   saveEmployees() {
-}}
+  }
+}
