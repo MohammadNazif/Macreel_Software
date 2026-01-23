@@ -150,9 +150,8 @@ export class LayoutComponent implements OnInit, OnDestroy {
           route: '/home/employee/assign-project',
           roles: ['employee']
         },
-        
          {
-          label: 'Project Progress',
+          label: 'Projects Progress',
           route: '/home/admin/project-progress',
           roles: ['admin','employee']
         }
