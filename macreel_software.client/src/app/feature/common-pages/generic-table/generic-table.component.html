@@ -1,117 +1,153 @@
-<div class="relative overflow-x-auto overflow-y-auto mb-2 ms-1 rounded-lg border border-gray-200"
-    
-     style="max-height: 72vh;"
-     (scroll)="onScroll($event)">
+<!-- TABLE WRAPPER -->
+<div
+  class="relative mb-2 ms-1 rounded-lg border border-gray-200
+         overflow-x-auto overflow-y-auto"
+  style="max-height:72vh; max-width:100%;"
+  (scroll)="onScroll($event)"
+>
 
-  <table class="w-full whitespace-nowrap text-[12px] text-left border-collapse"
-            [style.max-width]="tableMaxWidth">
+  <!-- TABLE -->
+  <table
+    class="min-w-max whitespace-nowrap text-[12px] text-left border-collapse"
+    style="width:100%;"
+    [style.max-width]="tableMaxWidth"
+  >
 
+    <!-- TABLE HEADER -->
     <thead class="sticky top-0 z-10 bg-[#dd3d4f]">
       <tr class="text-white border-b border-[#ccc]">
 
-        <th class="w-[1.5px] px-1 py-0 overflow-hidden whitespace-nowrap border-r border-[#ccc]">
+        <!-- SERIAL -->
+        <th
+          class="px-1 py-0 border-r border-[#ccc]"
+          style="width:40px; min-width:40px;"
+        >
           S.N.
         </th>
 
-        <th *ngFor="let col of columns"
-            class="px-2 py-1 font-semibold border-r border-[#ccc]"
-            [style.width]="col.width || 'auto'"
-            [style.text-align]="col.align || 'left'">
+        <!-- DYNAMIC COLUMNS -->
+        <th
+          *ngFor="let col of columns"
+          class="px-2 py-1 font-semibold border-r border-[#ccc]"
+          [style.width]="col.width || 'auto'"
+          [style.text-align]="col.align || 'left'"
+        >
           {{ col.label }}
         </th>
 
-        <th *ngIf="showActions"
-            class="px-2 w-auto py-1 text-center font-semibold border-r border-[#ccc]">
+        <!-- ACTION -->
+        <th
+          *ngIf="showActions"
+          class="px-2 py-1 text-center font-semibold border-r border-[#ccc]"
+          style="width:100px; min-width:100px;"
+        >
           Action
         </th>
 
       </tr>
     </thead>
 
-    <!-- Table Body -->
+    <!-- TABLE BODY -->
     <tbody>
 
-      <tr *ngFor="let item of data; let i = index"
-          class="border-b border-[#e1e1e1] hover:bg-gray-50 transition">
+      <tr
+        *ngFor="let item of data; let i = index"
+        class="border-b border-[#e1e1e1] hover:bg-gray-50 transition"
+      >
 
-        <!-- Serial -->
-        <td class="px-2 py-1 text-gray-500 font-medium border-r border-[#e1e1e1]">
+        <!-- SERIAL -->
+        <td
+          class="px-2 py-1 text-gray-500 font-medium border-r border-[#e1e1e1]"
+          style="width:40px; min-width:40px;"
+        >
           {{ i + 1 }}
         </td>
 
-        <!-- Columns -->
-        <td *ngFor="let col of columns"
-            class="px-2 py-1 text-gray-700 border-r border-[#e1e1e1]"
-            [style.text-align]="col.align || 'left'">
+        <!-- DATA COLUMNS -->
+        <td
+          *ngFor="let col of columns"
+          class="px-2 py-1 text-gray-700 border-r border-[#e1e1e1]"
+          [style.text-align]="col.align || 'left'"
+        >
 
-          <!-- ✅ TemplateRef UNTOUCHED -->
+          <!-- CUSTOM TEMPLATE -->
           <ng-container *ngIf="col.template; else defaultCell">
             <ng-container
-              *ngTemplateOutlet="col.template; context: { $implicit: item }">
+              *ngTemplateOutlet="col.template; context:{ $implicit:item }">
             </ng-container>
           </ng-container>
 
+          <!-- DEFAULT CELL -->
           <ng-template #defaultCell>
 
-            <a *ngIf="col.clickable"
-               class="text-[#dd3d4f] hover:underline cursor-pointer font-medium"
-               (click)="onCellClick(item, col)">
-              {{ col.formatter ? col.formatter(item[col.key], item) : item[col.key] }}
+            <!-- CLICKABLE -->
+            <a
+              *ngIf="col.clickable"
+              class="text-[#dd3d4f] hover:underline cursor-pointer font-medium"
+              (click)="onCellClick(item,col)"
+            >
+              {{ col.formatter ? col.formatter(item[col.key],item) : item[col.key] }}
             </a>
 
-            <span *ngIf="col.type === 'date' && !col.clickable">
-              {{ col.formatter ? col.formatter(item[col.key], item) : formatCell(item, col) }}
+            <!-- DATE -->
+            <span *ngIf="col.type==='date' && !col.clickable">
+              {{ col.formatter ? col.formatter(item[col.key],item) : formatCell(item,col) }}
             </span>
 
-            <ng-container *ngIf="col.type === 'checkbox'">
-              <input type="checkbox"
-                     [checked]="item[col.key]"
-                     (change)="onCheckboxChange(item,col.key, $event)"
-                     class="mx-auto" />
+            <!-- CHECKBOX -->
+            <ng-container *ngIf="col.type==='checkbox'">
+              <input
+                type="checkbox"
+                [checked]="item[col.key]"
+                (change)="onCheckboxChange(item,col.key,$event)"
+              />
             </ng-container>
 
-            <ng-container *ngIf="col.type === 'number'">
-              <input type="number"
-                     [value]="col.formatter ? col.formatter(item[col.key], item) : item[col.key]"
-                     (change)="onNumberChange(item, col.key, $event)"
-                     class="w-12 px-1 py-0.5 text-center border rounded text-gray-700 text-sm" />
+            <!-- NUMBER -->
+            <ng-container *ngIf="col.type==='number'">
+              <input
+                type="number"
+                class="w-12 px-1 py-0.5 text-center border rounded text-gray-700 text-sm"
+                [value]="col.formatter ? col.formatter(item[col.key],item) : item[col.key]"
+                (change)="onNumberChange(item,col.key,$event)"
+              />
             </ng-container>
 
-            <span *ngIf="(!col.type || col.type === 'text') && !col.clickable">
-              {{ col.formatter ? col.formatter(item[col.key], item) : item[col.key] }}
+            <!-- TEXT -->
+            <span *ngIf="(!col.type || col.type==='text') && !col.clickable">
+              {{ col.formatter ? col.formatter(item[col.key],item) : item[col.key] }}
             </span>
 
           </ng-template>
+
         </td>
-        <td *ngIf="showActions" class="px-2 py-1 border-r w-[100px] border-[#e1e1e1]">
+
+        <!-- ACTION BUTTONS -->
+        <td
+          *ngIf="showActions"
+          class="px-2 py-1 border-r border-[#e1e1e1]"
+          style="width:100px; min-width:100px;"
+        >
           <div class="flex justify-center gap-1">
 
-            <!-- Edit -->
-            <button class="w-6 h-6 flex items-center justify-center rounded border
-                           border-green-500 text-green-500
-                           hover:bg-green-500 hover:text-white
-                           transition-all duration-150"
-                    (click)="edit.emit(item)"
-                    title="Edit">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
-                   viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                      d="M4 20h4l10.5-10.5a2.12 2.12 0 10-3-3L5 17v3z"/>
-              </svg>
+            <!-- EDIT -->
+            <button
+              class="w-6 h-6 flex items-center justify-center rounded
+                     border border-green-500 text-green-500
+                     hover:bg-green-500 hover:text-white transition"
+              (click)="edit.emit(item)"
+            >
+              ✎
             </button>
 
-            <!-- Delete -->
-            <button class="w-6 h-6 flex items-center justify-center rounded border
-                           border-red-500 text-red-500
-                           hover:bg-red-500 hover:text-white
-                           transition-all duration-150"
-                    (click)="delete.emit(item)"
-                    title="Delete">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
-                   viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                      d="M6 7h12M9 7V4h6v3M8 7l1 13h6l1-13"/>
-              </svg>
+            <!-- DELETE -->
+            <button
+              class="w-6 h-6 flex items-center justify-center rounded
+                     border border-red-500 text-red-500
+                     hover:bg-red-500 hover:text-white transition"
+              (click)="delete.emit(item)"
+            >
+              🗑
             </button>
 
           </div>

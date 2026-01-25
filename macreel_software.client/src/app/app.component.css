@@ -13,4 +13,8 @@ div:has(table)::-webkit-scrollbar {
   height: 10px;
 }
 
-/* And so on... */
+html, body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
