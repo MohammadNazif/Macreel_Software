@@ -1,13 +1,17 @@
 <div class="flex h-screen bg-[#f6f7fb] overflow-hidden">
 
   <!-- MOBILE OVERLAY -->
-  <div *ngIf="sidebarOpen && isMobile" (click)="closeSidebarOnMobile()"
+  <div
+    *ngIf="sidebarOpen && isMobile"
+    (click)="closeSidebarOnMobile()"
     class="fixed inset-0 bg-black/40 z-30 md:hidden">
   </div>
 
   <!-- SIDEBAR -->
-  <aside class="bg-white shadow-lg z-40 h-full transition-all duration-300
-           fixed md:relative" [ngClass]="{
+  <aside
+    class="bg-white shadow-lg z-40 h-full transition-all duration-300
+           fixed md:relative shrink-0"
+    [ngClass]="{
       'w-[265px] translate-x-0': sidebarOpen,
       'w-[72px] -translate-x-full md:translate-x-0 md:w-[72px]': !sidebarOpen
     }">
@@ -23,8 +27,9 @@
     <!-- MENU -->
     <nav class="mt-4 px-3 text-[13px] font-medium text-[#7E7E7E] space-y-1">
 
-      <!-- DASHBOARD -->
-      <div routerLink="/home/employee/dashboard" (click)="closeSidebarOnMobile()"
+      <div
+        routerLink="/home/employee/dashboard"
+        (click)="closeSidebarOnMobile()"
         class="flex items-center gap-3 p-2 rounded-lg cursor-pointer hover:bg-[#FDECEA]">
         <span>🏠</span>
         <span *ngIf="sidebarOpen">Dashboard</span>
@@ -32,45 +37,55 @@
 
       <div>
         <ng-container *ngFor="let menu of filteredMenusFromApi">
-          <div (click)="toggleMenu(menu.key)"
+          <div
+            (click)="toggleMenu(menu.key)"
             class="flex items-center p-2 justify-between rounded-lg cursor-pointer hover:bg-[#FDECEA]">
             <div class="flex items-center gap-3">
               <i [class]="menu.icon"></i>
               <span *ngIf="sidebarOpen">{{ menu.label }}</span>
             </div>
-            <span *ngIf="sidebarOpen" class="transition-transform" [ngClass]="openMenu === menu.key ? 'rotate-90' : ''">
+            <span
+              *ngIf="sidebarOpen"
+              class="transition-transform"
+              [ngClass]="openMenu === menu.key ? 'rotate-90' : ''">
               <i class="fa-solid fa-chevron-right"></i>
             </span>
           </div>
-          <div *ngIf="openMenu === menu.key && sidebarOpen" class="ml-10 space-y-1 text-sm">
-            <a *ngFor="let item of menu.children" [routerLink]="item.route" (click)="closeSidebarOnMobile()"
+
+          <div
+            *ngIf="openMenu === menu.key && sidebarOpen"
+            class="ml-10 space-y-1 text-sm">
+            <a
+              *ngFor="let item of menu.children"
+              [routerLink]="item.route"
+              (click)="closeSidebarOnMobile()"
               class="block p-2 hover:text-[#E6354B]">
               {{ item.label }}
             </a>
           </div>
         </ng-container>
       </div>
+
     </nav>
   </aside>
 
   <!-- MAIN CONTENT -->
-  <div class="flex-1 flex flex-col">
+  <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
 
     <!-- NAVBAR -->
-    <header class="bg-white shadow-sm px-3 py-2 flex justify-between items-center">
+    <header class="bg-white shadow-sm px-3 py-2 flex justify-between items-center overflow-x-hidden">
 
       <div class="flex items-center gap-3">
-        <!-- TOGGLE BUTTON (ALL SCREENS) -->
-        <button (click)="toggleSidebar()" class="text-2xl text-[#E6354B] p-2 rounded-lg">
+        <button
+          (click)="toggleSidebar()"
+          class="text-2xl text-[#E6354B] p-2 rounded-lg">
           ☰
         </button>
-
         <h1 class="text-lg md:text-xl font-semibold">Dashboard</h1>
       </div>
 
       <div class="flex items-center gap-3">
 
-        <!-- ICONS -->
         <div class="w-9 h-9 flex items-center justify-center bg-[#FDECEA] rounded-xl">
           <i class="fa-solid fa-bell text-[#E6354B]"></i>
         </div>
@@ -79,23 +94,29 @@
           <i class="fa-regular fa-message text-[#E6354B]"></i>
         </div>
 
-        <!-- PROFILE -->
         <div class="relative">
-          <img src="https://i.pravatar.cc/40" (click)="toggleProfileMenu()"
+          <img
+            src="https://i.pravatar.cc/40"
+            (click)="toggleProfileMenu()"
             class="w-9 h-9 rounded-full cursor-pointer border-2 border-[#E6354B]" />
 
-          <div *ngIf="profileOpen"
+          <div
+            *ngIf="profileOpen"
             class="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-xl text-sm z-50 overflow-hidden">
 
             <div class="px-4 py-2 border-b font-semibold text-[#333]">
               <i class="fa-solid fa-user mr-2"></i> Profile
             </div>
 
-            <button (click)="goToChangePassword()" class="w-full text-left px-4 py-2 hover:bg-[#FDECEA]">
+            <button
+              (click)="goToChangePassword()"
+              class="w-full text-left px-4 py-2 hover:bg-[#FDECEA]">
               <i class="fa-solid fa-key text-[#E6354B] mr-2"></i> Change Password
             </button>
 
-            <button (click)="logout()" class="w-full text-left px-4 py-2 hover:bg-[#FDECEA]">
+            <button
+              (click)="logout()"
+              class="w-full text-left px-4 py-2 hover:bg-[#FDECEA]">
               <i class="fa-solid fa-right-from-bracket text-[#E6354B] mr-2"></i> Logout
             </button>
 
@@ -106,7 +127,8 @@
     </header>
 
     <!-- PAGE CONTENT -->
-    <main class="flex-1 overflow-auto bg-[#f6f7fb]">
+    <main
+      class="flex-1 bg-[#f6f7fb] overflow-y-auto overflow-x-hidden min-w-0">
       <router-outlet></router-outlet>
     </main>
 
