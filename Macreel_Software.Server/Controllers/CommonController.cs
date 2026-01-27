@@ -562,41 +562,34 @@ namespace Macreel_Software.Server.Controllers
             }
         }
 
-       // [HttpPost("update-project-emp-status")]
-       // public async Task<IActionResult> UpdateProjectEmpStatusBulk(
-       //[FromBody] ProjectEmpStatusBulkRequest model)
-       // {
-       //     try
-       //     {
-       //         int adminId = _userId;
+        [HttpPost("update-project-emp-status")]
+        public async Task<IActionResult> UpdateProjectEmpStatus([FromBody] List<ProjectEmpStatusItem> model)
+        {
+            try
+            {
+                int adminId = _userId;
 
-       //         bool result = await _service.UpdateProjectEmpStatusBulk(
-       //             model.Items, adminId);
+                foreach (var item in model)
+                {
+                    await _service.UpdateProjectEmpStatusSingle(item, adminId);
+                }
 
-       //         if (result)
-       //         {
-       //             return Ok(new
-       //             {
-       //                 success = true,
-       //                 message = "Project employee status updated successfully."
-       //             });
-       //         }
+                return Ok(new
+                {
+                    success = true,
+                    message = "Project employee status updated successfully."
+                });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, new
+                {
+                    success = false,
+                    message = "Some error occurred."
+                });
+            }
+        }
 
-       //         return Ok(new
-       //         {
-       //             success = false,
-       //             message = "No record updated."
-       //         });
-       //     }
-       //     catch (Exception)
-       //     {
-       //         return StatusCode(500, new
-       //         {
-       //             success = false,
-       //             message = "Some error occurred while processing request."
-       //         });
-       //     }
-       // }
 
         #endregion
 

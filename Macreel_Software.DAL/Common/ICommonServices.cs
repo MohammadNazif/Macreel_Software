@@ -19,6 +19,6 @@ namespace Macreel_Software.DAL.Common
         Task<ApiResponse<List<SendEmailForRegistrationDto>>> getEmailByAccessByIdForReg(string accessId);
         Task<bool> InsertProjectEmp(ProjectEmp data, int? addedBy);
         Task<ApiResponse<List<AssignedProjectEmpDto>>> AssignedProjectEmpList(int projectId);
-        //Task<bool> UpdateProjectEmpStatusBulk(List<ProjectEmpStatusItem> items, int addedBy);
+        Task<bool> UpdateProjectEmpStatusSingle(ProjectEmpStatusItem model, int adminId);
     }
 }
