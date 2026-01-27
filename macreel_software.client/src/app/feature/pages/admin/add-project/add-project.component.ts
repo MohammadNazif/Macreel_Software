@@ -315,16 +315,21 @@ export class AddProjectComponent implements OnInit {
       endDate: emp.endDate?.split('T')[0],
       completionDate: emp.completionDate?.split('T')[0],
 
-      isMobileSoftware: emp.app === 'App',
-      isWebSoftware: emp.web === 'Web' || emp.category === 'Website',
-      isAndroid: emp.androidApp === 'Android',
-      isIOS: emp.iosApp === 'IOS',
+      // isMobileSoftware: emp.app === 'App',
+      // isWebSoftware: emp.web === 'Web' || emp.category === 'Website',
+      // isAndroid: emp.androidApp === 'Android',
+      // isIOS: emp.iosApp === 'IOS',
+
+      isMobileSoftware: !!emp.app,
+      isWebSoftware: !!emp.web,
+      isAndroid: !!emp.androidApp,
+      isIOS: !!emp.iosApp,
 
       SEO: emp.seo,
       SMO: emp.smo,
       GMB: emp.gmb,
       paidAds: emp.paidAds
-    });
+    })
     this.existingSopPath = emp.sopDocumentPath;
     this.existingTechnicalPath = emp.technicalDocumentPath;
 
@@ -398,15 +403,18 @@ export class AddProjectComponent implements OnInit {
 
     // ================= SOFTWARE TYPE =================
     if (f.isMobileSoftware) {
-      formData.append('app', 'App');
+      //   formData.append('app', 'App');
 
-      if (f.isAndroid) {
-        formData.append('androidApp', 'Android');
-      }
+      // if (f.isAndroid) {
+      //   formData.append('androidApp', 'Android');
+      // }
 
-      if (f.isIOS) {
-        formData.append('iosApp', 'IOS');
-      }
+      // if (f.isIOS) {
+      //   formData.append('iosApp', 'IOS');
+      // }
+      formData.append('app', f.isMobileSoftware.toString());
+      formData.append('androidApp', f.isAndroid.toString());
+      formData.append('iosApp', f.isIOS.toString());
 
       if (f.mobileSkill) {
         formData.append('appTechnology', f.mobileSkill);
@@ -418,7 +426,9 @@ export class AddProjectComponent implements OnInit {
     }
 
     if (f.isWebSoftware) {
-      formData.append('web', 'Web');
+      //   formData.append('web', 'Web');
+
+      formData.append('web', f.isWebSoftware.toString());
 
       if (f.webSkill) {
         formData.append('webTechnology', f.webSkill);

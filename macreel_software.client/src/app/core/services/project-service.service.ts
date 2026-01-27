@@ -34,7 +34,7 @@ export class ProjectService {
   getAssignedProjectsByEmp(): Observable<Project[]> {
     return this.http.get<Project[]>(`${this.baseUrl}Employee/AssignedProjectByEmpId`);
   }
-  
+
   assignProjectToEmp(payload: {
     projectId: number;
     empIds: string;
@@ -46,26 +46,30 @@ export class ProjectService {
   }
 
   getAssignedProjectEmpList(projectId: number) {
-  return this.http.get<any>(
-    `${this.baseUrl}Common/AssignedProjectEmpList`,
-    { params: { projectId } }
-  );
-}
+    return this.http.get<any>(
+      `${this.baseUrl}Common/AssignedProjectEmpList`,
+      { params: { projectId } }
+    );
+  }
 
-getProjectCoOrdinates(projectId: number, pmId: number) {
-  return this.http.get<any>(
-    `${this.baseUrl}Admin/ProjectCoOrdinateList`,
-    {
-      params: {
-        projectId: projectId.toString(),
-        pmId: pmId.toString()
+  getProjectCoOrdinates(projectId: number, pmId: number) {
+    return this.http.get<any>(
+      `${this.baseUrl}Admin/ProjectCoOrdinateList`,
+      {
+        params: {
+          projectId: projectId.toString(),
+          pmId: pmId.toString()
+        }
       }
-    }
+    );
+  }
+
+ updateProjectEmployeeStatus(payload: any) {
+  return this.http.post(
+    `${this.baseUrl}Common/update-project-emp-status`,
+    payload
   );
 }
-
-
-
 
 
 }

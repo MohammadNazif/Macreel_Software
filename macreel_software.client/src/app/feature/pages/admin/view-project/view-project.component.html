@@ -13,23 +13,36 @@
   </app-generic-table>
 </div>
 
-<ng-template #filesTemplate let-row>
- <span
-  *ngIf="row.appEmpName"
-  class="cursor-pointer text-blue-600"
-  (click)="onEmployeeClick(row.appEmpId,row.id ,'app')">
-  {{ row.appEmpName }}
-</span>
+<!-- <ng-template #filesTemplate let-row>
+  <span *ngIf="row.appEmpName" class="cursor-pointer text-blue-600"
+    (click)="onEmployeeClick(row.appEmpId,row.id ,'app')">
+    {{ row.appEmpName }}
+  </span>
 </ng-template>
 
 
 <ng-template #webTemplate let-row>
- <span
-  *ngIf="row.webEmpName"
-  class="cursor-pointer text-green-600"
-  (click)="onEmployeeClick(row.webEmpId,row.id ,'web')">
-  {{ row.webEmpName }}
-</span>
+  <span *ngIf="row.webEmpName" class="cursor-pointer text-green-600"
+    (click)="onEmployeeClick(row.webEmpId,row.id ,'web')">
+    {{ row.webEmpName }}
+  </span>
+</ng-template> -->
+<!-- APP EMPLOYEE TEMPLATE -->
+<ng-template #appEmployeeTemplate let-row>
+  <span *ngIf="row.app && row.appEmpName"
+        class="text-blue-600 cursor-pointer"
+        (click)="onEmployeeClick(row.appEmpId, row.id, 'app')">
+    {{ row.appEmpName }}
+  </span>
+</ng-template>
+
+<!-- WEB EMPLOYEE TEMPLATE -->
+<ng-template #webEmployeeTemplate let-row>
+  <span *ngIf="row.web && row.webEmpName"
+        class="text-green-600 cursor-pointer"
+        (click)="onEmployeeClick(row.webEmpId, row.id, 'web')">
+    {{ row.webEmpName }}
+  </span>
 </ng-template>
 
 
@@ -56,30 +69,32 @@
       </div>
     </div>
 
-   <!-- 🟦 CHIPS + ADD BUTTON (SAME ROW) -->
-<div class="px-4 py-2 flex items-center gap-2 border-b max-h-[80px]">
+    <!-- 🟦 CHIPS + ADD BUTTON (SAME ROW) -->
+    <div class="px-4 py-2 flex items-center gap-2 border-b max-h-[80px]">
 
-  <!-- CHIPS -->
-  <div class="flex flex-wrap gap-2 flex-1 overflow-auto">
-    <ng-container *ngFor="let emp of selectedEmployees">
-      <span class="flex items-center gap-1 bg-gray-200 text-sm px-2 py-1 rounded-full">
-        {{ emp.empName }}
-        <button class="text-red-500" (click)="removeChip(emp)">✕</button>
-      </span>
-    </ng-container>
-  </div>
+      <!-- CHIPS -->
+      <div class="flex flex-wrap gap-2 flex-1 overflow-auto">
+        <ng-container *ngFor="let emp of selectedEmployees">
+          <span class="flex items-center gap-1 bg-gray-200 text-sm px-2 py-1 rounded-full">
+            {{ emp.empName }}
+            <button class="text-red-500" (click)="removeChip(emp)">✕</button>
+          </span>
+        </ng-container>
+      </div>
 
-  <!-- ADD BUTTON -->
-  <button
-    *ngIf="showAddIcon"
-    class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full
-           bg-green-600 text-white hover:bg-green-700"
-    title="Add to table"
-    (click)="addEmployeesToTable()">
-    <i class="fa fa-check text-xs"></i>
-  </button>
+      <!-- ADD BUTTON -->
+      <!-- <button *ngIf="showAddIcon" class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full
+           bg-green-600 text-white hover:bg-green-700" title="Add to table" (click)="addEmployeesToTable()"  (click)="saveEmployees()">
+        <i class="fa fa-check text-xs"></i>
+      </button> -->
 
-</div>
+      <button *ngIf="showAddIcon" class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full
+         bg-green-600 text-white hover:bg-green-700" title="Add & Save" (click)="addAndSaveEmployees()">
+        <i class="fa fa-check text-xs"></i>
+      </button>
+
+
+    </div>
 
 
 
@@ -101,7 +116,8 @@
 
     <!-- FOOTER -->
     <div class="flex justify-end px-3 py-2 border-t">
-      <button class="px-3 py-1.5 text-sm bg-[#C5192F] text-white rounded-md hover:bg-red-600" (click)="saveEmployees()">
+      <button class="px-3 py-1.5 text-sm bg-[#C5192F] text-white rounded-md hover:bg-red-600" (click)="saveEmployees()"
+        (click)="submitApprovedEmployees()">
         Submit
       </button>
     </div>
@@ -112,15 +128,42 @@
 
 <ng-template #iconsTemplate let-row>
   <div class="flex gap-2">
-    <!-- Edit Icon -->
-    <button class="px-2 text-green-600 hover:bg-green-100" (click)="AddEmployee()">
+
+    <!-- APPROVE -->
+    <button class="px-2" [ngClass]="row.isApproved
+        ? 'text-white bg-green-600 rounded'
+        : 'text-green-600 hover:bg-green-100 rounded'" (click)="approveEmployee(row)">
       <i class="fa fa-check text-xs"></i>
     </button>
 
     <span class="w-px bg-gray-300"></span>
 
-    <button class="px-2 text-red-600 hover:bg-red-100" (click)="CancelEmployee()">
+    <!-- REJECT -->
+    <button class="px-2 text-red-600 hover:bg-red-100 rounded" (click)="openRejectModal(row)">
       <i class="fa fa-times text-xs"></i>
     </button>
+
   </div>
 </ng-template>
+
+
+<div *ngIf="showRejectModal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+
+  <div class="bg-white w-[400px] rounded-lg p-4">
+    <h3 class="font-semibold mb-2">Reject Employee</h3>
+
+    <textarea [(ngModel)]="rejectReason" class="w-full border rounded p-2 text-sm" placeholder="Enter rejection reason">
+    </textarea>
+
+    <div class="flex justify-end gap-2 mt-3">
+      <button class="px-3 py-1 bg-gray-300 rounded" (click)="showRejectModal=false">
+        Cancel
+      </button>
+
+      <button class="px-3 py-1 bg-red-600 text-white rounded" (click)="submitReject()">
+        Submit
+      </button>
+    </div>
+  </div>
+</div>
+

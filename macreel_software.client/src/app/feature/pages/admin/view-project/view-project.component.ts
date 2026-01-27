@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { Project, TableColumn } from '../../../../core/models/interface';
 import { PaginatedList } from '../../../../core/utils/paginated-list';
 import { ManageEmployeeService } from '../../../../core/services/manage-employee.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-view-project',
@@ -19,6 +20,9 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
   @ViewChild('iconsTemplate', { static: true }) iconsTemplate!: TemplateRef<any>;
   @ViewChild('filesTemplate', { static: true }) filesTemplate!: TemplateRef<any>;
   @ViewChild('webTemplate', { static: true }) webTemplate!: TemplateRef<any>;
+
+  @ViewChild('appEmployeeTemplate', { static: true }) appEmployeeTemplate!: TemplateRef<any>;
+  @ViewChild('webEmployeeTemplate', { static: true }) webEmployeeTemplate!: TemplateRef<any>;
 
   showEmployeeModal = false;
   selectedEmployees: any[] = [];
@@ -38,6 +42,11 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
   selectedProjectId!: number;
   selectedPmId!: number;
   selectedEmpType!: 'app' | 'web';
+
+  approvedEmployees: any[] = [];
+  rejectEmployee: any = null;
+  rejectReason = '';
+  showRejectModal = false;
 
 
 
@@ -66,14 +75,14 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
         label: 'App Employee',
         align: 'right',
         type: 'custom',
-        template: this.filesTemplate
+        template: this.appEmployeeTemplate
       },
       {
         key: 'webEmpName',
         label: 'Web Employee',
         align: 'right',
         type: 'custom',
-        template: this.webTemplate
+        template: this.webEmployeeTemplate
       }
     ];
     this.employeeColumns = [
@@ -107,19 +116,11 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     // Employee table columns (after ViewChild is ready)
-
   }
 
   onScroll(event: Event): void {
     this.paginator.handleScroll(event, this.searchForm.value.search);
   }
-
-  // openEmployeeModal() {
-  //   this.showEmployeeModal = true;
-  //   this.showEmployeeDropdown = false;
-  // }
-
-
 
   onEmployeeClick(empId: number, id: number, type: 'app' | 'web') {
     if (!empId || empId === 0) return;
@@ -128,10 +129,6 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
     this.selectedProjectId = id;
     this.selectedEmpType = type;
 
-    console.log('Selected Emp ID:', empId);
-    console.log('Selected Emp ID:', id);
-    console.log('Type:', type);
-
     this.showEmployeeModal = true;
 
     // reset table
@@ -139,56 +136,31 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
 
     // 🔥 API CALL
     this.getProjectEmployees();
-
-    // 🔥 YAHI ID backend ko bhejni hai
-    // this.callApi(empId);
   }
 
+  getProjectEmployees() {
+    if (!this.selectedProjectId || !this.selectedPmId) return;
 
-  // openEmployeeModal(id: number, empId: number) {
-  //   this.selectedProjectId = id;
-  //   this.selectedPmId = empId;
-
-  //   console.log('✅ CLICKED');
-  //   console.log('Project ID:', id);
-  //   console.log('Employee ID:', empId);
-
-  //   this.showEmployeeModal = true;
-
-  //   // reset states
-  //   this.selectedEmployees = [];
-  //   this.employees = [];
-  //   this.showEmployeeDropdown = false;
-  //   this.showAddIcon = false;
-
-  //   console.log('Project ID:', id);
-  //   console.log('Employee ID:', empId);
-
-  //   // agar already mapped employees dikhane hain
-  //   this.getProjectEmployees();
-  // }
-
-getProjectEmployees() {
-  if (!this.selectedProjectId || !this.selectedPmId) return;
-
-  this.projectService
-    .getProjectCoOrdinates(this.selectedProjectId, this.selectedPmId)
-    .subscribe({
-      next: (res) => {
-        if (res.success && res.data) {
-          this.employees = res.data.map((emp: any) => ({
-            empName: emp.empName,
-            designation: emp.designationName
-          }));
-        } else {
-          this.employees = [];
+    this.projectService
+      .getProjectCoOrdinates(this.selectedProjectId, this.selectedPmId)
+      .subscribe({
+        next: (res) => {
+          if (res.success && res.data) {
+            this.employees = res.data.map((emp: any) => ({
+              id: emp.empId,
+              empName: emp.empName,
+              designation: emp.designationName,
+              isApproved: false
+            }));
+          } else {
+            this.employees = [];
+          }
+        },
+        error: () => {
+          Swal.fire('Error', 'Employee list load nahi hui', 'error');
         }
-      },
-      error: () => {
-        Swal.fire('Error', 'Employee list load nahi hui', 'error');
-      }
-    });
-}
+      });
+  }
 
 
 
@@ -282,42 +254,161 @@ getProjectEmployees() {
     });
   }
 
-  AddEmployee() {
+  approveEmployee(emp: any) {
 
+    emp.isApproved = !emp.isApproved; // toggle selection
+
+    if (emp.isApproved) {
+      // add
+      this.approvedEmployees.push({
+        id: emp.id,
+        empName: emp.empName
+      });
+    } else {
+      // remove
+      this.approvedEmployees =
+        this.approvedEmployees.filter(e => e.id !== emp.id);
+    }
+
+    this.showAddIcon = this.approvedEmployees.length > 0;
+
+    console.log('APPROVED LIST 👉', this.approvedEmployees);
+  }
+
+
+  openRejectModal(emp: any) {
+    this.rejectEmployee = emp;
+    this.rejectReason = '';
+    this.showRejectModal = true;
   }
   CancelEmployee() {
   }
 
-  addEmployeesToTable() {
-    if (this.selectedEmployees.length === 0) {
-      Swal.fire(
-        'No employee selected',
-        'Please select at least one employee',
-        'warning'
-      );
+
+
+  addAndSaveEmployees() {
+    this.saveEmployees();
+  }
+  onSubmitEmployees() {
+
+    if (this.approvedEmployees.length > 0) {
+      this.submitApprovedEmployees();
       return;
     }
 
-    // Chips → Table (avoid duplicates)
-    this.selectedEmployees.forEach(emp => {
-      const exists = this.employees.some(e => e.empName === emp.empName);
-      if (!exists) {
-        this.employees.push({
-          empName: emp.empName,
-          designation: emp.designation
-        });
-      }
-    });
+    if (this.selectedEmployees.length > 0) {
+      this.saveEmployees();
+      return;
+    }
 
-    // Optional UX
-    this.selectedEmployees = [];      // chips clear
-    this.showEmployeeDropdown = false;
-    this.showAddIcon = false;
 
-    console.log('Table updated:', this.employees);
+    Swal.fire(
+      'Warning',
+      'Please select at least one employee',
+      'warning'
+    );
   }
 
 
   saveEmployees() {
+
+    if (!this.selectedEmployees.length) {
+      Swal.fire('Warning', 'Please select at least one employee', 'warning');
+      return;
+    }
+
+    const payload = this.selectedEmployees.map(emp => ({
+      ProjectId: this.selectedProjectId,
+      PmId: this.selectedPmId,
+      EmpId: this.selectedPmId,     // 🔥 OLD employee (important)
+      NewEmpId: emp.id,             // 🔥 NEW employee
+      Status: 1,                    // 1 = Approve
+      Reason: ''
+    }));
+
+    console.log('FINAL PAYLOAD 👉', payload);
+
+    this.projectService.updateProjectEmployeeStatus(payload)
+      .subscribe({
+        next: () => {
+          Swal.fire('Success', 'Employee added successfully', 'success');
+
+          this.getProjectEmployees(); // reload list
+
+          // reset UI
+          this.selectedEmployees = [];
+          this.showEmployeeDropdown = false;
+          this.showAddIcon = false;
+          this.showEmployeeModal = false;
+        },
+        error: (err) => {
+          console.error(err);
+          Swal.fire('Error', 'Employee update failed', 'error');
+        }
+      });
   }
+
+  submitReject() {
+    if (!this.rejectReason.trim()) {
+      Swal.fire('Warning', 'Please enter reason', 'warning');
+      return;
+    }
+
+    const payload = [{
+      ProjectId: this.selectedProjectId,
+      PmId: this.selectedPmId,
+      EmpId: this.rejectEmployee.id,
+      NewEmpId: null,
+      Status: 2,
+      Reason: this.rejectReason
+    }];
+
+    console.log('REJECT PAYLOAD 👉', payload);
+
+    this.projectService.updateProjectEmployeeStatus(payload)
+      .subscribe({
+        next: () => {
+          Swal.fire('Rejected', 'Employee rejected successfully', 'success');
+          this.showRejectModal = false;
+          this.rejectEmployee = null;
+          this.rejectReason = '';
+          this.getProjectEmployees();
+        },
+        error: () => {
+          Swal.fire('Error', 'Reject failed', 'error');
+        }
+      });
+  }
+
+
+  submitApprovedEmployees() {
+
+    if (!this.approvedEmployees.length) {
+      Swal.fire('Warning', 'Please select at least one employee', 'warning');
+      return;
+    }
+
+    const payload = this.approvedEmployees.map(emp => ({
+      projectId: this.selectedProjectId,
+      pmId: this.selectedPmId,
+      empId: emp.id,
+      newEmpId: null,
+      status: 1,
+      reason: ''
+    }));
+
+    this.projectService.updateProjectEmployeeStatus(payload)
+      .subscribe({
+        next: () => {
+          Swal.fire('Success', 'Employees approved successfully', 'success');
+
+          this.approvedEmployees = [];
+          this.getProjectEmployees();
+        },
+        error: () => {
+          Swal.fire('Error', 'Approve failed', 'error');
+        }
+      });
+  }
+
 }

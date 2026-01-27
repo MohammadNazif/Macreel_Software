@@ -192,10 +192,10 @@ namespace Macreel_Software.Models.Master
         public string? projectTitle { get; set; }
         public string? description { get; set; }
 
-        public string? web { get; set; }
-        public string? app { get; set; }
-        public string? androidApp { get; set; }
-        public string? IOSApp { get; set; }
+        public bool web { get; set; }
+        public bool app { get; set; }
+        public bool androidApp { get; set; }
+        public bool IOSApp { get; set; }
 
         public int? appTechnology { get; set; }
         public int? appEmpId { get; set; }

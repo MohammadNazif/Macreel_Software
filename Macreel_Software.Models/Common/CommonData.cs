@@ -81,11 +81,11 @@ namespace Macreel_Software.Models.Common
 
     public class ProjectEmpStatusItem
     {
-        public int ProjectId { get; set; }
-        public int PmId { get; set; }
-        public int EmpId { get; set; }
+        public int? ProjectId { get; set; }
+        public int? PmId { get; set; }
+        public int? EmpId { get; set; }
         public int? NewEmpId { get; set; }
-        public int Status { get; set; }   // 1=Approve, 2=Reject
+        public int? Status { get; set; }   // 1=Approve, 2=Reject
         public string? Reason { get; set; }
     }
 

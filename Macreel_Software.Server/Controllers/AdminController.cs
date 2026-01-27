@@ -715,11 +715,13 @@ namespace Macreel_Software.Server.Controllers
             if (data.category != null &&
                 data.category.Equals("Software", StringComparison.OrdinalIgnoreCase))
             {
-                bool isAnySoftwareSelected =
-                    !string.IsNullOrWhiteSpace(data.web) ||
-                    !string.IsNullOrWhiteSpace(data.app) ||
-                    !string.IsNullOrWhiteSpace(data.androidApp) ||
-                    !string.IsNullOrWhiteSpace(data.IOSApp);
+                //bool isAnySoftwareSelected =
+                //    !string.IsNullOrWhiteSpace(data.web) ||
+                //    !string.IsNullOrWhiteSpace(data.app) ||
+                //    !string.IsNullOrWhiteSpace(data.androidApp) ||
+                //    !string.IsNullOrWhiteSpace(data.IOSApp);
+
+                bool isAnySoftwareSelected = data.web || data.app || data.androidApp || data.IOSApp;
 
                 if (!isAnySoftwareSelected)
                     return BadRequest("Please select at least one software type.");
