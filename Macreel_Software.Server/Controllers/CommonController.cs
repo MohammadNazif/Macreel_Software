@@ -1,4 +1,5 @@
-﻿using Macreel_Software.Contracts.DTOs;
+﻿using System.Security.Claims;
+using Macreel_Software.Contracts.DTOs;
 using Macreel_Software.DAL.Admin;
 using Macreel_Software.DAL.Common;
 using Macreel_Software.DAL.Master;
@@ -23,6 +24,7 @@ namespace Macreel_Software.Server.Controllers
         private readonly MailSender _mailservice;
         private readonly int _userId;
         private readonly IMasterService _masterservice;
+        private readonly string _role;
 
 
         public CommonController(ICommonServices service, PasswordEncrypt pass, FileUploadService fileUploadService,IAdminServices adminservice, MailSender mailservice, IAdminServices adminService, IHttpContextAccessor http,IMasterService masterservice)
@@ -38,6 +40,7 @@ namespace Macreel_Software.Server.Controllers
             if (user != null && user.Identity?.IsAuthenticated == true)
             {
                 _userId = Convert.ToInt32(user.FindFirst("UserId")?.Value);
+                _role = user.FindFirst(ClaimTypes.Role)?.Value.ToString()!;
             }
         }
 
@@ -600,8 +603,9 @@ namespace Macreel_Software.Server.Controllers
         {
             try
             {
+                string? role = _role;
                 ApiResponse<List<employeeRegistration>> result =
-                    await _services.GetAllEmpData(searchTerm, pageNumber, pageSize);
+                    await _services.GetAllEmpData(searchTerm, pageNumber, pageSize,_role);
 
                 return StatusCode(result.StatusCode, result);
             }
@@ -634,7 +638,7 @@ namespace Macreel_Software.Server.Controllers
                     "An error occurred while fetching pages",
                     500,
                     "SERVER_ERROR"
-                ));
+                ));                                                                                                                                                                                                                            
             }
         }
         #endregion

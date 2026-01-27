@@ -64,7 +64,7 @@ namespace Macreel_Software.Models.Master
         public string? Technology { get; set; }
         public string? CompanyContactNo { get; set; }
 
-        public int? addedBy { get; set; }
+        public string? addedBy { get; set; }
 
         public IFormFile? ExperienceCertificate { get; set; }
         public IFormFile? TenthCertificate { get; set; }

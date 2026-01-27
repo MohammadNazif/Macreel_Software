@@ -167,7 +167,7 @@ namespace Macreel_Software.DAL.Admin
         }
 
 
-        public async Task<ApiResponse<List<employeeRegistration>>> GetAllEmpData(string? searchTerm,int? pageNumber,int? pageSize)
+        public async Task<ApiResponse<List<employeeRegistration>>> GetAllEmpData(string? searchTerm,int? pageNumber,int? pageSize, string? addedBy)
         {
             List<employeeRegistration> list = new List<employeeRegistration>();
             int totalRecords = 0;
@@ -181,6 +181,7 @@ namespace Macreel_Software.DAL.Admin
 
                     cmd.Parameters.AddWithValue("@searchTerm",
                         string.IsNullOrWhiteSpace(searchTerm) ? DBNull.Value : searchTerm);
+                    cmd.Parameters.AddWithValue("@addedBy",addedBy);
 
                     cmd.Parameters.AddWithValue("@pageNumber",
                         pageNumber.HasValue ? pageNumber.Value : DBNull.Value);
