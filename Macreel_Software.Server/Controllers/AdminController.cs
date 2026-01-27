@@ -1,4 +1,5 @@
-﻿using Macreel_Software.Contracts.DTOs;
+﻿using System.Security.Claims;
+using Macreel_Software.Contracts.DTOs;
 using Macreel_Software.DAL.Admin;
 using Macreel_Software.Models;
 using Macreel_Software.Models.Common;
@@ -23,6 +24,7 @@ namespace Macreel_Software.Server.Controllers
         private readonly MailSender _mailservice;
         private readonly PasswordEncrypt _pass;
         private readonly int _userId;
+        private readonly string _role;
 
         public AdminController(
             IAdminServices service,
@@ -40,6 +42,7 @@ namespace Macreel_Software.Server.Controllers
             if (user != null && user.Identity?.IsAuthenticated == true)
             {
                 _userId = Convert.ToInt32(user.FindFirst("UserId")?.Value);
+                _role = user.FindFirst(ClaimTypes.Role)?.Value.ToString()!;
             }
 
         }
@@ -61,6 +64,7 @@ namespace Macreel_Software.Server.Controllers
         {
             try
             {
+                model.addedBy = _role;
                 string[] imgExt = { ".jpg", ".jpeg", ".png" };
                 string[] docExt = { ".pdf", ".jpg", ".jpeg", ".png" };
                 long maxSize = 2 * 1024 * 1024; // 2 MB
@@ -200,10 +204,10 @@ namespace Macreel_Software.Server.Controllers
         public async Task<IActionResult> getemployeeById(int id)
         {
             try
-            {
+
+            { 
 
                 var result = await _services.GetAllEmpDataById(id);
-
 
                 return StatusCode(result.StatusCode, result);
             }
