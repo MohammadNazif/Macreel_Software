@@ -49,15 +49,32 @@
       </div>
     </div>
 
-    <!-- 🟦 CHIPS SECTION -->
-    <div class="px-4 py-2 flex flex-wrap gap-2 border-b max-h-[80px]">
-      <ng-container *ngFor="let emp of selectedEmployees">
-        <span class="flex items-center gap-1 bg-gray-200 text-sm px-2 py-1 rounded-full">
-          {{ emp.empName }}
-          <button class="text-red-500" (click)="removeChip(emp)">✕</button>
-        </span>
-      </ng-container>
-    </div>
+   <!-- 🟦 CHIPS + ADD BUTTON (SAME ROW) -->
+<div class="px-4 py-2 flex items-center gap-2 border-b max-h-[80px]">
+
+  <!-- CHIPS -->
+  <div class="flex flex-wrap gap-2 flex-1 overflow-auto">
+    <ng-container *ngFor="let emp of selectedEmployees">
+      <span class="flex items-center gap-1 bg-gray-200 text-sm px-2 py-1 rounded-full">
+        {{ emp.empName }}
+        <button class="text-red-500" (click)="removeChip(emp)">✕</button>
+      </span>
+    </ng-container>
+  </div>
+
+  <!-- ADD BUTTON -->
+  <button
+    *ngIf="showAddIcon"
+    class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full
+           bg-green-600 text-white hover:bg-green-700"
+    title="Add to table"
+    (click)="addEmployeesToTable()">
+    <i class="fa fa-check text-xs"></i>
+  </button>
+
+</div>
+
+
 
     <!-- 📋 EMPLOYEE LIST (API DATA) -->
     <div *ngIf="showEmployeeDropdown" class="px-4 py-2 max-h-40 overflow-auto border-b" style="max-height: 80px;">

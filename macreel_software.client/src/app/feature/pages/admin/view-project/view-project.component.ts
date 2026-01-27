@@ -31,12 +31,10 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
   showEmployeeDropdown = false;
   loadingEmployees = false;
 
+  showAddIcon = false;
+
   // Static dummy employees
-  employees = [
-    { empName: 'John Doe', designation: 'Developer' },
-    { empName: 'Jane Smith', designation: 'Tester' },
-    { empName: 'Michael Johnson', designation: 'Manager' },
-  ];
+  employees: any[] = [];
 
   searchForm!: FormGroup;
   paginator!: PaginatedList<Project>;
@@ -160,10 +158,14 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
         status: 1
       });
     }
+
+     this.showAddIcon = this.selectedEmployees.length > 0;
   }
 
   removeChip(emp: any) {
     this.selectedEmployees = this.selectedEmployees.filter(e => e.id !== emp.id);
+
+     this.showAddIcon = this.selectedEmployees.length > 0;
   }
 
   openEmployeedataModal() {
@@ -205,6 +207,36 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
   }
   CancelEmployee() {
   }
+
+  addEmployeesToTable() {
+  if (this.selectedEmployees.length === 0) {
+    Swal.fire(
+      'No employee selected',
+      'Please select at least one employee',
+      'warning'
+    );
+    return;
+  }
+
+  // Chips → Table (avoid duplicates)
+  this.selectedEmployees.forEach(emp => {
+    const exists = this.employees.some(e => e.empName === emp.empName);
+    if (!exists) {
+      this.employees.push({
+        empName: emp.empName,
+        designation: emp.designation
+      });
+    }
+  });
+
+  // Optional UX
+  this.selectedEmployees = [];      // chips clear
+  this.showEmployeeDropdown = false;
+   this.showAddIcon = false;
+
+  console.log('Table updated:', this.employees);
+}
+
 
   saveEmployees() {
   }
