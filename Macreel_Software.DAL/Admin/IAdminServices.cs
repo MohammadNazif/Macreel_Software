@@ -11,9 +11,7 @@ namespace Macreel_Software.DAL.Admin
     {
         Task<string> InsertEmployeeRegistrationData(employeeRegistration data);
         Task<List<ReportingManger>> GetAllReportingManager();
-         Task<ApiResponse<List<employeeRegistration>>> GetAllEmpData(string? searchTerm,
-          int? pageNumber,
-          int? pageSize);
+         Task<ApiResponse<List<employeeRegistration>>> GetAllEmpData(string? searchTerm, int? pageNumber, int? pageSize, string? addedBy);
         Task<bool> deleteEmployeeById(int id);
         Task<ApiResponse<List<employeeRegistration>>> GetAllEmpDataById(int id);
         Task<bool> UpdateEmployeeRegistrationData(employeeRegistration data);
