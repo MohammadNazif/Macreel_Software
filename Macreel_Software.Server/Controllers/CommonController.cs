@@ -634,7 +634,7 @@ namespace Macreel_Software.Server.Controllers
                     "An error occurred while fetching pages",
                     500,
                     "SERVER_ERROR"
-                ));
+                ));                                                                                                                                                                                                                            
             }
         }
         #endregion
