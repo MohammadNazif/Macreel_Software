@@ -14,19 +14,26 @@
 </div>
 
 <ng-template #filesTemplate let-row>
-  <button class="w-auto h-7 flex items-center justify-center rounded
-           text-gray-600 hover:text-blue-600 hover:bg-gray-100" (click)="openEmployeeModal()">
-    {{ row.appEmpName }}
-  </button>
+ <span
+  *ngIf="row.appEmpName"
+  class="cursor-pointer text-blue-600"
+  (click)="onEmployeeClick(row.appEmpId,row.id ,'app')">
+  {{ row.appEmpName }}
+</span>
 </ng-template>
 
 
 <ng-template #webTemplate let-row>
-  <button class="w-auto h-7 flex items-center justify-center rounded
-                 text-gray-600 hover:text-blue-600 hover:bg-gray-100" (click)="openEmployeeModal()">
-    {{ row.webEmpName }}
-  </button>
+ <span
+  *ngIf="row.webEmpName"
+  class="cursor-pointer text-green-600"
+  (click)="onEmployeeClick(row.webEmpId,row.id ,'web')">
+  {{ row.webEmpName }}
+</span>
 </ng-template>
+
+
+
 
 
 

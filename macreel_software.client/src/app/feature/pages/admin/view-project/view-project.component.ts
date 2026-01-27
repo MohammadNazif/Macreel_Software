@@ -18,7 +18,7 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
 
   @ViewChild('iconsTemplate', { static: true }) iconsTemplate!: TemplateRef<any>;
   @ViewChild('filesTemplate', { static: true }) filesTemplate!: TemplateRef<any>;
-    @ViewChild('webTemplate', { static: true }) webTemplate!: TemplateRef<any>;
+  @ViewChild('webTemplate', { static: true }) webTemplate!: TemplateRef<any>;
 
   showEmployeeModal = false;
   selectedEmployees: any[] = [];
@@ -35,6 +35,11 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
 
   // Static dummy employees
   employees: any[] = [];
+  selectedProjectId!: number;
+  selectedPmId!: number;
+  selectedEmpType!: 'app' | 'web';
+
+
 
   searchForm!: FormGroup;
   paginator!: PaginatedList<Project>;
@@ -79,7 +84,7 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
         label: 'Actions',
         type: 'custom',
         template: this.iconsTemplate,
-        width:'10px'
+        width: '10px'
 
       }
     ];
@@ -109,10 +114,85 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
     this.paginator.handleScroll(event, this.searchForm.value.search);
   }
 
-  openEmployeeModal() {
+  // openEmployeeModal() {
+  //   this.showEmployeeModal = true;
+  //   this.showEmployeeDropdown = false;
+  // }
+
+
+
+  onEmployeeClick(empId: number, id: number, type: 'app' | 'web') {
+    if (!empId || empId === 0) return;
+
+    this.selectedPmId = empId;
+    this.selectedProjectId = id;
+    this.selectedEmpType = type;
+
+    console.log('Selected Emp ID:', empId);
+    console.log('Selected Emp ID:', id);
+    console.log('Type:', type);
+
     this.showEmployeeModal = true;
-    this.showEmployeeDropdown = false;
+
+    // reset table
+    this.employees = [];
+
+    // 🔥 API CALL
+    this.getProjectEmployees();
+
+    // 🔥 YAHI ID backend ko bhejni hai
+    // this.callApi(empId);
   }
+
+
+  // openEmployeeModal(id: number, empId: number) {
+  //   this.selectedProjectId = id;
+  //   this.selectedPmId = empId;
+
+  //   console.log('✅ CLICKED');
+  //   console.log('Project ID:', id);
+  //   console.log('Employee ID:', empId);
+
+  //   this.showEmployeeModal = true;
+
+  //   // reset states
+  //   this.selectedEmployees = [];
+  //   this.employees = [];
+  //   this.showEmployeeDropdown = false;
+  //   this.showAddIcon = false;
+
+  //   console.log('Project ID:', id);
+  //   console.log('Employee ID:', empId);
+
+  //   // agar already mapped employees dikhane hain
+  //   this.getProjectEmployees();
+  // }
+
+getProjectEmployees() {
+  if (!this.selectedProjectId || !this.selectedPmId) return;
+
+  this.projectService
+    .getProjectCoOrdinates(this.selectedProjectId, this.selectedPmId)
+    .subscribe({
+      next: (res) => {
+        if (res.success && res.data) {
+          this.employees = res.data.map((emp: any) => ({
+            empName: emp.empName,
+            designation: emp.designationName
+          }));
+        } else {
+          this.employees = [];
+        }
+      },
+      error: () => {
+        Swal.fire('Error', 'Employee list load nahi hui', 'error');
+      }
+    });
+}
+
+
+
+
 
 
   closeModal() {
@@ -159,13 +239,13 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
       });
     }
 
-     this.showAddIcon = this.selectedEmployees.length > 0;
+    this.showAddIcon = this.selectedEmployees.length > 0;
   }
 
   removeChip(emp: any) {
     this.selectedEmployees = this.selectedEmployees.filter(e => e.id !== emp.id);
 
-     this.showAddIcon = this.selectedEmployees.length > 0;
+    this.showAddIcon = this.selectedEmployees.length > 0;
   }
 
   openEmployeedataModal() {
@@ -209,33 +289,33 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
   }
 
   addEmployeesToTable() {
-  if (this.selectedEmployees.length === 0) {
-    Swal.fire(
-      'No employee selected',
-      'Please select at least one employee',
-      'warning'
-    );
-    return;
-  }
-
-  // Chips → Table (avoid duplicates)
-  this.selectedEmployees.forEach(emp => {
-    const exists = this.employees.some(e => e.empName === emp.empName);
-    if (!exists) {
-      this.employees.push({
-        empName: emp.empName,
-        designation: emp.designation
-      });
+    if (this.selectedEmployees.length === 0) {
+      Swal.fire(
+        'No employee selected',
+        'Please select at least one employee',
+        'warning'
+      );
+      return;
     }
-  });
 
-  // Optional UX
-  this.selectedEmployees = [];      // chips clear
-  this.showEmployeeDropdown = false;
-   this.showAddIcon = false;
+    // Chips → Table (avoid duplicates)
+    this.selectedEmployees.forEach(emp => {
+      const exists = this.employees.some(e => e.empName === emp.empName);
+      if (!exists) {
+        this.employees.push({
+          empName: emp.empName,
+          designation: emp.designation
+        });
+      }
+    });
 
-  console.log('Table updated:', this.employees);
-}
+    // Optional UX
+    this.selectedEmployees = [];      // chips clear
+    this.showEmployeeDropdown = false;
+    this.showAddIcon = false;
+
+    console.log('Table updated:', this.employees);
+  }
 
 
   saveEmployees() {

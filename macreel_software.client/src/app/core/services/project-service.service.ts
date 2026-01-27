@@ -52,6 +52,20 @@ export class ProjectService {
   );
 }
 
+getProjectCoOrdinates(projectId: number, pmId: number) {
+  return this.http.get<any>(
+    `${this.baseUrl}Admin/ProjectCoOrdinateList`,
+    {
+      params: {
+        projectId: projectId.toString(),
+        pmId: pmId.toString()
+      }
+    }
+  );
+}
+
+
+
 
 
 }
