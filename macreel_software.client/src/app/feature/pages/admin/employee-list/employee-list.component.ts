@@ -5,7 +5,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { ManageEmployeeService } from '../../../../core/services/manage-employee.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import {  employee, TableColumn } from '../../../../core/models/interface';
+import { TableColumn } from '../../../../core/models/interface';
 
 
 @Component({
@@ -27,11 +27,11 @@ export class EmployeeListComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private employeeService: ManageEmployeeService, private router: Router) { }
+  constructor(private readonly employeeService: ManageEmployeeService, private readonly router: Router) { }
 
   editEmployee(emp: any) {
 
-    this.router.navigate(['/home/edit-employee', emp.id]);
+    this.router.navigate(['/home/admin/edit-employee', emp.id]);
   }
   employee: TableColumn<any>[] = [
     { key: 'empCode', label: 'Emp Code',align:'center' },
@@ -95,7 +95,7 @@ export class EmployeeListComponent implements OnInit {
                 confirmButtonText: 'OK'
               }).then(() => {
                 
-                window.location.reload();
+                location.reload();
               });
 
             } else {

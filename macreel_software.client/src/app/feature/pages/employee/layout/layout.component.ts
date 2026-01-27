@@ -1,16 +1,15 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { AuthService } from '../../core/services/auth.service';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { ManageMasterdataService } from '../../core/services/manage-masterdata.service';
+import { AuthService } from '../../../../core/services/auth.service';
+import { ManageMasterdataService } from '../../../../core/services/manage-masterdata.service';
 
 @Component({
   selector: 'app-layout',
   standalone: false,
   templateUrl: './layout.component.html',
-  styleUrls: ['./layout.component.css']
+  styleUrl: './layout.component.css'
 })
-export class LayoutComponent implements OnInit, OnDestroy {
-
+export class LayoutComponent {
   sidebarOpen = true;
   isMobile = false;
   openMenu: string | null = null;
@@ -25,7 +24,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly master: ManageMasterdataService
   ) { }
-  private resizeListener = () => this.checkScreen();
+  private readonly resizeListener = () => this.checkScreen();
 
   menus = [
     {
@@ -60,7 +59,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
       label: 'Employee Management',
       icon: 'fa-solid fa-users',
       key: 'employee',
-      roles: ['admin','hr'],
+      roles: ['admin', 'hr'],
       children: [
         {
           label: 'Add Employee',
@@ -76,7 +75,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
       label: 'Leave Management',
       icon: 'fas fa-id-card',
       key: 'leave',
-      roles: ['admin', 'employee','hr','reportingManager'],
+      roles: ['admin', 'employee', 'hr', 'reportingManager'],
       children: [
         { label: 'Assign Leave', route: '/home/admin/assign-leave', roles: ['admin'] },
         { label: 'Assigned Leaves', route: '/home/admin/assigned-employees-leaves', roles: ['admin'] },
@@ -89,7 +88,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
       label: 'Attendance Management',
       icon: 'fa-solid fa-calendar-check',
       key: 'attendance',
-      roles: ['admin','employee','hr','reportingManager'],
+      roles: ['admin', 'employee', 'hr', 'reportingManager'],
       children: [
         {
           label: 'Upload Attendance',
@@ -105,7 +104,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
       label: 'Task Management',
       icon: 'fa-solid fa-tasks',
       key: 'task',
-      roles: ['admin', 'employee','hr','reportingManager'],
+      roles: ['admin', 'employee', 'hr', 'reportingManager'],
       children: [
         {
           label: 'Add Task',
@@ -133,7 +132,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
       label: 'Project Management',
       icon: 'fa-solid fa-tasks',
       key: 'project',
-      roles: ['admin','employee','hr','reportingManager'],
+      roles: ['admin', 'employee', 'hr', 'reportingManager'],
       children: [
         {
           label: 'Add Project',
@@ -150,11 +149,11 @@ export class LayoutComponent implements OnInit, OnDestroy {
           route: '/home/employee/assign-project',
           roles: ['employee']
         },
-        
-         {
+
+        {
           label: 'Project Progress',
           route: '/home/admin/project-progress',
-          roles: ['admin','employee']
+          roles: ['admin', 'employee']
         }
       ]
     }
@@ -258,5 +257,4 @@ export class LayoutComponent implements OnInit, OnDestroy {
       this.router.navigate(['/login']);
     });
   }
-
 }

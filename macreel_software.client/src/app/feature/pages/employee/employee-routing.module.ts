@@ -6,15 +6,21 @@ import { ApplyLeaveComponent } from './apply-leave/apply-leave.component';
 import { AssignedLeavesComponent } from './assigned-leaves/assigned-leaves.component';
 import { AssignProjectComponent } from './assign-project/assign-project.component';
 import { TaskListComponent } from './task-list/task-list.component';
+import { LayoutComponent } from './layout/layout.component';
 
 const routes: Routes = [
-  {path:'',redirectTo:'dashboard',pathMatch:'full'},
-  {path:'dashboard',component:DashboardComponent},
-  {path:'assigned-tasks',component:AssignedTaskComponent},
-  {path:'assigned-leaves',component:AssignedLeavesComponent},
-  {path:'apply-leave',component:ApplyLeaveComponent},
-  {path:'assign-project',component:AssignProjectComponent},
-  {path:'task-list',component:TaskListComponent}
+  {
+    path: '', component: LayoutComponent,
+    children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard', component: DashboardComponent },
+      { path: 'assigned-tasks', component: AssignedTaskComponent },
+      { path: 'assigned-leaves', component: AssignedLeavesComponent },
+      { path: 'apply-leave', component: ApplyLeaveComponent },
+      { path: 'assign-project', component: AssignProjectComponent },
+      { path: 'task-list', component: TaskListComponent }
+    ]
+  },
 ];
 
 @NgModule({

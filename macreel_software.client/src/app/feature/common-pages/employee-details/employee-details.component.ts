@@ -1,4 +1,4 @@
-import { Component, EnvironmentInjector, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { environment, pdfUrl } from '../../../../environments/environment';
 
@@ -16,7 +16,7 @@ export interface EmployeeDetails {
   reportingManagerId: string;
   emailId: string;
   dateOfJoining: string;
-  yearOfExperience : number;
+  yearOfExperience: number;
   salary: string;
   bankName: string;
   accountNo: string;
@@ -46,27 +46,26 @@ export interface EmployeeDetails {
   graduationCertificatePathan: string;
   mastersCertificatePath: string;
   skill: any[];
-  companyContactNo :number;
+  companyContactNo: number;
+  password:string;
 }
 
 @Component({
   selector: 'app-employee-details',
-  standalone:false,
+  standalone: false,
   templateUrl: './employee-details.component.html',
   styleUrls: ['./employee-details.component.css']
 })
-  export class EmployeeDetailsComponent implements OnInit  {
-      
+export class EmployeeDetailsComponent implements OnInit {
+
   apiUrl = environment.apiUrl;
   pdfBaseUrl = pdfUrl.pdfUrl;
-    
-    employee!: EmployeeDetails;
+  employee!: EmployeeDetails;
 
-    constructor(private route: ActivatedRoute) { }
+  constructor(private readonly route: ActivatedRoute) { }
 
- ngOnInit(): void {
- 
-  this.employee = history.state.employee;
-   console.log(this.employee)
-}
+  ngOnInit(): void {
+    this.employee = history.state.employee;
+    console.log(this.employee)
+  }
 }

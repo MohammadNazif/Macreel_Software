@@ -20,9 +20,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-
 import { SafeUrlPipe } from '../../../core/pipes/capitalize.pipe';
 import { TaskListComponent } from './task-list/task-list.component';
+import { LayoutComponent } from './layout/layout.component';
 
 @NgModule({
   declarations: [
@@ -31,28 +31,22 @@ import { TaskListComponent } from './task-list/task-list.component';
     AssignedLeavesComponent,
     ApplyLeaveComponent,
     AssignProjectComponent,
-    TaskListComponent
+    TaskListComponent,
+    LayoutComponent
   ],
   imports: [
     CommonModule,
     EmployeeRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-
     MatTableModule,
-
-
-
-
     MatPaginatorModule,
     MatFormFieldModule,
     MatInputModule,
     MatChipsModule,
     MatAutocompleteModule,
-
     CommonPagesModule,
     SafeUrlPipe
-
   ],
   exports :[
 
