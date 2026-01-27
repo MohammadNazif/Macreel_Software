@@ -63,7 +63,6 @@ namespace Macreel_Software.Models.Common
     {
         public int id { get; set; }
         public IFormFile? rule_Book { get; set; }
-
         public string? rule_Book_Path { get; set; }
     }
 
