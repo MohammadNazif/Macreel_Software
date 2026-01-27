@@ -1,14 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Data;
-using System.Threading.Tasks;
+﻿using System.Data;
 using Macreel_Software.Contracts.DTOs;
 using Macreel_Software.Models;
 using Macreel_Software.Models.Common;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
-using OfficeOpenXml;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace Macreel_Software.DAL.Common
 {
     public class CommonService : ICommonServices
