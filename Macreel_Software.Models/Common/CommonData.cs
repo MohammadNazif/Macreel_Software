@@ -83,16 +83,13 @@ namespace Macreel_Software.Models.Common
     {
         public int ProjectId { get; set; }
         public int PmId { get; set; }
-        public int EmpId { get; set; }         
-        public int? NewEmpId { get; set; }    
-        public int Status { get; set; }         
-        public string? Reason { get; set; }     
+        public int EmpId { get; set; }
+        public int? NewEmpId { get; set; }
+        public int Status { get; set; }   // 1=Approve, 2=Reject
+        public string? Reason { get; set; }
     }
 
-    public class ProjectEmpStatusBulkRequest
-    {
-        public List<ProjectEmpStatusItem> Items { get; set; } = new();
-    }
+
 
 
 }
