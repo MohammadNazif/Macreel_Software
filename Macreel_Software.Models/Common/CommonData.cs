@@ -63,7 +63,6 @@ namespace Macreel_Software.Models.Common
     {
         public int id { get; set; }
         public IFormFile? rule_Book { get; set; }
-
         public string? rule_Book_Path { get; set; }
     }
 
@@ -75,16 +74,21 @@ namespace Macreel_Software.Models.Common
     public class ProjectEmp
     {
         public int? projectId { get; set; }
+        public int? pmId { get; set; }
         public string? empIds { get; set; }   
     }
 
-    public class ProjectEmpStatusRequest
+    public class ProjectEmpStatusItem
     {
-        public int ProjectId { get; set; }
-        public int EmpId { get; set; }         
-        public int ApproveStatus { get; set; }  
-        public int? NewEmpId { get; set; }      
+        public int? ProjectId { get; set; }
+        public int? PmId { get; set; }
+        public int? EmpId { get; set; }
+        public int? NewEmpId { get; set; }
+        public int? Status { get; set; }   // 1=Approve, 2=Reject
+        public string? Reason { get; set; }
     }
+
+
 
 
 }

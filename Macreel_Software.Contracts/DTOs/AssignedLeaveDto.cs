@@ -12,6 +12,7 @@ namespace Macreel_Software.Contracts.DTOs
         public int AssignedLeave { get; set; }      // assignedLeave
         public int UsedLeave { get; set; }          // usedLeave
         public int RemainingLeave { get; set; }     // remainingLeave
+        public int ELCarryForward { get; set; }     // remainingLeave
     }
 
 
@@ -30,6 +31,7 @@ namespace Macreel_Software.Contracts.DTOs
         public int? ELTotal { get; set; }
         public int? ELUsed { get; set; }
         public int? ELRemaining { get; set; }
+        public int? ELCarryForward { get; set; }
 
         public int? SLTotal { get; set; }
         public int? SLUsed { get; set; }

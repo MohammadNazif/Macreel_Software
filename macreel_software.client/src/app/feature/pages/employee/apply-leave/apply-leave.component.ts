@@ -39,6 +39,7 @@ export class ApplyLeaveComponent {
   // for cards
   totalLeave: Record<string, number> = {};
   remainingLeave: Record<string, number> = {};
+  carryforwardleave :  number = 0;
   unapprovedLeave: Record<string, number> = {};
   leaveRequests: LeaveRequest[] = []
   // Leave requests list
@@ -142,6 +143,7 @@ export class ApplyLeaveComponent {
         if (res?.data) {
           this.leaveBalanceList = res.data;
           this.mapLeaveBalance(res.data);
+           this.carryforwardleave =  res.data[1].elCarryForward
         }
       }
     });
@@ -154,7 +156,6 @@ export class ApplyLeaveComponent {
     data.forEach(item => {
       this.totalLeave[item.leaveType] = item.assignedLeave;
       this.remainingLeave[item.leaveType] = item.remainingLeave;
-
       // unapproved = assigned - (used + remaining)
       this.unapprovedLeave[item.leaveType] =
         item.assignedLeave - (item.usedLeave + item.remainingLeave);

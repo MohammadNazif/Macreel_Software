@@ -1,14 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Data;
-using System.Threading.Tasks;
+﻿using System.Data;
 using Macreel_Software.Contracts.DTOs;
 using Macreel_Software.Models;
 using Macreel_Software.Models.Common;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
-using OfficeOpenXml;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace Macreel_Software.DAL.Common
 {
     public class CommonService : ICommonServices
@@ -395,6 +390,7 @@ namespace Macreel_Software.DAL.Common
                     cmd.Parameters.AddWithValue("@action", "insertProjectEmp");
                     cmd.Parameters.AddWithValue("@projectId", data.projectId);
                     cmd.Parameters.AddWithValue("@empId", empId);
+                    cmd.Parameters.AddWithValue("@pmId", addedBy);
                     cmd.Parameters.AddWithValue("@addedBy", addedBy);
 
                     int rows = await cmd.ExecuteNonQueryAsync();
@@ -465,32 +461,38 @@ namespace Macreel_Software.DAL.Common
 
         }
 
-        public async Task<bool> UpdateProjectEmpStatus(int projectId,int empId,int approveStatus,int? newEmpId,int addedBy)
+        public async Task<bool> UpdateProjectEmpStatusSingle(ProjectEmpStatusItem model, int adminId)
         {
             try
             {
-                using (SqlCommand cmd = new SqlCommand("sp_addAndAssignProject", _conn))
+                using (SqlCommand cmd =
+                       new SqlCommand("sp_addAndAssignProject", _conn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
 
                     cmd.Parameters.AddWithValue("@action", "updateStatusOfProjectEmp");
-                    cmd.Parameters.AddWithValue("@projectId", projectId);
-                    cmd.Parameters.AddWithValue("@addedBy", addedBy);
-                    cmd.Parameters.AddWithValue("@empId", empId);
-                    cmd.Parameters.AddWithValue("@approveStatus", approveStatus);
-                    cmd.Parameters.AddWithValue("@newEmpId",
-                        newEmpId.HasValue ? newEmpId.Value : (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@projectId", model.ProjectId);
+                    cmd.Parameters.AddWithValue("@pmId", model.PmId);
+                    cmd.Parameters.AddWithValue("@empId", model.EmpId);
+                    cmd.Parameters.AddWithValue("@newEmpId",model.NewEmpId ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@approveStatus", model.Status);
+                    cmd.Parameters.AddWithValue("@reason", model.Reason ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@addedBy", adminId);
 
                     if (_conn.State == ConnectionState.Closed)
                         await _conn.OpenAsync();
 
-                    int rowAffected = await cmd.ExecuteNonQueryAsync();
-                    return rowAffected > 0;
+                    int rows = await cmd.ExecuteNonQueryAsync();
+                    return rows > 0;
                 }
+            }
+            catch (SqlException sqlEx)
+            {
+                throw; 
             }
             catch (Exception ex)
             {
-                throw; 
+                throw;
             }
             finally
             {
@@ -498,8 +500,6 @@ namespace Macreel_Software.DAL.Common
                     await _conn.CloseAsync();
             }
         }
-
-
 
 
     }

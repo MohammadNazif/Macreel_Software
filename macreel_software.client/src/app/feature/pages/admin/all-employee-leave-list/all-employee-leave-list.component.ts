@@ -11,7 +11,7 @@ import { ManageLeaveService } from '../../../../core/services/manage-leave.servi
 })
 export class AllEmployeeLeaveListComponent implements OnInit {
 
-  displayedColumns: string[] = ['srNo', 'empCode', 'empName', 'designation', 'CL', 'EL', 'SL'];
+  displayedColumns: string[] = ['srNo', 'empCode', 'empName', 'designation', 'CL', 'EL', 'SL','CF'];
 
   dataSource = new MatTableDataSource<any>([]);
   totalRecords = 0;
@@ -65,7 +65,8 @@ export class AllEmployeeLeaveListComponent implements OnInit {
     this.selectedEmployeeLeaves = [
       { leaveType: 'CL', noOfLeave: emp.clTotal },
       { leaveType: 'EL', noOfLeave: emp.elTotal },
-      { leaveType: 'SL', noOfLeave: emp.slTotal }
+      { leaveType: 'SL', noOfLeave: emp.slTotal },
+      { leaveType: 'CF', noOfLeave: emp.slTotal }
     ];
 
     this.selectedEmployeeName = emp.empName;

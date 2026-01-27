@@ -1,4 +1,5 @@
-﻿using Macreel_Software.Contracts.DTOs;
+﻿using System.Security.Claims;
+using Macreel_Software.Contracts.DTOs;
 using Macreel_Software.DAL.Admin;
 using Macreel_Software.DAL.Common;
 using Macreel_Software.DAL.Master;
@@ -23,6 +24,7 @@ namespace Macreel_Software.Server.Controllers
         private readonly MailSender _mailservice;
         private readonly int _userId;
         private readonly IMasterService _masterservice;
+        private readonly string _role;
 
 
         public CommonController(ICommonServices service, PasswordEncrypt pass, FileUploadService fileUploadService,IAdminServices adminservice, MailSender mailservice, IAdminServices adminService, IHttpContextAccessor http,IMasterService masterservice)
@@ -38,6 +40,7 @@ namespace Macreel_Software.Server.Controllers
             if (user != null && user.Identity?.IsAuthenticated == true)
             {
                 _userId = Convert.ToInt32(user.FindFirst("UserId")?.Value);
+                _role = user.FindFirst(ClaimTypes.Role)?.Value.ToString()!;
             }
         }
 
@@ -563,31 +566,33 @@ namespace Macreel_Software.Server.Controllers
         }
 
         [HttpPost("update-project-emp-status")]
-        public async Task<IActionResult> UpdateProjectEmpStatus([FromForm]ProjectEmpStatusRequest model)
+        public async Task<IActionResult> UpdateProjectEmpStatus([FromBody] List<ProjectEmpStatusItem> model)
         {
             try
             {
-                int addedBy = _userId;
-                bool result = await _service.UpdateProjectEmpStatus(model.ProjectId, model.EmpId,model.ApproveStatus,model.NewEmpId, _userId);
-                if (result)
+                int adminId = _userId;
+
+                foreach (var item in model)
                 {
-                    string msg = model.ApproveStatus == 1? "Project employee approved successfully.": "Project employee rejected and updated successfully.";
-                    return Ok(new{success = true, message = msg});
+                    await _service.UpdateProjectEmpStatusSingle(item, adminId);
                 }
-                else
+
+                return Ok(new
                 {
-                    return Ok(new { success = false,message = "No record updated. Please try again."});
-                }
+                    success = true,
+                    message = "Project employee status updated successfully."
+                });
             }
             catch (Exception)
             {
                 return StatusCode(500, new
                 {
                     success = false,
-                    message = "Some error occurred while processing your request."
+                    message = "Some error occurred."
                 });
-            }           
+            }
         }
+
 
         #endregion
 
@@ -598,8 +603,9 @@ namespace Macreel_Software.Server.Controllers
         {
             try
             {
+                string? role = _role;
                 ApiResponse<List<employeeRegistration>> result =
-                    await _services.GetAllEmpData(searchTerm, pageNumber, pageSize);
+                    await _services.GetAllEmpData(searchTerm, pageNumber, pageSize,_role);
 
                 return StatusCode(result.StatusCode, result);
             }
@@ -632,7 +638,7 @@ namespace Macreel_Software.Server.Controllers
                     "An error occurred while fetching pages",
                     500,
                     "SERVER_ERROR"
-                ));
+                ));                                                                                                                                                                                                                            
             }
         }
         #endregion

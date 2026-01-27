@@ -10,14 +10,10 @@ using Microsoft.Extensions.Configuration;
 using System.Data;
 using System.Text.Json;
 
-
-
 namespace Macreel_Software.DAL.Admin
 {
-
     public  class AdminServices:IAdminServices
     {
-
         private readonly SqlConnection _conn;
         private readonly UploadAttendance _upload;
         private readonly PasswordEncrypt _pass;
@@ -173,7 +169,7 @@ namespace Macreel_Software.DAL.Admin
         }
 
 
-        public async Task<ApiResponse<List<employeeRegistration>>> GetAllEmpData(string? searchTerm,int? pageNumber,int? pageSize)
+        public async Task<ApiResponse<List<employeeRegistration>>> GetAllEmpData(string? searchTerm,int? pageNumber,int? pageSize, string? addedBy)
         {
             List<employeeRegistration> list = new List<employeeRegistration>();
             int totalRecords = 0;
@@ -187,6 +183,7 @@ namespace Macreel_Software.DAL.Admin
 
                     cmd.Parameters.AddWithValue("@searchTerm",
                         string.IsNullOrWhiteSpace(searchTerm) ? DBNull.Value : searchTerm);
+                    cmd.Parameters.AddWithValue("@addedBy",addedBy);
 
                     cmd.Parameters.AddWithValue("@pageNumber",
                         pageNumber.HasValue ? pageNumber.Value : DBNull.Value);
@@ -744,6 +741,7 @@ namespace Macreel_Software.DAL.Admin
                                 ELTotal = sdr["ELTotal"] != DBNull.Value ? Convert.ToInt32(sdr["ELTotal"]) : null,
                                 ELRemaining = sdr["ELRemaining"] != DBNull.Value ? Convert.ToInt32(sdr["ELRemaining"]) : null,
                                 ELUsed = sdr["ELUsed"] != DBNull.Value ? Convert.ToInt32(sdr["ELUsed"]) : null,
+                                ELCarryForward = sdr["ELCarryForward"] != DBNull.Value ? Convert.ToInt32(sdr["ELCarryForward"]) : null,
                             });
                         }
                     }
@@ -1373,18 +1371,24 @@ namespace Macreel_Software.DAL.Admin
                                 category = sdr["category"] != DBNull.Value ? sdr["category"].ToString():null,
                                 projectTitle = sdr["projectTitle"] != DBNull.Value ? sdr["projectTitle"].ToString():null,
                                 description = sdr["description"] != DBNull.Value ? sdr["description"].ToString():null,
-                                web = sdr["web"] != DBNull.Value ? sdr["web"].ToString():null,
-                                app = sdr["app"] != DBNull.Value ? sdr["app"].ToString():null,
-                                androidApp = sdr["androidApp"] != DBNull.Value ? sdr["androidApp"].ToString():null,
-                                IOSApp = sdr["IOSApp"] != DBNull.Value ? sdr["IOSApp"].ToString():null,
+                                //web = sdr["web"] != DBNull.Value ? sdr["web"].ToString():null,
+                                //app = sdr["app"] != DBNull.Value ? sdr["app"].ToString():null,
+                                //androidApp = sdr["androidApp"] != DBNull.Value ? sdr["androidApp"].ToString():null,
+                                //IOSApp = sdr["IOSApp"] != DBNull.Value ? sdr["IOSApp"].ToString():null,
+
+                                web = sdr["web"] != DBNull.Value && Convert.ToBoolean(sdr["web"]),
+                                app = sdr["app"] != DBNull.Value && Convert.ToBoolean(sdr["app"]),
+                                androidApp = sdr["androidApp"] != DBNull.Value && Convert.ToBoolean(sdr["androidApp"]),
+                                IOSApp = sdr["IOSApp"] != DBNull.Value && Convert.ToBoolean(sdr["IOSApp"]),
+
                                 appTechnology = sdr["appTechnology"] != DBNull.Value ? Convert.ToInt32(sdr["appTechnology"]):null,
                                 appTechnologyName = sdr["AppTechnology"] != DBNull.Value ? sdr["AppTechnology"].ToString():null,
                                 webTechnology = sdr["webTechnology"] != DBNull.Value ? Convert.ToInt32(sdr["webTechnology"]):null,
                                 webTechnologyName = sdr["webTechnology"] != DBNull.Value ? sdr["webTechnology"].ToString():null,
                                 appEmpId = sdr["appEmpId"] != DBNull.Value ? Convert.ToInt32(sdr["appEmpId"]):null,
-                                appEmpName = sdr["appEmp"] != DBNull.Value ?sdr["appEmp"].ToString():null,
+                                appEmpName = sdr["AppTeamLead"] != DBNull.Value ?sdr["AppTeamLead"].ToString():null,
                                 webEmpId = sdr["webEmpId"] != DBNull.Value ? Convert.ToInt32(sdr["webEmpId"]):null,
-                                webEmpName = sdr["webEmp"] != DBNull.Value ? sdr["webEmp"].ToString():null,
+                                webEmpName = sdr["WebTeamLead"] != DBNull.Value ? sdr["WebTeamLead"].ToString():null,
                                 startDate = sdr["startDate"] != DBNull.Value ?Convert.ToDateTime(sdr["startDate"]):DateTime.MinValue,
                                 assignDate = sdr["assignDate"] != DBNull.Value ? Convert.ToDateTime(sdr["assignDate"]):DateTime.MinValue,
                                 endDate = sdr["endDate"] != DBNull.Value ? Convert.ToDateTime(sdr["endDate"]):DateTime.MinValue,
@@ -1396,6 +1400,13 @@ namespace Macreel_Software.DAL.Admin
                                 sopDocumentPath = sdr["sopDocument"] != DBNull.Value ? sdr["sopDocument"].ToString():null,
                                 technicalDocumentPath = sdr["technicalDocument"] != DBNull.Value ? sdr["technicalDocument"].ToString():null,
                                 delayedDays = sdr["DelayedDays"] != DBNull.Value ? Convert.ToInt32(sdr["DelayedDays"]) : null,
+                                projectStatus = sdr["projectStatus"] != DBNull.Value ? sdr["projectStatus"].ToString():null,
+                                appProjectMembers = sdr["AppMembersJson"] != DBNull.Value
+                                ? JsonSerializer.Deserialize<List<appProjectMember>>(sdr["AppMembersJson"].ToString())
+                                : new List<appProjectMember>(),
+                                webProjectMembers = sdr["WebMembersJson"] != DBNull.Value
+                                    ? JsonSerializer.Deserialize<List<webProjectMember>>(sdr["WebMembersJson"].ToString())
+                                    : new List<webProjectMember>()
                             });
                         }
                     }
@@ -1460,10 +1471,11 @@ namespace Macreel_Software.DAL.Admin
                                 category = sdr["category"] != DBNull.Value ? sdr["category"].ToString() : null,
                                 projectTitle = sdr["projectTitle"] != DBNull.Value ? sdr["projectTitle"].ToString() : null,
                                 description = sdr["description"] != DBNull.Value ? sdr["description"].ToString() : null,
-                                web = sdr["web"] != DBNull.Value ? sdr["web"].ToString() : null,
-                                app = sdr["app"] != DBNull.Value ? sdr["app"].ToString() : null,
-                                androidApp = sdr["androidApp"] != DBNull.Value ? sdr["androidApp"].ToString() : null,
-                                IOSApp = sdr["IOSApp"] != DBNull.Value ? sdr["IOSApp"].ToString() : null,
+                                web = sdr["web"] != DBNull.Value && Convert.ToBoolean(sdr["web"]),
+                                app = sdr["app"] != DBNull.Value && Convert.ToBoolean(sdr["app"]),
+                                androidApp = sdr["androidApp"] != DBNull.Value && Convert.ToBoolean(sdr["androidApp"]),
+                                IOSApp = sdr["IOSApp"] != DBNull.Value && Convert.ToBoolean(sdr["IOSApp"]),
+
                                 appTechnology = sdr["appTechnology"] != DBNull.Value ? Convert.ToInt32(sdr["appTechnology"]) : null,
                                 appTechnologyName = sdr["AppTechnology"] != DBNull.Value ? sdr["AppTechnology"].ToString() : null,
                                 webTechnology = sdr["webTechnology"] != DBNull.Value ? Convert.ToInt32(sdr["webTechnology"]) : null,
@@ -1537,10 +1549,11 @@ namespace Macreel_Software.DAL.Admin
                                 category = sdr["category"] != DBNull.Value ? sdr["category"].ToString() : null,
                                 projectTitle = sdr["projectTitle"] != DBNull.Value ? sdr["projectTitle"].ToString() : null,
                                 description = sdr["description"] != DBNull.Value ? sdr["description"].ToString() : null,
-                                web = sdr["web"] != DBNull.Value ? sdr["web"].ToString() : null,
-                                app = sdr["app"] != DBNull.Value ? sdr["app"].ToString() : null,
-                                androidApp = sdr["androidApp"] != DBNull.Value ? sdr["androidApp"].ToString() : null,
-                                IOSApp = sdr["IOSApp"] != DBNull.Value ? sdr["IOSApp"].ToString() : null,
+                                web = sdr["web"] != DBNull.Value && Convert.ToBoolean(sdr["web"]),
+                                app = sdr["app"] != DBNull.Value && Convert.ToBoolean(sdr["app"]),
+                                androidApp = sdr["androidApp"] != DBNull.Value && Convert.ToBoolean(sdr["androidApp"]),
+                                IOSApp = sdr["IOSApp"] != DBNull.Value && Convert.ToBoolean(sdr["IOSApp"]),
+
                                 appTechnology = sdr["appTechnology"] != DBNull.Value ? Convert.ToInt32(sdr["appTechnology"]) : null,
                                 appTechnologyName = sdr["AppTechnology"] != DBNull.Value ? sdr["AppTechnology"].ToString() : null,
                                 webTechnology = sdr["webTechnology"] != DBNull.Value ? Convert.ToInt32(sdr["webTechnology"]) : null,
@@ -1877,45 +1890,60 @@ namespace Macreel_Software.DAL.Admin
 
         #region assigned project emp list
 
-        //public async Task<ApiResponse<List<AssignedProjectEmpListDto>>> assignedProjectEmpList(int projectId, int addedBy)
-        //{
-        //    List<AssignedProjectEmpListDto> list = new List<AssignedProjectEmpListDto>();
-        //    try
-        //    {
-        //        SqlCommand cmd = new SqlCommand("sp_addAndAssignProject", _conn);
-        //        cmd.CommandType = CommandType.StoredProcedure;
-        //        cmd.Parameters.AddWithValue("@action", "getEmpListForAssignedProject");
-        //        cmd.Parameters.AddWithValue("@projectId", projectId);
-        //        cmd.Parameters.AddWithValue("@addedBy", addedBy);
-        //        if (_conn.State == ConnectionState.Closed)
-        //            await _conn.OpenAsync();
+        public async Task<ApiResponse<List<AssignedProjectEmpListDto>>> assignedProjectEmpList(int projectId, int pmId)
+        {
+            List<AssignedProjectEmpListDto> list = new List<AssignedProjectEmpListDto>();
+            try
+            {
+                SqlCommand cmd = new SqlCommand("sp_addAndAssignProject", _conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@action", "getEmpListForAssignedProject");
+                cmd.Parameters.AddWithValue("@projectId", projectId);
+                cmd.Parameters.AddWithValue("@pmId", pmId);
+                if (_conn.State == ConnectionState.Closed)
+                    await _conn.OpenAsync();
 
-        //        using(SqlDataReader sdr=await cmd.ExecuteReaderAsync())
-        //        {
-        //            if(sdr.HasRows)
-        //            {
-        //                while(await sdr.ReadAsync())
-        //                {
-        //                    list.Add(new AssignedProjectEmpListDto
-        //                    {
-        //                        id = sdr["id"] != DBNull.Value ? Convert.ToInt32(sdr[""]):null,
-        //                        projectId = sdr[""] != DBNull.Value ? Convert.ToInt32(sdr[""]):null,
-        //                        empId = sdr[""] != DBNull.Value ? Convert.ToInt32(sdr[""]):null,
-        //                        approveStatus = sdr[""] != DBNull.Value ? Convert.ToInt32(sdr[""]):null,
-        //                    });
-        //                }
-        //            }
-        //        }
-        //    }
-        //    catch
-        //    {
+                using (SqlDataReader sdr = await cmd.ExecuteReaderAsync())
+                {
+                    if (sdr.HasRows)
+                    {
+                        while (await sdr.ReadAsync())
+                        {
+                            list.Add(new AssignedProjectEmpListDto
+                            {
+                                id = sdr["id"] != DBNull.Value ? Convert.ToInt32(sdr["id"]) : null,
+                                projectId = sdr["projectId"] != DBNull.Value ? Convert.ToInt32(sdr["projectId"]) : null,
+                                empId = sdr["empId"] != DBNull.Value ? Convert.ToInt32(sdr["empId"]) : null,
+                                approveStatus = sdr["approveStatus"] != DBNull.Value ? Convert.ToInt32(sdr["approveStatus"]) : null,
+                                empName = sdr["empName"] != DBNull.Value ? sdr["empName"].ToString():null,
+                                designationName = sdr["designationName"] != DBNull.Value ? sdr["designationName"].ToString():null
+                            });
+                        }
+                    }
+                }
+                return ApiResponse<List<AssignedProjectEmpListDto>>.SuccessResponse(
+                list,
+                "Assigned Project All emp list fetched successfully!!"
+            );
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<List<AssignedProjectEmpListDto>>.FailureResponse(
+                  ex.Message,
+                  500,
+                  "ASSIGN_PROJECT_EMP_LIST_FETCH_ERROR"
+              );
+            }
+            finally
+            {
+                if (_conn.State == ConnectionState.Open)
+                    await _conn.CloseAsync();
+            }
 
-        //    }
-        //    finally
-        //    {
-
-        //    }
-        //}
+        }
+            
+          
+        
 
         #endregion
     }

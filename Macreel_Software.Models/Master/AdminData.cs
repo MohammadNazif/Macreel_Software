@@ -64,7 +64,7 @@ namespace Macreel_Software.Models.Master
         public string? Technology { get; set; }
         public string? CompanyContactNo { get; set; }
 
-        public int? addedBy { get; set; }
+        public string? addedBy { get; set; }
 
         public IFormFile? ExperienceCertificate { get; set; }
         public IFormFile? TenthCertificate { get; set; }
@@ -192,10 +192,10 @@ namespace Macreel_Software.Models.Master
         public string? projectTitle { get; set; }
         public string? description { get; set; }
 
-        public string? web { get; set; }
-        public string? app { get; set; }
-        public string? androidApp { get; set; }
-        public string? IOSApp { get; set; }
+        public bool web { get; set; }
+        public bool app { get; set; }
+        public bool androidApp { get; set; }
+        public bool IOSApp { get; set; }
 
         public int? appTechnology { get; set; }
         public int? appEmpId { get; set; }
@@ -221,9 +221,23 @@ namespace Macreel_Software.Models.Master
         public string? webTechnologyName { get; set; }
         public string? appEmpName { get; set; }
         public string? webEmpName { get; set; }
+        public string? projectStatus { get; set; }
         public int? delayedDays { get; set; }
+
+        public List<appProjectMember> appProjectMembers { get; set; } = new List<appProjectMember>();
+        public List<webProjectMember> webProjectMembers { get; set; } = new List<webProjectMember>();
     }
 
+    public class appProjectMember
+    {
+        public int? empId { get; set; }
+        public string? EmpName { get; set; }
+    }
+    public class webProjectMember
+    {
+        public int? empId { get; set; }
+        public string? EmpName { get; set; }
+    }
 
     public class Taskassign
     {

@@ -1,4 +1,5 @@
-﻿using Macreel_Software.Contracts.DTOs;
+﻿using System.Security.Claims;
+using Macreel_Software.Contracts.DTOs;
 using Macreel_Software.DAL.Admin;
 using Macreel_Software.Models;
 using Macreel_Software.Models.Common;
@@ -23,6 +24,7 @@ namespace Macreel_Software.Server.Controllers
         private readonly MailSender _mailservice;
         private readonly PasswordEncrypt _pass;
         private readonly int _userId;
+        private readonly string _role;
 
         public AdminController(
             IAdminServices service,
@@ -40,6 +42,7 @@ namespace Macreel_Software.Server.Controllers
             if (user != null && user.Identity?.IsAuthenticated == true)
             {
                 _userId = Convert.ToInt32(user.FindFirst("UserId")?.Value);
+                _role = user.FindFirst(ClaimTypes.Role)?.Value.ToString()!;
             }
 
         }
@@ -61,6 +64,7 @@ namespace Macreel_Software.Server.Controllers
         {
             try
             {
+                model.addedBy = _role;
                 string[] imgExt = { ".jpg", ".jpeg", ".png" };
                 string[] docExt = { ".pdf", ".jpg", ".jpeg", ".png" };
                 long maxSize = 2 * 1024 * 1024; // 2 MB
@@ -200,10 +204,10 @@ namespace Macreel_Software.Server.Controllers
         public async Task<IActionResult> getemployeeById(int id)
         {
             try
-            {
+
+            { 
 
                 var result = await _services.GetAllEmpDataById(id);
-
 
                 return StatusCode(result.StatusCode, result);
             }
@@ -693,7 +697,7 @@ namespace Macreel_Software.Server.Controllers
 
             if (data.sopDocument == null && data.id <= 0)
                 if (data.sopDocument == null && data.id <= 0)
-                    return BadRequest("SOP document is required.");
+                    return BadRequest("SOW document is required.");
 
             if (data.startDate == null)
                 return BadRequest("Start date is required.");
@@ -715,11 +719,13 @@ namespace Macreel_Software.Server.Controllers
             if (data.category != null &&
                 data.category.Equals("Software", StringComparison.OrdinalIgnoreCase))
             {
-                bool isAnySoftwareSelected =
-                    !string.IsNullOrWhiteSpace(data.web) ||
-                    !string.IsNullOrWhiteSpace(data.app) ||
-                    !string.IsNullOrWhiteSpace(data.androidApp) ||
-                    !string.IsNullOrWhiteSpace(data.IOSApp);
+                //bool isAnySoftwareSelected =
+                //    !string.IsNullOrWhiteSpace(data.web) ||
+                //    !string.IsNullOrWhiteSpace(data.app) ||
+                //    !string.IsNullOrWhiteSpace(data.androidApp) ||
+                //    !string.IsNullOrWhiteSpace(data.IOSApp);
+
+                bool isAnySoftwareSelected = data.web || data.app || data.androidApp || data.IOSApp;
 
                 if (!isAnySoftwareSelected)
                     return BadRequest("Please select at least one software type.");
@@ -1071,5 +1077,28 @@ namespace Macreel_Software.Server.Controllers
         #endregion
 
 
+        #region assignedProjectEmpList
+
+        [HttpGet("ProjectCoOrdinateList")]
+        public async Task<IActionResult> AllEmpListAssignedProject(int projectId,int pmId)
+        {
+            try
+            {
+                ApiResponse<List<AssignedProjectEmpListDto>> result =
+                    await _services.assignedProjectEmpList(projectId, pmId);
+
+
+                return StatusCode(result.StatusCode, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<List<AssignedProjectEmpListDto>>.FailureResponse(
+                    "An error occurred while fetching all emp list assigned project",
+                    500,
+                    "SERVER_ERROR"
+                ));
+            }
+        }
+        #endregion
     }
 }
