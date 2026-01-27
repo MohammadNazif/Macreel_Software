@@ -395,7 +395,7 @@ namespace Macreel_Software.DAL.Common
                     cmd.Parameters.AddWithValue("@action", "insertProjectEmp");
                     cmd.Parameters.AddWithValue("@projectId", data.projectId);
                     cmd.Parameters.AddWithValue("@empId", empId);
-                    cmd.Parameters.AddWithValue("@pmId", data.pmId);
+                    cmd.Parameters.AddWithValue("@pmId", addedBy);
                     cmd.Parameters.AddWithValue("@addedBy", addedBy);
 
                     int rows = await cmd.ExecuteNonQueryAsync();
@@ -466,40 +466,55 @@ namespace Macreel_Software.DAL.Common
 
         }
 
-        public async Task<bool> UpdateProjectEmpStatus(int projectId,int empId,int approveStatus,int? newEmpId,int addedBy)
-        {
-            try
-            {
-                using (SqlCommand cmd = new SqlCommand("sp_addAndAssignProject", _conn))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
+       // public async Task<bool> UpdateProjectEmpStatusBulk(
+       //List<ProjectEmpStatusItem> items, int addedBy)
+       // {
+       //     try
+       //     {
+       //         DataTable dt = new DataTable();
+       //         dt.Columns.Add("ProjectId", typeof(int));
+       //         dt.Columns.Add("PmId", typeof(int));
+       //         dt.Columns.Add("EmpId", typeof(int));
+       //         dt.Columns.Add("NewEmpId", typeof(int));
+       //         dt.Columns.Add("Status", typeof(int));
+       //         dt.Columns.Add("Reason", typeof(string));
 
-                    cmd.Parameters.AddWithValue("@action", "updateStatusOfProjectEmp");
-                    cmd.Parameters.AddWithValue("@projectId", projectId);
-                    cmd.Parameters.AddWithValue("@addedBy", addedBy);
-                    cmd.Parameters.AddWithValue("@empId", empId);
-                    cmd.Parameters.AddWithValue("@approveStatus", approveStatus);
-                    cmd.Parameters.AddWithValue("@newEmpId",
-                        newEmpId.HasValue ? newEmpId.Value : (object)DBNull.Value);
+       //         foreach (var item in items)
+       //         {
+       //             dt.Rows.Add(
+       //                 item.ProjectId,
+       //                 item.PmId,
+       //                 item.EmpId,
+       //                 item.NewEmpId ?? (object)DBNull.Value,
+       //                 item.Status,
+       //                 item.Reason ?? (object)DBNull.Value
+       //             );
+       //         }
 
-                    if (_conn.State == ConnectionState.Closed)
-                        await _conn.OpenAsync();
+       //         using (SqlCommand cmd =
+       //             new SqlCommand("sp_addAndAssignProject", _conn))
+       //         {
+       //             cmd.CommandType = CommandType.StoredProcedure;
+       //             cmd.Parameters.AddWithValue("@action", "updateProjectEmpStatusBulk");
+       //             cmd.Parameters.AddWithValue("@addedBy", addedBy);
 
-                    int rowAffected = await cmd.ExecuteNonQueryAsync();
-                    return rowAffected > 0;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw; 
-            }
-            finally
-            {
-                if (_conn.State == ConnectionState.Open)
-                    await _conn.CloseAsync();
-            }
-        }
+       //             var tvp = cmd.Parameters.AddWithValue("@EmpStatusJson", dt);
+       //             tvp.SqlDbType = SqlDbType.Structured;
+       //             tvp.TypeName = "dbo.ProjectEmpStatusType";
 
+       //             if (_conn.State == ConnectionState.Closed)
+       //                 await _conn.OpenAsync();
+
+       //             int rows = await cmd.ExecuteNonQueryAsync();
+       //             return rows > 0;
+       //         }
+       //     }
+       //     finally
+       //     {
+       //         if (_conn.State == ConnectionState.Open)
+       //             await _conn.CloseAsync();
+       //     }
+       // }
 
 
 

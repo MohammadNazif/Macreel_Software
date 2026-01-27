@@ -1073,7 +1073,7 @@ namespace Macreel_Software.Server.Controllers
 
         #region assignedProjectEmpList
 
-        [HttpGet("AllEmpListAssignedProject")]
+        [HttpGet("ProjectCoOrdinateList")]
         public async Task<IActionResult> AllEmpListAssignedProject(int projectId,int pmId)
         {
             try
