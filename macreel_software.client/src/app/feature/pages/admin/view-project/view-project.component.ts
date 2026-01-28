@@ -254,26 +254,37 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
     });
   }
 
+  // approveEmployee(emp: any) {
+
+  //   emp.isApproved = !emp.isApproved; // toggle selection
+
+  //   if (emp.isApproved) {    
+  //     this.approvedEmployees.push({
+  //       id: emp.id,
+  //       empName: emp.empName
+  //     });
+  //   } else {
+  //     this.approvedEmployees =
+  //       this.approvedEmployees.filter(e => e.id !== emp.id);
+  //   }
+
+  //   this.showAddIcon = this.approvedEmployees.length > 0;
+  // }
+
   approveEmployee(emp: any) {
+  emp.isApproved = !emp.isApproved;
 
-    emp.isApproved = !emp.isApproved; // toggle selection
-
-    if (emp.isApproved) {
-      // add
-      this.approvedEmployees.push({
-        id: emp.id,
-        empName: emp.empName
-      });
-    } else {
-      // remove
-      this.approvedEmployees =
-        this.approvedEmployees.filter(e => e.id !== emp.id);
-    }
-
-    this.showAddIcon = this.approvedEmployees.length > 0;
-
-    console.log('APPROVED LIST 👉', this.approvedEmployees);
+  if (emp.isApproved) {
+    this.approvedEmployees.push({ id: emp.id, empName: emp.empName });
+  } else {
+    this.approvedEmployees = this.approvedEmployees.filter(e => e.id !== emp.id);
   }
+
+  // ⚠️ Ye line hata do:
+  // this.showAddIcon = this.approvedEmployees.length > 0;
+
+  console.log('APPROVED LIST 👉', this.approvedEmployees);
+}
 
 
   openRejectModal(emp: any) {

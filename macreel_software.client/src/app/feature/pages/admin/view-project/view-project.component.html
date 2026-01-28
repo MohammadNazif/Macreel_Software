@@ -13,41 +13,23 @@
   </app-generic-table>
 </div>
 
-<!-- <ng-template #filesTemplate let-row>
-  <span *ngIf="row.appEmpName" class="cursor-pointer text-blue-600"
-    (click)="onEmployeeClick(row.appEmpId,row.id ,'app')">
-    {{ row.appEmpName }}
-  </span>
-</ng-template>
 
 
-<ng-template #webTemplate let-row>
-  <span *ngIf="row.webEmpName" class="cursor-pointer text-green-600"
-    (click)="onEmployeeClick(row.webEmpId,row.id ,'web')">
-    {{ row.webEmpName }}
-  </span>
-</ng-template> -->
 <!-- APP EMPLOYEE TEMPLATE -->
 <ng-template #appEmployeeTemplate let-row>
-  <span *ngIf="row.app && row.appEmpName"
-        class="text-blue-600 cursor-pointer"
-        (click)="onEmployeeClick(row.appEmpId, row.id, 'app')">
+  <span *ngIf="row.app && row.appEmpName" class="block text-red-600 text-center cursor-pointer"
+    (click)="onEmployeeClick(row.appEmpId, row.id, 'app')">
     {{ row.appEmpName }}
   </span>
 </ng-template>
 
 <!-- WEB EMPLOYEE TEMPLATE -->
 <ng-template #webEmployeeTemplate let-row>
-  <span *ngIf="row.web && row.webEmpName"
-        class="text-green-600 cursor-pointer"
-        (click)="onEmployeeClick(row.webEmpId, row.id, 'web')">
+  <span *ngIf="row.web && row.webEmpName" class="block text-red-600 text-center cursor-pointer"
+    (click)="onEmployeeClick(row.webEmpId, row.id, 'web')">
     {{ row.webEmpName }}
   </span>
 </ng-template>
-
-
-
-
 
 
 <!-- Employee Modal (Static Design) -->
@@ -92,10 +74,7 @@
          bg-green-600 text-white hover:bg-green-700" title="Add & Save" (click)="addAndSaveEmployees()">
         <i class="fa fa-check text-xs"></i>
       </button>
-
-
     </div>
-
 
 
     <!-- 📋 EMPLOYEE LIST (API DATA) -->
@@ -105,7 +84,6 @@
         (click)="addChip(emp)">
         {{ emp.empName }} ({{ emp.designationName }})
       </div>
-
     </div>
 
     <!-- 📊 TABLE -->
@@ -121,7 +99,6 @@
         Submit
       </button>
     </div>
-
   </div>
 </div>
 
@@ -166,4 +143,3 @@
     </div>
   </div>
 </div>
-
