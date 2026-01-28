@@ -1,15 +1,97 @@
-<div class="bg-white rounded-2xl shadow-sm mt-1  px-4 md:px-6 py-4  md:mx-auto  font-[Poppins]">
+<div class="bg-white rounded-2xl shadow-sm mt-1 px-4 md:px-6 py-4 md:mx-auto font-[Poppins]">
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-3">
         <h2 class="text-sm font-semibold text-gray-700">Project List</h2>
 
         <form [formGroup]="searchForm" class="relative w-full md:w-60">
-            <input type="text" formControlName="search" placeholder="Search projects"
-                class="w-full h-8 rounded-lg border border-gray-300 pl-8 pr-3 text-[12px] text-gray-700 placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-[#dd3d4f] focus:border-[#dd3d4f]" />
+            <input type="text" formControlName="search" placeholder="Search projects" class="w-full h-8 rounded-lg border border-gray-300 pl-8 pr-3 text-[12px] text-gray-700
+               placeholder:text-gray-400 focus:outline-none focus:ring-1
+               focus:ring-[#dd3d4f] focus:border-[#dd3d4f]" />
         </form>
     </div>
+
     <div class="responsive-tb-data">
         <app-generic-table [columns]="projectColumns" [data]="paginator.items" [loading]="paginator.loading"
-            (tableScroll)="onScroll($event)" [showActions]="false">
+            [showActions]="false" (tableScroll)="onScroll($event)">
         </app-generic-table>
     </div>
 </div>
+
+<!-- ================= APP EMPLOYEE TEMPLATE ================= -->
+<ng-template #appEmployeeTemplate let-row>
+    <ng-container *ngIf="row.appEmpName; else noAppEmp">
+        <span class="font-medium">
+            {{ row.appEmpName }}
+        </span>
+
+        <span *ngIf="row.appProjectMembers?.length" class="text-blue-600 cursor-pointer ml-1 relative group">
+            +{{ row.appProjectMembers.length }} more
+
+            <!-- TOOLTIP -->
+            <div class="fixed hidden group-hover:block
+               bg-white shadow-xl border rounded-md
+               p-2 text-xs w-48 z-[9999]" [style.marginTop.px]="6">
+                <div *ngFor="let emp of row.appProjectMembers" class="whitespace-nowrap">
+                    • {{ emp.empName }}
+                </div>
+            </div>
+        </span>
+    </ng-container>
+
+    <ng-template #noAppEmp>
+        <span>-</span>
+    </ng-template>
+</ng-template>
+
+
+<!-- ================= WEB EMPLOYEE TEMPLATE ================= -->
+<ng-template #webEmployeeTemplate let-row>
+    <ng-container *ngIf="row.webEmpName; else noWebEmp">
+        <span class="font-medium">
+            {{ row.webEmpName }}
+        </span>
+
+        <span *ngIf="row.webProjectMembers?.length" class="text-blue-600 cursor-pointer ml-1 relative group">
+            +{{ row.webProjectMembers.length }} more
+
+            <!-- TOOLTIP -->
+            <div class="fixed hidden group-hover:block
+               bg-white shadow-xl border rounded-md
+               p-2 text-xs w-48 z-[9999]" [style.marginTop.px]="6">
+                <div *ngFor="let emp of row.webProjectMembers" class="whitespace-nowrap">
+                    • {{ emp.empName }}
+                </div>
+            </div>
+        </span>
+    </ng-container>
+
+    <ng-template #noWebEmp>
+        <span>-</span>
+    </ng-template>
+</ng-template>
+
+
+<!-- ================= STATUS / DELAY TEMPLATE ================= -->
+<ng-template #iconTemplate let-row>
+
+  <!-- DELAYED -->
+  <span *ngIf="row.delayedDays > 0"
+        class="inline-flex items-center gap-1
+               px-1 py-[1px]
+               text-[10px] font-medium rounded
+               bg-red-100 text-red-700 border border-red-200">
+    <i class="fa-solid fa-clock text-[5px]"></i>
+    Delayed {{ row.delayedDays }} Days
+  </span>
+
+  <!-- ON TIME -->
+  <span *ngIf="row.delayedDays === 0"
+        class="inline-flex items-center gap-1
+               px-1 py-[1px]
+               text-[10px] font-medium rounded
+               bg-green-100 text-green-700 border border-green-200">
+    <i class="fa-solid fa-check-circle text-[5px]"></i>
+    On Time
+  </span>
+
+</ng-template>
+

@@ -37,6 +37,14 @@ export class AddProjectComponent implements OnInit {
   newSopFile: File | null = null;
   newTechnicalFile: File | null = null;
 
+  showMobilePlatformError = false;
+  showMobileSkillError = false;
+  showMobileEmpError = false;
+
+  showWebSkillError = false;
+  showWebEmpError = false;
+
+
   // ========== DATE MIN VALUES ==========
   minAssignDate: string = '';
   minEndDate: string = '';
@@ -135,6 +143,14 @@ export class AddProjectComponent implements OnInit {
   get isWebSoftware(): boolean {
     return this.projectForm.get('isWebSoftware')?.value;
   }
+  get isAndroid(): boolean {
+    return this.projectForm.get('isAndroid')?.value;
+  }
+
+  get isIOS(): boolean {
+    return this.projectForm.get('isIOS')?.value;
+  }
+
   // ================= LOAD TECHNOLOGIES =================
   loadTechnologies() {
     this.masterService.getAllTechnology(1, 100).subscribe({
@@ -358,6 +374,31 @@ export class AddProjectComponent implements OnInit {
     }
   }
 
+  clearFieldError(type: 'mobilePlatform' | 'mobileSkill' | 'mobileEmp' | 'webSkill' | 'webEmp') {
+  switch (type) {
+    case 'mobilePlatform':
+      this.showMobilePlatformError = false;
+      break;
+
+    case 'mobileSkill':
+      this.showMobileSkillError = false;
+      break;
+
+    case 'mobileEmp':
+      this.showMobileEmpError = false;
+      break;
+
+    case 'webSkill':
+      this.showWebSkillError = false;
+      break;
+
+    case 'webEmp':
+      this.showWebEmpError = false;
+      break;
+  }
+}
+
+
   // ================= FORM SUBMISSION =================
   submitProject() {
 
@@ -376,20 +417,57 @@ export class AddProjectComponent implements OnInit {
         return;
       }
     }
+     let hasError = false;  
+     this.resetErrors();
 
     const formData = new FormData();
     const f = this.projectForm.value;
 
-    if (f.isMobileSoftware) {
-      if (!f.isAndroid && !f.isIOS) {
-        Swal.fire({
-          icon: 'warning',
-          title: 'Selection Required',
-          text: 'Please select at least one: Android or iOS',
-        });
-        return;
-      }
+    // if (f.isMobileSoftware) {
+    //   if (!f.isAndroid && !f.isIOS) {
+    //     Swal.fire({
+    //       icon: 'warning',
+    //       title: 'Selection Required',
+    //       text: 'Please select at least one: Android or iOS',
+    //     });
+    //     return;
+    //   }
+    // }
+
+     // ========== MOBILE VALIDATION ==========
+  if (f.isMobileSoftware) {
+
+    if (!f.isAndroid && !f.isIOS) {
+      this.showMobilePlatformError = true;
+      hasError = true;
     }
+
+    if ((f.isAndroid || f.isIOS) && !f.mobileSkill) {
+      this.showMobileSkillError = true;
+      hasError = true;
+    }
+
+    if (f.mobileSkill && !f.mobileEmpId) {
+      this.showMobileEmpError = true;
+      hasError = true;
+    }
+  }
+
+  // ========== WEB VALIDATION ==========
+  if (f.isWebSoftware) {
+
+    if (!f.webSkill) {
+      this.showWebSkillError = true;
+      hasError = true;
+    }
+
+    if (f.webSkill && !f.webEmpId) {
+      this.showWebEmpError = true;
+      hasError = true;
+    }
+  }
+
+  if (hasError) return;
 
     // ================= BASIC FIELDS =================
     formData.append('id', this.editProjectId.toString());
@@ -526,4 +604,12 @@ export class AddProjectComponent implements OnInit {
       this.projectForm.patchValue({ [field]: '' });
     }
   }
+  resetErrors() {
+  this.showMobilePlatformError = false;
+  this.showMobileSkillError = false;
+  this.showMobileEmpError = false;
+  this.showWebSkillError = false;
+  this.showWebEmpError = false;
 }
+}
+

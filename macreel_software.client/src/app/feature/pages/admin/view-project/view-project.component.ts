@@ -47,9 +47,7 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
   rejectEmployee: any = null;
   rejectReason = '';
   showRejectModal = false;
-
-
-
+  
   searchForm!: FormGroup;
   paginator!: PaginatedList<Project>;
   projectColumns: TableColumn<Project>[] = [];
@@ -272,19 +270,16 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
   // }
 
   approveEmployee(emp: any) {
-  emp.isApproved = !emp.isApproved;
+    emp.isApproved = !emp.isApproved;
 
-  if (emp.isApproved) {
-    this.approvedEmployees.push({ id: emp.id, empName: emp.empName });
-  } else {
-    this.approvedEmployees = this.approvedEmployees.filter(e => e.id !== emp.id);
+    if (emp.isApproved) {
+      this.approvedEmployees.push({ id: emp.id, empName: emp.empName });
+    } else {
+      this.approvedEmployees = this.approvedEmployees.filter(e => e.id !== emp.id);
+    }
+
+    console.log('APPROVED LIST 👉', this.approvedEmployees);
   }
-
-  // ⚠️ Ye line hata do:
-  // this.showAddIcon = this.approvedEmployees.length > 0;
-
-  console.log('APPROVED LIST 👉', this.approvedEmployees);
-}
 
 
   openRejectModal(emp: any) {
