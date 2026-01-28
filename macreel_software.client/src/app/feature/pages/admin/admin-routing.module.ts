@@ -15,28 +15,38 @@ import { ViewProjectComponent } from './view-project/view-project.component';
 import { LeaveRequestsComponent } from './leave-requests/leave-requests.component';
 import { ProjectDetailsComponent } from '../../common-pages/project-details/project-details.component';
 import { EmployeeDetailsComponent } from '../../common-pages/employee-details/employee-details.component';
-
-
-
+import { LayoutComponent } from './layout/layout.component';
+import { ProjectProgressComponent } from '../../common-pages/project-progress/project-progress.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-  { path: 'employee-task-sheet', component: EmployeeTaskSheetComponent },
-  { path: 'dashboard', component: DashboardComponent },
-  { path:'employee-list',component:EmployeeListComponent} ,
-  { path: 'edit-employee/:id',component: AddEmployeeComponent},  
-  { path:'assign-leave',component:AssignLeaveComponent},
-  { path: 'upload-attendance', component: UploadAttendanceComponent },
-  { path: 'view-attendance', component: ViewAttendanceComponent },
-  { path:'assigned-employees-leaves',component:AllEmployeeLeaveListComponent},
-  {path: 'add-task',component:AddTaskComponent},
-  {path: 'view-task',component:ViewTaskComponent},
-  {path: 'view-project',component:ViewProjectComponent},
-  { path:'add-project',component:AddProjectComponent},
-  {path:'leave-requests',component:LeaveRequestsComponent},
-  {path:'master',loadChildren:()=>import('./masters/masters.module').then(n=>n.MastersModule)},
-  {path:'project-details',component:ProjectDetailsComponent},
-   {path:'employee-details',component:EmployeeDetailsComponent}
+  {
+    path: '', component: LayoutComponent,
+    children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard', component: DashboardComponent },
+      { path: 'employee-task-sheet', component: EmployeeTaskSheetComponent },
+      { path: 'employee-list', component: EmployeeListComponent },
+      { path: 'edit-employee/:id', component: AddEmployeeComponent },
+      { path: 'assign-leave', component: AssignLeaveComponent },
+      { path: 'upload-attendance', component: UploadAttendanceComponent },
+      { path: 'view-attendance', component: ViewAttendanceComponent },
+      { path: 'assigned-employees-leaves', component: AllEmployeeLeaveListComponent },
+      { path: 'add-task', component: AddTaskComponent },
+      { path: 'view-task', component: ViewTaskComponent },
+      { path: 'view-project', component: ViewProjectComponent },
+      { path: 'add-project', component: AddProjectComponent },
+      { path: 'leave-requests', component: LeaveRequestsComponent },
+      { path: 'master', loadChildren: () => import('./masters/masters.module').then(n => n.MastersModule) },
+      { path: 'project-details', component: ProjectDetailsComponent },
+      { path: 'employee-details', component: EmployeeDetailsComponent },
+      { path: 'employee-details', component: EmployeeDetailsComponent },
+      {path:'add-employee',component:AddEmployeeComponent},
+      {path:'project-progress',component:ProjectProgressComponent},
+      {path:'project-details',component:ProjectDetailsComponent},
+      {path:'edit-employee/:id',component:AddEmployeeComponent}
+
+    ]
+  }
 ];
 
 @NgModule({

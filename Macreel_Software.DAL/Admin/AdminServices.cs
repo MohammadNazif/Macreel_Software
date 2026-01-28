@@ -3,10 +3,10 @@ using Macreel_Software.Models;
 using Macreel_Software.Models.Employee;
 using Macreel_Software.Models.Master;
 using Macreel_Software.Services.AttendanceUpload;
+using Macreel_Software.Services.MailSender;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Identity.Client;
 using System.Data;
 using System.Text.Json;
 
@@ -16,12 +16,14 @@ namespace Macreel_Software.DAL.Admin
     {
         private readonly SqlConnection _conn;
         private readonly UploadAttendance _upload;
+        private readonly PasswordEncrypt _pass;
 
-        public AdminServices(IConfiguration config, UploadAttendance load)
+        public AdminServices(IConfiguration config, UploadAttendance load, PasswordEncrypt pass)
         {
             _conn = new SqlConnection(
                 config.GetConnectionString("DefaultConnection"));
             _upload=load;
+            _pass = pass;
         }
 
         #region employee registration
@@ -224,7 +226,7 @@ namespace Macreel_Software.DAL.Admin
                                 AccountNo = sdr["accountNo"]?.ToString(),
                                 IfscCode = sdr["ifscCode"]?.ToString(),
                                 BankBranch = sdr["bankBranch"]?.ToString(),
-                                Dob = sdr["dob"] != DBNull.Value ? Convert.ToDateTime(sdr["dob"]) :DateTime.MinValue,
+                                Dob = sdr["dob"] != DBNull.Value ? Convert.ToDateTime(sdr["dob"]) : DateTime.MinValue,
                                 Gender = sdr["gender"]?.ToString(),
                                 Nationality = sdr["nationality"]?.ToString(),
                                 MaritalStatus = sdr["maritalStatus"]?.ToString(),
@@ -234,23 +236,23 @@ namespace Macreel_Software.DAL.Admin
                                 Pincode = sdr["pincode"]?.ToString(),
                                 EmergencyContactPersonName = sdr["emergencyContactPersonName"]?.ToString(),
                                 EmergencyContactNum = sdr["emergenctContactNum"]?.ToString(),
-                                CompanyName = sdr["companyName"] != DBNull.Value ? sdr["companyName"]?.ToString():null,
-                                Technology = sdr["previousExp"] != DBNull.Value ? sdr["previousExp"]?.ToString():null,
-                                CompanyContactNo = sdr["companyContactNo"] != DBNull.Value ? sdr["companyContactNo"]?.ToString():null,
-                                ExperienceCertificatePath = sdr["experienceCertificate"] != DBNull.Value ? sdr["experienceCertificate"]?.ToString():null,
-                                TenthCertificatePath = sdr["tenthCertificate"] != DBNull.Value ? sdr["tenthCertificate"]?.ToString():null,
-                                TwelthCertificatePath = sdr["twelthCertificate"] != DBNull.Value ? 
-                                sdr["twelthCertificate"]?.ToString():null,
+                                CompanyName = sdr["companyName"] != DBNull.Value ? sdr["companyName"]?.ToString() : null,
+                                Technology = sdr["previousExp"] != DBNull.Value ? sdr["previousExp"]?.ToString() : null,
+                                CompanyContactNo = sdr["companyContactNo"] != DBNull.Value ? sdr["companyContactNo"]?.ToString() : null,
+                                ExperienceCertificatePath = sdr["experienceCertificate"] != DBNull.Value ? sdr["experienceCertificate"]?.ToString() : null,
+                                TenthCertificatePath = sdr["tenthCertificate"] != DBNull.Value ? sdr["tenthCertificate"]?.ToString() : null,
+                                TwelthCertificatePath = sdr["twelthCertificate"] != DBNull.Value ?
+                                sdr["twelthCertificate"]?.ToString() : null,
 
-                                GraduationCertificatePath = sdr["graduationCertificate"] != DBNull.Value ? 
-                                sdr["graduationCertificate"]?.ToString():null,
-
-                                MastersCertificatePath = sdr["mastersCertificate"] != DBNull.Value ? sdr["mastersCertificate"]?.ToString():null,
-                                YearOfExperience= sdr["yearOfExperience"] != DBNull.Value ? Convert.ToInt32(sdr["yearOfExperience"]) : (int?)null,
-                                stateName = sdr["stateName"] != DBNull.Value ? sdr["stateName"].ToString():null,
-                                cityName = sdr["cityName"] != DBNull.Value ? sdr["cityName"].ToString():null,
+                                GraduationCertificatePath = sdr["graduationCertificate"] != DBNull.Value ?
+                                sdr["graduationCertificate"]?.ToString() : null,
+                                Password = sdr["Password"] != DBNull.Value? _pass.DecryptPassword(sdr["Password"]?.ToString()!):null,
+                                MastersCertificatePath = sdr["mastersCertificate"] != DBNull.Value ? sdr["mastersCertificate"]?.ToString() : null,
+                                YearOfExperience = sdr["yearOfExperience"] != DBNull.Value ? Convert.ToInt32(sdr["yearOfExperience"]) : (int?)null,
+                                stateName = sdr["stateName"] != DBNull.Value ? sdr["stateName"].ToString() : null,
+                                cityName = sdr["cityName"] != DBNull.Value ? sdr["cityName"].ToString() : null,
                                 skill = sdr["skillsJson"] != DBNull.Value
-                ? JsonSerializer.Deserialize<List<Skill>>(sdr["skillsJson"].ToString())
+                ? JsonSerializer.Deserialize<List<Skill>>(sdr["skillsJson"].ToString()!)
                 : new List<Skill>()
 
                             });

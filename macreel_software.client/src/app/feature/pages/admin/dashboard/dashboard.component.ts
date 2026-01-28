@@ -17,6 +17,7 @@ export class DashboardComponent {
   ) {}
  ngOnInit(): void {
     this.getAdminDashboardCount();
+    
   }
 dashboardCount: AdminDashboard = {
   totalProjects: 0,

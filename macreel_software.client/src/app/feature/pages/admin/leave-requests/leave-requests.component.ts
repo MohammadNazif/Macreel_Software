@@ -7,6 +7,24 @@ import { ManageLeaveService } from '../../../../core/services/manage-leave.servi
 import Swal from 'sweetalert2';
 import { CommonService } from '../../../../core/services/common.service';
 import { TableColumn } from '../../../../core/models/interface';
+import { ActivatedRoute, Router } from '@angular/router';
+interface Leave {
+  id: number;
+  empId: number | null;
+  empName: string;
+  leaveName: string;
+  leaveTypeId: number | null;
+  fromDate: string;
+  toDate: string;
+  applieddate: string;
+  description: string;
+  status: string; // "Pending", "Approved", etc.
+  statuscode: number; // 0 = Pending, 1 = Approved, 2 = Rejected
+  leaveCount: number;
+  reason: string;
+  fileName: string;
+  uploadFile: string | null;
+}
 
 @Component({
   selector: 'app-leave-requests',
@@ -46,7 +64,8 @@ export class LeaveRequestsComponent {
   constructor(
     private readonly leaveService: ManageLeaveService,
     private readonly fb: FormBuilder,
-    private readonly commonservice: CommonService
+    private readonly commonservice: CommonService,
+      private route: ActivatedRoute,
   ) {
     this.statusForm = this.fb.group({
       id: null,
@@ -185,7 +204,18 @@ export class LeaveRequestsComponent {
         width:"50px"
       }
     ];
-    this.loadAssignedLeaves();
+   
+  this.route.queryParams.subscribe(params => {
+    debugger
+    const status = params['status'];
+    if (status) {
+      this.loadAssignedLeaves(status); 
+    }
+    else {
+       this.loadAssignedLeaves(); 
+    }
+  }); 
+
     this.searchControl.valueChanges
       .pipe(
         debounceTime(400),
@@ -205,19 +235,39 @@ export class LeaveRequestsComponent {
   }
 
 
-  loadAssignedLeaves(): void {
-    this.leaveService
-      .getAllLeaveRequests(this.searchTerm, this.pageNumber, this.pageSize)
-      .subscribe({
-        next: res => {
-          if (res.success) {
-            this.allLeaves = res.data;
-            this.data = res.data;
-            this.totalRecords = res.totalRecords;
-          }
+loadAssignedLeaves(status?: string): void {
+  this.leaveService
+    .getAllLeaveRequests(this.searchTerm, this.pageNumber, this.pageSize)
+    .subscribe({
+      next: (res: { success: boolean; data: Leave[]; totalRecords: number }) => {
+        if (res.success) {
+       
+          const mappedLeaves: Leave[] = res.data.map((leave: Leave) => ({
+            ...leave,
+            statusLabel: leave.status
+          }));
+          
+         const today = new Date();
+
+if (status !== 'Approved') {
+  this.allLeaves = status
+    ? mappedLeaves.filter(l => l.status === status)
+    : mappedLeaves;
+} else {
+ 
+  this.allLeaves = status
+    ? mappedLeaves.filter(l => l.status === status && new Date(l.toDate) >= today)
+    : mappedLeaves;
+}
+
+          this.data = this.allLeaves;
+          this.totalRecords = this.allLeaves.length;
         }
-      });
-  }
+      }
+    });
+}
+
+
 
   pdfUrl: string = 'https://localhost:7253/'
 

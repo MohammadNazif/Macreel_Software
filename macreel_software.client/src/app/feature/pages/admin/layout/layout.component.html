@@ -27,18 +27,16 @@
     <!-- MENU -->
     <nav class="mt-4 px-3 text-[13px] font-medium text-[#7E7E7E] space-y-1">
 
-      <div
-        routerLink="/home/employee/dashboard"
-        (click)="closeSidebarOnMobile()"
+      <!-- DASHBOARD -->
+      <div routerLink="/home/admin/dashboard" (click)="closeSidebarOnMobile()"
         class="flex items-center gap-3 p-2 rounded-lg cursor-pointer hover:bg-[#FDECEA]">
         <span>🏠</span>
         <span *ngIf="sidebarOpen">Dashboard</span>
       </div>
 
       <div>
-        <ng-container *ngFor="let menu of filteredMenusFromApi">
-          <div
-            (click)="toggleMenu(menu.key)"
+        <ng-container *ngFor="let menu of filteredMenus">
+          <div (click)="toggleMenu(menu.key)"
             class="flex items-center p-2 justify-between rounded-lg cursor-pointer hover:bg-[#FDECEA]">
             <div class="flex items-center gap-3">
               <i [class]="menu.icon"></i>
@@ -93,35 +91,35 @@
         <div class="w-9 h-9 flex items-center justify-center bg-[#FDECEA] rounded-xl">
           <i class="fa-regular fa-message text-[#E6354B]"></i>
         </div>
+<div class="relative">
+  <img
+    src="https://i.pravatar.cc/40"
+    (click)="toggleProfileMenu()"
+    class="w-9 h-9 rounded-full cursor-pointe r border-2 border-[#E6354B]" />
 
-        <div class="relative">
-          <img
-            src="https://i.pravatar.cc/40"
-            (click)="toggleProfileMenu()"
-            class="w-9 h-9 rounded-full cursor-pointer border-2 border-[#E6354B]" />
+  <div
+    *ngIf="profileOpen"
+    class="fixed top-16 right-4 w-48 bg-white shadow-lg rounded-xl text-sm z-50 overflow-hidden">
 
-          <div
-            *ngIf="profileOpen"
-            class="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-xl text-sm z-50 overflow-hidden">
+    <div class="px-4 py-2 border-b font-semibold text-[#333]">
+      <i class="fa-solid fa-user mr-2"></i> Profile
+    </div>
 
-            <div class="px-4 py-2 border-b font-semibold text-[#333]">
-              <i class="fa-solid fa-user mr-2"></i> Profile
-            </div>
+    <button
+      (click)="goToChangePassword()"
+      class="w-full text-left px-4 py-2 hover:bg-[#FDECEA]">
+      <i class="fa-solid fa-key text-[#E6354B] mr-2"></i> Change Password
+    </button>
 
-            <button
-              (click)="goToChangePassword()"
-              class="w-full text-left px-4 py-2 hover:bg-[#FDECEA]">
-              <i class="fa-solid fa-key text-[#E6354B] mr-2"></i> Change Password
-            </button>
+    <button
+      (click)="logout()"
+      class="w-full text-left px-4 py-2 hover:bg-[#FDECEA]">
+      <i class="fa-solid fa-right-from-bracket text-[#E6354B] mr-2"></i> Logout
+    </button>
+  </div>
+</div>
 
-            <button
-              (click)="logout()"
-              class="w-full text-left px-4 py-2 hover:bg-[#FDECEA]">
-              <i class="fa-solid fa-right-from-bracket text-[#E6354B] mr-2"></i> Logout
-            </button>
 
-          </div>
-        </div>
 
       </div>
     </header>
