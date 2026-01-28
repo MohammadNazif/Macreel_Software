@@ -1,10 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
-import { LayoutComponent } from '../layout/layout.component';
 import { AddEmployeeComponent } from '../common-pages/add-employee/add-employee.component';
-import { EmployeeProfileComponent } from '../common-pages/employee-profile/employee-profile.component';
-import { AssignLeaveComponent } from '../pages/admin/assign-leave/assign-leave.component';
 import { authGuard } from '../../core/guards/guards/auth.guard';
 import { roleGuard } from '../../core/guards/guards/role.guard';
 
@@ -13,13 +10,14 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'employee-registration', component: AddEmployeeComponent },
   {
-    path: 'home', component: LayoutComponent,
-    canActivate:[authGuard],
+    path: 'home',
+    canActivate: [authGuard],
     children: [
       { path: '', loadChildren: () => import('../pages/pages.module').then(m => m.PagesModule) },
-      { path: 'add-employee', component: AddEmployeeComponent },
-      {path:'employee-profile',component: EmployeeProfileComponent},
-       {path: 'edit-employee/:id',component: AddEmployeeComponent}
+      { path: 'add-employee', component: AddEmployeeComponent,
+        canActivate:[authGuard,roleGuard],
+        data:['admin']
+       }
     ]
   }
 ];

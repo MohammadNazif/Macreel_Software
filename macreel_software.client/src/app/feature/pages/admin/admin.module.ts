@@ -23,9 +23,7 @@ import { ViewProjectComponent } from './view-project/view-project.component';
 import { CommonPagesModule } from '../../common-pages/common-pages.module';
 import { LeaveRequestsComponent } from './leave-requests/leave-requests.component';
 import { SafeUrlPipe } from "../../../core/pipes/capitalize.pipe";
-
-
-
+import { LayoutComponent } from './layout/layout.component';
 
 @NgModule({
   declarations: [
@@ -40,8 +38,8 @@ import { SafeUrlPipe } from "../../../core/pipes/capitalize.pipe";
     AddTaskComponent,
     ViewTaskComponent,
     ViewProjectComponent,
-    LeaveRequestsComponent
-
+    LeaveRequestsComponent,
+    LayoutComponent
   ],
   imports: [
     CommonModule,

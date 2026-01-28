@@ -27,18 +27,16 @@
     <!-- MENU -->
     <nav class="mt-4 px-3 text-[13px] font-medium text-[#7E7E7E] space-y-1">
 
-      <div
-        routerLink="/home/employee/dashboard"
-        (click)="closeSidebarOnMobile()"
+      <!-- DASHBOARD -->
+      <div routerLink="/home/admin/dashboard" (click)="closeSidebarOnMobile()"
         class="flex items-center gap-3 p-2 rounded-lg cursor-pointer hover:bg-[#FDECEA]">
         <span>🏠</span>
         <span *ngIf="sidebarOpen">Dashboard</span>
       </div>
 
       <div>
-        <ng-container *ngFor="let menu of filteredMenusFromApi">
-          <div
-            (click)="toggleMenu(menu.key)"
+        <ng-container *ngFor="let menu of filteredMenus">
+          <div (click)="toggleMenu(menu.key)"
             class="flex items-center p-2 justify-between rounded-lg cursor-pointer hover:bg-[#FDECEA]">
             <div class="flex items-center gap-3">
               <i [class]="menu.icon"></i>
