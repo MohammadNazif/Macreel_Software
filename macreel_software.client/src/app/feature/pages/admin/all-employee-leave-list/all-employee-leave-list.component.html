@@ -8,10 +8,16 @@
   <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 w-full mb-2">
 
     <!-- HEADING -->
-    <h1 class="text-lg md:text-[16px] font-semibold text-[#444] text-center md:text-left md:flex-1">
-      Leave List
-    </h1>
-
+      <h1 class="text-lg md:text-[16px] font-semibold text-[#444] text-center md:text-left md:flex-1">
+         Leave List  <span class="text-red-400">({{ leaveRange }})</span>
+      </h1>
+<script>
+  const currentYear = new Date().getFullYear(); // Get current year
+  const startDate = `1st Jan`;
+  const endDate = `31st Dec ${currentYear}`;
+  const leaveList = document.getElementById('leave-list');
+  leaveList.textContent = `Leave List (${startDate} to ${endDate})`;
+</script>
     <!-- SEARCH + PAGINATOR -->
     <div class="flex flex-col sm:flex-row items-center gap-2 w-full md:w-auto">
 
@@ -138,17 +144,22 @@
             {{ element.elCarryForward || 0 }}
           </td>
         </ng-container> -->
-
+  
         <ng-container matColumnDef="CF">
           <th mat-header-cell *matHeaderCellDef class="min-w-[160px] px-1 py-1 !bg-[#dd3d4f] text-white">
             <div class="text-center font-semibold text-[12px] md:text-[14px]">CO</div>
-            <div class="text-center text-[11px] md:text-[12px]">Carry Over</div>
-          </th>
-          <td mat-cell *matCellDef="let element" class="px-1 py-1">
-            <div class="flex justify-center">
-              {{ element.elCarryForward || 0 }}
+           <div class="grid grid-cols-2 text-[11px] md:text-[12px]">
+              <div class="text-center px-2">Total</div>
+              <div class="text-center px-2">Remaining</div>
             </div>
-          </td>
+          </th>
+      
+            <td mat-cell *matCellDef="let element" class="px-1 py-1 text-center border-r">
+            <div class="grid grid-cols-2 text-[12px] md:text-[14px]">
+              <div class="text-center px-2 md:px-3"> {{ element.elCarryForward || 0 }}</div>
+              <div class="text-center px-2 md:px-3">{{  0 }}</div>
+            </div>
+         
         </ng-container>
 
 

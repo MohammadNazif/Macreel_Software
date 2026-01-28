@@ -10,7 +10,8 @@ import { ManageLeaveService } from '../../../../core/services/manage-leave.servi
   styleUrl: './all-employee-leave-list.component.css'
 })
 export class AllEmployeeLeaveListComponent implements OnInit {
-
+currentYear: number = new Date().getFullYear();
+  leaveRange: string = `1st Jan to 31st Dec ${this.currentYear}`;
   displayedColumns: string[] = ['srNo', 'empCode', 'empName', 'designation', 'CL', 'EL', 'SL','CF'];
 
   dataSource = new MatTableDataSource<any>([]);

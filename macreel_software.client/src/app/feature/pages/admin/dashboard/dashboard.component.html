@@ -47,11 +47,7 @@
   </a>
 </p>
 
-        <p class="text-sm text-gray-600 hover:text-indigo-600 cursor-pointer transition-colors duration-300">
-          <a class="hover:text-indigo-600 cursor-pointer" href="/home/admin/employee-list">
-          Absent : {{dashboardCount.absentEmployee||0}}
-        </a>
-        </p>
+       
       </div>
 
       <div class="text-indigo-600 text-3xl p-3">
@@ -72,20 +68,23 @@
         <h3 class="font-semibold text-gray-700 mb-1.5">Leave</h3>
 
         <!-- Clickable text only -->
+          <p class="text-sm text-gray-600 hover:text-orange-500 cursor-pointer transition-colors duration-300">
+              <a class="hover:text-indigo-600 cursor-pointer"
+              [routerLink]="['/home/admin/leave-requests']" [queryParams]="{ status: 'Approved' }">
+            Upcoming : <span class="font-medium">{{dashboardCount.upcomingLeaves||0}}</span>
+            </a>
+          </p>
         <p class="text-sm text-gray-600 hover:text-orange-500 cursor-pointer transition-colors duration-300">
-             <a class="hover:text-indigo-600 cursor-pointer" href="/home/admin/leave-requests">
-
-          Upcoming : <span class="font-medium">{{dashboardCount.upcomingLeaves||0}}</span>
-          </a>
+         <a [routerLink]="['/home/admin/leave-requests']" [queryParams]="{ status: 'Pending' }">
+        Request : {{dashboardCount.leaveRequest || 0}}
+    </a>
         </p>
-        <p class="text-sm text-gray-600 hover:text-orange-500 cursor-pointer transition-colors duration-300">
-             <a class="hover:text-indigo-600 cursor-pointer" href="/home/admin/leave-requests">
-
-          Request : {{dashboardCount.leaveRequest||0}}
-          </a>
+         <p class="text-sm text-gray-600 hover:text-indigo-600 cursor-pointer transition-colors duration-300">
+          <a class="hover:text-indigo-600 cursor-pointer" [routerLink]="['/home/admin/leave-requests']" [queryParams]="{ status: 'Absent' }">
+          Absent : {{dashboardCount.absentEmployee||0}}
+        </a>
         </p>
       </div>
-
       <div class="text-orange-500 text-3xl p-3">
         <i class="fa-solid fa-calendar-days"></i>
       </div>
@@ -110,7 +109,7 @@
           </a>
         </p>
         <p class="text-sm text-gray-600 hover:text-purple-500 cursor-pointer transition-colors duration-300">
-            <a class="hover:text-indigo-600 cursor-pointer" href="/home/admin/view-task">
+            <a class="hover:text-indigo-600 cursor-pointer" [routerLink]="['/home/admin/view-task']" [queryParams]="{ status: 'Completed' }">
 
           Complete Task : {{dashboardCount.completedTask||0}}
           </a>

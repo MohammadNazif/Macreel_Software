@@ -5,7 +5,8 @@ import { PaginatedList } from '../../../../core/utils/paginated-list';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { TableColumn, Task } from '../../../../core/models/interface';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Action } from 'rxjs/internal/scheduler/Action';
 
 @Component({
   selector: 'app-view-task',
@@ -24,14 +25,20 @@ export class ViewTaskComponent implements OnInit {
 
   taskColumns!: TableColumn<Task>[]; // ⚠️ Initialize later
   pdfUrl: string = 'https://localhost:7253/';
+  status: any;
 
   constructor(
     private fb: FormBuilder,
     private taskService: TaskService,
-    private router: Router
+    private router: Router,
+    private route:ActivatedRoute
   ) { }
 
   ngOnInit(): void {
+
+     this.route.queryParams.subscribe(params => {
+    this.status = params['status']; // could be undefined
+  });
     this.searchForm = this.fb.group({ search: [''] });
 
     // ✅ Initialize columns here AFTER filesTemplate is available
@@ -90,12 +97,22 @@ export class ViewTaskComponent implements OnInit {
   }
 
   
-  get tasks(): Task[] {
-    return this.paginator.items.map(task => ({
-      ...task,
-      uploadedDocuments: [task.document1Path, task.document2Path].filter((doc): doc is string => !!doc)
-    }));
-  }
+  get tasks(): Task[] 
+ {
+  // If paginator has no items, return empty array
+  if (!this.paginator?.items) return [];
+
+  // Map items to include uploadedDocuments
+  const mappedTasks = this.paginator.items.map(task => ({
+    ...task,
+    uploadedDocuments: [task.document1Path, task.document2Path]
+      .filter((doc): doc is string => !!doc && doc.trim() !== '')
+  }));
+
+     return this.status    ? mappedTasks.filter(task => task.adminTaskStatus == this.status)
+    : mappedTasks;
+}
+  
 
   // Open modal
 openFiles(docs: string[] = []) {
@@ -107,13 +124,7 @@ openFiles(docs: string[] = []) {
 
   this.showFilesModal = true;
 }
-  // openFiles(docs: any) {
-  //   // alert(this.pdfUrl+docs)
-  //   window.open(this.pdfUrl+docs[0])
-  //   // if (!docs.length) return;
-  //   // this.selectedDocuments = docs;
-  //   // this.showFilesModal = true;
-  // }
+  
 
   closeFiles() {
     this.selectedDocuments = [];
