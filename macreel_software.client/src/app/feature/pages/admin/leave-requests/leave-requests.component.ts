@@ -246,10 +246,10 @@ loadAssignedLeaves(status?: string): void {
             ...leave,
             statusLabel: leave.status
           }));
+          
          const today = new Date();
 
 if (status !== 'Approved') {
-  // Filter by status normally
   this.allLeaves = status
     ? mappedLeaves.filter(l => l.status === status)
     : mappedLeaves;
