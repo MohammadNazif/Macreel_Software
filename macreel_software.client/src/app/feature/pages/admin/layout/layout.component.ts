@@ -53,7 +53,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
         { label: 'Add Leave', route: '/home/admin/master/add-leave', roles: ['admin'] },
         { label: 'Add Page', route: '/home/admin/master/add-pages', roles: ['admin'] },
         { label: 'Assign Page', route: '/home/admin/master/assign-page', roles: ['admin'] },
-        { label: 'Assign Page List', route: '/home/admin/master/assign-page-list', roles: ['admin'] },
+        { label: 'Assigned Pages', route: '/home/admin/master/assign-page-list', roles: ['admin'] },
       ]
     },
     {
