@@ -39,6 +39,7 @@ export interface Project {
   paidAds?: string;
   gmb?: string;
   delayedDays? : number;
+  projectStatus :string
 }
 
 export interface LeaveRow {
@@ -76,6 +77,7 @@ export interface Task {
   uploadedDocuments?: string[] | null; 
 }
 export interface PaginatedResult<T> {
+  items: any
   data: T[];
   totalPages: number;
 }

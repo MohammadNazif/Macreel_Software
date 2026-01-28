@@ -18,7 +18,8 @@
            </a>
         </p>
         <p class="text-sm text-gray-600 hover:text-blue-500 cursor-pointer transition-colors duration-300">
-           <a class="hover:text-indigo-600 cursor-pointer" href="/home/admin/view-project">
+           <a class="hover:text-indigo-600 cursor-pointer" 
+           [routerLink]="['/home/admin/leave-requests']" [queryParams]="{ status: 'In Progress' }">
 
           Ongoing :{{dashboardCount.ongoingProjects||0}}
           </a>
@@ -70,7 +71,8 @@
         <!-- Clickable text only -->
           <p class="text-sm text-gray-600 hover:text-orange-500 cursor-pointer transition-colors duration-300">
               <a class="hover:text-indigo-600 cursor-pointer"
-              [routerLink]="['/home/admin/leave-requests']" [queryParams]="{ status: 'Approved' }">
+            
+              >
             Upcoming : <span class="font-medium">{{dashboardCount.upcomingLeaves||0}}</span>
             </a>
           </p>
