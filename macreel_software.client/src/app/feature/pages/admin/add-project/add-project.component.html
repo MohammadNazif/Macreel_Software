@@ -85,7 +85,8 @@
 
         <!-- SOW DOCUMENT -->
         <div class="relative">
-          <label class="block text-sm font-medium text-gray-500 mb-1">SOW Document <span class="text-red-500 text-[16px] font-medium">*</span></label>
+          <label class="block text-sm font-medium text-gray-500 mb-1">SOW Document <span
+              class="text-red-500 text-[16px] font-medium">*</span></label>
           <input #sopFile type="file" (change)="onSopFileChange($event)"
             class="w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-3 file:border-0 file:text-sm
                   file:font-semibold file:bg-[#C5192F] file:text-white hover:file:bg-[#a41526]
@@ -125,15 +126,19 @@
           <h4 class="font-semibold mb-2">Mobile App Type</h4>
           <div class="flex gap-4">
             <label class="flex items-center gap-2">
-              <input type="checkbox" formControlName="isAndroid" /> Android
+              <input type="checkbox" formControlName="isAndroid" (change)="clearFieldError('mobilePlatform')"  /> Android
             </label>
             <label class="flex items-center gap-2">
-              <input type="checkbox" formControlName="isIOS" /> iOS
+              <input type="checkbox" formControlName="isIOS" (change)="clearFieldError('mobilePlatform')" /> iOS
             </label>
+            <p *ngIf="showMobilePlatformError" class="text-red-600 text-sm mt-1">
+              Please select at least one: Android or iOS
+            </p>
+
           </div>
 
-          <div class="relative mt-3">
-            <select formControlName="mobileSkill" class="peer w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700
+          <div class="relative mt-3" *ngIf="isAndroid || isIOS">
+            <select formControlName="mobileSkill" (change)="clearFieldError('mobileSkill')" class="peer w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700
                  focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
               <option value="">Select Mobile Skill</option>
               <option *ngFor="let skill of mobileSkills" [ngValue]="skill.id">{{ skill.technologyName }}</option>
@@ -142,12 +147,15 @@
                 peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
               Select Mobile Skill
             </label>
+            <p *ngIf="showMobileSkillError" class="text-red-600 text-sm mt-1">
+              Mobile skill is required
+            </p>
             <span class="absolute right-3 top-2 text-gray-400 pointer-events-none"><i
                 class="fa-solid fa-angle-down"></i></span>
           </div>
 
-          <div class="relative mt-3" *ngIf="filteredMobileEmployees.length">
-            <select formControlName="mobileEmpId" (change)="onSelectMobileEmployee()" class="peer w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700
+          <div class="relative mt-3" *ngIf="(isAndroid || isIOS) && filteredMobileEmployees.length">
+            <select formControlName="mobileEmpId" (change)="onSelectMobileEmployee()" (change)="clearFieldError('mobileEmp')" class="peer w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700
         focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
               <option value="">Select Mobile Employee</option>
               <option *ngFor="let emp of filteredMobileEmployees" [value]="emp.empId">{{ emp.empName }}</option>
@@ -156,6 +164,9 @@
                 peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
               Select Employee
             </label>
+            <p *ngIf="showMobileEmpError" class="text-red-600 text-sm mt-1">
+              Please select mobile employee
+            </p>
             <span class="absolute right-3 top-2 text-gray-400 pointer-events-none"><i
                 class="fa-solid fa-angle-down"></i></span>
           </div>
@@ -165,7 +176,7 @@
         <div *ngIf="isWebSoftware" class="mt-4">
           <h4 class="font-semibold mb-2">Web Details</h4>
           <div class="relative mt-3">
-            <select formControlName="webSkill" class="peer w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700
+            <select formControlName="webSkill" (change)="clearFieldError('webSkill')" class="peer w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700
                  focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
               <option value="">Select Web skill</option>
               <option *ngFor="let skill of webSkills" [ngValue]="skill.id">{{ skill.technologyName }}</option>
@@ -174,12 +185,15 @@
                 peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
               Select Web Skill
             </label>
+            <p *ngIf="showWebSkillError" class="text-red-600 text-sm mt-1">
+              Web skill is required
+            </p>
             <span class="absolute right-3 top-2 text-gray-400 pointer-events-none"><i
                 class="fa-solid fa-angle-down"></i></span>
           </div>
 
           <div class="relative mt-3" *ngIf="filteredWebEmployees.length">
-            <select formControlName="webEmpId" (change)="onSelectWebEmployee()" class="peer w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700
+            <select formControlName="webEmpId" (change)="onSelectWebEmployee()" (change)="clearFieldError('webEmp')" class="peer w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700
                  focus:border-[#C5192F] focus:ring-2 focus:ring-[#C5192F]/30 outline-none">
               <option value="">Select Web Employee</option>
               <option *ngFor="let emp of filteredWebEmployees" [value]="emp.empId">{{ emp.empName }}</option>
@@ -188,6 +202,10 @@
                 peer-focus:-top-2 peer-focus:text-xs peer-valid:-top-2 peer-valid:text-xs">
 
             </label>
+            <p *ngIf="showWebEmpError" class="text-red-600 text-sm mt-1">
+              Please select web employee
+            </p>
+
             <span class="absolute right-3 top-2 text-gray-400 pointer-events-none"><i
                 class="fa-solid fa-angle-down"></i></span>
           </div>
@@ -283,7 +301,7 @@
                 <span class="font-medium">Web Technology Name:</span>
                 <span>{{ p.webTechnologyName || '—' }}</span>
               </div>
-              
+
               <div class="flex justify-between">
                 <span class="font-medium">Assign Date:</span>
                 <span>{{ p.assignDate | date:'dd MMM yyyy' }}</span>

@@ -8,42 +8,34 @@ import { Component } from '@angular/core';
 })
 export class ProjectDetailsComponent {
 
+  project: any;
 
-taskColumns = [
-      { key: '', label: 'Employee Name' },
-      { key: '', label: 'Milestone' },
-      { key: '', label: 'Completion Date' },
-      { key: '', label: 'Milestone Delay' },
-      { key: '', label: 'Employee Status'},
-      { key: '', label: 'Admin Status'},
-    ]
-  
-  project = {
-    name: 'LCMIS',
-    code: 'MacLCM202015',
-    status: 'Working',
-    company: 'Irrigation Department',
-    client: 'Parul',
-    startDate: '2025-10-06',
-    completionDate: '2025-10-13',
-    deliveryDate: '2025-10-14',
-    totalAmount: '0.00',
-    employees: ['Himanshu Saxena','Mohammad Nazif','Deep Singh','Himanshu Saxena',
-      'Mohammad Nazif','Deep Singh',
-    'Himanshu Saxena','Mohammad Nazif','Deep Singh']
-  };
+  webTL: string | null = null;
+  webMembers: string[] = [];
 
-  milestones = [
-    {
-      sno: 1,
-      milestone: '',
-      completionDate: '',
-      employeeStatus: 'Pending',
-      delay: '0 Days',
-      employeeName: '',
-      adminStatus: 'Rejected'
-    }
-  ];
+  appTL: string | null = null;
+  appMembers: string[] = [];
 
-  employeeStatusLogs: any[] = [];
+  ngOnInit(): void {
+    this.project = history.state?.employee;
+    this.prepareEmployees();
+  }
+
+  prepareEmployees() {
+
+    if (!this.project) return;
+
+    // WEB
+    this.webTL = this.project.webEmpName || null;
+    this.webMembers = this.project.webProjectMembers?.map(
+      (e: any) => e.empName
+    ) || [];
+
+    // APP
+    this.appTL = this.project.appEmpName || null;
+    this.appMembers = this.project.appProjectMembers?.map(
+      (e: any) => e.empName
+    ) || [];
+  }
 }
+
