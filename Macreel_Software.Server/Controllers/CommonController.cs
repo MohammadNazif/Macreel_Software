@@ -542,7 +542,26 @@ namespace Macreel_Software.Server.Controllers
             }
         }
 
+        [HttpGet("getAllProject")]
+        public async Task<IActionResult> getAllProject(string? searchTerm = null, int? pageNumber = null, int? pageSize = null)
+        {
+            try
+            {
+                ApiResponse<List<project>> result =
+                    await _services.GetAllProject(searchTerm, pageNumber, pageSize, _role == "admin"?null: _userId);
 
+
+                return StatusCode(result.StatusCode, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<List<project>>.FailureResponse(
+                    "An error occurred while fetching project details",
+                    500,
+                    "SERVER_ERROR"
+                ));
+            }
+        }
 
         [HttpGet("AssignedProjectEmpList")]
         public async Task<IActionResult> AssignedProjectEmpList(int projectId)
