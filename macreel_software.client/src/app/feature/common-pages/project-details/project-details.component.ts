@@ -19,6 +19,7 @@ export class ProjectDetailsComponent {
   ngOnInit(): void {
     this.project = history.state?.employee;
     this.prepareEmployees();
+    console.log(this.project);
   }
 
   prepareEmployees() {

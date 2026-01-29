@@ -40,6 +40,7 @@ export class AddProjectComponent implements OnInit {
   showMobilePlatformError = false;
   showMobileSkillError = false;
   showMobileEmpError = false;
+  showSoftwareTypeError = false;
 
   showWebSkillError = false;
   showWebEmpError = false;
@@ -375,28 +376,31 @@ export class AddProjectComponent implements OnInit {
   }
 
   clearFieldError(type: 'mobilePlatform' | 'mobileSkill' | 'mobileEmp' | 'webSkill' | 'webEmp') {
-  switch (type) {
-    case 'mobilePlatform':
-      this.showMobilePlatformError = false;
-      break;
+    switch (type) {
+      case 'mobilePlatform':
+        this.showMobilePlatformError = false;
+        break;
 
-    case 'mobileSkill':
-      this.showMobileSkillError = false;
-      break;
+      case 'mobileSkill':
+        this.showMobileSkillError = false;
+        break;
 
-    case 'mobileEmp':
-      this.showMobileEmpError = false;
-      break;
+      case 'mobileEmp':
+        this.showMobileEmpError = false;
+        break;
 
-    case 'webSkill':
-      this.showWebSkillError = false;
-      break;
+      case 'webSkill':
+        this.showWebSkillError = false;
+        break;
 
-    case 'webEmp':
-      this.showWebEmpError = false;
-      break;
+      case 'webEmp':
+        this.showWebEmpError = false;
+        break;
+    }
   }
-}
+  clearSoftwareTypeError() {
+    this.showSoftwareTypeError = false;
+  }
 
 
   // ================= FORM SUBMISSION =================
@@ -417,8 +421,8 @@ export class AddProjectComponent implements OnInit {
         return;
       }
     }
-     let hasError = false;  
-     this.resetErrors();
+    let hasError = false;
+    this.resetErrors();
 
     const formData = new FormData();
     const f = this.projectForm.value;
@@ -434,40 +438,48 @@ export class AddProjectComponent implements OnInit {
     //   }
     // }
 
-     // ========== MOBILE VALIDATION ==========
-  if (f.isMobileSoftware) {
+    // ========== MOBILE VALIDATION ==========
+    if (f.isMobileSoftware) {
 
-    if (!f.isAndroid && !f.isIOS) {
-      this.showMobilePlatformError = true;
-      hasError = true;
+      if (!f.isAndroid && !f.isIOS) {
+        this.showMobilePlatformError = true;
+        hasError = true;
+      }
+
+      if ((f.isAndroid || f.isIOS) && !f.mobileSkill) {
+        this.showMobileSkillError = true;
+        hasError = true;
+      }
+
+      if (f.mobileSkill && !f.mobileEmpId) {
+        this.showMobileEmpError = true;
+        hasError = true;
+      }
+      
+    }
+    // ========== SOFTWARE TYPE VALIDATION ==========
+      if (f.category === 'Software' || f.category === 'Website') {
+        if (!f.isMobileSoftware && !f.isWebSoftware) {
+          this.showSoftwareTypeError = true;
+          hasError = true;
+        }
+      }
+
+    // ========== WEB VALIDATION ==========
+    if (f.isWebSoftware) {
+
+      if (!f.webSkill) {
+        this.showWebSkillError = true;
+        hasError = true;
+      }
+
+      if (f.webSkill && !f.webEmpId) {
+        this.showWebEmpError = true;
+        hasError = true;
+      }
     }
 
-    if ((f.isAndroid || f.isIOS) && !f.mobileSkill) {
-      this.showMobileSkillError = true;
-      hasError = true;
-    }
-
-    if (f.mobileSkill && !f.mobileEmpId) {
-      this.showMobileEmpError = true;
-      hasError = true;
-    }
-  }
-
-  // ========== WEB VALIDATION ==========
-  if (f.isWebSoftware) {
-
-    if (!f.webSkill) {
-      this.showWebSkillError = true;
-      hasError = true;
-    }
-
-    if (f.webSkill && !f.webEmpId) {
-      this.showWebEmpError = true;
-      hasError = true;
-    }
-  }
-
-  if (hasError) return;
+    if (hasError) return;
 
     // ================= BASIC FIELDS =================
     formData.append('id', this.editProjectId.toString());
@@ -605,11 +617,12 @@ export class AddProjectComponent implements OnInit {
     }
   }
   resetErrors() {
-  this.showMobilePlatformError = false;
-  this.showMobileSkillError = false;
-  this.showMobileEmpError = false;
-  this.showWebSkillError = false;
-  this.showWebEmpError = false;
-}
+    this.showMobilePlatformError = false;
+    this.showMobileSkillError = false;
+    this.showMobileEmpError = false;
+    this.showWebSkillError = false;
+    this.showWebEmpError = false;
+    this.showSoftwareTypeError = false;
+  }
 }
 
