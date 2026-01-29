@@ -18,7 +18,7 @@ export class ProjectService {
       .set('pageNumber', page)
       .set('pageSize', size);
 
-    return this.http.get<PaginatedResult<Project>>(`${this.baseUrl}Admin/getAllProject`, { params });
+    return this.http.get<PaginatedResult<Project>>(`${this.baseUrl}Common/getAllProject`, { params });
   }
 
   // Delete project with table-only loader
