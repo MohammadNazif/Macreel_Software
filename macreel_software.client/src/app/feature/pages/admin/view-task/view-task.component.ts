@@ -99,17 +99,16 @@ export class ViewTaskComponent implements OnInit {
   
   get tasks(): Task[] 
  {
-  // If paginator has no items, return empty array
+
   if (!this.paginator?.items) return [];
 
-  // Map items to include uploadedDocuments
   const mappedTasks = this.paginator.items.map(task => ({
     ...task,
     uploadedDocuments: [task.document1Path, task.document2Path]
       .filter((doc): doc is string => !!doc && doc.trim() !== '')
   }));
 
-     return this.status    ? mappedTasks.filter(task => task.adminTaskStatus == this.status)
+     return this.status ? mappedTasks.filter(task => task.adminTaskStatus == this.status)
     : mappedTasks;
 }
   

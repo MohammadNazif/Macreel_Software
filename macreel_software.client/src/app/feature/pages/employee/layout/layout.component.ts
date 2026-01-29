@@ -152,7 +152,7 @@ export class LayoutComponent {
 
         {
           label: 'Project Progress',
-          route: '/home/admin/project-progress',
+          route: '/home/employee/project-progress',
           roles: ['admin', 'employee']
         }
       ]

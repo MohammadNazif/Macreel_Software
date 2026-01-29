@@ -7,6 +7,7 @@ import { AssignedLeavesComponent } from './assigned-leaves/assigned-leaves.compo
 import { AssignProjectComponent } from './assign-project/assign-project.component';
 import { TaskListComponent } from './task-list/task-list.component';
 import { LayoutComponent } from './layout/layout.component';
+import { ProjectProgressComponent } from '../../common-pages/project-progress/project-progress.component';
 
 const routes: Routes = [
   {
@@ -18,7 +19,8 @@ const routes: Routes = [
       { path: 'assigned-leaves', component: AssignedLeavesComponent },
       { path: 'apply-leave', component: ApplyLeaveComponent },
       { path: 'assign-project', component: AssignProjectComponent },
-      { path: 'task-list', component: TaskListComponent }
+      { path: 'task-list', component: TaskListComponent },
+      {path:'project-progress',component:ProjectProgressComponent},
     ]
   },
 ];

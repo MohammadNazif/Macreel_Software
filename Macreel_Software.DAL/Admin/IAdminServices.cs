@@ -28,7 +28,7 @@ namespace Macreel_Software.DAL.Admin
         Task<ApiResponse<List<EmpWorkingDetails>>> EmpWorkingDetailsByempCode(int empCode, int month, int year);
 
         Task<bool> AddProject(project data);
-        Task<ApiResponse<List<project>>> GetAllProject(string? SearchTerm, int? pageNumber, int? pageSize, string status = null);
+        Task<ApiResponse<List<project>>> GetAllProject(string? SearchTerm, int? pageNumber, int? pageSize, int? userId = null,string status = null);
         Task<ApiResponse<List<project>>> GetAllProjectById(int id);
         Task<bool> deleteProjectById(int id);
 
