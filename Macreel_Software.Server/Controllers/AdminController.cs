@@ -791,7 +791,7 @@ namespace Macreel_Software.Server.Controllers
 
 
         [HttpGet("getAllProject")]
-        public async Task<IActionResult> getAllProject(string? searchTerm = null, int? pageNumber = null, int? pageSize = null, string status = null)
+        public async Task<IActionResult> getAllProject(string? searchTerm = null, int? pageNumber = null, int? pageSize = null, string? status = null)
         {
             try
             {

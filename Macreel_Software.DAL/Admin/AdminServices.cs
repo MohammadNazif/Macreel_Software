@@ -1342,7 +1342,7 @@ namespace Macreel_Software.DAL.Admin
             }
         }
 
-        public async Task<ApiResponse<List<project>>> GetAllProject(string? SearchTerm,int? pageNumber,int?pageSize, int? userId = null,string status=null)
+        public async Task<ApiResponse<List<project>>> GetAllProject(string? SearchTerm,int? pageNumber,int?pageSize, int? userId = null,string? status=null)
         {
             List<project> list = new List<project>();
             int totalRecords = 0;
