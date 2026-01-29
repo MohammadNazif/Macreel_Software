@@ -791,12 +791,12 @@ namespace Macreel_Software.Server.Controllers
 
 
         [HttpGet("getAllProject")]
-        public async Task<IActionResult> getAllProject(string? searchTerm = null, int? pageNumber = null, int? pageSize = null)
+        public async Task<IActionResult> getAllProject(string? searchTerm = null, int? pageNumber = null, int? pageSize = null, string status = null)
         {
             try
             {
                 ApiResponse<List<project>> result =
-                    await _services.GetAllProject(searchTerm, pageNumber, pageSize);
+                    await _services.GetAllProject(searchTerm, pageNumber, pageSize,status);
 
 
                 return StatusCode(result.StatusCode, result);
