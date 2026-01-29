@@ -1342,7 +1342,7 @@ namespace Macreel_Software.DAL.Admin
             }
         }
 
-        public async Task<ApiResponse<List<project>>> GetAllProject(string? SearchTerm,int? pageNumber,int?pageSize,int? userId = null)
+        public async Task<ApiResponse<List<project>>> GetAllProject(string? SearchTerm,int? pageNumber,int?pageSize, int? userId = null,string? status=null)
         {
             List<project> list = new List<project>();
             int totalRecords = 0;
@@ -1355,6 +1355,7 @@ namespace Macreel_Software.DAL.Admin
                 cmd.Parameters.AddWithValue("@pageNumber",pageNumber.HasValue?pageNumber.Value:DBNull.Value);
                 cmd.Parameters.AddWithValue("@pageSize",pageSize.HasValue?pageSize.Value:DBNull.Value);
                 cmd.Parameters.AddWithValue("@id",userId.HasValue?userId.Value:DBNull.Value);
+                cmd.Parameters.AddWithValue("@status", string.IsNullOrWhiteSpace(status)?(object)DBNull.Value:status);
                 if (_conn.State == ConnectionState.Closed)
                     await _conn.OpenAsync();
 
