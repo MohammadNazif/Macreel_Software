@@ -164,7 +164,7 @@ public class MailSender
 
             <p style=""text-align: center;"">
                 <a class=""btn""
-                   href=""http://macreelinfo.in/api/employee-registration?accessId={res}""
+                   href=""http://macreelinfo.in/employee-registration?accessId={res}""
                    target=""_blank"">
                    Register Here
                 </a>

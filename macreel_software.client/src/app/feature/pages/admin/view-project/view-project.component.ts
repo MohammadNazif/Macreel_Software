@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ProjectService } from '../../../../core/services/project-service.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import Swal from 'sweetalert2';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Project, TableColumn } from '../../../../core/models/interface';
 import { PaginatedList } from '../../../../core/utils/paginated-list';
 import { ManageEmployeeService } from '../../../../core/services/manage-employee.service';
@@ -52,15 +52,19 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
   paginator!: PaginatedList<Project>;
   projectColumns: TableColumn<Project>[] = [];
   employeeColumns!: TableColumn<any>[]; // assign in ngAfterViewInit
+  status: any;
 
   constructor(
     private readonly fb: FormBuilder,
     private readonly projectService: ProjectService,
     private readonly router: Router,
     private readonly employeeService: ManageEmployeeService,
+    private readonly route:ActivatedRoute
   ) { }
 
   ngOnInit(): void {
+     this.route.queryParams.subscribe(params => {
+    this.status = params['status']; });
     // Project table columns
     this.projectColumns = [
       { key: 'projectTitle', label: 'Project', clickable: true, route: '/home/admin/project-details' },
@@ -112,8 +116,21 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
       });
   }
 
+ get tasks(): Project[] 
+ {
+    console.log("ad",this.status)
+
+  if (!this.paginator?.items) return [];
+
+  const mappedTasks = this.paginator.items.map(task => ({
+    ...task,
+  }));
+
+     return this.status ? mappedTasks.filter(task => task.projectStatus == this.status)
+    : mappedTasks;
+}
   ngAfterViewInit(): void {
-    // Employee table columns (after ViewChild is ready)
+
   }
 
   onScroll(event: Event): void {
