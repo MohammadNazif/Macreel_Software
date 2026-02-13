@@ -8,7 +8,7 @@ using Microsoft.Data.SqlClient;
 
 namespace Macreel_Software.Server.Controllers
 {
-    [Authorize(Roles ="admin")]
+    //[Authorize(Roles ="admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class MasterController : ControllerBase
