@@ -1,0 +1,96 @@
+<div class="min-h-screen bg-[#f8f9fc] p-6 relative">
+
+  <!-- HEADER -->
+  <div class="flex justify-between items-center mb-6">
+    <div>
+      <h1 class="text-xl font-semibold text-gray-800">
+        Create Performa Invoice
+      </h1>
+    
+    </div>
+
+    <button
+      class="bg-[#E6354B] hover:bg-[#cc2e42] text-white px-5 py-2 rounded-lg shadow-sm transition">
+      Save Performa
+    </button>
+  </div>
+
+  <!-- COMPANY CARD -->
+<!-- CLIENT INFORMATION CARD -->
+
+<app-quatationandpicommon
+  [clientFields]="clientFields"
+  [products]="products"
+  [modalSections]="modalSections"
+  [showCompanyModal]="showCompanyModal"
+  (addProductEvent)="addProduct()"
+  (removeProductEvent)="removeProduct($event)"
+  (saveCompanyEvent)="saveCompany()"
+></app-quatationandpicommon>
+
+  <!-- SUMMARY -->
+<div class="bg-white rounded-xl shadow-sm p-5 border border-gray-100">
+
+  <div class="grid md:grid-cols-2 gap-6">
+
+    <!-- LEFT -->
+    <div class="bg-[#E6354B]/5 border border-[#E6354B]/20 rounded-xl p-5">
+      <h4 class="text-sm font-semibold text-[#E6354B] mb-4">
+        Terms & Conditions
+      </h4>
+
+      <div class="space-y-2 text-sm text-gray-700">
+
+        <p><span class="font-medium">1. Payment Terms:</span> 50% Advance and 50% at site go live.</p>
+
+        <p><span class="font-medium">2. Hardware:</span> Commercial details don’t cover any hardware part.</p>
+
+        <p><span class="font-medium">3. Updates:</span> Govt rule updates free for one year.</p>
+
+        <p><span class="font-medium">4. Service & Support:</span> 9×6 support via site, net & phone.</p>
+
+        <p><span class="font-medium">5. Miscellaneous:</span> Cost excludes hardware & third-party software.</p>
+
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="bg-gray-50 rounded-xl p-5">
+      <div class="space-y-3 text-sm">
+
+        <div class="flex justify-between text-gray-600">
+          <span>Subtotal</span>
+          <span>₹ 0.00</span>
+        </div>
+
+        <div class="flex justify-between text-gray-600">
+          <span>GST (18%)</span>
+          <span>₹ 0.00</span>
+        </div>
+
+        <div class="border-t pt-3 flex justify-between font-medium text-gray-800">
+          <span>Amount After Tax</span>
+          <span>₹ 0.00</span>
+        </div>
+
+        <div class="flex justify-between text-gray-500 text-xs">
+          <span>Additional Charges</span>
+          <span>₹ 0.00</span>
+        </div>
+
+        <div class="border-t pt-4 flex justify-between text-base font-semibold">
+          <span>Grand Total</span>
+          <span class="text-[#E6354B]">₹ 0.00</span>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+  </div>
+
+
+

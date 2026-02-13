@@ -141,6 +141,71 @@ export class LayoutComponent implements OnInit, OnDestroy {
         }
       ]
     }
+      ,
+      {
+      label: 'Qutation Management',
+      icon: 'fa-solid fa-tasks',
+      key: 'Quatation',
+      roles: ['admin','hr'],
+      children: [
+        {
+          label: 'Add Quatation',
+          route: '/home/admin/AddQuatation',
+          roles: ['admin']
+        },
+        {
+          label: 'View Quatation',
+          route: '/home/admin/ViewQuatation',
+          roles: ['admin']
+        }
+       
+      ]
+    },
+      {
+      label: 'Performa Invoice',
+      icon: 'fa-solid fa-tasks',
+      key: 'Performa',
+      roles: ['admin','hr'],
+      children: [
+        {
+          label: 'Add PerformaInvoice',
+          route: '/home/admin/AddPerforamInvoice',
+          roles: ['admin']
+        },
+        {
+          label: 'View PerformaInvoice',
+          route: '/home/admin/ViewPerforamInvoice',
+          roles: ['admin']
+        },
+          {
+          label: 'View AMC Invoice',
+          route: '/home/admin/ViewAMCInvoice',
+          roles: ['admin']
+        }
+       
+      ]
+    }
+    ,
+      {
+      label: 'Tax Invoice',
+      icon: 'fa-solid fa-tasks',
+      key: 'Tax',
+      roles: ['admin','hr'],
+      children: [
+        {
+          label: 'Add TaxInvoice',
+          route: '/home/admin/AddTaxInvoice',
+          roles: ['admin']
+        },
+        {
+          label: 'View TaxInvoice',
+          route: '/home/admin/ViewtaxInvoice',
+          roles: ['admin']
+        }
+       
+      ]
+    }
+
 
   ];
 

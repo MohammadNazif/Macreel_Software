@@ -17,6 +17,15 @@ import { ProjectDetailsComponent } from '../../common-pages/project-details/proj
 import { EmployeeDetailsComponent } from '../../common-pages/employee-details/employee-details.component';
 import { LayoutComponent } from './layout/layout.component';
 import { ProjectProgressComponent } from '../../common-pages/project-progress/project-progress.component';
+import { AddQuatationComponent } from './add-quatation/add-quatation.component';
+import { ViewQuotationComponent } from './view-quotation/view-quotation.component';
+import { PerformaInvoiceComponent } from './performa-invoice/performa-invoice.component';
+import { ViewPerformaComponent } from './view-performa/view-performa.component';
+import { AmcInvoiceComponent } from './amc-invoice/amc-invoice.component';
+import { TaxInvoiceComponent } from './tax-invoice/tax-invoice.component';
+import { ViewTaxInvoiceComponent } from './view-tax-invoice/view-tax-invoice.component';
+
+
 
 const routes: Routes = [
   {
@@ -41,7 +50,14 @@ const routes: Routes = [
       { path: 'employee-details', component: EmployeeDetailsComponent },
       {path:'add-employee',component:AddEmployeeComponent},
       {path:'project-progress',component:ProjectProgressComponent},
-      {path:'edit-employee/:id',component:AddEmployeeComponent}
+      {path:'edit-employee/:id',component:AddEmployeeComponent},
+      {path:'AddQuatation',component:AddQuatationComponent},
+      {path:'ViewQuatation',component:ViewQuotationComponent},
+      {path:'AddPerforamInvoice',component:PerformaInvoiceComponent},
+      {path:'ViewPerforamInvoice',component:ViewPerformaComponent},
+      {path:'ViewAMCInvoice',component:AmcInvoiceComponent},
+      {path:'AddTaxInvoice',component:TaxInvoiceComponent},
+      {path:'ViewTaxInvoice',component:ViewTaxInvoiceComponent}
     
 
     ]

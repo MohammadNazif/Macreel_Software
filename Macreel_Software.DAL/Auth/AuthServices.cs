@@ -21,7 +21,7 @@ namespace Macreel_Software.DAL.Auth
         }
 
         public async Task<UserData?> ValidateUserAsync(string userName, string enteredPassword)
-        {
+            {
             UserData? user = null;
 
             try
@@ -41,11 +41,11 @@ namespace Macreel_Software.DAL.Auth
 
                 if (await dr.ReadAsync())
                 {
-                    string encryptedDbPassword = dr["Password"].ToString()!;
-                    string decryptedDbPassword = _pass.DecryptPassword(encryptedDbPassword);
+                    string encryptedDbPassword = dr["Password"].ToString();
+                    //string decryptedDbPassword = _pass.DecryptPassword(encryptedDbPassword);
 
                  
-                    if (decryptedDbPassword == enteredPassword)
+                    if (encryptedDbPassword == enteredPassword)
                     {
                         user = new UserData
                         {

@@ -24,6 +24,16 @@ import { CommonPagesModule } from '../../common-pages/common-pages.module';
 import { LeaveRequestsComponent } from './leave-requests/leave-requests.component';
 import { SafeUrlPipe } from "../../../core/pipes/capitalize.pipe";
 import { LayoutComponent } from './layout/layout.component';
+import { QuatationAndPiCommonComponent } from './quatationandpicommon/quatationandpicommon.component';
+import { AddQuatationComponent } from './add-quatation/add-quatation.component';
+import { ViewQuotationComponent } from './view-quotation/view-quotation.component';
+import { PerformaInvoiceComponent } from './performa-invoice/performa-invoice.component';
+import { ViewPerformaComponent } from './view-performa/view-performa.component';
+import { AmcInvoiceComponent } from './amc-invoice/amc-invoice.component';
+import { TaxInvoiceComponent } from './tax-invoice/tax-invoice.component';
+import { ViewTaxInvoiceComponent } from './view-tax-invoice/view-tax-invoice.component';
+
+
 
 @NgModule({
   declarations: [
@@ -39,7 +49,17 @@ import { LayoutComponent } from './layout/layout.component';
     ViewTaskComponent,
     ViewProjectComponent,
     LeaveRequestsComponent,
-    LayoutComponent
+    LayoutComponent,
+QuatationAndPiCommonComponent,
+AddQuatationComponent,
+ViewQuotationComponent,
+PerformaInvoiceComponent,
+ViewPerformaComponent,
+AmcInvoiceComponent,
+TaxInvoiceComponent,
+ViewTaxInvoiceComponent
+
+
   ],
   imports: [
     CommonModule,

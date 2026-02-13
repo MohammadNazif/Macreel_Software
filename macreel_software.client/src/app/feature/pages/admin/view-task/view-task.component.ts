@@ -6,7 +6,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { TableColumn, Task } from '../../../../core/models/interface';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Action } from 'rxjs/internal/scheduler/Action';
+
 
 @Component({
   selector: 'app-view-task',
@@ -23,7 +23,7 @@ export class ViewTaskComponent implements OnInit {
   showFilesModal = false;
   selectedDocuments: string[] = [];
 
-  taskColumns!: TableColumn<Task>[]; // ⚠️ Initialize later
+  taskColumns!: TableColumn<Task>[]; 
   pdfUrl: string = 'https://localhost:7253/';
   status: any;
 
@@ -41,7 +41,6 @@ export class ViewTaskComponent implements OnInit {
   });
     this.searchForm = this.fb.group({ search: [''] });
 
-    // ✅ Initialize columns here AFTER filesTemplate is available
     this.taskColumns = [
       { key: 'title', label: 'Task' },
       { key: 'empName', label: 'Assigned To' },
